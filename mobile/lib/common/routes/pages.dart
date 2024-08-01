@@ -10,12 +10,12 @@ class AppPages {
   static final List<GetPage> routes = [
     GetPage(
       name: AppRoutes.Application,
-      page: () => ApplicationPage(),
+      page: () => const ApplicationPage(),
       binding: ApplicationBinding(),
     ),
     GetPage(
         name: AppRoutes.Profile,
-        page: () => ProfilePage(),
+        page: () => const ProfilePage(),
         binding: ProfileBinding()),
   ];
 }

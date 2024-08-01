@@ -6,6 +6,8 @@ import 'package:health_for_all/pages/profile/widget/following_view.dart';
 import 'package:health_for_all/pages/profile/widget/information_view.dart';
 
 class ProfilePage extends GetView<ProfileController> {
+  const ProfilePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

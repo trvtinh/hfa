@@ -5,7 +5,7 @@ import 'package:health_for_all/pages/profile/view.dart';
 import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
-  ApplicationPage({super.key});
+  const ApplicationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,11 +14,11 @@ class ApplicationPage extends GetView<ApplicationController> {
         physics: const NeverScrollableScrollPhysics(),
         controller: controller.pageController,
         onPageChanged: controller.handPageChanged,
-        children: [
-          const Homepage(),
-          const Homepage(),
-          const Homepage(),
-          const Homepage(),
+        children: const [
+          Homepage(),
+          Homepage(),
+          Homepage(),
+          Homepage(),
           ProfilePage()
         ],
       );
