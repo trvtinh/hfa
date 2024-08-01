@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ComboBox extends StatefulWidget {
-  final Icon leadingicon;
+  final String leadingiconpath;
   final String title;
   final String value;
   final String unit;
@@ -9,7 +9,7 @@ class ComboBox extends StatefulWidget {
   final IconButton? upload;
   final bool check;
 
-  const ComboBox({super.key, required this.leadingicon, required this.title, required this.value, required this.unit, this.edit, this.upload, required this.check});
+  const ComboBox({super.key, required this.leadingiconpath, required this.title, required this.value, required this.unit, this.edit, this.upload, required this.check});
 
   @override
   State<ComboBox> createState() => _ComboBoxState();
@@ -55,62 +55,65 @@ class _ComboBoxState extends State<ComboBox> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 72,
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: widget.check ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.surface,
       ),
       child: Row(
         children: [
-          //Icon
-          SizedBox(width: 12),
-          IconWidget(icon: widget.leadingicon),
+          Expanded(
+            child: Row(children: [
+              //Icon
+              Image.asset(widget.leadingiconpath),
 
-          // Tên chỉ số
-          SizedBox(width: 8),
-          Container(
-            height: 55,
-            width: MediaQuery.of(context).size.width/4,
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                widget.title,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontWeight: FontWeight.w500
+              // Tên chỉ số
+              SizedBox(width: 8),
+              Container(
+                height: 55,
+                width: MediaQuery.of(context).size.width/4,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontWeight: FontWeight.w500
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
 
-          // Số đo
-          Container(
-            height: 55,
-            width: MediaQuery.of(context).size.width/4,
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    widget.value,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 20
+              // Số đo
+              Container(
+                height: 55,
+                width: MediaQuery.of(context).size.width/4,
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        widget.value,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    widget.unit,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        widget.unit,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],),
           ),
-
           // Chỉnh sửa
           IconWidgetRound(icon: Icon(Icons.edit_note)),
           SizedBox(width: 8,),
