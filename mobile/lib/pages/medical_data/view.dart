@@ -27,6 +27,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
             height: 0.7,
         )),
       ),
+<<<<<<< HEAD
       body: 
           SingleChildScrollView(
             child: Column(
@@ -101,11 +102,54 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                             color: Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                         ), 
+=======
+      body: Column(
+        children: [
+          // ngày tháng năm
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.0),
+                width: MediaQuery.of(context).size.width/3*2,
+                child: TextField(
+                  controller: infor,
+                  decoration: InputDecoration(
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(0),
+                      child: Icon(
+                        Icons.event_note,
+                        color: Theme.of(context).colorScheme.primary,
+>>>>>>> parent of dfbd718 (sửa scroll view và thêm các chỉ số)
                       ),
                     ),
+                    border: OutlineInputBorder(),
+                    labelText: 'Ngày',
                   ),
                 ),
+              ),
+              Container(
+                padding: EdgeInsets.all(8.0),
+                width: MediaQuery.of(context).size.width/3,
+                child: TextField(
+                  controller: infor,
+                  
+                  decoration: InputDecoration(
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(0),
+                      child: Icon(
+                        Icons.schedule,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    border: OutlineInputBorder(),
+                    labelText: 'Thời gian',
+                  ),
+                ),
+              ),
+            ],
+          ),
 
+<<<<<<< HEAD
                 // Chỉ số
                 const ComboBox(leadingiconpath: 'assets/images/huyet_ap.png', title: "Huyết áp", value: "120/80", unit: "mmHg", check: true),
                 const ComboBox(leadingiconpath: 'assets/images/than_nhiet.png', title: "Thân nhiệt", value: "36", unit: "°C", check: true),
@@ -118,8 +162,44 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                 const ComboBox(leadingiconpath: 'assets/images/xet_nghiem_mau.png', title: "Xét nghiệm máu", value: "--", unit: "--", check: true),
                 const ComboBox(leadingiconpath: 'assets/images/axit_uric.png', title: "Axit Uric", value: "--", unit: "--", check: false),
               ],
+=======
+          // thanh tìm kiếm
+          Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+            ),
+            height: 72,
+            child: Center(
+              child: TextField(
+                controller: infor,
+                decoration: InputDecoration(
+                  hintText: "Input Text",
+                  border: InputBorder.none,
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Icon(
+                      Icons.search,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  suffixIcon: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Icon(
+                      Icons.clear,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ), 
+                ),
+              ),
+>>>>>>> parent of dfbd718 (sửa scroll view và thêm các chỉ số)
             ),
           ),
+          ComboBox(leadingicon: Icon(Icons.bloodtype), title: "Huyết áp", value: "120/80", unit: "mg/dL", check: true),
+          ComboBox(leadingicon: Icon(Icons.bloodtype), title: "Huyết áp", value: "120/80", unit: "mg/dL", check: true),
+          ComboBox(leadingicon: Icon(Icons.bloodtype), title: "Huyết áp", value: "120/80", unit: "mg/dL", check: true),
+        ],
+      ),
     );
   }
 }
