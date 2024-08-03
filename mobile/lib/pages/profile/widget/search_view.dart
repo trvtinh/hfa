@@ -6,6 +6,8 @@ import 'search_controller.dart';
 class SearchingBar extends GetView<SearchingController> {
   final TextEditingController _controller = TextEditingController();
 
+  SearchingBar({super.key});
+
   void _clearText() {
     _controller.clear();
     controller.onTextChanged('');
@@ -53,12 +55,12 @@ class SearchingBar extends GetView<SearchingController> {
           }
 
           // GlobalKey to measure the height of the ListTile
-          GlobalKey _listTileKey = GlobalKey();
+          GlobalKey listTileKey = GlobalKey();
           double itemHeight = 70;
 
           // Measure the height of a single ListTile
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            final context = _listTileKey.currentContext;
+            final context = listTileKey.currentContext;
             if (context != null) {
               log('Measuring height of ListTile');
               final box = context.findRenderObject() as RenderBox;
@@ -81,7 +83,7 @@ class SearchingBar extends GetView<SearchingController> {
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(0, 3), // changes position of shadow
+                  offset: const Offset(0, 3), // changes position of shadow
                 ),
               ],
             ),
@@ -95,7 +97,7 @@ class SearchingBar extends GetView<SearchingController> {
                   final follower = controller.searchResults[index];
                   return FollowerListTile(
                     key: index == 0
-                        ? _listTileKey
+                        ? listTileKey
                         : null, // Assign key to the first item for measuring height
                     name: follower['name'],
                     email: follower['email'],
@@ -133,14 +135,14 @@ class SearchingBar extends GetView<SearchingController> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       ChoiceChip(
-                                        label: Text('Người nhà'),
+                                        label: const Text('Người nhà'),
                                         selected: true,
                                         onSelected: (bool selected) {
                                           // Handle selection
                                         },
                                       ),
                                       ChoiceChip(
-                                        label: Text('Chuyên gia y tế'),
+                                        label: const Text('Chuyên gia y tế'),
                                         selected: false,
                                         onSelected: (bool selected) {
                                           // Handle selection
@@ -157,13 +159,13 @@ class SearchingBar extends GetView<SearchingController> {
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        child: Text('Hủy',
+                                        child: const Text('Hủy',
                                             style:
                                                 TextStyle(color: Colors.red)),
                                       ),
                                       ElevatedButton(
                                         onPressed: () {},
-                                        child: Text('Xác nhận'),
+                                        child: const Text('Xác nhận'),
                                       ),
                                     ],
                                   ),
