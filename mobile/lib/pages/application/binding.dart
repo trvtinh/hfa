@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
+import 'package:health_for_all/pages/profile/widget/search_controller.dart';
 import 'index.dart';
 
 class ApplicationBinding implements Bindings {
@@ -7,6 +8,7 @@ class ApplicationBinding implements Bindings {
   void dependencies() {
     Get.lazyPut(() => ApplicationController());
     Get.lazyPut(() => ProfileController(), fenix: true);
+    Get.lazyPut(() => SearchingController(), fenix: true);
     // Get.lazyPut(() => HomeController());
     // Get.lazyPut(() => PostController());
     // Get.lazyPut(()=> ProfileController());

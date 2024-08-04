@@ -7,6 +7,6 @@ class ProfileBinding implements Bindings {
   @override
   void dependencies() {
     Get.lazyPut<ProfileController>(() => ProfileController(), fenix: true);
-    Get.lazyPut<SearchingController>(() => SearchingController());
+    Get.lazyPut<SearchingController>(() => SearchingController(), fenix: true);
   }
 }

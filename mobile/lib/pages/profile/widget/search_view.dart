@@ -119,7 +119,7 @@ class SearchingBar extends GetView<SearchingController> {
                                   ListTile(
                                     leading: CircleAvatar(
                                       backgroundImage:
-                                          NetworkImage(follower['photoUrl']),
+                                          NetworkImage(follower['photourl']),
                                     ),
                                     title: Text(follower['name']),
                                     subtitle: Text(follower['email']),
