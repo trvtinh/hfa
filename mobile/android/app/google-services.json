@@ -29,6 +29,13 @@
             {
               "client_id": "857860432080-jsp2a8k1v1v13b8jglncbrjlj9iltnf5.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "857860432080-og4mh520u6qis8ta92opgfcgfahr8gru.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.healthForAll"
+              }
             }
           ]
         }

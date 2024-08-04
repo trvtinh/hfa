@@ -6,13 +6,13 @@ class Notice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: Colors.white,
@@ -28,7 +28,7 @@ class Notice extends StatelessWidget {
                               Icons.warning_amber,
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                            const SizedBox(width: 12,),
+                            SizedBox(width: 12,),
                             Text(
                               '· HFA ·',
                               style: TextStyle(
@@ -38,7 +38,7 @@ class Notice extends StatelessWidget {
                                 fontFamily: 'Roboto',
                               )
                             ),
-                            const SizedBox(width: 12,),
+                            SizedBox(width: 12,),
                             Text(
                               '06:00 Sáng, 27-07-2024',
                               style: TextStyle(
@@ -57,7 +57,7 @@ class Notice extends StatelessWidget {
                       ),
                     ]
                   ),
-                  const SizedBox(height: 12,),
+                  SizedBox(height: 12,),
                   Row(
                     children: [
                       Text(
@@ -71,7 +71,7 @@ class Notice extends StatelessWidget {
                       ),
                     ]
                   ),
-                  const SizedBox(height: 3,),
+                  SizedBox(height: 3,),
                   Row(
                     children: [
                       Text(

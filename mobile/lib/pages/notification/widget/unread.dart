@@ -6,13 +6,13 @@ class Unread extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Container(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
                 color: Colors.white,
@@ -28,7 +28,7 @@ class Unread extends StatelessWidget {
                               Icons.person_add_alt,
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                            const SizedBox(width: 12,),
+                            SizedBox(width: 12,),
                             Text(
                               '· Nguyễn Văn B ·',
                               style: TextStyle(
@@ -38,7 +38,7 @@ class Unread extends StatelessWidget {
                                 fontFamily: 'Roboto',
                               )
                             ),
-                            const SizedBox(width: 12,),
+                            SizedBox(width: 12,),
                             Text(
                               'now',
                               style: TextStyle(
@@ -57,7 +57,7 @@ class Unread extends StatelessWidget {
                       ),
                     ]
                   ),
-                  const SizedBox(height: 12,),
+                  SizedBox(height: 12,),
                   Row(
                     children: [
                       Text(
@@ -71,7 +71,7 @@ class Unread extends StatelessWidget {
                       ),
                     ]
                   ),
-                  const SizedBox(height: 3,),
+                  SizedBox(height: 3,),
                   Row(
                     children: [
                       Text(

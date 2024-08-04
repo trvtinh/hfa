@@ -101,7 +101,7 @@ class SearchingBar extends GetView<SearchingController> {
                         : null, // Assign key to the first item for measuring height
                     name: follower['name'],
                     email: follower['email'],
-                    imageUrl: follower['photoUrl'],
+                    imageUrl: follower['photourl'],
                     onTap: () {
                       // Show dialog on tap
                       showDialog(

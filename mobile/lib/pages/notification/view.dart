@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/notification/widget/unread.dart';
 import 'package:health_for_all/pages/notification/widget/notice.dart';
+import 'package:health_for_all/pages/notification/widget/remind.dart';
+import 'package:health_for_all/pages/notification/widget/read.dart';
 
 class NotificationPage extends GetView<NotificationController>{
-  const NotificationPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -21,29 +23,36 @@ class NotificationPage extends GetView<NotificationController>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Chưa đọc',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 5,),
                     Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.red[900],
-                        shape: BoxShape.circle,
+                      child: Row(
+                        children: [
+                          Text(
+                              'Chưa đọc',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 5,),
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.red[900],
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  '1',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  )
+                                ),
+                              )
+                            ),
+                        ],
                       ),
-                      child: const Center(
-                        child: Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          )
-                        ),
-                      )
                     ),
                   ]
                 ),
@@ -53,29 +62,36 @@ class NotificationPage extends GetView<NotificationController>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Cảnh báo',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 5,),
                     Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.red[900],
-                        shape: BoxShape.circle,
+                      child: Row(
+                        children: [
+                          Text(
+                              'Cảnh báo',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 5,),
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.red[900],
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  '1',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  )
+                                ),
+                              )
+                            ),
+                        ],
                       ),
-                      child: const Center(
-                        child: Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          )
-                        ),
-                      )
                     ),
                   ]
                 ),
@@ -85,29 +101,36 @@ class NotificationPage extends GetView<NotificationController>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Nhắc nhở',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 5,),
                     Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.red[900],
-                        shape: BoxShape.circle,
+                      child: Row(
+                        children: [
+                          Text(
+                              'Nhắc nhở',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 5,),
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.red[900],
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  '1',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  )
+                                ),
+                              )
+                            ),
+                        ],
                       ),
-                      child: const Center(
-                        child: Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          )
-                        ),
-                      )
                     ),
                   ]
                 ),
@@ -117,29 +140,36 @@ class NotificationPage extends GetView<NotificationController>{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Đã đọc',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(width: 5,),
                     Container(
-                      padding: const EdgeInsets.all(6),
-                      decoration: BoxDecoration(
-                        color: Colors.red[900],
-                        shape: BoxShape.circle,
+                      child: Row(
+                        children: [
+                          Text(
+                              'Đã đọc',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(width: 5,),
+                            Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.red[900],
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  '1',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 11,
+                                  )
+                                ),
+                              )
+                            ),
+                        ],
                       ),
-                      child: const Center(
-                        child: Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          )
-                        ),
-                      )
                     ),
                   ]
                 ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ComboBox extends StatefulWidget {
+class AddNewData extends StatefulWidget {
   final String leadingiconpath;
   final String title;
   final String value;
@@ -9,10 +9,10 @@ class ComboBox extends StatefulWidget {
   final IconButton? upload;
   final bool check;
   final Function()? onTap;
-  ComboBox({super.key, required this.leadingiconpath, required this.title, required this.value, required this.unit, this.edit, this.upload, required this.check, required this.onTap, });
+  AddNewData({super.key, required this.leadingiconpath, required this.title, required this.value, required this.unit, this.edit, this.upload, required this.check, required this.onTap, });
 
   @override
-  State<ComboBox> createState() => _ComboBoxState();
+  State<AddNewData> createState() => _ComboBoxState();
 }
 
 class IconWidget extends StatelessWidget {
@@ -34,7 +34,7 @@ void toggle(){
   
 }
 
-class _ComboBoxState extends State<ComboBox> {
+class _ComboBoxState extends State<AddNewData> {
   final infor = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -52,101 +52,7 @@ class _ComboBoxState extends State<ComboBox> {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(widget.leadingiconpath),
-                        SizedBox(width: 10,),
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            fontSize: 24,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 150, height: 78,
-                          child: TextField(
-                            controller: infor,
-                            decoration: const InputDecoration(
-                              labelText: 'Giá trị đo',
-                              hintText: "Giá trị",
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(width: 20,),
-
-                        Container(
-                          width: 120, height: 78,
-                          child: TextField(
-                            controller: infor,
-                            decoration: const InputDecoration(
-                              labelText: 'Đơn vị',
-                              hintText: 'lần/phút',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 290, height: 56,
-                          child: TextField(
-                            controller: infor,
-                            decoration: InputDecoration(
-                              labelText: 'Ghi chú',
-                              hintText: 'Ghi chú',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.all(8),
-                                child: Icon(
-                                  Icons.edit_note,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Row(children: [
-                            Text(
-                                'Hủy',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
-                              ),
-                              SizedBox(width: 16,),
-                              Text(
-                                'Xác nhận',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                          ],),
-                        )
-                      ],
-                    )
-                  ],
+                  
                 ),
               ),
             );
