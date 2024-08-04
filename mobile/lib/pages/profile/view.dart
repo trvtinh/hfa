@@ -38,7 +38,7 @@ class ProfilePage extends GetView<ProfileController> {
                     FollowingPage(),
                   ],
                 )
-              : Center(child: CircularProgressIndicator()),
+              : const Center(child: CircularProgressIndicator()),
         ),
       ),
     );
