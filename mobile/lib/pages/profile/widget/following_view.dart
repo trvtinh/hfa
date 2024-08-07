@@ -15,7 +15,7 @@ class _FollowingPageState extends State<FollowingPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SearchBar(),
+          const SearchBar(),
           const SizedBox(
             height: 10,
           ),
@@ -97,6 +97,8 @@ class FollowerListTile extends StatelessWidget {
 }
 
 class SearchBar extends StatefulWidget {
+  const SearchBar({super.key});
+
   @override
   _SearchBarState createState() => _SearchBarState();
 }
