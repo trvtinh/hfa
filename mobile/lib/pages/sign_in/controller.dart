@@ -20,7 +20,9 @@ class SignInController extends GetxController {
   Future<void> handleSignIn() async {
     try {
       final user = await _googleSignIn.signIn();
+
       if (user != null) {
+        log(user.toString());
         final gAuthentication = await user.authentication;
         final credential = GoogleAuthProvider.credential(
           idToken: gAuthentication.idToken,
@@ -80,7 +82,7 @@ class SignInController extends GetxController {
               )
               .add(data);
         }
-
+        log('đăng nhâp thành công');
         Get.offAndToNamed(AppRoutes.Application);
       }
     } catch (e) {

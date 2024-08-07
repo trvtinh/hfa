@@ -41,6 +41,7 @@ class _InformationPageState extends State<InformationPage> {
   @override
   void initState() {
     super.initState();
+    controller.getProfile();
     log(controller.state.profile.value.toString());
     // Initialize the controllers with current values if available
     if (controller.state.profile.value != null) {
@@ -191,8 +192,24 @@ class _InformationPageState extends State<InformationPage> {
                                 originalDob =
                                     controller.state.dateOfBirth.value;
                                 originalGender = controller.state.gender.value;
-                                false; // Exit editing mode
+                                controller.state.profile.value!.name =
+                                    controller.state.name.value;
+                                controller.state.profile.value!.email =
+                                    controller.state.email.value;
+                                controller.state.profile.value!.phoneNumber =
+                                    controller.state.phoneNumber.value;
+                                controller.state.profile.value!.dateOfBirth =
+                                    controller.state.dateOfBirth.value;
+                                controller.state.profile.value!.gender =
+                                    controller.state.gender.value;
+                                controller.state.profile.value.toString();
+
+                                // Update the profile in the database
+                                isEditing = false; // Exit editing mode
                               });
+                              controller.updateUserDataById(
+                                  controller.state.profile.value!.id.toString(),
+                                  controller.state.profile.value!);
                             },
                           ),
                           IconButton(

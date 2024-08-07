@@ -1,20 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserData {
-  final String? id;
-  final String? name;
-  final String? email;
-  final String? photourl;
-  final String? location;
-  final String? fcmtoken;
-  final Timestamp? addtime;
-  final int? age;
-  final String? gender;
-  final String? phoneNumber;
-  final List<String>? doctors;
-  final List<String>? patients;
-  final List<String>? relatives;
-  final String? dateOfBirth;
+  String? id;
+  String? name;
+  String? email;
+  String? photourl;
+  String? location;
+  String? fcmtoken;
+  Timestamp? addtime;
+  int? age;
+  String? gender;
+  String? phoneNumber;
+  List<String>? doctors;
+  List<String>? patients;
+  List<String>? relatives;
+  String? dateOfBirth;
+
   UserData({
     this.id,
     this.name,
@@ -24,11 +25,11 @@ class UserData {
     this.fcmtoken,
     this.addtime,
     this.age,
+    this.gender,
+    this.phoneNumber,
     this.doctors,
     this.patients,
     this.relatives,
-    this.gender,
-    this.phoneNumber,
     this.dateOfBirth,
   });
 
@@ -47,8 +48,8 @@ class UserData {
         'patients: $patients, '
         'relatives: $relatives, '
         'gender: $gender, '
-        'phoneNumber: $phoneNumber'
-        ', dateOfBirth: $dateOfBirth'
+        'phoneNumber: $phoneNumber,'
+        'dateOfBirth: $dateOfBirth'
         ')';
   }
 
@@ -95,7 +96,6 @@ class UserData {
   }
 }
 
-// 登录返回
 class UserLoginResponseEntity {
   String? accessToken;
   String? displayName;
@@ -119,34 +119,13 @@ class UserLoginResponseEntity {
         accessToken: json["access_token"],
         displayName: json["display_name"],
         email: json["email"],
-        photoUrl: json["photoUrl"],
+        photoUrl: json["photourl"],
       );
 
   Map<String, dynamic> toJson() => {
         "access_token": accessToken,
         "display_name": displayName,
         "email": email,
-        "photoUrl": photoUrl,
+        "photourl": photoUrl,
       };
-}
-
-class MeListItem {
-  String? name;
-  String? icon;
-  String? explain;
-  String? route;
-
-  MeListItem({
-    this.name,
-    this.icon,
-    this.explain,
-    this.route,
-  });
-
-  factory MeListItem.fromJson(Map<String, dynamic> json) => MeListItem(
-        name: json["name"],
-        icon: json["icon"],
-        explain: json["explain"],
-        route: json["route"],
-      );
 }
