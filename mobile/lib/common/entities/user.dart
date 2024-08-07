@@ -15,6 +15,7 @@ class UserData {
   List<String>? patients;
   List<String>? relatives;
   String? dateOfBirth;
+
   UserData({
     this.id,
     this.name,
@@ -24,11 +25,11 @@ class UserData {
     this.fcmtoken,
     this.addtime,
     this.age,
+    this.gender,
+    this.phoneNumber,
     this.doctors,
     this.patients,
     this.relatives,
-    this.gender,
-    this.phoneNumber,
     this.dateOfBirth,
   });
 
@@ -47,8 +48,8 @@ class UserData {
         'patients: $patients, '
         'relatives: $relatives, '
         'gender: $gender, '
-        'phoneNumber: $phoneNumber'
-        ', dateOfBirth: $dateOfBirth'
+        'phoneNumber: $phoneNumber,'
+        'dateOfBirth: $dateOfBirth'
         ')';
   }
 
@@ -95,7 +96,6 @@ class UserData {
   }
 }
 
-// 登录返回
 class UserLoginResponseEntity {
   String? accessToken;
   String? displayName;
@@ -119,13 +119,13 @@ class UserLoginResponseEntity {
         accessToken: json["access_token"],
         displayName: json["display_name"],
         email: json["email"],
-        photoUrl: json["photoUrl"],
+        photoUrl: json["photourl"],
       );
 
   Map<String, dynamic> toJson() => {
         "access_token": accessToken,
         "display_name": displayName,
         "email": email,
-        "photoUrl": photoUrl,
+        "photourl": photoUrl,
       };
 }

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
-import 'package:health_for_all/pages/profile/widget/search_controller.dart';
+import 'package:health_for_all/pages/profile/page/search_controller.dart';
 import 'index.dart';
 
 class ApplicationBinding implements Bindings {

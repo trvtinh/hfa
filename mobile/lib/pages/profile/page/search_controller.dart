@@ -23,8 +23,7 @@ class SearchingController extends GetxController {
 
       final results = await FirebaseFirestore.instance
           .collection('users')
-          .where('name', isGreaterThanOrEqualTo: query)
-          .where('name', isLessThanOrEqualTo: '$query\uf8ff')
+          .where('id', isEqualTo: query)
           .get();
 
       searchResults.value = results.docs.map((doc) => doc.data()).toList();

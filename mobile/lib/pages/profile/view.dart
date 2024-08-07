@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
-import 'package:health_for_all/pages/profile/widget/follower_view.dart';
-import 'package:health_for_all/pages/profile/widget/following_view.dart';
-import 'package:health_for_all/pages/profile/widget/information_view.dart';
+import 'package:health_for_all/pages/profile/page/follower_view.dart';
+import 'package:health_for_all/pages/profile/page/following_view.dart';
+import 'package:health_for_all/pages/profile/page/information_view.dart';
 
 class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
