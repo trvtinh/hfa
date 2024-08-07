@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import 'controller.dart';
-import 'widget/search_controller.dart';
+import 'page/search_controller.dart';
 
 class ProfileBinding implements Bindings {
   @override

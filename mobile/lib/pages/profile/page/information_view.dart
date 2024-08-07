@@ -41,6 +41,7 @@ class _InformationPageState extends State<InformationPage> {
   @override
   void initState() {
     super.initState();
+    controller.getProfile();
     log(controller.state.profile.value.toString());
     // Initialize the controllers with current values if available
     if (controller.state.profile.value != null) {

@@ -1,12 +1,13 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/profile/controller.dart';
 import 'search_controller.dart';
 
 class SearchingBar extends GetView<SearchingController> {
   final TextEditingController _controller = TextEditingController();
-
-  SearchingBar({super.key});
+  final bool following;
+  SearchingBar(this.following, {super.key});
 
   void _clearText() {
     _controller.clear();
@@ -22,7 +23,9 @@ class SearchingBar extends GetView<SearchingController> {
           controller: _controller,
           onChanged: controller.onTextChanged,
           decoration: InputDecoration(
-            hintText: 'Thêm người theo dõi',
+            hintText: following
+                ? 'Thêm người muốn theo dõi dữ liệu'
+                : 'Thêm người theo dõi',
             prefixIcon: Obx(() => IconButton(
                   icon: Icon(controller.hasText.value
                       ? Icons.arrow_back
@@ -95,7 +98,7 @@ class SearchingBar extends GetView<SearchingController> {
                 itemCount: itemCount,
                 itemBuilder: (context, index) {
                   final follower = controller.searchResults[index];
-                  return FollowerListTile(
+                  return UserViewListTile(
                     key: index == 0
                         ? listTileKey
                         : null, // Assign key to the first item for measuring height
@@ -107,71 +110,9 @@ class SearchingBar extends GetView<SearchingController> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundImage:
-                                          NetworkImage(follower['photourl']),
-                                    ),
-                                    title: Text(follower['name']),
-                                    subtitle: Text(follower['email']),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Text('Thêm người theo dõi',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ChoiceChip(
-                                        label: const Text('Người nhà'),
-                                        selected: true,
-                                        onSelected: (bool selected) {
-                                          // Handle selection
-                                        },
-                                      ),
-                                      ChoiceChip(
-                                        label: const Text('Chuyên gia y tế'),
-                                        selected: false,
-                                        onSelected: (bool selected) {
-                                          // Handle selection
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Hủy',
-                                            style:
-                                                TextStyle(color: Colors.red)),
-                                      ),
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text('Xác nhận'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                          return _FollowerDialog(
+                            follower: follower,
+                            following: following,
                           );
                         },
                       );
@@ -187,13 +128,13 @@ class SearchingBar extends GetView<SearchingController> {
   }
 }
 
-class FollowerListTile extends StatelessWidget {
+class UserViewListTile extends StatelessWidget {
   final String name;
   final String email;
   final String imageUrl;
   final VoidCallback onTap;
 
-  const FollowerListTile({
+  const UserViewListTile({
     required this.name,
     required this.email,
     required this.imageUrl,
@@ -220,6 +161,111 @@ class FollowerListTile extends StatelessWidget {
         title: Text(name),
         subtitle: Text(email),
         onTap: onTap,
+      ),
+    );
+  }
+}
+
+class _FollowerDialog extends StatefulWidget {
+  final Map<String, dynamic> follower;
+  final bool following;
+  const _FollowerDialog({
+    required this.follower,
+    required this.following,
+  });
+
+  @override
+  __FollowerDialogState createState() => __FollowerDialogState();
+}
+
+class __FollowerDialogState extends State<_FollowerDialog> {
+  String? selectedCategory;
+  final controller = Get.find<ProfileController>();
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(widget.follower['photourl']),
+              ),
+              title: Text(widget.follower['name']),
+              subtitle: Text(widget.follower['email']),
+            ),
+            const SizedBox(height: 16),
+            Text('Thêm người theo dõi',
+                style: Theme.of(context).textTheme.bodyLarge),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ChoiceChip(
+                  label: const Text('Người nhà'),
+                  selected: selectedCategory == 'Người nhà',
+                  onSelected: (bool selected) {
+                    setState(() {
+                      selectedCategory = selected ? 'Người nhà' : null;
+                    });
+                  },
+                ),
+                ChoiceChip(
+                  label: const Text('Chuyên gia y tế'),
+                  selected: selectedCategory == 'Chuyên gia y tế',
+                  onSelected: (bool selected) {
+                    setState(() {
+                      selectedCategory = selected ? 'Chuyên gia y tế' : null;
+                    });
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  child: const Text('Hủy', style: TextStyle(color: Colors.red)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Handle the confirmation button press
+                    if (selectedCategory != null) {
+                      print('Confirmed: $selectedCategory');
+                      print('id : ' + widget.follower['id']);
+                      if (selectedCategory == 'Người nhà') {
+                        controller.sendRequest(
+                            widget.follower['id'], 'relative');
+                        log('1');
+                      } else {
+                        if (widget.following) {
+                          controller.sendRequest(
+                              widget.follower['id'], 'doctor');
+                          log('2');
+                        } else {
+                          controller.sendRequest(
+                              widget.follower['id'], 'patient');
+                          log('3');
+                        }
+                      }
+                    }
+                    // Get.back();
+                  },
+                  child: const Text('Xác nhận'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
