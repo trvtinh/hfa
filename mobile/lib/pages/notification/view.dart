@@ -17,43 +17,38 @@ class NotificationPage extends GetView<NotificationController>{
       child: Scaffold(
         // thanh chọn
         appBar: AppBar(
+          // leading: IconButton(onPressed: ()=> Get.back(), icon: Icon(Icons.arrow_back)),
           bottom: TabBar(
             tabs: [
               Tab(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      child: Row(
-                        children: [
-                          Text(
-                              'Chưa đọc',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(width: 5,),
-                            Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: Colors.red[900],
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  '1',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 11,
-                                  )
-                                ),
-                              )
-                            ),
-                        ],
+                    Text(
+                        'Chưa đọc',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          fontSize: 14,
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 5,),
+                      Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.red[900],
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Center(
+                          child: Text(
+                            '1',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 11,
+                            )
+                          ),
+                        )
+                      ),
                   ]
                 ),
               ),

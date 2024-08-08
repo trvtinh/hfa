@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
               // theme: ThemeData(
               //   primarySwatch: Colors.,
               // ),
-              initialRoute: AppPages.Application,
+              initialRoute: AppPages.SignIn,
               getPages: AppPages.routes,
               debugShowCheckedModeBanner: false,
             ));
