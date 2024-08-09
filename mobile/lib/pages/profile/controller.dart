@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -6,49 +5,36 @@ import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/request_follow.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/entities/user_request.dart';
-import 'package:health_for_all/common/store/user.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/profile/index.dart';
+import 'package:intl/intl.dart';
 
 class ProfileController extends GetxController {
   final state = ProfileState();
-
+  final appController = Get.find<ApplicationController>();
   @override
   void onInit() async {
     super.onInit();
-    await getProfile();
   }
 
-  Future<void> getProfile() async {
-    try {
-      String profile = await UserStore.to.getProfile();
+  DateTime parseDate(String dateString) {
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+    return dateFormat.parse(dateString);
+  }
 
-      if (profile.isNotEmpty) {
-        UserLoginResponseEntity userdata =
-            UserLoginResponseEntity.fromJson(jsonDecode(profile));
-        state.head_detail.value = userdata;
-        log('Dữ liệu local: ${state.head_detail.value.toString()}');
+  int calculateAge(String dateString) {
+    DateTime today = DateTime.now();
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+    final birthDate = dateFormat.parse(dateString);
+    int age = today.year - birthDate.year;
 
-        final userCollection = FirebaseFirestore.instance.collection('users');
-        final query = userCollection.where('id',
-            isEqualTo: state.head_detail.value!.accessToken);
-
-        final querySnapshot = await query.get();
-
-        if (querySnapshot.docs.isNotEmpty) {
-          final documentSnapshot = querySnapshot
-              .docs.first; // Lấy tài liệu đầu tiên từ kết quả truy vấn
-          state.profile.value = UserData.fromFirestore(documentSnapshot, null);
-          log(state.profile.value.toString());
-          // Thực hiện các thao tác khác với userData
-        } else {
-          log('User does not exist.');
-        }
-      } else {
-        log("Lỗi lấy dữ liệu local");
-      }
-    } catch (e) {
-      log('Lỗi khi lấy hồ sơ: $e');
+    // Nếu ngày sinh chưa qua trong năm nay
+    if (today.month < birthDate.month ||
+        (today.month == birthDate.month && today.day < birthDate.day)) {
+      age--;
     }
+
+    return age;
   }
 
   Future<List<UserData>> fetchUserByIds(List<String> id) async {
@@ -80,7 +66,7 @@ class ProfileController extends GetxController {
     try {
       // Lấy danh sách các yêu cầu từ Firestore
       final querySnapshot = await FirebaseApi.getQuerySnapshot(
-          'requestFollows', 'toUId', state.profile.value!.id!);
+          'requestFollows', 'toUId', appController.state.profile.value!.id!);
 
       // Lưu danh sách các Future<UserRequest>
       final List<Future<UserRequest>> requestFutures = [];
@@ -150,14 +136,14 @@ class ProfileController extends GetxController {
           fromFirestore: UserData.fromFirestore,
           toFirestore: (UserData userdata, options) => userdata.toFirestore(),
         )
-        .where("from_uid", isEqualTo: state.profile.value!.id)
+        .where("from_uid", isEqualTo: appController.state.profile.value!.id)
         .where("to_uid", isEqualTo: id)
         .where('typeRole', isEqualTo: type)
         .get();
 
     if (userbase.docs.isEmpty) {
       final data = RequestFollow(
-        fromUId: state.profile.value!.id,
+        fromUId: appController.state.profile.value!.id,
         toUId: id,
         typeRole: type,
       );

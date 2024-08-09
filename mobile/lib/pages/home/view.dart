@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/pages/application/index.dart';
 
 class Homepage extends StatelessWidget {
-  const Homepage({super.key});
-
+  Homepage({super.key});
+  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          const Divider(
-            color: Colors.black,
-            thickness: 0.5,
-          ),
           Container(
             height: 80,
             width: 380,
@@ -20,7 +18,7 @@ class Homepage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               color: Theme.of(context).colorScheme.primaryContainer,
             ),
-            child: const Column(
+            child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(

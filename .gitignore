@@ -1,8 +1,3 @@
-History/
-References/
-KHOEMACH_LIB/
-Project Outputs for KHOEMACH_LIB/
-__Previews/
 # Miscellaneous
 *.class
 *.log
@@ -14,6 +9,7 @@ __Previews/
 .history
 .svn/
 migrate_working_dir/
+.env
 
 # IntelliJ related
 *.iml

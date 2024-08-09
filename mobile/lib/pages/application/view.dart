@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/routes/names.dart';
-import 'package:health_for_all/pages/homepage/view.dart';
+import 'package:health_for_all/pages/home/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
-import 'package:health_for_all/pages/sign_in/controller.dart';
 import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
@@ -20,7 +18,7 @@ class ApplicationPage extends GetView<ApplicationController> {
         controller: controller.pageController,
         onPageChanged: controller.handPageChanged,
         children: [
-          const Homepage(),
+          Homepage(),
           OverallMedicalDataHistoryPage(),
           MedicalDataPage(),
           NotificationPage(),
@@ -114,10 +112,10 @@ class ApplicationPage extends GetView<ApplicationController> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context)=> const About_HFA()),
+                  MaterialPageRoute(builder: (context) => const About_HFA()),
                 );
               },
               child: Image.asset(
@@ -143,7 +141,7 @@ class About_HFA extends StatelessWidget {
       appBar: AppBar(
         title: Text("Về chúng tôi"),
         leading: GestureDetector(
-          onTap: (){
+          onTap: () {
             Navigator.pop(context);
           },
           child: Icon(Icons.arrow_back),
@@ -154,7 +152,9 @@ class About_HFA extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Về HFA project'),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             Text('Về NK Solution'),
           ],
         ),
