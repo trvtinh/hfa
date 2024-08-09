@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/pages/application/index.dart';
 
 class Homepage extends StatelessWidget {
-  const Homepage({super.key});
-
+  Homepage({super.key});
+  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -16,136 +18,132 @@ class Homepage extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               color: Theme.of(context).colorScheme.primaryContainer,
             ),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    // SizedBox(
-                    //   width: 8,
-                    // ),
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundImage: NetworkImage(
-                        'https://s3-alpha-sig.figma.com/img/447d/ffec/b39241368aea1a19b6a61652750c7316?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Q3518w86n~r1T95c867IZ4KfhmZWH2VjaBSvsuGASCjV4DVOqIHyyX1aTHbMwVGavXu~nj1hwsqyUk2fLCst~Mv7Ld5495xnB9vABr5rP4QgaSsfLkZyS0plApMhQ7P4gJn1wXNvZRc2yq6UELDcyg6ZrfnJUDna7i7dW6z7hDCg2-2uSATU8v4-uq5U5mhrZ883gatl7ZNw5sLmCFB3LNN-2SmCbskKe2rPynkWEr4kXg8UIRdmCw2zsJN2EEwnwkvJUaj3qVucjsImnnQ65EuF8V7LhOpVP3l3qBkxlK-IpQjPAlQ23j-d2Bsa9PavrclCgDwLkaO66tX3vzJpFQ__',
-                      ),
-                    ),
-                    // SizedBox(
-                    //   width: 16,
-                    // ),
-                    Column(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          "Nguyễn Văn A",
-                          style: TextStyle(fontSize: 20),
+                        // SizedBox(
+                        //   width: 8,
+                        // ),
+                        CircleAvatar(
+                          radius: 28,
+                          backgroundImage: NetworkImage(
+                            'https://s3-alpha-sig.figma.com/img/447d/ffec/b39241368aea1a19b6a61652750c7316?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Q3518w86n~r1T95c867IZ4KfhmZWH2VjaBSvsuGASCjV4DVOqIHyyX1aTHbMwVGavXu~nj1hwsqyUk2fLCst~Mv7Ld5495xnB9vABr5rP4QgaSsfLkZyS0plApMhQ7P4gJn1wXNvZRc2yq6UELDcyg6ZrfnJUDna7i7dW6z7hDCg2-2uSATU8v4-uq5U5mhrZ883gatl7ZNw5sLmCFB3LNN-2SmCbskKe2rPynkWEr4kXg8UIRdmCw2zsJN2EEwnwkvJUaj3qVucjsImnnQ65EuF8V7LhOpVP3l3qBkxlK-IpQjPAlQ23j-d2Bsa9PavrclCgDwLkaO66tX3vzJpFQ__',
+                          ),
                         ),
-                        Row(
+                        // SizedBox(
+                        //   width: 16,
+                        // ),
+                        Column(
                           children: [
                             Text(
-                              "Nam",
-                              style: TextStyle(
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
+                              "Nguyễn Văn A",
+                              style: TextStyle(fontSize: 20),
                             ),
-                            SizedBox(
-                              width: 31,
-                            ),
-                            Text(
-                              "25 tuổi",
-                              style: TextStyle(
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
-                            ),
-                          ],
-                        )
-
-                      ],
-                    ),
-                    // Spacer(
-                    //   flex: 1,
-                    // ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              "Người nhà:",
-                              style: TextStyle(
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 30,
-                            ),
-                            Badge(
-                              // child: Text("2"),
-                              label: Text("2"),
-                              largeSize: 16,
-                              backgroundColor: Color.fromRGBO(125, 82, 96, 1),
+                            Row(
+                              children: [
+                                Text(
+                                  "Nam",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(121, 116, 126, 1),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 31,
+                                ),
+                                Text(
+                                  "25 tuổi",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(121, 116, 126, 1),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                ),
+                              ],
                             )
                           ],
                         ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        // Spacer(
+                        //   flex: 1,
+                        // ),
+                        Column(
                           children: [
-                            Text(
-                              "Chuyên gia:",
-                              style: TextStyle(
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "Người nhà:",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(121, 116, 126, 1),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                Badge(
+                                  // child: Text("2"),
+                                  label: Text("2"),
+                                  largeSize: 16,
+                                  backgroundColor:
+                                      Color.fromRGBO(125, 82, 96, 1),
+                                )
+                              ],
                             ),
-                            SizedBox(
-                              width: 26,
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "Chuyên gia:",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(121, 116, 126, 1),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 26,
+                                ),
+                                Badge(
+                                  // child: Text("2"),
+                                  label: Text("1"),
+                                  largeSize: 16,
+                                  backgroundColor:
+                                      Color.fromRGBO(125, 82, 96, 1),
+                                )
+                              ],
                             ),
-                            Badge(
-                              // child: Text("2"),
-                              label: Text("1"),
-                              largeSize: 16,
-                              backgroundColor: Color.fromRGBO(125, 82, 96, 1),
-                            )
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  "Đang theo dõi:",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(121, 116, 126, 1),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Badge(
+                                  // child: Text("2"),
+                                  label: Text("1"),
+                                  largeSize: 16,
+                                  backgroundColor:
+                                      Color.fromRGBO(125, 82, 96, 1),
+                                )
+                              ],
+                            ),
+                            // Text('Người nhà'),
+                            // Text('Chuyên gia'),
+                            // Text('Đang theo dõi'),
                           ],
                         ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              "Đang theo dõi:",
-                              style: TextStyle(
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Badge(
-                              // child: Text("2"),
-                              label: Text("1"),
-                              largeSize: 16,
-                              backgroundColor: Color.fromRGBO(125, 82, 96, 1),
-                            )
-                          ],
-                        ),
-                        // Text('Người nhà'),
-                        // Text('Chuyên gia'),
-                        // Text('Đang theo dõi'),
-                      ],
-                    ),
-                  ]
-                )
-              ]
-
-
-            ),
+                      ])
+                ]),
           ),
-
-
           Container(
             height: 124,
             width: 380,
@@ -250,8 +248,6 @@ class Homepage extends StatelessWidget {
               ],
             ),
           ),
-
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -266,23 +262,23 @@ class Homepage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          "Chẩn đoán",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            "Chẩn đoán",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Icon(
-                          Icons.open_in_new,
-                          size: 16,
-                        ),
-                      ]),
+                          SizedBox(
+                            width: 30,
+                          ),
+                          Icon(
+                            Icons.open_in_new,
+                            size: 16,
+                          ),
+                        ]),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -296,8 +292,7 @@ class Homepage extends StatelessWidget {
                         ),
                         Column(children: [
                           Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Chưa xem",
@@ -319,8 +314,7 @@ class Homepage extends StatelessWidget {
                             ],
                           ),
                           Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Đã xem",
@@ -347,8 +341,6 @@ class Homepage extends StatelessWidget {
                   ],
                 ),
               ),
-
-
               Container(
                 height: 100,
                 width: 185,
@@ -390,8 +382,7 @@ class Homepage extends StatelessWidget {
                         ),
                         Column(children: [
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Đang uống",
@@ -413,8 +404,7 @@ class Homepage extends StatelessWidget {
                             ],
                           ),
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Hoàn thành",
@@ -443,8 +433,6 @@ class Homepage extends StatelessWidget {
               ),
             ],
           ),
-
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -488,8 +476,7 @@ class Homepage extends StatelessWidget {
                           width: 8,
                         ),
                         Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Số lời nhắc",
@@ -515,7 +502,6 @@ class Homepage extends StatelessWidget {
                   ],
                 ),
               ),
-
               Container(
                 height: 100,
                 width: 185,
@@ -556,8 +542,7 @@ class Homepage extends StatelessWidget {
                           width: 8,
                         ),
                         Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               "Số cảnh báo",
@@ -585,8 +570,6 @@ class Homepage extends StatelessWidget {
               ),
             ],
           ),
-
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -631,8 +614,7 @@ class Homepage extends StatelessWidget {
                         ),
                         Column(children: [
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Chưa xem",
@@ -654,8 +636,7 @@ class Homepage extends StatelessWidget {
                             ],
                           ),
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Đã xem",
@@ -682,7 +663,6 @@ class Homepage extends StatelessWidget {
                   ],
                 ),
               ),
-
               Container(
                 height: 100,
                 width: 185,
@@ -721,8 +701,7 @@ class Homepage extends StatelessWidget {
                         ),
                         Column(children: [
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "Trò chuyện y tế",
@@ -734,8 +713,7 @@ class Homepage extends StatelessWidget {
                             ],
                           ),
                           Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
                                 "với HFA",
@@ -754,8 +732,6 @@ class Homepage extends StatelessWidget {
               ),
             ],
           ),
-
-
           Container(
             height: 84,
             width: 380,
@@ -785,7 +761,6 @@ class Homepage extends StatelessWidget {
                     )
                   ],
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [

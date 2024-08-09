@@ -30,7 +30,7 @@ class ProfilePage extends GetView<ProfileController> {
           ),
         ),
         body: Obx(
-          () => controller.state.profile.value != null
+          () => controller.appController.state.profile.value != null
               ? const TabBarView(
                   children: [
                     InformationPage(),

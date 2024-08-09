@@ -41,26 +41,34 @@ class _InformationPageState extends State<InformationPage> {
   @override
   void initState() {
     super.initState();
-    controller.getProfile();
-    log(controller.state.profile.value.toString());
+    controller.appController.getProfile();
+    log(controller.appController.state.profile.value.toString());
     // Initialize the controllers with current values if available
-    if (controller.state.profile.value != null) {
-      _idController.text = controller.state.profile.value!.id.toString();
-      _nameController.text = controller.state.profile.value!.name ?? '';
-      _emailController.text = controller.state.profile.value!.email ?? '';
+    if (controller.appController.state.profile.value != null) {
+      _idController.text =
+          controller.appController.state.profile.value!.id.toString();
+      _nameController.text =
+          controller.appController.state.profile.value!.name ?? '';
+      _emailController.text =
+          controller.appController.state.profile.value!.email ?? '';
       _phoneController.text =
-          "+84 ${controller.state.profile.value!.phoneNumber ?? ''}";
-      _dobController.text = controller.state.profile.value!.dateOfBirth ??
-          DateTime.now().toString();
-      _genderController.text = controller.state.profile.value!.gender ?? '';
+          "+84 ${controller.appController.state.profile.value!.phoneNumber ?? ''}";
+      _dobController.text =
+          controller.appController.state.profile.value!.dateOfBirth ??
+              DateTime.now().toString();
+      _genderController.text =
+          controller.appController.state.profile.value!.gender ?? '';
 
       // Store the original values
-      originalId = controller.state.profile.value!.id ?? '';
-      originalName = controller.state.profile.value!.name ?? '';
-      originalEmail = controller.state.profile.value!.email ?? '';
-      originalPhone = controller.state.profile.value!.phoneNumber ?? '';
-      originalDob = controller.state.profile.value!.dateOfBirth ?? '';
-      originalGender = controller.state.profile.value!.gender ?? '';
+      originalId = controller.appController.state.profile.value!.id ?? '';
+      originalName = controller.appController.state.profile.value!.name ?? '';
+      originalEmail = controller.appController.state.profile.value!.email ?? '';
+      originalPhone =
+          controller.appController.state.profile.value!.phoneNumber ?? '';
+      originalDob =
+          controller.appController.state.profile.value!.dateOfBirth ?? '';
+      originalGender =
+          controller.appController.state.profile.value!.gender ?? '';
     }
 
     // Add listeners to update controller state on change
@@ -119,7 +127,7 @@ class _InformationPageState extends State<InformationPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (controller.state.profile.value == null) {
+    if (controller.appController.state.profile.value == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -141,7 +149,7 @@ class _InformationPageState extends State<InformationPage> {
                         CircleAvatar(
                           radius: 50, // Adjust radius as needed
                           backgroundImage: NetworkImage(
-                            controller.state.profile.value!
+                            controller.appController.state.profile.value!
                                 .photourl!, // Replace with your image URL
                           ),
                         ),
@@ -150,7 +158,7 @@ class _InformationPageState extends State<InformationPage> {
                           () => Container(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              controller.state.profile.value!
+                              controller.appController.state.profile.value!
                                   .name!, // Replace with dynamic value if needed
                               style: const TextStyle(
                                   color: Colors.black,
@@ -192,24 +200,30 @@ class _InformationPageState extends State<InformationPage> {
                                 originalDob =
                                     controller.state.dateOfBirth.value;
                                 originalGender = controller.state.gender.value;
-                                controller.state.profile.value!.name =
-                                    controller.state.name.value;
-                                controller.state.profile.value!.email =
-                                    controller.state.email.value;
-                                controller.state.profile.value!.phoneNumber =
+                                controller.appController.state.profile.value!
+                                    .name = controller.state.name.value;
+                                controller.appController.state.profile.value!
+                                    .email = controller.state.email.value;
+                                controller.appController.state.profile.value!
+                                        .phoneNumber =
                                     controller.state.phoneNumber.value;
-                                controller.state.profile.value!.dateOfBirth =
+                                controller.appController.state.profile.value!
+                                        .dateOfBirth =
                                     controller.state.dateOfBirth.value;
-                                controller.state.profile.value!.gender =
-                                    controller.state.gender.value;
-                                controller.state.profile.value.toString();
+                                controller.appController.state.profile.value!
+                                    .gender = controller.state.gender.value;
+                                controller.appController.state.profile.value
+                                    .toString();
 
                                 // Update the profile in the database
                                 isEditing = false; // Exit editing mode
                               });
                               controller.updateUserDataById(
-                                  controller.state.profile.value!.id.toString(),
-                                  controller.state.profile.value!);
+                                  controller
+                                      .appController.state.profile.value!.id
+                                      .toString(),
+                                  controller
+                                      .appController.state.profile.value!);
                             },
                           ),
                           IconButton(
@@ -247,12 +261,14 @@ class _InformationPageState extends State<InformationPage> {
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.perm_identity),
                     title: const Text('Mã người dùng'),
-                    subtitle: Text(controller.state.profile.value!.id!),
+                    subtitle:
+                        Text(controller.appController.state.profile.value!.id!),
                     trailing: IconButton(
                       icon: const Icon(Icons.copy),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(
-                            text: controller.state.profile.value!.id!));
+                            text: controller
+                                .appController.state.profile.value!.id!));
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('Đã lưu mã người dùng')));
