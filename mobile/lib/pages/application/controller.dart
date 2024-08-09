@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:health_for_all/common/routes/names.dart';
+import 'package:health_for_all/common/store/user.dart';
 import 'index.dart';
 
 import 'package:get/get.dart';
 
 class ApplicationController extends GetxController {
   final state = ApplicationState();
+  final GoogleSignIn googleSignIn = GoogleSignIn(scopes: <String>[
+    'email',
+    'http://www.googleapis.com/auth/contacts.readonly'
+  ]);
   ApplicationController();
 
   late final List<String> tabTitles;
@@ -62,6 +69,12 @@ class ApplicationController extends GetxController {
       ),
     ];
     pageController = PageController(initialPage: state.page);
+  }
+
+  Future<void> onLogOut() async {
+    UserStore.to.onLogout();
+    await googleSignIn.signOut();
+    Get.offAndToNamed(AppRoutes.SIGN_IN);
   }
 
   @override

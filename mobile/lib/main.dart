@@ -1,11 +1,32 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
 
 import 'common/routes/pages.dart';
+import 'common/services/storage.dart';
+import 'common/store/config.dart';
+import 'common/store/user.dart';
+import 'firebase_options.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(
+      'Title: ${message.notification!.title}'); // Handle background message here
+  print('Body: ${message.notification!.body}');
+  print('Payload: ${message.data}');
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Get.putAsync<StorageService>(() => StorageService().init());
+  Get.put<ConfigStore>(ConfigStore());
+  Get.put<UserStore>(UserStore());
+
+  await Firebase.initializeApp();
+  await FirebaseApi.initNotifications();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
 }
@@ -22,7 +43,7 @@ class MyApp extends StatelessWidget {
               // theme: ThemeData(
               //   primarySwatch: Colors.,
               // ),
-              initialRoute: AppPages.Application,
+              initialRoute: AppPages.SignIn,
               getPages: AppPages.routes,
               debugShowCheckedModeBanner: false,
             ));

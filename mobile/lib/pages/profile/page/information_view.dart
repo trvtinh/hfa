@@ -1,3 +1,6 @@
+// information_view.dart
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -11,7 +14,7 @@ class InformationPage extends StatefulWidget {
 }
 
 class _InformationPageState extends State<InformationPage> {
-  final controller = ProfileController();
+  final controller = Get.find<ProfileController>();
   bool isEditing = false;
 
   final TextEditingController _idController = TextEditingController();
@@ -38,21 +41,27 @@ class _InformationPageState extends State<InformationPage> {
   @override
   void initState() {
     super.initState();
-    // Initialize the controllers with current values
-    _idController.text = controller.state.id.value;
-    _nameController.text = controller.state.name.value;
-    _emailController.text = controller.state.email.value;
-    _phoneController.text = "+84 ${controller.state.phoneNumber.value}";
-    _dobController.text = controller.state.dateOfBirth.value;
-    _genderController.text = controller.state.gender.value;
+    controller.getProfile();
+    log(controller.state.profile.value.toString());
+    // Initialize the controllers with current values if available
+    if (controller.state.profile.value != null) {
+      _idController.text = controller.state.profile.value!.id.toString();
+      _nameController.text = controller.state.profile.value!.name ?? '';
+      _emailController.text = controller.state.profile.value!.email ?? '';
+      _phoneController.text =
+          "+84 ${controller.state.profile.value!.phoneNumber ?? ''}";
+      _dobController.text = controller.state.profile.value!.dateOfBirth ??
+          DateTime.now().toString();
+      _genderController.text = controller.state.profile.value!.gender ?? '';
 
-    // Store the original values
-    originalId = controller.state.id.value;
-    originalName = controller.state.name.value;
-    originalEmail = controller.state.email.value;
-    originalPhone = controller.state.phoneNumber.value;
-    originalDob = controller.state.dateOfBirth.value;
-    originalGender = controller.state.gender.value;
+      // Store the original values
+      originalId = controller.state.profile.value!.id ?? '';
+      originalName = controller.state.profile.value!.name ?? '';
+      originalEmail = controller.state.profile.value!.email ?? '';
+      originalPhone = controller.state.profile.value!.phoneNumber ?? '';
+      originalDob = controller.state.profile.value!.dateOfBirth ?? '';
+      originalGender = controller.state.profile.value!.gender ?? '';
+    }
 
     // Add listeners to update controller state on change
     _idController.addListener(() {
@@ -110,6 +119,10 @@ class _InformationPageState extends State<InformationPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (controller.state.profile.value == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -125,10 +138,11 @@ class _InformationPageState extends State<InformationPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const CircleAvatar(
+                        CircleAvatar(
                           radius: 50, // Adjust radius as needed
                           backgroundImage: NetworkImage(
-                            'https://afamilycdn.com/2019/2/25/photo-1-1551079860388720100606.jpg', // Replace with your image URL
+                            controller.state.profile.value!
+                                .photourl!, // Replace with your image URL
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -136,8 +150,8 @@ class _InformationPageState extends State<InformationPage> {
                           () => Container(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              controller.state.name
-                                  .value, // Replace with dynamic value if needed
+                              controller.state.profile.value!
+                                  .name!, // Replace with dynamic value if needed
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w600,
@@ -178,8 +192,24 @@ class _InformationPageState extends State<InformationPage> {
                                 originalDob =
                                     controller.state.dateOfBirth.value;
                                 originalGender = controller.state.gender.value;
+                                controller.state.profile.value!.name =
+                                    controller.state.name.value;
+                                controller.state.profile.value!.email =
+                                    controller.state.email.value;
+                                controller.state.profile.value!.phoneNumber =
+                                    controller.state.phoneNumber.value;
+                                controller.state.profile.value!.dateOfBirth =
+                                    controller.state.dateOfBirth.value;
+                                controller.state.profile.value!.gender =
+                                    controller.state.gender.value;
+                                controller.state.profile.value.toString();
+
+                                // Update the profile in the database
                                 isEditing = false; // Exit editing mode
                               });
+                              controller.updateUserDataById(
+                                  controller.state.profile.value!.id.toString(),
+                                  controller.state.profile.value!);
                             },
                           ),
                           IconButton(
@@ -217,12 +247,12 @@ class _InformationPageState extends State<InformationPage> {
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(Icons.perm_identity),
                     title: const Text('Mã người dùng'),
-                    subtitle: Text(controller.state.id.value),
+                    subtitle: Text(controller.state.profile.value!.id!),
                     trailing: IconButton(
                       icon: const Icon(Icons.copy),
                       onPressed: () {
-                        Clipboard.setData(
-                            ClipboardData(text: controller.state.id.value));
+                        Clipboard.setData(ClipboardData(
+                            text: controller.state.profile.value!.id!));
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('Đã lưu mã người dùng')));

@@ -1,6 +1,11 @@
 History/
 References/
+<<<<<<< HEAD
 Project Logs for HFA/
+=======
+KHOEMACH_LIB/
+Project Outputs for KHOEMACH_LIB/
+>>>>>>> ae0acdd6d3fb8776a17ef405a7fbc37cc5df50d8
 __Previews/
 # Miscellaneous
 *.class
