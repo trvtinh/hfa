@@ -107,8 +107,8 @@ class _AddFileState extends State<AddFile> {
     if (selectedFiles.isEmpty) {
       return DottedBorder(
               borderType: BorderType.RRect,
-              radius: Radius.circular(4),
-              dashPattern: [2, 3],
+              radius: const Radius.circular(4),
+              dashPattern: const [2, 3],
               color: Theme.of(context).colorScheme.outline,
               child: Container(
                 width: 260,
