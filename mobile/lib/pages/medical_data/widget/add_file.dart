@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -5,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddFile extends StatefulWidget {
-  const AddFile({super.key});
+  AddFile({super.key, this.files, this.onFilesChanged});
+
+  List<XFile>? files;
+  final Function(List<XFile>)? onFilesChanged;
 
   @override
   State<AddFile> createState() => _AddFileState();
@@ -15,22 +19,33 @@ class _AddFileState extends State<AddFile> {
   final ImagePicker _picker = ImagePicker();
   final List<XFile> selectedFiles = [];
 
-  /// Pick multiple images
+  @override
+  void initState() {
+    super.initState();
+    if (widget.files != null) {
+      selectedFiles.addAll(widget.files!);
+    }
+  }
+
   void pickMultipleImages() async {
     final List<XFile>? images = await _picker.pickMultiImage();
     if (images != null) {
       setState(() {
         selectedFiles.addAll(images);
+        widget.onFilesChanged
+            ?.call(selectedFiles); // Notify parent about changes
       });
     }
   }
 
-  /// Capture a photo
   void capturePhoto() async {
     final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
     if (photo != null) {
       setState(() {
         selectedFiles.add(photo);
+        log(selectedFiles.length.toString());
+        widget.onFilesChanged
+            ?.call(selectedFiles); // Notify parent about changes
       });
     }
   }
@@ -106,20 +121,20 @@ class _AddFileState extends State<AddFile> {
   Widget _buildFileList() {
     if (selectedFiles.isEmpty) {
       return DottedBorder(
-              borderType: BorderType.RRect,
-              radius: const Radius.circular(4),
-              dashPattern: const [2, 3],
-              color: Theme.of(context).colorScheme.outline,
-              child: Container(
-                width: 260,
-                height: 30,
-                alignment: Alignment.center,
-                child: Text(
-                  'Chưa có file đính kèm',
-                  style: TextStyle(color: Theme.of(context).colorScheme.outline),
-                ),
-              ),
-            );
+        borderType: BorderType.RRect,
+        radius: const Radius.circular(4),
+        dashPattern: const [2, 3],
+        color: Theme.of(context).colorScheme.outline,
+        child: Container(
+          width: 260,
+          height: 30,
+          alignment: Alignment.center,
+          child: Text(
+            'Chưa có file đính kèm',
+            style: TextStyle(color: Theme.of(context).colorScheme.outline),
+          ),
+        ),
+      );
     } else {
       return ListView.builder(
         shrinkWrap: true,
@@ -163,6 +178,8 @@ class _AddFileState extends State<AddFile> {
               onPressed: () {
                 setState(() {
                   selectedFiles.remove(file);
+                  widget.onFilesChanged
+                      ?.call(selectedFiles); // Notify parent about changes
                 });
               },
             ),
@@ -173,7 +190,6 @@ class _AddFileState extends State<AddFile> {
   }
 
   IconData _getFileIcon(XFile file) {
-    // You can expand this method to return different icons based on the file type
     final String extension = file.name.split('.').last;
     switch (extension.toLowerCase()) {
       case 'jpg':
