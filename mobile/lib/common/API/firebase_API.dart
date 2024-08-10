@@ -22,6 +22,24 @@ class FirebaseApi {
     return querySnapshot;
   }
 
+  // Truy vấn và lấy `docID` của tài liệu dựa trên giá trị trường cụ thể
+  static Future<String?> getDocumentId(
+      String collection, String field, String value) async {
+    try {
+      final querySnapshot =
+          await db.collection(collection).where(field, isEqualTo: value).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.id;
+      } else {
+        print('No document found with $field: $value');
+        return null;
+      }
+    } catch (e) {
+      print('Error retrieving document ID: $e');
+      return null;
+    }
+  }
+
   static Future<void> deleteDocument(
       String collection, String documentId) async {
     try {
@@ -91,40 +109,18 @@ class FirebaseApi {
     }
   }
 
-  static Future<String?> uploadFile(File file, String folderPath) async {
+  static Future<String?> uploadImage(
+      String imagePath, String folederPath) async {
     try {
-      // Tạo tên tệp duy nhất dựa trên thời gian hiện tại
-      String fileName =
-          '${DateTime.now().millisecondsSinceEpoch}.${file.path.split('.').last}';
-
-      // Tạo tham chiếu đến vị trí lưu trữ trong Firebase Storage
-      Reference storageRef = _storage.ref().child('$folderPath/$fileName');
-
-      // Tải lên tệp
-      UploadTask uploadTask = storageRef.putFile(file);
-
-      // Theo dõi trạng thái tải lên
-      TaskSnapshot snapshot = await uploadTask;
-      String downloadURL = await snapshot.ref.getDownloadURL();
-
-      print('File uploaded successfully: $downloadURL');
-      return downloadURL;
-    } catch (e) {
-      print('Error uploading file: $e');
-      return null;
-    }
-  }
-
-  static Future<String?> uploadImage(File imageFile) async {
-    try {
+      File file = File(imagePath);
       // Lấy tên tệp (có thể tạo tên duy nhất)
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
       // Tạo tham chiếu đến vị trí lưu trữ trong Firebase Storage
-      Reference storageRef = _storage.ref().child('images/$fileName');
+      Reference storageRef = _storage.ref().child(folederPath + '/' + fileName);
 
       // Tải lên tệp
-      UploadTask uploadTask = storageRef.putFile(imageFile);
+      UploadTask uploadTask = storageRef.putFile(file);
 
       // Theo dõi trạng thái tải lên
       TaskSnapshot snapshot = await uploadTask;

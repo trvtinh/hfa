@@ -1,22 +1,33 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/common/enum/type_medical_data.dart';
+import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ComboBox extends StatefulWidget {
   final String leadingiconpath;
   final String title;
-  final String value;
-  final String unit;
-  final IconButton? edit;
-  final IconButton? upload;
+  final RxString? value; // Changed to RxString
+  final RxString? unit; // Changed to RxString
+  final TextEditingController valueController;
+  final TextEditingController unitController;
+  final TextEditingController noteController;
 
   ComboBox({
     super.key,
     required this.leadingiconpath,
     required this.title,
-    required this.value,
-    required this.unit,
-    this.edit,
-    this.upload,
+    this.value,
+    this.unit,
+    required this.valueController,
+    required this.unitController,
+    required this.noteController,
   });
 
   @override
@@ -24,15 +35,23 @@ class ComboBox extends StatefulWidget {
 }
 
 class _ComboBoxState extends State<ComboBox> {
-  final TextEditingController valueController = TextEditingController();
-  final TextEditingController unitController = TextEditingController();
-  final TextEditingController noteController = TextEditingController();
-  bool isChecked = false;
+  final medicalController = Get.find<MedicalDataController>();
+  final appController = Get.find<ApplicationController>();
+  List<XFile> selectedFiles = [];
+  void updateFiles(List<XFile> newFiles) {
+    setState(() {
+      selectedFiles = newFiles;
+      for (var i in selectedFiles) log('combobox : ' + i.path);
+    });
+  }
 
+  bool ischeck = false;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _showDialog(context),
+      onTap: () {
+        _showDialog(context);
+      },
       child: Column(
         children: [
           Container(
@@ -40,25 +59,35 @@ class _ComboBoxState extends State<ComboBox> {
             height: 72,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: isChecked
+              color: ischeck
                   ? Theme.of(context).colorScheme.primaryContainer
                   : Theme.of(context).colorScheme.surface,
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image.asset(widget.leadingiconpath),
                 const SizedBox(width: 8),
-                Expanded(child: _buildTextContainer(widget.title)),
-                Expanded(child: _buildValueUnitColumn()),
+                //title
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Expanded(child: _buildValueUnitColumn(context)),
                 const SizedBox(width: 8),
                 IconWidgetRound(icon: const Icon(Icons.edit_note)),
                 const SizedBox(width: 8),
                 IconWidgetRound(icon: const Icon(Icons.attach_file)),
-                const SizedBox(width: 15),
+                const SizedBox(width: 8),
                 Checkbox(
-                  value: isChecked,
-                  onChanged: (value) => setState(() => isChecked = value!),
-                ),
+                  value: ischeck,
+                  onChanged: (value) {
+                    ischeck = value ?? false;
+                  },
+                )
               ],
             ),
           ),
@@ -68,23 +97,7 @@ class _ComboBoxState extends State<ComboBox> {
     );
   }
 
-  Widget _buildTextContainer(String text) {
-    return Container(
-      height: 55,
-      child: Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildValueUnitColumn() {
+  Widget _buildValueUnitColumn(BuildContext context) {
     return SizedBox(
       height: 55,
       child: Column(
@@ -92,7 +105,7 @@ class _ComboBoxState extends State<ComboBox> {
         crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
         children: [
           Text(
-            widget.value,
+            widget.value?.value ?? "",
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontWeight: FontWeight.w500,
@@ -100,7 +113,7 @@ class _ComboBoxState extends State<ComboBox> {
             ),
           ),
           Text(
-            widget.unit,
+            widget.unit?.value ?? "",
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
             ),
@@ -127,8 +140,11 @@ class _ComboBoxState extends State<ComboBox> {
                 const SizedBox(height: 24),
                 _buildDialogInputFields(),
                 const SizedBox(height: 4),
-                AddFile(),
-                const SizedBox(height: 24), 
+                AddFile(
+                  files: selectedFiles,
+                  onFilesChanged: updateFiles,
+                ),
+                const SizedBox(height: 24),
                 _buildDialogActions(context),
               ],
             ),
@@ -154,21 +170,26 @@ class _ComboBoxState extends State<ComboBox> {
         Row(
           children: [
             Expanded(
-              child: _buildDialogTextField('Giá trị đo', 'Giá trị', valueController),
+              child: _buildDialogTextField(
+                  'Giá trị đo', 'Giá trị', widget.valueController),
             ),
             const SizedBox(width: 20),
             Expanded(
-              child: _buildDialogTextField('Đơn vị', 'lần/phút', unitController),
+              child: _buildDialogTextField(
+                  'Đơn vị', 'lần/phút', widget.unitController),
             ),
           ],
         ),
         const SizedBox(height: 6),
-        _buildDialogTextField('Ghi chú', 'Ghi chú', noteController, icon: Icons.edit_note),
+        _buildDialogTextField('Ghi chú', 'Ghi chú', widget.noteController,
+            icon: Icons.edit_note),
       ],
     );
   }
 
-  Widget _buildDialogTextField(String label, String hint, TextEditingController controller, {IconData? icon}) {
+  Widget _buildDialogTextField(
+      String label, String hint, TextEditingController controller,
+      {IconData? icon}) {
     return Container(
       height: 78,
       child: TextField(
@@ -190,13 +211,29 @@ class _ComboBoxState extends State<ComboBox> {
   }
 
   Row _buildDialogActions(BuildContext context) {
+    MedicalEntity data = MedicalEntity();
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: () {
-            setState(() => isChecked = false);
-            Navigator.pop(context);
+          onPressed: () async {
+            ischeck = false;
+
+            // Await the result of getDocumentId
+            String? typeId = await FirebaseApi.getDocumentId(
+                'type_medical_data', 'name', widget.title);
+
+            // Create MedicalEntity with the obtained typeId
+            data = MedicalEntity(
+              userId: appController.state.profile.value!.id,
+              typeId: typeId,
+              time: medicalController.updateTimestamp(),
+              value: widget.valueController.text,
+              unit: widget.unitController.text,
+              note: widget.noteController.text,
+            );
+
+            Get.back();
           },
           child: Text(
             'Hủy',
@@ -209,8 +246,9 @@ class _ComboBoxState extends State<ComboBox> {
         const SizedBox(width: 16),
         TextButton(
           onPressed: () {
-            setState(() => isChecked = true);
-            Navigator.pop(context);
+            ischeck = true;
+            for (var i in selectedFiles) log(i.path);
+            Get.back();
           },
           child: Text(
             'Xác nhận',

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
-import 'package:health_for_all/pages/medical_data/widget/combo_box.dart';
 import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
 
 class MedicalDataPage extends GetView<MedicalDataController> {
@@ -24,25 +23,6 @@ class MedicalDataPage extends GetView<MedicalDataController> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime datetime = DateTime.now();
-    TimeOfDay timeOfDay = TimeOfDay.now();
-
-    Future<void> _selectDate() async {
-      await showDatePicker(
-        context: context,
-        initialDate: datetime,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
-      );
-    }
-
-    Future<void> _selectTime() async {
-      await showTimePicker(
-        context: context,
-        initialTime: timeOfDay,
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -71,12 +51,12 @@ class MedicalDataPage extends GetView<MedicalDataController> {
               ],
             ),
             _buildSearchField(context),
-            Divider(height: 1),
-            ...entries,
-            MoreData(),
-            Divider(height: 1),
+            const Divider(height: 1),
+            ...controller.entries,
+            const MoreData(),
+            const Divider(height: 1),
             _buildActionButtons(context),
-            Divider(height: 1),
+            const Divider(height: 1),
           ],
         ),
       ),
@@ -85,17 +65,17 @@ class MedicalDataPage extends GetView<MedicalDataController> {
 
   Widget _buildDateTimeField(BuildContext context, String label, IconData icon, Future<void> Function() onTap, {required double width}) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       width: width,
       child: TextField(
-        controller: infor,
+        controller: controller,
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           labelText: label,
         ),
         readOnly: true,
-        onTap: onTap,
+        onTap: () => onTap(context),
       ),
     );
   }
@@ -107,7 +87,6 @@ class MedicalDataPage extends GetView<MedicalDataController> {
       height: 72,
       child: Center(
         child: TextField(
-          controller: infor,
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
             hintText: "Input Text",
@@ -122,15 +101,15 @@ class MedicalDataPage extends GetView<MedicalDataController> {
 
   Widget _buildActionButtons(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: IntrinsicHeight(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             _buildActionButton(context, "Hủy"),
-            SizedBox(width: 15),
-            VerticalDivider(width: 1, indent: 5, endIndent: 5),
-            SizedBox(width: 15),
+            const SizedBox(width: 15),
+            const VerticalDivider(width: 1, indent: 5, endIndent: 5),
+            const SizedBox(width: 15),
             _buildActionButton(context, "Lưu"),
           ],
         ),

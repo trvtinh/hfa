@@ -15,7 +15,7 @@ class _MoreDataState extends State<MoreData> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: ()=> _showDialog(context),
+      onTap: () => _showDialog(context),
       child: Container(
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -28,14 +28,15 @@ class _MoreDataState extends State<MoreData> {
               Icons.add_circle_outline,
               color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
-            SizedBox(width: 16,),
+            SizedBox(
+              width: 16,
+            ),
             Text(
               "Thêm loại dữ liệu khác",
               style: TextStyle(
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                fontWeight: FontWeight.w400
-              ),
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w400),
             ),
           ],
         ),
@@ -43,44 +44,48 @@ class _MoreDataState extends State<MoreData> {
     );
   }
 
-  void _showDialog(BuildContext context){
+  void _showDialog(BuildContext context) {
     showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Thêm loại dữ liệu y tế',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Theme.of(context).colorScheme.onSurface,
+        context: context,
+        builder: (context) {
+          return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Thêm loại dữ liệu y tế',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 24,),
-                MyTextField('Tên loại dữ liệu y tế','Tên loại dữ liệu y tế', 64, nameController),
-                const SizedBox(height: 16,),
-                MyTextField('Đơn vị','Đơn vị', 56, unitController),
-                const SizedBox(height: 16,),
-                MyTextField('Mô tả','Mô tả dữ liệu y tế', 98, detailController),
-              ]
-            ),
-          )
-        );
-      }
-    );
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  MyTextField('Tên loại dữ liệu y tế', 'Tên loại dữ liệu y tế',
+                      64, nameController),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  MyTextField('Đơn vị', 'Đơn vị', 56, unitController),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  MyTextField(
+                      'Mô tả', 'Mô tả dữ liệu y tế', 98, detailController),
+                ]),
+              ));
+        });
   }
 
-  Widget MyTextField(String name, String hint, double hei, TextEditingController controller){
+  Widget MyTextField(
+      String name, String hint, double hei, TextEditingController controller) {
     return SizedBox(
       height: hei,
       child: TextField(
