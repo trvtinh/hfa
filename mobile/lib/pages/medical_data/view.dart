@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
 
@@ -115,11 +118,72 @@ class MedicalDataPage extends GetView<MedicalDataController> {
   }
 
   Widget _buildActionButton(BuildContext context, String label) {
-    return Container(
+    return SizedBox(
       height: 40,
       width: (MediaQuery.of(context).size.width / 2) - 40,
       child: TextButton(
-        onPressed: () {},
+        onPressed: () async {
+          if (label == 'Lưu') {
+            try {
+              // Perform the saving operation
+              for (var value in controller.state.data.values) {
+                if (value.imagePaths != null) {
+                  for (var path in value.imagePaths!) {
+                    final imageUrl =
+                        await FirebaseApi.uploadImage(path, 'medicalData');
+                    value.imageUrls?.add(imageUrl!);
+                  }
+                }
+                log(value.toString());
+                await FirebaseApi.addDocument(
+                    'medicalData', value.toFirestoreMap());
+              }
+
+              // Clear the data after saving
+              controller.state.data.clear();
+
+              // Show success dialog
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Thành công'),
+                    content: Text('Dữ liệu đã được ghi nhận'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Dismiss the dialog
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            } catch (e) {
+              // Handle any errors
+              print('Error saving data: $e');
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Error'),
+                    content: Text(
+                        'An error occurred while saving data. Please try again.'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Dismiss the dialog
+                        },
+                        child: Text('OK'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
+          }
+        },
         child: Text(
           label,
           style: TextStyle(

@@ -110,22 +110,14 @@ class FirebaseApi {
   }
 
   static Future<String?> uploadImage(
-      String imagePath, String folederPath) async {
+      String imagePath, String folderPath) async {
     try {
       File file = File(imagePath);
-      // Lấy tên tệp (có thể tạo tên duy nhất)
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-
-      // Tạo tham chiếu đến vị trí lưu trữ trong Firebase Storage
-      Reference storageRef = _storage.ref().child(folederPath + '/' + fileName);
-
-      // Tải lên tệp
+      Reference storageRef = _storage.ref().child('$folderPath/$fileName');
       UploadTask uploadTask = storageRef.putFile(file);
-
-      // Theo dõi trạng thái tải lên
       TaskSnapshot snapshot = await uploadTask;
       String downloadURL = await snapshot.ref.getDownloadURL();
-
       print('Image uploaded successfully: $downloadURL');
       return downloadURL;
     } catch (e) {

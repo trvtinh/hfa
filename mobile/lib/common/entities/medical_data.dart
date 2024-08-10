@@ -5,28 +5,30 @@ class MedicalEntity {
   String? typeId;
   String? time;
   String? value;
-  List<String>? fireStoreIds;
+  List<String>? imageUrls;
   List<String>? commentIds;
   List<String>? dianoticIds;
   String? userId;
   String? unit;
   String? note;
+  List<String>? imagePaths;
 
   MedicalEntity(
       {this.commentIds,
       this.userId,
       this.dianoticIds,
-      this.fireStoreIds,
+      this.imageUrls,
       this.id,
       this.time,
       this.typeId,
       this.value,
       this.unit,
-      this.note});
+      this.note,
+      this.imagePaths});
 
   @override
   String toString() {
-    return 'MedicalEntity{id: $id, typeId: $typeId, time: $time, value: $value, fireStoreIds: $fireStoreIds, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId, unit : $unit, note: $note}';
+    return 'MedicalEntity{id: $id, typeId: $typeId, time: $time, value: $value, imageUrls: $imageUrls, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId, unit : $unit, note: $note, image: $imagePaths}';
   }
 
   factory MedicalEntity.fromFirestore(
@@ -38,10 +40,13 @@ class MedicalEntity {
       typeId: data?['typeId'],
       time: data?['time'],
       value: data?['value'],
-      fireStoreIds: data?['fireStoreIds'],
+      imageUrls: data?['imageUrls'],
       commentIds: data?['commentIds'],
       dianoticIds: data?['dianoticIds'],
       userId: data?['userId'],
+      unit: data?['unit'],
+      note: data?['note'],
+      imagePaths: data?['imagePaths'],
     );
   }
 
@@ -51,10 +56,13 @@ class MedicalEntity {
       if (typeId != null) 'typeId': typeId,
       if (time != null) 'time': time,
       if (value != null) 'value': value,
-      if (fireStoreIds != null) 'fireStoreIds': fireStoreIds,
+      if (imageUrls != null) 'imageUrls': imageUrls,
       if (commentIds != null) 'commentIds': commentIds,
       if (dianoticIds != null) 'dianoticIds': dianoticIds,
       if (userId != null) 'userId': userId,
+      if (unit != null) 'unit': unit,
+      if (note != null) 'note': note,
+      if (imagePaths != null) 'imagePaths': imagePaths,
     };
   }
 }
