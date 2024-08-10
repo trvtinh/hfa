@@ -27,7 +27,7 @@ class _FollowerPageState extends State<FollowerPage> {
               height: 20,
             ),
             Text(
-                'Người thân (${controller.state.profile.value!.relatives!.length})'),
+                'Người thân (${controller.appController.state.profile.value!.relatives!.length})'),
             const Divider(),
             // if (controller.state.profile.value!.relatives!.isEmpty)
             //   const SizedBox.shrink()
@@ -35,8 +35,8 @@ class _FollowerPageState extends State<FollowerPage> {
             Container(
               constraints: const BoxConstraints(maxHeight: 150),
               child: StreamBuilder(
-                stream: controller
-                    .getUserByIds(controller.state.profile.value!.relatives!),
+                stream: controller.getUserByIds(
+                    controller.appController.state.profile.value!.relatives!),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -62,7 +62,8 @@ class _FollowerPageState extends State<FollowerPage> {
                             description: user.id!,
                             imageUrl: user.photourl!,
                             onTap: () {},
-                            id: controller.state.profile.value!.id!,
+                            id: controller
+                                .appController.state.profile.value!.id!,
                             collection: 'users',
                             fieldName: 'relatives',
                             valueToRemove: user.id!);
@@ -80,13 +81,13 @@ class _FollowerPageState extends State<FollowerPage> {
               height: 5,
             ),
             Text(
-                'Chuyên gia y tế (${controller.state.profile.value!.doctors!.length})'),
+                'Chuyên gia y tế (${controller.appController.state.profile.value!.doctors!.length})'),
             const Divider(),
             Container(
               constraints: const BoxConstraints(maxHeight: 200),
               child: StreamBuilder(
-                stream: controller
-                    .getUserByIds(controller.state.profile.value!.doctors!),
+                stream: controller.getUserByIds(
+                    controller.appController.state.profile.value!.doctors!),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -108,7 +109,8 @@ class _FollowerPageState extends State<FollowerPage> {
                       itemBuilder: (context, index) {
                         final user = users[index];
                         return UserListTile(
-                            id: controller.state.profile.value!.id!,
+                            id: controller
+                                .appController.state.profile.value!.id!,
                             collection: 'users',
                             fieldName: 'doctors',
                             valueToRemove: user.id!,

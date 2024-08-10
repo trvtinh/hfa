@@ -1,32 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
-import 'package:health_for_all/pages/medical_data/widget/combo_box.dart';
- 
+import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
+
 class MedicalDataPage extends GetView<MedicalDataController> {
   MedicalDataPage({super.key});
- 
-  final infor = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-
-    Future<void> _selectDate() async {
-      await showDatePicker(
-        context: context, 
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
-      );
-    }
-
-    TimeOfDay _timeofDay = TimeOfDay.now();
-    Future<void> _selectTime() async{
-      await showTimePicker(
-        initialTime: _timeofDay,
-        context: context,
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -42,107 +23,111 @@ class MedicalDataPage extends GetView<MedicalDataController> {
           child: Container(
             color: Theme.of(context).colorScheme.outline,
             height: 0.7,
-        )),
+          ),
+        ),
       ),
-      body: 
-          SingleChildScrollView(
-            child: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Row(
               children: [
-                // ngày tháng năm
-                Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8.0),
-                      width: MediaQuery.of(context).size.width/3*2,
-                      child: TextField(
-                        controller: infor,
-                        decoration: InputDecoration(
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.all(0),
-                            child: Icon(
-                              Icons.event_note,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          border: OutlineInputBorder(),
-                          labelText: 'Ngày',
-                        ),
-                        readOnly: true,
-                        onTap: (){
-                          _selectDate();
-                        },
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(8.0),
-                      width: MediaQuery.of(context).size.width/3,
-                      child: TextField(
-                        controller: infor,
-                        decoration: InputDecoration(
-                          prefixIcon: Padding(
-                            padding: EdgeInsets.all(0),
-                            child: Icon(
-                              Icons.schedule,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                          border: OutlineInputBorder(),
-                          labelText: 'Thời gian',
-                        ),
-                        readOnly: true,
-                          onTap: (){
-                            _selectTime();
-                          },
-                      ),
-                    ),
-                  ],
-                ),
-
-                // thanh tìm kiếm
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainer,
-                  ),
-                  height: 72,
-                  child: Center(
-                    child: TextField(
-                      controller: infor,
-                      decoration: InputDecoration(
-                        hintText: "Input Text",
-                        border: InputBorder.none,
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Icon(
-                            Icons.search,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                        suffixIcon: Padding(
-                          padding: EdgeInsets.all(0),
-                          child: Icon(
-                            Icons.clear,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ), 
-                      ),
-                    ),
-                  ),
-                ),
-                // Chỉ số
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/huyet_ap.png', title: "Huyết áp", value: "120/80", unit: "mmHg", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/than_nhiet.png', title: "Thân nhiệt", value: "36", unit: "°C", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/duong_huyet.png', title: "Đường huyết", value: "80", unit: "mg/dL", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/nhip_tim.png', title: "Nhịp tim", value: "80", unit: "lần/phút", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/spo2.png', title: "SPO2", value: "--", unit: "%", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/hrv.png', title: "HRV", value: "--", unit: "ms", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/ecg.png', title: "ECG - Điện tâm đồ", value: "--", unit: "--", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/can_nang.png', title: "Cân nặng", value: "--", unit: "kg", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/xet_nghiem_mau.png', title: "Xét nghiệm máu", value: "--", unit: "--", check: false),
-                ComboBox(onTap: (){}, leadingiconpath: 'assets/images/axit_uric.png', title: "Axit Uric", value: "--", unit: "--", check: false),
+                _buildDateTimeField(context, 'Ngày', Icons.event_note,
+                    controller.selectDate, controller.dateController,
+                    width: MediaQuery.of(context).size.width / 5 * 3),
+                _buildDateTimeField(context, 'Thời gian', Icons.schedule,
+                    controller.selectTime, controller.timeController,
+                    width: MediaQuery.of(context).size.width / 5 * 2),
               ],
             ),
+            _buildSearchField(context),
+            const Divider(height: 2),
+            ...controller.entries,
+            const MoreData(),
+            const Divider(height: 1),
+            _buildActionButtons(context),
+            const Divider(height: 1),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateTimeField(
+      BuildContext context,
+      String label,
+      IconData icon,
+      Future<void> Function(BuildContext) onTap,
+      TextEditingController controller,
+      {required double width}) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      width: width,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
+          border: const OutlineInputBorder(),
+          labelText: label,
+        ),
+        readOnly: true,
+        onTap: () => onTap(context),
+      ),
+    );
+  }
+
+  Widget _buildSearchField(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      height: 72,
+      child: Center(
+        child: TextField(
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            hintText: "Input Text",
+            border: InputBorder.none,
+            prefixIcon: Icon(Icons.search,
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
+            suffixIcon: Icon(Icons.clear,
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: IntrinsicHeight(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildActionButton(context, "Hủy"),
+            const SizedBox(width: 15),
+            const VerticalDivider(width: 1, indent: 5, endIndent: 5),
+            const SizedBox(width: 15),
+            _buildActionButton(context, "Lưu"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(BuildContext context, String label) {
+    return Container(
+      height: 40,
+      width: (MediaQuery.of(context).size.width / 2) - 40,
+      child: TextButton(
+        onPressed: () {},
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 14,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ),
     );
   }
 }

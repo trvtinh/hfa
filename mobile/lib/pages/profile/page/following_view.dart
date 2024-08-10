@@ -28,14 +28,14 @@ class _FollowingPageState extends State<FollowingPage> {
               height: 10,
             ),
             Text(
-                'Người thân (${controller.state.profile.value!.relatives!.length})'),
+                'Người thân (${controller.appController.state.profile.value!.relatives!.length})'),
             const Divider(),
             // Use the custom ListTile widgets here
             Container(
               constraints: const BoxConstraints(maxHeight: 150),
               child: StreamBuilder(
-                stream: controller
-                    .getUserByIds(controller.state.profile.value!.relatives!),
+                stream: controller.getUserByIds(
+                    controller.appController.state.profile.value!.relatives!),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -61,7 +61,7 @@ class _FollowingPageState extends State<FollowingPage> {
                           description: user.id!,
                           imageUrl: user.photourl!,
                           onTap: () {},
-                          id: controller.state.profile.value!.id!,
+                          id: controller.appController.state.profile.value!.id!,
                           collection: 'users',
                           fieldName: 'relatives',
                           valueToRemove: user.id!,
@@ -78,14 +78,14 @@ class _FollowingPageState extends State<FollowingPage> {
             ),
 
             Text(
-                'Bệnh nhân (${controller.state.profile.value!.patients!.length})'),
+                'Bệnh nhân (${controller.appController.state.profile.value!.patients!.length})'),
             const Divider(),
             // Use the custom ListTile widgets here
             Container(
               constraints: BoxConstraints(maxHeight: 150),
               child: StreamBuilder(
-                stream: controller
-                    .getUserByIds(controller.state.profile.value!.patients!),
+                stream: controller.getUserByIds(
+                    controller.appController.state.profile.value!.patients!),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
@@ -111,7 +111,8 @@ class _FollowingPageState extends State<FollowingPage> {
                             description: user.id!,
                             imageUrl: user.photourl!,
                             onTap: () {},
-                            id: controller.state.profile.value!.id!,
+                            id: controller
+                                .appController.state.profile.value!.id!,
                             collection: 'users',
                             fieldName: 'patients',
                             valueToRemove: user.id!);
@@ -169,12 +170,14 @@ class _FollowingPageState extends State<FollowingPage> {
                                   'users',
                                   user.user!.id!,
                                   'patients',
-                                  controller.state.profile.value!.id!,
+                                  controller
+                                      .appController.state.profile.value!.id!,
                                 );
                                 final a2 =
                                     await FirebaseApi.addValueToArrayField(
                                   'users',
-                                  controller.state.profile.value!.id!,
+                                  controller
+                                      .appController.state.profile.value!.id!,
                                   'doctors',
                                   user.user!.id!,
                                 );
@@ -192,8 +195,6 @@ class _FollowingPageState extends State<FollowingPage> {
                                 print('Error occurred: $e');
                               }
                             }
-
-// Xử lý cho vai trò 'patient'
                             if (user.role == 'patient') {
                               try {
                                 final a1 =
@@ -201,12 +202,14 @@ class _FollowingPageState extends State<FollowingPage> {
                                   'users',
                                   user.user!.id!,
                                   'doctors',
-                                  controller.state.profile.value!.id!,
+                                  controller
+                                      .appController.state.profile.value!.id!,
                                 );
                                 final a2 =
                                     await FirebaseApi.addValueToArrayField(
                                   'users',
-                                  controller.state.profile.value!.id!,
+                                  controller
+                                      .appController.state.profile.value!.id!,
                                   'patients',
                                   user.user!.id!,
                                 );
@@ -232,12 +235,14 @@ class _FollowingPageState extends State<FollowingPage> {
                                   'users',
                                   user.user!.id!,
                                   'relatives',
-                                  controller.state.profile.value!.id!,
+                                  controller
+                                      .appController.state.profile.value!.id!,
                                 );
                                 final a2 =
                                     await FirebaseApi.addValueToArrayField(
                                   'users',
-                                  controller.state.profile.value!.id!,
+                                  controller
+                                      .appController.state.profile.value!.id!,
                                   'relatives',
                                   user.user!.id!,
                                 );
@@ -277,62 +282,3 @@ class _FollowingPageState extends State<FollowingPage> {
     );
   }
 }
-
-// class SearchBar extends StatefulWidget {
-//   const SearchBar({super.key});
-
-//   @override
-//   _SearchBarState createState() => _SearchBarState();
-// }
-
-// class _SearchBarState extends State<SearchBar> {
-//   final TextEditingController _controller = TextEditingController();
-//   bool _hasText = false;
-
-//   void _onTextChanged(String text) {
-//     setState(() {
-//       _hasText = text.isNotEmpty;
-//     });
-//   }
-
-//   void _clearText() {
-//     _controller.clear();
-//     _onTextChanged('');
-//     FocusScope.of(context).unfocus(); // Dismiss the keyboard
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextField(
-//       controller: _controller,
-//       onChanged: _onTextChanged,
-//       decoration: InputDecoration(
-//         hintText: 'Thêm người muốn theo dõi dữ liệu',
-//         prefixIcon: IconButton(
-//           icon: Icon(_hasText ? Icons.arrow_back : Icons.add_circle_outline),
-//           onPressed: () {
-//             if (_hasText) {
-//               _clearText();
-//             }
-//           },
-//         ),
-//         suffixIcon: _hasText
-//             ? IconButton(
-//                 icon: const Icon(Icons.clear),
-//                 onPressed: _clearText,
-//               )
-//             : null,
-//         border: OutlineInputBorder(
-//           borderRadius: BorderRadius.circular(28),
-//           borderSide: BorderSide.none,
-//         ),
-//         filled: true,
-//         fillColor: Theme.of(context)
-//             .colorScheme
-//             .surfaceContainerHigh, // Background color of the search bar
-//         contentPadding:
-//             const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-//       ),
-//     );
-//   }
-// }

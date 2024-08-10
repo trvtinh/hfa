@@ -11,7 +11,6 @@ class AppPages {
   static const INITIAL = AppRoutes.INITIAL;
   static const SignIn = AppRoutes.SIGN_IN;
   static const Application = AppRoutes.Application;
-  static const AboutHfa = AppRoutes.ABOUT;
   static final List<GetPage> routes = [
     GetPage(
       name: AppRoutes.Application,

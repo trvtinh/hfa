@@ -1,238 +1,264 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/common/enum/type_medical_data.dart';
+import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/medical_data/controller.dart';
+import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ComboBox extends StatefulWidget {
   final String leadingiconpath;
   final String title;
-  final String value;
-  final String unit;
-  final IconButton? edit;
-  final IconButton? upload;
-  final bool check;
-  final Function()? onTap;
-  ComboBox({super.key, required this.leadingiconpath, required this.title, required this.value, required this.unit, this.edit, this.upload, required this.check, required this.onTap, });
+  final RxString? value; // Changed to RxString
+  final RxString? unit; // Changed to RxString
+  final TextEditingController valueController;
+  final TextEditingController unitController;
+  final TextEditingController noteController;
+
+  ComboBox({
+    super.key,
+    required this.leadingiconpath,
+    required this.title,
+    this.value,
+    this.unit,
+    required this.valueController,
+    required this.unitController,
+    required this.noteController,
+  });
 
   @override
-  State<ComboBox> createState() => _ComboBoxState();
-}
-
-class IconWidget extends StatelessWidget {
-  final Icon icon;
-
-  IconWidget({required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: icon,
-    );
-  }
-}
-
-
-
-void toggle(){
-  
+  _ComboBoxState createState() => _ComboBoxState();
 }
 
 class _ComboBoxState extends State<ComboBox> {
-  final infor = TextEditingController();
+  final medicalController = Get.find<MedicalDataController>();
+  final appController = Get.find<ApplicationController>();
+  List<XFile> selectedFiles = [];
+  void updateFiles(List<XFile> newFiles) {
+    setState(() {
+      selectedFiles = newFiles;
+      for (var i in selectedFiles) log('combobox : ' + i.path);
+    });
+  }
+
+  bool ischeck = false;
   @override
   Widget build(BuildContext context) {
-    bool? ischeck = false;
     return GestureDetector(
-      onTap: (){
-        showDialog(
-          context: context, 
-          builder: (BuildContext context){
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(widget.leadingiconpath),
-                        SizedBox(width: 10,),
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                            fontSize: 24,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 150, height: 78,
-                          child: TextField(
-                            controller: infor,
-                            decoration: const InputDecoration(
-                              labelText: 'Giá trị đo',
-                              hintText: "Giá trị",
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(width: 20,),
-
-                        Container(
-                          width: 120, height: 78,
-                          child: TextField(
-                            controller: infor,
-                            decoration: const InputDecoration(
-                              labelText: 'Đơn vị',
-                              hintText: 'lần/phút',
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 290, height: 56,
-                          child: TextField(
-                            controller: infor,
-                            decoration: InputDecoration(
-                              labelText: 'Ghi chú',
-                              hintText: 'Ghi chú',
-                              border: OutlineInputBorder(),
-                              prefixIcon: Padding(
-                                padding: EdgeInsets.all(8),
-                                child: Icon(
-                                  Icons.edit_note,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Row(children: [
-                            Text(
-                                'Hủy',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
-                              ),
-                              SizedBox(width: 16,),
-                              Text(
-                                'Xác nhận',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                              ),
-                          ],),
-                        )
-                      ],
-                    )
-                  ],
+      onTap: () {
+        _showDialog(context);
+      },
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 72,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: ischeck
+                  ? Theme.of(context).colorScheme.primaryContainer
+                  : Theme.of(context).colorScheme.surface,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Image.asset(widget.leadingiconpath),
+                const SizedBox(width: 8),
+                //title
+                Text(
+                  widget.title,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-            );
-          }
+                Expanded(child: _buildValueUnitColumn(context)),
+                const SizedBox(width: 8),
+                IconWidgetRound(icon: const Icon(Icons.edit_note)),
+                const SizedBox(width: 8),
+                IconWidgetRound(icon: const Icon(Icons.attach_file)),
+                const SizedBox(width: 8),
+                Checkbox(
+                  value: ischeck,
+                  onChanged: (value) {
+                    ischeck = value ?? false;
+                  },
+                )
+              ],
+            ),
+          ),
+          const Divider(height: 1),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildValueUnitColumn(BuildContext context) {
+    return SizedBox(
+      height: 55,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
+        children: [
+          Text(
+            widget.value?.value ?? "",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+            ),
+          ),
+          Text(
+            widget.unit?.value ?? "",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDialogHeader(),
+                const SizedBox(height: 24),
+                _buildDialogInputFields(),
+                const SizedBox(height: 4),
+                AddFile(
+                  files: selectedFiles,
+                  onFilesChanged: updateFiles,
+                ),
+                const SizedBox(height: 24),
+                _buildDialogActions(context),
+              ],
+            ),
+          ),
         );
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: 72,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: widget.check ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.surface,
-        ),
-        child: Row(
+    );
+  }
+
+  Row _buildDialogHeader() {
+    return Row(
+      children: [
+        Image.asset(widget.leadingiconpath),
+        const SizedBox(width: 10),
+        Text(widget.title, style: const TextStyle(fontSize: 24)),
+      ],
+    );
+  }
+
+  Column _buildDialogInputFields() {
+    return Column(
+      children: [
+        Row(
           children: [
             Expanded(
-              child: Row(children: [
-                //Icon
-                Image.asset(widget.leadingiconpath),
-      
-                // Tên chỉ số
-                const SizedBox(width: 8),
-                Container(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width/4,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.title,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontWeight: FontWeight.w500
-                      ),
-                    ),
-                  ),
-                ),
-      
-                // Số đo
-                SizedBox(
-                  height: 55,
-                  width: MediaQuery.of(context).size.width/4,
-                  child: Column(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.value,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.unit,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],),
+              child: _buildDialogTextField(
+                  'Giá trị đo', 'Giá trị', widget.valueController),
             ),
-            // Chỉnh sửa
-            IconWidgetRound(icon: const Icon(Icons.edit_note)),
-            const SizedBox(width: 8,),
-            // Thêm file
-            IconWidgetRound(icon: const Icon(Icons.attach_file)),
-            const SizedBox(width: 15,),
-            // TickBox
-            Checkbox(
-              value: ischeck,
-              onChanged: (bool? value) {
-                setState(() {
-                  ischeck = value!;
-                });
-              },
-            ),     
+            const SizedBox(width: 20),
+            Expanded(
+              child: _buildDialogTextField(
+                  'Đơn vị', 'lần/phút', widget.unitController),
+            ),
           ],
         ),
+        const SizedBox(height: 6),
+        _buildDialogTextField('Ghi chú', 'Ghi chú', widget.noteController,
+            icon: Icons.edit_note),
+      ],
+    );
+  }
+
+  Widget _buildDialogTextField(
+      String label, String hint, TextEditingController controller,
+      {IconData? icon}) {
+    return Container(
+      height: 78,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: hint,
+          hintStyle: TextStyle(
+            color: Theme.of(context).colorScheme.outline,
+            fontSize: 16,
+          ),
+          border: const OutlineInputBorder(),
+          prefixIcon: icon != null
+              ? Icon(icon, color: Theme.of(context).colorScheme.primary)
+              : null,
+        ),
       ),
+    );
+  }
+
+  Row _buildDialogActions(BuildContext context) {
+    MedicalEntity data = MedicalEntity();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () async {
+            ischeck = false;
+
+            // Await the result of getDocumentId
+            String? typeId = await FirebaseApi.getDocumentId(
+                'type_medical_data', 'name', widget.title);
+
+            // Create MedicalEntity with the obtained typeId
+            data = MedicalEntity(
+              userId: appController.state.profile.value!.id,
+              typeId: typeId,
+              time: medicalController.updateTimestamp(),
+              value: widget.valueController.text,
+              unit: widget.unitController.text,
+              note: widget.noteController.text,
+            );
+
+            Get.back();
+          },
+          child: Text(
+            'Hủy',
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        TextButton(
+          onPressed: () {
+            ischeck = true;
+            for (var i in selectedFiles) log(i.path);
+            Get.back();
+          },
+          child: Text(
+            'Xác nhận',
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
