@@ -9,8 +9,6 @@ class MedicalEntity {
   List<String>? commentIds;
   List<String>? dianoticIds;
   String? userId;
-  String? unit;
-  String? note;
 
   MedicalEntity(
       {this.commentIds,
@@ -20,13 +18,11 @@ class MedicalEntity {
       this.id,
       this.time,
       this.typeId,
-      this.value,
-      this.unit,
-      this.note});
+      this.value});
 
   @override
   String toString() {
-    return 'MedicalEntity{id: $id, typeId: $typeId, time: $time, value: $value, fireStoreIds: $fireStoreIds, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId, unit : $unit, note: $note}';
+    return 'MedicalEntity{id: $id, typeId: $typeId, time: $time, value: $value, fireStoreIds: $fireStoreIds, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId}';
   }
 
   factory MedicalEntity.fromFirestore(

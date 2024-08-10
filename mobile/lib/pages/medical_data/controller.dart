@@ -2,85 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/application/index.dart';
-import 'package:health_for_all/pages/medical_data/state.dart';
-import 'package:health_for_all/pages/medical_data/widget/combo_box.dart';
 import 'package:intl/intl.dart';
 
 class MedicalDataController extends GetxController {
   final dateController = TextEditingController();
   final timeController = TextEditingController();
   final appController = Get.find<ApplicationController>();
-  final state = MedicalDataState();
-  static int length = 10;
-  void updateLength() {
-    length++;
-  }
-
-  final noteController = TextEditingController();
-  final unitController = TextEditingController();
-  final valueController = TextEditingController();
   DateTime datetime = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
-
-  List<ComboBox> get entries => List.generate(length, (index) {
-        return ComboBox(
-          noteController: noteController,
-          unitController: unitController,
-          valueController: valueController,
-          leadingiconpath: _getIconPath(index),
-          title: _getTitle(index),
-          value: valueController.text.obs,
-          unit: unitController.text.obs,
-        );
-      });
-
-  static String _getIconPath(int index) {
-    const iconPaths = [
-      'assets/images/huyet_ap.png',
-      'assets/images/than_nhiet.png',
-      'assets/images/duong_huyet.png',
-      'assets/images/nhip_tim.png',
-      'assets/images/spo2.png',
-      'assets/images/hrv.png',
-      'assets/images/ecg.png',
-      'assets/images/can_nang.png',
-      'assets/images/xet_nghiem_mau.png',
-      'assets/images/axit_uric.png',
-    ];
-    return iconPaths[index];
-  }
-
-  static String _getTitle(int index) {
-    const titles = [
-      'Huyết áp',
-      'Thân nhiệt',
-      'Đường huyết',
-      'Nhịp tim',
-      'SPO2',
-      'HRV',
-      'ECG - Điện tâm đồ',
-      'Cân nặng',
-      'Xét nghiệm máu',
-      'Axit Uric',
-    ];
-    return titles[index];
-  }
-
-  static RxString _getUnit(int index) {
-    const units = [
-      'mmHg',
-      '°C',
-      'mg/dL',
-      'lần/phút',
-      '%',
-      'ms',
-      '--',
-      'kg',
-      '--',
-      '--',
-    ];
-    return units[index].obs;
-  }
 
   Future<void> selectDate(BuildContext context) async {
     final selectedDate = await showDatePicker(
@@ -94,7 +23,7 @@ class MedicalDataController extends GetxController {
       datetime = selectedDate;
       final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
       dateController.text = formattedDate;
-      updateTimestamp(); // Cập nhật timestamp
+      _updateTimestamp(); // Cập nhật timestamp
     }
   }
 
@@ -108,11 +37,11 @@ class MedicalDataController extends GetxController {
       timeOfDay = selectedTime;
       final formattedTime = selectedTime.format(context);
       timeController.text = formattedTime;
-      updateTimestamp(); // Cập nhật timestamp
+      _updateTimestamp(); // Cập nhật timestamp
     }
   }
 
-  String updateTimestamp() {
+  void _updateTimestamp() {
     final updatedDateTime = DateTime(
       datetime.year,
       datetime.month,
@@ -128,7 +57,7 @@ class MedicalDataController extends GetxController {
         DateFormat('dd/MM/yyyy HH:mm:ss').format(finalDateTime);
 
     // In ra hoặc làm gì đó với formattedDateTime
-    return formattedDateTime;
+    print('Formatted DateTime: $formattedDateTime');
   }
 
   Future<void> addMedicalData() async {}
