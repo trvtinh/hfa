@@ -8,12 +8,12 @@ class FirebaseApi {
   FirebaseApi._();
   static final FirebaseStorage _storage = FirebaseStorage.instance;
   static final db = FirebaseFirestore.instance;
-  static Future<void> initNotifications() async {
-    final firebaseMessaging = FirebaseMessaging.instance;
-    await firebaseMessaging.requestPermission();
-    final fCMToken = await firebaseMessaging.getToken();
-    print('FCM Token: $fCMToken');
-  }
+  // static Future<void> initNotifications() async {
+  //   final firebaseMessaging = FirebaseMessaging.instance;
+  //   await firebaseMessaging.requestPermission();
+  //   final fCMToken = await firebaseMessaging.getToken();
+  //   print('FCM Token: $fCMToken');
+  // }
 
   static Future<QuerySnapshot<Map<String, dynamic>>> getQuerySnapshot(
       String collection, String field, String value) async {

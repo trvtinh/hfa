@@ -25,7 +25,7 @@ Future<void> main() async {
   Get.put<UserStore>(UserStore());
 
   await Firebase.initializeApp();
-  await FirebaseApi.initNotifications();
+  // await FirebaseApi.initNotifications();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
               // theme: ThemeData(
               //   primarySwatch: Colors.,
               // ),
-              initialRoute: AppPages.Application,
+              initialRoute: AppPages.SignIn,
               getPages: AppPages.routes,
               debugShowCheckedModeBanner: false,
             ));

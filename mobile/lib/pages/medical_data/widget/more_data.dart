@@ -9,9 +9,9 @@ class MoreData extends StatefulWidget {
 }
 
 class _MoreDataState extends State<MoreData> {
-  final NameController = TextEditingController();
-  final UnitController = TextEditingController();
-  final DetailController = TextEditingController();
+  final nameController = TextEditingController();
+  final unitController = TextEditingController();
+  final detailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -67,11 +67,11 @@ class _MoreDataState extends State<MoreData> {
                   ),
                 ),
                 const SizedBox(height: 24,),
-                MyTextField('Tên loại dữ liệu y tế','Tên loại dữ liệu y tế', 64, NameController),
+                MyTextField('Tên loại dữ liệu y tế','Tên loại dữ liệu y tế', 64, nameController),
                 const SizedBox(height: 16,),
-                MyTextField('Đơn vị','Đơn vị', 56, UnitController),
+                MyTextField('Đơn vị','Đơn vị', 56, unitController),
                 const SizedBox(height: 16,),
-                MyTextField('Mô tả','Mô tả dữ liệu y tế', 98, DetailController),
+                MyTextField('Mô tả','Mô tả dữ liệu y tế', 98, detailController),
               ]
             ),
           )
