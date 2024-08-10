@@ -1,7 +1,3 @@
-History/
-References/
-Project Logs for HFA/
-__Previews/
 # Miscellaneous
 *.class
 *.log
@@ -13,6 +9,7 @@ __Previews/
 .history
 .svn/
 migrate_working_dir/
+.env
 
 # IntelliJ related
 *.iml
