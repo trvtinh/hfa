@@ -30,7 +30,7 @@ class MedicalDataController extends GetxController {
           leadingiconpath: _getIconPath(index),
           title: _getTitle(index),
           value: valueController.text.obs,
-          unit: unitController.text.obs ?? _getUnit(index),
+          unit: unitController.text.obs,
         );
       });
 
