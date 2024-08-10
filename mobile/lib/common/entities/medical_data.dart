@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MedicalEntity {
   String? id;
   String? typeId;
-  Timestamp? time;
+  String? time;
   String? value;
   List<String>? fireStoreIds;
   List<String>? commentIds;

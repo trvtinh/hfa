@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
 
 class ComboBox extends StatefulWidget {
@@ -28,11 +30,13 @@ class _ComboBoxState extends State<ComboBox> {
   final TextEditingController unitController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
   bool isChecked = false;
-
+  final controller = Get.find<MedicalDataController>();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _showDialog(context),
+      onTap: () {
+        _showDialog(context);
+      },
       child: Column(
         children: [
           Container(
@@ -128,7 +132,7 @@ class _ComboBoxState extends State<ComboBox> {
                 _buildDialogInputFields(),
                 const SizedBox(height: 4),
                 AddFile(),
-                const SizedBox(height: 24), 
+                const SizedBox(height: 24),
                 _buildDialogActions(context),
               ],
             ),
@@ -154,21 +158,26 @@ class _ComboBoxState extends State<ComboBox> {
         Row(
           children: [
             Expanded(
-              child: _buildDialogTextField('Giá trị đo', 'Giá trị', valueController),
+              child: _buildDialogTextField(
+                  'Giá trị đo', 'Giá trị', valueController),
             ),
             const SizedBox(width: 20),
             Expanded(
-              child: _buildDialogTextField('Đơn vị', 'lần/phút', unitController),
+              child:
+                  _buildDialogTextField('Đơn vị', 'lần/phút', unitController),
             ),
           ],
         ),
         const SizedBox(height: 6),
-        _buildDialogTextField('Ghi chú', 'Ghi chú', noteController, icon: Icons.edit_note),
+        _buildDialogTextField('Ghi chú', 'Ghi chú', noteController,
+            icon: Icons.edit_note),
       ],
     );
   }
 
-  Widget _buildDialogTextField(String label, String hint, TextEditingController controller, {IconData? icon}) {
+  Widget _buildDialogTextField(
+      String label, String hint, TextEditingController controller,
+      {IconData? icon}) {
     return Container(
       height: 78,
       child: TextField(
