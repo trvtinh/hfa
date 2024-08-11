@@ -10,24 +10,6 @@ import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
 class MedicalDataPage extends GetView<MedicalDataController> {
   MedicalDataPage({super.key});
 
-<<<<<<<<< Temporary merge branch 1
-  final List<ComboBox> entries = [
-    ComboBox(leadingiconpath: 'assets/images/huyet_ap.png', title: "Huyết áp", value: "120/80", unit: "mmHg"),
-    ComboBox(leadingiconpath: 'assets/images/than_nhiet.png', title: "Thân nhiệt", value: "36", unit: "°C"),
-    ComboBox(leadingiconpath: 'assets/images/duong_huyet.png', title: "Đường huyết", value: "80", unit: "mg/dL"),
-    ComboBox(leadingiconpath: 'assets/images/nhip_tim.png', title: "Nhịp tim", value: "80", unit: "lần/phút"),
-    ComboBox(leadingiconpath: 'assets/images/spo2.png', title: "SPO2", value: "--", unit: "%"),
-    ComboBox(leadingiconpath: 'assets/images/hrv.png', title: "HRV", value: "--", unit: "ms"),
-    ComboBox(leadingiconpath: 'assets/images/ecg.png', title: "ECG - Điện tâm đồ", value: "--", unit: "--"),
-    ComboBox(leadingiconpath: 'assets/images/can_nang.png', title: "Cân nặng", value: "--", unit: "kg"),
-    ComboBox(leadingiconpath: 'assets/images/xet_nghiem_mau.png', title: "Xét nghiệm máu", value: "--", unit: "--"),
-    ComboBox(leadingiconpath: 'assets/images/axit_uric.png', title: "Axit Uric", value: "--", unit: "--"),
-  ];
-
-  final infor = TextEditingController();
-
-=========
->>>>>>>>> Temporary merge branch 2
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,22 +35,17 @@ class MedicalDataPage extends GetView<MedicalDataController> {
           children: [
             Row(
               children: [
-<<<<<<<<< Temporary merge branch 1
-                _buildDateTimeField(context, 'Ngày', Icons.event_note, _selectDate, width: MediaQuery.of(context).size.width / 3 * 2),
-                _buildDateTimeField(context, 'Thời gian', Icons.schedule, _selectTime, width: MediaQuery.of(context).size.width / 3),
-=========
                 _buildDateTimeField(context, 'Ngày', Icons.event_note,
                     controller.selectDate, controller.dateController,
                     width: MediaQuery.of(context).size.width / 5 * 3),
                 _buildDateTimeField(context, 'Thời gian', Icons.schedule,
                     controller.selectTime, controller.timeController,
                     width: MediaQuery.of(context).size.width / 5 * 2),
->>>>>>>>> Temporary merge branch 2
               ],
             ),
             _buildSearchField(context),
             const Divider(height: 1),
-            ...entries,
+            ...controller.entries,
             const MoreData(),
             const Divider(height: 1),
             _buildActionButtons(context),
@@ -79,9 +56,6 @@ class MedicalDataPage extends GetView<MedicalDataController> {
     );
   }
 
-<<<<<<<<< Temporary merge branch 1
-  Widget _buildDateTimeField(BuildContext context, String label, IconData icon, Future<void> Function() onTap, {required double width}) {
-=========
   Widget _buildDateTimeField(
       BuildContext context,
       String label,
@@ -89,7 +63,6 @@ class MedicalDataPage extends GetView<MedicalDataController> {
       Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
->>>>>>>>> Temporary merge branch 2
     return Container(
       padding: const EdgeInsets.all(8.0),
       width: width,
