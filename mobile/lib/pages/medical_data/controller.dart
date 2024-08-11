@@ -16,6 +16,13 @@ class MedicalDataController extends GetxController {
     length++;
   }
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+  }
+
   final noteController = TextEditingController();
   final unitController = TextEditingController();
   final valueController = TextEditingController();
