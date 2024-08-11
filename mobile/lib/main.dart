@@ -30,7 +30,7 @@ Future<void> main() async {
     androidProvider: AndroidProvider.playIntegrity, // For Android
     appleProvider: AppleProvider.deviceCheck, // For iOS
   );
-  await FirebaseApi.initNotifications();
+  // await FirebaseApi.initNotifications();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
               // theme: ThemeData(
               //   primarySwatch: Colors.,
               // ),
-              initialRoute: AppPages.Application,
+              initialRoute: AppPages.SignIn,
               getPages: AppPages.routes,
               debugShowCheckedModeBanner: false,
             ));
