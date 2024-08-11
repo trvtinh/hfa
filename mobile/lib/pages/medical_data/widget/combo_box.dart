@@ -99,28 +99,30 @@ class _ComboBoxState extends State<ComboBox> {
 
   Widget _buildValueUnitColumn(BuildContext context) {
     return SizedBox(
-      height: 55,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
-        children: [
-          Text(
-            widget.value?.value ?? "",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimaryContainer,
-              fontWeight: FontWeight.w500,
-              fontSize: 20,
-            ),
+        height: 55,
+        child: Obx(
+          () => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment:
+                CrossAxisAlignment.start, // Align text to the start
+            children: [
+              Text(
+                medicalController.state.data[widget.title]?.value ?? "",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20,
+                ),
+              ),
+              Text(
+                medicalController.state.data[widget.title]?.unit ?? "",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+            ],
           ),
-          Text(
-            widget.unit?.value ?? "",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-          ),
-        ],
-      ),
-    );
+        ));
   }
 
   void _showDialog(BuildContext context) {
@@ -175,8 +177,7 @@ class _ComboBoxState extends State<ComboBox> {
             ),
             const SizedBox(width: 20),
             Expanded(
-              child: _buildDialogTextField(
-                  'Đơn vị', 'lần/phút', widget.unitController),
+              child: _buildDialogTextField('Đơn vị', '', widget.unitController),
             ),
           ],
         ),
@@ -190,7 +191,7 @@ class _ComboBoxState extends State<ComboBox> {
   Widget _buildDialogTextField(
       String label, String hint, TextEditingController controller,
       {IconData? icon}) {
-    return Container(
+    return SizedBox(
       height: 78,
       child: TextField(
         controller: controller,
@@ -220,19 +221,7 @@ class _ComboBoxState extends State<ComboBox> {
             ischeck = false;
 
             // Await the result of getDocumentId
-            String? typeId = await FirebaseApi.getDocumentId(
-                'type_medical_data', 'name', widget.title);
-
-            // Create MedicalEntity with the obtained typeId
-            data = MedicalEntity(
-              userId: appController.state.profile.value!.id,
-              typeId: typeId,
-              time: medicalController.updateTimestamp(),
-              value: widget.valueController.text,
-              unit: widget.unitController.text,
-              note: widget.noteController.text,
-            );
-
+            medicalController.clearController();
             Get.back();
           },
           child: Text(
@@ -245,9 +234,30 @@ class _ComboBoxState extends State<ComboBox> {
         ),
         const SizedBox(width: 16),
         TextButton(
-          onPressed: () {
+          onPressed: () async {
             ischeck = true;
-            for (var i in selectedFiles) log(i.path);
+            String? typeId = await FirebaseApi.getDocumentId(
+                'type_medical_data', 'name', widget.title);
+            // List<String> imageUrl = [];
+
+            // for (var i in selectedFiles) {
+            //   String? url =
+            //       await FirebaseApi.uploadImage(i.path, 'medicalData');
+            //   imageUrl.add(url!);
+            // }
+            // Create MedicalEntity with the obtained typeId
+            data = MedicalEntity(
+                userId: appController.state.profile.value!.id,
+                typeId: typeId,
+                time: medicalController.updateTimestamp(),
+                value: widget.valueController.text,
+                unit: widget.unitController.text,
+                note: widget.noteController.text,
+                imagePaths: [for (var i in selectedFiles) i.path],
+                imageUrls: []);
+            medicalController.state.data[widget.title] = data;
+            medicalController.clearController();
+            log(medicalController.state.data.toString());
             Get.back();
           },
           child: Text(

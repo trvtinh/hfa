@@ -22,6 +22,12 @@ class MedicalDataController extends GetxController {
   DateTime datetime = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
 
+  void clearController() {
+    noteController.clear();
+    unitController.clear();
+    valueController.clear();
+  }
+
   List<ComboBox> get entries => List.generate(length, (index) {
         return ComboBox(
           noteController: noteController,
