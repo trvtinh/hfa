@@ -1,35 +1,42 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/API/firebase_API.dart';
-import 'package:health_for_all/common/entities/medical_data.dart';
-import 'package:health_for_all/common/enum/type_medical_data.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ComboBox extends StatefulWidget {
   final String leadingiconpath;
   final String title;
+<<<<<<< HEAD
   final String time;
   final RxString? value; // Changed to RxString
   final RxString? unit; // Changed to RxString
   final TextEditingController valueController;
   final TextEditingController unitController;
   final TextEditingController noteController;
+=======
+  final String value;
+  final String unit;
+  final IconButton? edit;
+  final IconButton? upload;
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
 
   ComboBox({
     super.key,
     required this.leadingiconpath,
     required this.title,
+<<<<<<< HEAD
     this.value,
     this.unit,
     required this.valueController,
     required this.unitController,
     required this.noteController, 
     required this.time,
+=======
+    required this.value,
+    required this.unit,
+    this.edit,
+    this.upload,
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
   });
 
   @override
@@ -37,17 +44,11 @@ class ComboBox extends StatefulWidget {
 }
 
 class _ComboBoxState extends State<ComboBox> {
-  final medicalController = Get.find<MedicalDataController>();
-  final appController = Get.find<ApplicationController>();
-  List<XFile> selectedFiles = [];
-  void updateFiles(List<XFile> newFiles) {
-    setState(() {
-      selectedFiles = newFiles;
-      for (var i in selectedFiles) log('combobox : ' + i.path);
-    });
-  }
-
-  bool ischeck = false;
+  final TextEditingController valueController = TextEditingController();
+  final TextEditingController unitController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
+  bool isChecked = false;
+  final controller = Get.find<MedicalDataController>();
   @override
   Widget build(BuildContext context) {
     bool haveFile = (selectedFiles.length > 0);
@@ -63,17 +64,21 @@ class _ComboBoxState extends State<ComboBox> {
             height: 76,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: ischeck
+              color: isChecked
                   ? Theme.of(context).colorScheme.primaryContainer
                   : Theme.of(context).colorScheme.surface,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Image.asset(widget.leadingiconpath),
                 const SizedBox(width: 8),
+<<<<<<< HEAD
                 Expanded(child: _buildTextContainer(widget.title, widget.time)),
                 Expanded(child: _buildValueUnitColumn(context)),
+=======
+                Expanded(child: _buildTextContainer(widget.title)),
+                Expanded(child: _buildValueUnitColumn()),
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
                 const SizedBox(width: 8),
                 Container(
                   decoration: BoxDecoration(
@@ -101,6 +106,7 @@ class _ComboBoxState extends State<ComboBox> {
                   ),
                 ),
                 const SizedBox(width: 8),
+<<<<<<< HEAD
                 Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -148,6 +154,13 @@ class _ComboBoxState extends State<ComboBox> {
                       ),
                     ),
                   ),
+=======
+                IconWidgetRound(icon: const Icon(Icons.attach_file)),
+                const SizedBox(width: 15),
+                Checkbox(
+                  value: isChecked,
+                  onChanged: (value) => setState(() => isChecked = value!),
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
                 ),
               ],
             ),
@@ -158,12 +171,35 @@ class _ComboBoxState extends State<ComboBox> {
     );
   }
 
+<<<<<<< HEAD
   Widget _buildTextContainer(String name, String time) {
     return Container(
       height: 76,
+=======
+  Widget _buildTextContainer(String text) {
+    return Container(
+      height: 55,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildValueUnitColumn() {
+    return SizedBox(
+      height: 55,
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+<<<<<<< HEAD
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -182,6 +218,20 @@ class _ComboBoxState extends State<ComboBox> {
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.normal,
               ),
+=======
+          Text(
+            widget.value,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+            ),
+          ),
+          Text(
+            widget.unit,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
             ),
           ),
         ],
@@ -231,6 +281,7 @@ class _ComboBoxState extends State<ComboBox> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
+<<<<<<< HEAD
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -249,6 +300,21 @@ class _ComboBoxState extends State<ComboBox> {
                   _buildDialogActions(context),
                 ],
               ),
+=======
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDialogHeader(),
+                const SizedBox(height: 24),
+                _buildDialogInputFields(),
+                const SizedBox(height: 4),
+                AddFile(),
+                const SizedBox(height: 24),
+                _buildDialogActions(context),
+              ],
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
             ),
           ),
         );
@@ -273,16 +339,21 @@ class _ComboBoxState extends State<ComboBox> {
           children: [
             Expanded(
               child: _buildDialogTextField(
-                  'Giá trị đo', 'Giá trị', widget.valueController),
+                  'Giá trị đo', 'Giá trị', valueController),
             ),
             const SizedBox(width: 20),
             Expanded(
+<<<<<<< HEAD
               child: _buildDialogTextField('Đơn vị', '', widget.unitController),
+=======
+              child:
+                  _buildDialogTextField('Đơn vị', 'lần/phút', unitController),
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
             ),
           ],
         ),
         const SizedBox(height: 6),
-        _buildDialogTextField('Ghi chú', 'Ghi chú', widget.noteController,
+        _buildDialogTextField('Ghi chú', 'Ghi chú', noteController,
             icon: Icons.edit_note),
       ],
     );
@@ -312,17 +383,22 @@ class _ComboBoxState extends State<ComboBox> {
   }
 
   Row _buildDialogActions(BuildContext context) {
-    MedicalEntity data = MedicalEntity();
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
+<<<<<<< HEAD
           onPressed: () async {
             ischeck = false;
 
             // Await the result of getDocumentId
             medicalController.clearController();
             Get.back();
+=======
+          onPressed: () {
+            setState(() => isChecked = false);
+            Navigator.pop(context);
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
           },
           child: Text(
             'Hủy',
@@ -334,6 +410,7 @@ class _ComboBoxState extends State<ComboBox> {
         ),
         const SizedBox(width: 16),
         TextButton(
+<<<<<<< HEAD
           onPressed: () async {
             ischeck = true;
             String? typeId = await FirebaseApi.getDocumentId(
@@ -359,6 +436,11 @@ class _ComboBoxState extends State<ComboBox> {
             medicalController.clearController();
             log(medicalController.state.data.toString());
             Get.back();
+=======
+          onPressed: () {
+            setState(() => isChecked = true);
+            Navigator.pop(context);
+>>>>>>> 416fb578f78090ebf15969f4ecdb1f2a664f0fa1
           },
           child: Text(
             'Xác nhận',

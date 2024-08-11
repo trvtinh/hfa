@@ -4,5 +4,5 @@ import 'package:health_for_all/common/entities/medical_data.dart';
 
 class MedicalDataState {
   Rx<TimeOfDay> timeofDay = TimeOfDay.now().obs;
-  RxMap<String, MedicalEntity> data = <String, MedicalEntity>{}.obs;
+  Map<String, MedicalEntity> data = <String, MedicalEntity>{};
 }

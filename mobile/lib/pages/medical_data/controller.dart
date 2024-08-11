@@ -2,31 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/application/index.dart';
-import 'package:health_for_all/pages/medical_data/state.dart';
-import 'package:health_for_all/pages/medical_data/widget/combo_box.dart';
 import 'package:intl/intl.dart';
 
 class MedicalDataController extends GetxController {
   final dateController = TextEditingController();
   final timeController = TextEditingController();
   final appController = Get.find<ApplicationController>();
-  final state = MedicalDataState();
-  static int length = 10;
-  void updateLength() {
-    length++;
-  }
-
-  final noteController = TextEditingController();
-  final unitController = TextEditingController();
-  final valueController = TextEditingController();
   DateTime datetime = DateTime.now();
   TimeOfDay timeOfDay = TimeOfDay.now();
-
-  void clearController() {
-    noteController.clear();
-    unitController.clear();
-    valueController.clear();
-  }
 
   List<ComboBox> get entries => List.generate(length, (index) {
         return ComboBox(
@@ -35,7 +18,6 @@ class MedicalDataController extends GetxController {
           valueController: valueController,
           leadingiconpath: _getIconPath(index),
           title: _getTitle(index),
-          time: "09:00",
           value: valueController.text.obs,
           unit: unitController.text.obs,
         );
@@ -101,7 +83,7 @@ class MedicalDataController extends GetxController {
       datetime = selectedDate;
       final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
       dateController.text = formattedDate;
-      updateTimestamp(); // Cập nhật timestamp
+      _updateTimestamp(); // Cập nhật timestamp
     }
   }
 
@@ -115,11 +97,11 @@ class MedicalDataController extends GetxController {
       timeOfDay = selectedTime;
       final formattedTime = selectedTime.format(context);
       timeController.text = formattedTime;
-      updateTimestamp(); // Cập nhật timestamp
+      _updateTimestamp(); // Cập nhật timestamp
     }
   }
 
-  String updateTimestamp() {
+  void _updateTimestamp() {
     final updatedDateTime = DateTime(
       datetime.year,
       datetime.month,
@@ -135,7 +117,7 @@ class MedicalDataController extends GetxController {
         DateFormat('dd/MM/yyyy HH:mm:ss').format(finalDateTime);
 
     // In ra hoặc làm gì đó với formattedDateTime
-    return formattedDateTime;
+    print('Formatted DateTime: $formattedDateTime');
   }
 
   Future<void> addMedicalData() async {}
