@@ -28,7 +28,7 @@ class ComboBox extends StatefulWidget {
     this.unit,
     required this.valueController,
     required this.unitController,
-    required this.noteController, 
+    required this.noteController,
     required this.time,
   });
 
@@ -81,25 +81,28 @@ class _ComboBoxState extends State<ComboBox> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.outlineVariant),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(1.5),
                     child: haveNote
-                      ? Badge(
-                        child: Icon(
-                            Icons.edit_note, // Icon when files are present
+                        ? Badge(
+                            child: Icon(
+                              Icons.edit_note, // Icon when files are present
+                              color: ischeck
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                            ),
+                          )
+                        : Icon(
+                            Icons.edit_note, // Icon when no files are present
                             color: ischeck
                                 ? Theme.of(context).colorScheme.primary
                                 : Theme.of(context).colorScheme.outlineVariant,
                           ),
-                      )
-                      : Icon(
-                          Icons.edit_note, // Icon when no files are present
-                          color: ischeck
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.outlineVariant,
-                        ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -107,41 +110,52 @@ class _ComboBoxState extends State<ComboBox> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.outlineVariant),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(1.5),
                     child: haveFile
-                      ? Badge(
-                        child: Icon(
-                            Icons.attach_file, // Icon when files are present
+                        ? Badge(
+                            child: Icon(
+                              Icons.attach_file, // Icon when files are present
+                              color: ischeck
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                            ),
+                          )
+                        : Icon(
+                            Icons.attach_file, // Icon when no files are present
                             color: ischeck
                                 ? Theme.of(context).colorScheme.primary
                                 : Theme.of(context).colorScheme.outlineVariant,
                           ),
-                      )
-                      : Icon(
-                          Icons.attach_file, // Icon when no files are present
-                          color: ischeck
-                              ? Theme.of(context).colorScheme.primary
-                              : Theme.of(context).colorScheme.outlineVariant,
-                        ),
                   ),
                 ),
                 const SizedBox(width: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(1.5),
-                    child: Icon(
-                      Icons.clear,
-                      color: ischeck
-                        ? Theme.of(context).colorScheme.error
-                        : Theme.of(context).colorScheme.outlineVariant,
+                GestureDetector(
+                  onTap: () {
+                    selectedFiles.clear();
+                    ischeck = false;
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerLowest,
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.outlineVariant),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.5),
+                      child: Icon(
+                        Icons.clear,
+                        color: ischeck
+                            ? Theme.of(context).colorScheme.error
+                            : Theme.of(context).colorScheme.outlineVariant,
+                      ),
                     ),
                   ),
                 ),
@@ -227,22 +241,24 @@ class _ComboBoxState extends State<ComboBox> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildDialogHeader(),
-                const SizedBox(height: 24),
-                _buildDialogInputFields(),
-                const SizedBox(height: 4),
-                AddFile(
-                  files: selectedFiles,
-                  onFilesChanged: updateFiles,
-                ),
-                const SizedBox(height: 24),
-                _buildDialogActions(context),
-              ],
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildDialogHeader(),
+                  const SizedBox(height: 24),
+                  _buildDialogInputFields(),
+                  const SizedBox(height: 4),
+                  AddFile(
+                    files: selectedFiles,
+                    onFilesChanged: updateFiles,
+                  ),
+                  const SizedBox(height: 24),
+                  _buildDialogActions(context),
+                ],
+              ),
             ),
           ),
         );
