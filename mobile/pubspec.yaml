@@ -51,6 +51,8 @@ dependencies:
   path_provider: ^2.1.4
   dotted_border: ^2.1.0
   firebase_storage: ^12.1.3
+  intl: ^0.18.1
+  custom_calendar_viewer: ^0.4.9
 
 dev_dependencies:
   flutter_test:

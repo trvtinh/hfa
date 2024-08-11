@@ -1,20 +1,32 @@
+import 'package:custom_calendar_viewer/custom_calendar_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/widget/add_choice.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/widget/combo_box.dart';
+import 'package:intl/intl.dart';
 
 class OverallMedicalDataHistoryPage extends GetView<OverallMedicalDataHistoryController>{
+  RxString formattedDate = DateFormat('dd/MM/yyyy').format(DateTime.now()).obs;
   @override
   Widget build(BuildContext context){
     Future<void> _selectDate() async {
-      await showDatePicker(
-        context: context, 
+      DateTime? selectedDate = await showDatePicker(
+        context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
         lastDate: DateTime(2100),
       );
-    }
 
+      if (selectedDate != null) {
+        // Format the date as a string
+        formattedDate.value = DateFormat('dd/MM/yyyy').format(selectedDate);
+        print('Selected Date: $formattedDate');
+        // You can use the formattedDate string as needed
+      } else {
+        print('Date selection was canceled');
+      }
+    }
     Widget _buildDivider() => Divider(height: 1);
 
     Widget _buildDateRow() {
@@ -36,8 +48,35 @@ class OverallMedicalDataHistoryPage extends GetView<OverallMedicalDataHistoryCon
             const SizedBox(width: 10),
             Icon(Icons.arrow_back_ios_new, color: Theme.of(context).colorScheme.secondary),
             GestureDetector(
-              onTap: _selectDate,
-              child: Text('31/07/2024', style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.secondary)),
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor,
+                        borderRadius: const BorderRadius.vertical(top: Radius.circular(20.0)),
+                      ),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Icon(Icons.calendar_month, color: Theme.of(context).colorScheme.secondary),
+                            title: Obx(() => Text(formattedDate.value, style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.secondary))),
+                            trailing: Text(
+                              "Hôm nay",
+                              style: TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.primary),
+                            ),
+                          ),
+                          CustomCalendarViewer(
+                            calendarType: CustomCalendarType.viewFullYear,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Obx(() => Text(formattedDate.value, style: TextStyle(fontSize: 22, color: Theme.of(context).colorScheme.secondary))),
             ),
             Icon(Icons.arrow_forward_ios, color: Theme.of(context).colorScheme.secondary),
             Spacer(),
@@ -46,50 +85,92 @@ class OverallMedicalDataHistoryPage extends GetView<OverallMedicalDataHistoryCon
                 showModalBottomSheet(
                   context: context, 
                   builder: (BuildContext context) {
-                    return Scaffold(
-                      appBar: AppBar(
-                        leading: Icon(Icons.filter_list),
-                        title: Text(
-                          'Loại dữ liệu hiển thị',
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).canvasColor, // Match the container's color to the theme
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(20.0),
                         ),
-                        actions: [
-                          Padding(
-                            padding: const EdgeInsets.all(14.0),
-                            child: Text(
-                              'Mặc định',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
-                      body: Column(
+                      child: Column(
                         children: [
-                          Divider(height: 1,),
-                          SizedBox(height: 16,),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
-                              color: Theme.of(context).colorScheme.surfaceContainer,
+                          ListTile(
+                            leading: Icon(Icons.filter_list),
+                            title: Text(
+                              'Loại dữ liệu hiển thị',
+                              style: TextStyle(
+                                fontSize: 22,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
                             ),
-                            child: TextField(
-                              decoration: InputDecoration(
-                                prefixIcon: Icon(Icons.search),
-                                hintText: "Tìm kiếm",
-                                hintStyle: TextStyle(
-                                  fontSize: 16,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant
-                                )
+                            trailing: Text(
+                              "Mặc định",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 14,
                               ),
                             ),
                           ),
-                          SizedBox(height: 16,),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Column(
+                              children: [
+                                Divider(height: 1,),
+                                SizedBox(height: 16,),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    color: Theme.of(context).colorScheme.surfaceContainer,
+                                  ),
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.search),
+                                      hintText: "Tìm kiếm",
+                                      hintStyle: TextStyle(
+                                        fontSize: 16,
+                                        color: Theme.of(context).colorScheme.onSurfaceVariant
+                                      )
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 16,),
+                                Row(
+                                  children: [
+                                    AddChoice(name: "Huyết áp"),
+                                    const SizedBox(width: 6,),
+                                    AddChoice(name: "Thân nhiệt"),
+                                    const SizedBox(width: 6,),
+                                    AddChoice(name: "Đường huyết"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    AddChoice(name: "Nhịp tim"),
+                                    const SizedBox(width: 6,),
+                                    AddChoice(name: "SPO2"),
+                                    const SizedBox(width: 6,),
+                                    AddChoice(name: "HRV"),
+                                    const SizedBox(width: 6,),
+                                    AddChoice(name: "ECG"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    AddChoice(name: "Cân nặng"),
+                                    const SizedBox(width: 2,),
+                                    AddChoice(name: "Axit Uric"),
+                                    const SizedBox(width: 2,),
+                                    AddChoice(name: "Phiếu xét nghiệm"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    AddChoice(name: "Kết quả khám"),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     );

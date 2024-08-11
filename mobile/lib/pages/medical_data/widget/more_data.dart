@@ -65,21 +65,6 @@ class _MoreDataState extends State<MoreData> {
                       ),
                     ),
                   ),
-<<<<<<< HEAD
-                ),
-                const SizedBox(height: 24,),
-                MyTextField('Tên loại dữ liệu y tế','Tên loại dữ liệu y tế', 64, nameController),
-                const SizedBox(height: 16,),
-                MyTextField('Đơn vị','Đơn vị', 56, unitController),
-                const SizedBox(height: 16,),
-                MyTextField('Mô tả','Mô tả dữ liệu y tế', 98, detailController),
-              ]
-            ),
-          )
-        );
-      }
-    );
-=======
                   const SizedBox(
                     height: 24,
                   ),
@@ -97,7 +82,6 @@ class _MoreDataState extends State<MoreData> {
                 ]),
               ));
         });
->>>>>>> cuong
   }
 
   Widget MyTextField(
