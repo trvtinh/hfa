@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 class ComboBox extends StatefulWidget {
   final String leadingiconpath;
   final String title;
+  final String time;
   final RxString? value; // Changed to RxString
   final RxString? unit; // Changed to RxString
   final TextEditingController valueController;
@@ -28,6 +29,7 @@ class ComboBox extends StatefulWidget {
     required this.valueController,
     required this.unitController,
     required this.noteController,
+    required this.time,
   });
 
   @override
@@ -45,53 +47,174 @@ class _ComboBoxState extends State<ComboBox> {
     });
   }
 
-  bool ischeck = false;
+  RxBool ischeck = false.obs;
   @override
   Widget build(BuildContext context) {
+    bool haveFile = (selectedFiles.length > 0);
+    bool haveNote = widget.noteController.text.isNotEmpty;
     return GestureDetector(
       onTap: () {
         _showDialog(context);
       },
       child: Column(
         children: [
-          Container(
-            width: double.infinity,
-            height: 72,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: ischeck
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : Theme.of(context).colorScheme.surface,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(widget.leadingiconpath),
-                const SizedBox(width: 8),
-                //title
-                Text(
-                  widget.title,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
+          Obx(
+            () => Container(
+              width: double.infinity,
+              height: 76,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: ischeck.value
+                    ? Theme.of(context).colorScheme.primaryContainer
+                    : Theme.of(context).colorScheme.surface,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(widget.leadingiconpath),
+                  const SizedBox(width: 8),
+                  Expanded(
+                      child: _buildTextContainer(widget.title, widget.time)),
+                  Expanded(child: _buildValueUnitColumn(context)),
+                  const SizedBox(width: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerLowest,
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.outlineVariant),
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.all(1.5),
+                        child: haveNote
+                            ? Badge(
+                                child: Icon(
+                                  Icons
+                                      .edit_note, // Icon when files are present
+                                  color: ischeck.value
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                ),
+                              )
+                            : Obx(
+                                () => Icon(
+                                  Icons
+                                      .edit_note, // Icon when no files are present
+                                  color: ischeck.value
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                ),
+                              )),
                   ),
-                ),
-                Expanded(child: _buildValueUnitColumn(context)),
-                const SizedBox(width: 8),
-                IconWidgetRound(icon: const Icon(Icons.edit_note)),
-                const SizedBox(width: 8),
-                IconWidgetRound(icon: const Icon(Icons.attach_file)),
-                const SizedBox(width: 8),
-                Checkbox(
-                  value: ischeck,
-                  onChanged: (value) {
-                    ischeck = value ?? false;
-                  },
-                )
-              ],
+                  const SizedBox(width: 8),
+                  Obx(
+                    () => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerLowest,
+                        border: Border.all(
+                            color:
+                                Theme.of(context).colorScheme.outlineVariant),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.5),
+                        child: haveFile
+                            ? Badge(
+                                child: Icon(
+                                  Icons
+                                      .attach_file, // Icon when files are present
+                                  color: ischeck.value
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                ),
+                              )
+                            : Icon(
+                                Icons
+                                    .attach_file, // Icon when no files are present
+                                color: ischeck.value
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                              ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {
+                      selectedFiles.clear();
+                      ischeck.value = false;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerLowest,
+                        border: Border.all(
+                            color:
+                                Theme.of(context).colorScheme.outlineVariant),
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.all(1.5),
+                          child: Obx(
+                            () => Icon(
+                              Icons.clear,
+                              color: ischeck.value
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                            ),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const Divider(height: 1),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextContainer(String name, String time) {
+    return Container(
+      height: 76,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              name,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              time,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -106,18 +229,24 @@ class _ComboBoxState extends State<ComboBox> {
             crossAxisAlignment:
                 CrossAxisAlignment.start, // Align text to the start
             children: [
-              Text(
-                medicalController.state.data[widget.title]?.value ?? "",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  medicalController.state.data[widget.title]?.value ?? "",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-              Text(
-                medicalController.state.data[widget.title]?.unit ?? "",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  medicalController.state.data[widget.title]?.unit ?? "",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
               ),
             ],
@@ -133,22 +262,24 @@ class _ComboBoxState extends State<ComboBox> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildDialogHeader(),
-                const SizedBox(height: 24),
-                _buildDialogInputFields(),
-                const SizedBox(height: 4),
-                AddFile(
-                  files: selectedFiles,
-                  onFilesChanged: updateFiles,
-                ),
-                const SizedBox(height: 24),
-                _buildDialogActions(context),
-              ],
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildDialogHeader(),
+                  const SizedBox(height: 24),
+                  _buildDialogInputFields(),
+                  const SizedBox(height: 4),
+                  AddFile(
+                    files: selectedFiles,
+                    onFilesChanged: updateFiles,
+                  ),
+                  const SizedBox(height: 24),
+                  _buildDialogActions(context),
+                ],
+              ),
             ),
           ),
         );
@@ -218,7 +349,7 @@ class _ComboBoxState extends State<ComboBox> {
       children: [
         TextButton(
           onPressed: () async {
-            ischeck = false;
+            ischeck.value = false;
 
             // Await the result of getDocumentId
             medicalController.clearController();
@@ -235,7 +366,7 @@ class _ComboBoxState extends State<ComboBox> {
         const SizedBox(width: 16),
         TextButton(
           onPressed: () async {
-            ischeck = true;
+            ischeck.value = true;
             String? typeId = await FirebaseApi.getDocumentId(
                 'type_medical_data', 'name', widget.title);
             // List<String> imageUrl = [];
@@ -269,26 +400,6 @@ class _ComboBoxState extends State<ComboBox> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class IconWidgetRound extends StatelessWidget {
-  final Icon icon;
-
-  IconWidgetRound({required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(3.0),
-        child: icon,
-      ),
     );
   }
 }

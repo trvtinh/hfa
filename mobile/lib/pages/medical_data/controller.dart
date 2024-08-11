@@ -16,6 +16,13 @@ class MedicalDataController extends GetxController {
     length++;
   }
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+  }
+
   final noteController = TextEditingController();
   final unitController = TextEditingController();
   final valueController = TextEditingController();
@@ -28,8 +35,16 @@ class MedicalDataController extends GetxController {
     valueController.clear();
   }
 
+  String formatTimeOfDay() {
+    TimeOfDay timeOfDay = TimeOfDay.now();
+    String formattedTime =
+        "${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}";
+    return formattedTime; // In ra thời gian dưới dạng chuỗi "hh:mm"
+  }
+
   List<ComboBox> get entries => List.generate(length, (index) {
         return ComboBox(
+          time: formatTimeOfDay(),
           noteController: noteController,
           unitController: unitController,
           valueController: valueController,
