@@ -47,7 +47,7 @@ class _ComboBoxState extends State<ComboBox> {
     });
   }
 
-  bool ischeck = false;
+  RxBool ischeck = false.obs;
   @override
   Widget build(BuildContext context) {
     bool haveFile = (selectedFiles.length > 0);
@@ -58,87 +58,26 @@ class _ComboBoxState extends State<ComboBox> {
       },
       child: Column(
         children: [
-          Container(
-            width: double.infinity,
-            height: 76,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: ischeck
-                  ? Theme.of(context).colorScheme.primaryContainer
-                  : Theme.of(context).colorScheme.surface,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Image.asset(widget.leadingiconpath),
-                const SizedBox(width: 8),
-                Expanded(child: _buildTextContainer(widget.title, widget.time)),
-                Expanded(child: _buildValueUnitColumn(context)),
-                const SizedBox(width: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.outlineVariant),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(1.5),
-                    child: haveNote
-                        ? Badge(
-                            child: Icon(
-                              Icons.edit_note, // Icon when files are present
-                              color: ischeck
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant,
-                            ),
-                          )
-                        : Icon(
-                            Icons.edit_note, // Icon when no files are present
-                            color: ischeck
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.outlineVariant,
-                          ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.surfaceContainerLowest,
-                    border: Border.all(
-                        color: Theme.of(context).colorScheme.outlineVariant),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(1.5),
-                    child: haveFile
-                        ? Badge(
-                            child: Icon(
-                              Icons.attach_file, // Icon when files are present
-                              color: ischeck
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant,
-                            ),
-                          )
-                        : Icon(
-                            Icons.attach_file, // Icon when no files are present
-                            color: ischeck
-                                ? Theme.of(context).colorScheme.primary
-                                : Theme.of(context).colorScheme.outlineVariant,
-                          ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: () {
-                    selectedFiles.clear();
-                    ischeck = false;
-                  },
-                  child: Container(
+          Obx(
+            () => Container(
+              width: double.infinity,
+              height: 76,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: ischeck.value
+                    ? Theme.of(context).colorScheme.primaryContainer
+                    : Theme.of(context).colorScheme.surface,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Image.asset(widget.leadingiconpath),
+                  const SizedBox(width: 8),
+                  Expanded(
+                      child: _buildTextContainer(widget.title, widget.time)),
+                  Expanded(child: _buildValueUnitColumn(context)),
+                  const SizedBox(width: 8),
+                  Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color:
@@ -147,17 +86,101 @@ class _ComboBoxState extends State<ComboBox> {
                           color: Theme.of(context).colorScheme.outlineVariant),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.all(1.5),
-                      child: Icon(
-                        Icons.clear,
-                        color: ischeck
-                            ? Theme.of(context).colorScheme.error
-                            : Theme.of(context).colorScheme.outlineVariant,
+                        padding: const EdgeInsets.all(1.5),
+                        child: haveNote
+                            ? Badge(
+                                child: Icon(
+                                  Icons
+                                      .edit_note, // Icon when files are present
+                                  color: ischeck.value
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                ),
+                              )
+                            : Obx(
+                                () => Icon(
+                                  Icons
+                                      .edit_note, // Icon when no files are present
+                                  color: ischeck.value
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                ),
+                              )),
+                  ),
+                  const SizedBox(width: 8),
+                  Obx(
+                    () => Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerLowest,
+                        border: Border.all(
+                            color:
+                                Theme.of(context).colorScheme.outlineVariant),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(1.5),
+                        child: haveFile
+                            ? Badge(
+                                child: Icon(
+                                  Icons
+                                      .attach_file, // Icon when files are present
+                                  color: ischeck.value
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .outlineVariant,
+                                ),
+                              )
+                            : Icon(
+                                Icons
+                                    .attach_file, // Icon when no files are present
+                                color: ischeck.value
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                              ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () {
+                      selectedFiles.clear();
+                      ischeck.value = false;
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerLowest,
+                        border: Border.all(
+                            color:
+                                Theme.of(context).colorScheme.outlineVariant),
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.all(1.5),
+                          child: Obx(
+                            () => Icon(
+                              Icons.clear,
+                              color: ischeck.value
+                                  ? Theme.of(context).colorScheme.error
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                            ),
+                          )),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const Divider(height: 1),
@@ -326,7 +349,7 @@ class _ComboBoxState extends State<ComboBox> {
       children: [
         TextButton(
           onPressed: () async {
-            ischeck = false;
+            ischeck.value = false;
 
             // Await the result of getDocumentId
             medicalController.clearController();
@@ -343,7 +366,7 @@ class _ComboBoxState extends State<ComboBox> {
         const SizedBox(width: 16),
         TextButton(
           onPressed: () async {
-            ischeck = true;
+            ischeck.value = true;
             String? typeId = await FirebaseApi.getDocumentId(
                 'type_medical_data', 'name', widget.title);
             // List<String> imageUrl = [];
