@@ -26,10 +26,6 @@ Future<void> main() async {
   Get.put<UserStore>(UserStore());
 
   await Firebase.initializeApp();
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity, // For Android
-    appleProvider: AppleProvider.deviceCheck, // For iOS
-  );
   // await FirebaseApi.initNotifications();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
