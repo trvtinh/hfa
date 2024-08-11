@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/home/view.dart';
+import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
