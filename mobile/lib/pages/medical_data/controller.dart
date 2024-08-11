@@ -35,6 +35,7 @@ class MedicalDataController extends GetxController {
           valueController: valueController,
           leadingiconpath: _getIconPath(index),
           title: _getTitle(index),
+          time: "09:00",
           value: valueController.text.obs,
           unit: unitController.text.obs,
         );

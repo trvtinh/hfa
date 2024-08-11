@@ -68,7 +68,7 @@ class OverallMedicalDataHistoryPage extends GetView<OverallMedicalDataHistoryCon
                             ),
                           ),
                           CustomCalendarViewer(
-                            calendarType: CustomCalendarType.viewFullYear,
+                            
                           ),
                         ],
                       ),
