@@ -6,6 +6,18 @@ class Medical_data_Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dữ liệu sức khỏe'),
+        elevation: 0,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(
+              'assets/images/HFA_small_icon.png',
+            ),
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Column(
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -13,7 +25,7 @@ class Medical_data_Home extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   border: Border(
                 top: BorderSide(
                   color: Color.fromRGBO(202, 196, 208, 1),
