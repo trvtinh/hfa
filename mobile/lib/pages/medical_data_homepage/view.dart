@@ -13,7 +13,7 @@ class Medical_data_Home extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width,
               height: 40,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   border: Border(
                 top: BorderSide(
                   color: Color.fromRGBO(202, 196, 208, 1),

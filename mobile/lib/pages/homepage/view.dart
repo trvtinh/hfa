@@ -1,11 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
 
 class Homepage extends StatelessWidget {
-  const Homepage({super.key});
-
+  Homepage({super.key});
+  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,163 +35,166 @@ class Homepage extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(width: 12),
-                          CircleAvatar(
-                            radius: 28,
-                            backgroundImage: NetworkImage(
-                              'https://s3-alpha-sig.figma.com/img/447d/ffec/b39241368aea1a19b6a61652750c7316?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Q3518w86n~r1T95c867IZ4KfhmZWH2VjaBSvsuGASCjV4DVOqIHyyX1aTHbMwVGavXu~nj1hwsqyUk2fLCst~Mv7Ld5495xnB9vABr5rP4QgaSsfLkZyS0plApMhQ7P4gJn1wXNvZRc2yq6UELDcyg6ZrfnJUDna7i7dW6z7hDCg2-2uSATU8v4-uq5U5mhrZ883gatl7ZNw5sLmCFB3LNN-2SmCbskKe2rPynkWEr4kXg8UIRdmCw2zsJN2EEwnwkvJUaj3qVucjsImnnQ65EuF8V7LhOpVP3l3qBkxlK-IpQjPAlQ23j-d2Bsa9PavrclCgDwLkaO66tX3vzJpFQ__',
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          Container(
-                            width: 130,
-                            height: 56,
-                            padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                            child: Column(
-                              children: [
-                                Row(
+                    Obx(() => Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const SizedBox(width: 12),
+                              CircleAvatar(
+                                  radius: 28,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      appController
+                                              .state.profile.value?.photourl ??
+                                          'https://s3-alpha-sig.figma.com/img/447d/ffec/b39241368aea1a19b6a61652750c7316?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Q3518w86n~r1T95c867IZ4KfhmZWH2VjaBSvsuGASCjV4DVOqIHyyX1aTHbMwVGavXu~nj1hwsqyUk2fLCst~Mv7Ld5495xnB9vABr5rP4QgaSsfLkZyS0plApMhQ7P4gJn1wXNvZRc2yq6UELDcyg6ZrfnJUDna7i7dW6z7hDCg2-2uSATU8v4-uq5U5mhrZ883gatl7ZNw5sLmCFB3LNN-2SmCbskKe2rPynkWEr4kXg8UIRdmCw2zsJN2EEwnwkvJUaj3qVucjsImnnQ65EuF8V7LhOpVP3l3qBkxlK-IpQjPAlQ23j-d2Bsa9PavrclCgDwLkaO66tX3vzJpFQ__')),
+                              const SizedBox(width: 12),
+                              Container(
+                                width: 130,
+                                height: 56,
+                                padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
+                                child: Column(
                                   children: [
-                                    Text(
-                                      "Nguyễn Văn A",
-                                      style: TextStyle(fontSize: 16),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          appController
+                                                  .state.profile.value?.name ??
+                                              "",
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                      ],
                                     ),
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 88,
+                                          height: 20,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Nam",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color.fromRGBO(
+                                                      121, 116, 126, 1),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 12,
+                                              ),
+                                              Text(
+                                                "24 tuổi",
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Color.fromRGBO(
+                                                      121, 116, 126, 1),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    )
                                   ],
                                 ),
-                                Row(
+                              ),
+                              const SizedBox(width: 12),
+                              const SizedBox(
+                                width: 146,
+                                height: 56,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     SizedBox(
-                                      width: 88,
-                                      height: 20,
+                                      width: 120,
+                                      height: 16,
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "Nam",
+                                            "Người nhà:",
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               color: Color.fromRGBO(
                                                   121, 116, 126, 1),
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
+                                          // SizedBox(
+                                          //   width: 30,
+                                          // ),
+                                          Badge(
+                                            // child: Text("2"),
+                                            label: Text("2"),
+                                            largeSize: 16,
+                                            backgroundColor:
+                                                Color.fromRGBO(125, 82, 96, 1),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 120,
+                                      height: 16,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
                                           Text(
-                                            "25 tuổi",
+                                            "Chuyên gia:",
                                             style: TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               color: Color.fromRGBO(
                                                   121, 116, 126, 1),
                                             ),
                                           ),
+                                          // SizedBox(
+                                          //   width: 30,
+                                          // ),
+                                          Badge(
+                                            // child: Text("2"),
+                                            label: Text("1"),
+                                            largeSize: 16,
+                                            backgroundColor:
+                                                Color.fromRGBO(125, 82, 96, 1),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 120,
+                                      height: 16,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            "Đang theo dõi:",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: Color.fromRGBO(
+                                                  121, 116, 126, 1),
+                                            ),
+                                          ),
+                                          // SizedBox(
+                                          //   width: 30,
+                                          // ),
+                                          Badge(
+                                            // child: Text("2"),
+                                            label: Text("1"),
+                                            largeSize: 16,
+                                            backgroundColor:
+                                                Color.fromRGBO(125, 82, 96, 1),
+                                          )
                                         ],
                                       ),
                                     ),
                                   ],
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 12),
-                          SizedBox(
-                            width: 146,
-                            height: 56,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                SizedBox(
-                                  width: 120,
-                                  height: 16,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Người nhà:",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                              Color.fromRGBO(121, 116, 126, 1),
-                                        ),
-                                      ),
-                                      // SizedBox(
-                                      //   width: 30,
-                                      // ),
-                                      Badge(
-                                        // child: Text("2"),
-                                        label: Text("2"),
-                                        largeSize: 16,
-                                        backgroundColor:
-                                            Color.fromRGBO(125, 82, 96, 1),
-                                      )
-                                    ],
-                                  ),
                                 ),
-                                SizedBox(
-                                  width: 120,
-                                  height: 16,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Chuyên gia:",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                              Color.fromRGBO(121, 116, 126, 1),
-                                        ),
-                                      ),
-                                      // SizedBox(
-                                      //   width: 30,
-                                      // ),
-                                      Badge(
-                                        // child: Text("2"),
-                                        label: Text("1"),
-                                        largeSize: 16,
-                                        backgroundColor:
-                                            Color.fromRGBO(125, 82, 96, 1),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 120,
-                                  height: 16,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Đang theo dõi:",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color:
-                                              Color.fromRGBO(121, 116, 126, 1),
-                                        ),
-                                      ),
-                                      // SizedBox(
-                                      //   width: 30,
-                                      // ),
-                                      Badge(
-                                        // child: Text("2"),
-                                        label: Text("1"),
-                                        largeSize: 16,
-                                        backgroundColor:
-                                            Color.fromRGBO(125, 82, 96, 1),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ])
+                              ),
+                            ]))
                   ]),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Container(
@@ -209,7 +214,7 @@ class Homepage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 356,
                     height: 20,
                     child: Row(
@@ -234,7 +239,7 @@ class Homepage extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.monitor_heart_outlined,
                           size: 48,
                           color: Color.fromRGBO(101, 85, 143, 1),
@@ -245,7 +250,7 @@ class Homepage extends StatelessWidget {
                               Container(
                                 width: 100,
                                 height: 48,
-                                child: Column(
+                                child: const Column(
                                   children: [
                                     Text(
                                       "Chưa cập nhật",
@@ -267,7 +272,7 @@ class Homepage extends StatelessWidget {
                               Container(
                                 width: 100,
                                 height: 48,
-                                child: Column(
+                                child: const Column(
                                   children: [
                                     Text(
                                       "Đã cập nhật",
@@ -289,7 +294,7 @@ class Homepage extends StatelessWidget {
                               Container(
                                 width: 100,
                                 height: 48,
-                                child: Column(
+                                child: const Column(
                                   children: [
                                     Text(
                                       "Tổng số",
@@ -314,7 +319,7 @@ class Homepage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 356,
                     height: 16,
                     child: Row(
@@ -333,10 +338,10 @@ class Homepage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBox(
@@ -355,10 +360,10 @@ class Homepage extends StatelessWidget {
                     value2: '07'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBoxnoW(
@@ -373,10 +378,10 @@ class Homepage extends StatelessWidget {
                     value1: '07'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBox(
@@ -393,13 +398,13 @@ class Homepage extends StatelessWidget {
                     text2: 'với HFA'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Container(
               height: 84,
               width: 380,
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: const Color.fromRGBO(234, 221, 255, 1),
@@ -470,7 +475,7 @@ class Homepage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],
