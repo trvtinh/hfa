@@ -65,7 +65,7 @@ class UserData {
       photourl: data?['photourl'],
       location: data?['location'],
       fcmtoken: data?['fcmtoken'],
-      addtime: data?['addtime'],
+      addtime: data?['addtime'] as Timestamp,
       age: data?['age'],
       doctors: List<String>.from(data?['doctors'] ?? []),
       patients: List<String>.from(data?['patients'] ?? []),

@@ -133,7 +133,7 @@ class MedicalDataController extends GetxController {
     }
   }
 
-  String updateTimestamp() {
+  Timestamp updateTimestamp() {
     final updatedDateTime = DateTime(
       datetime.year,
       datetime.month,
@@ -147,9 +147,9 @@ class MedicalDataController extends GetxController {
     // Định dạng DateTime thành chuỗi
     final formattedDateTime =
         DateFormat('dd/MM/yyyy HH:mm:ss').format(finalDateTime);
-
+    final dateTimestamp = Timestamp.fromDate(finalDateTime);
     // In ra hoặc làm gì đó với formattedDateTime
-    return formattedDateTime;
+    return dateTimestamp;
   }
 
   Future<void> addMedicalData() async {}
