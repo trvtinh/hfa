@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_for_all/pages/medical_data_homepage/Widget/GreyBox.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 
 class Medical_data_Home extends StatelessWidget {
   const Medical_data_Home({super.key});
@@ -89,37 +91,42 @@ class Medical_data_Home extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Container(
-                  height: 64,
-                  width: 186,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Color.fromRGBO(234, 221, 255, 1),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.3),
-                          blurRadius: 2,
+                GestureDetector(
+                  onTap: (){
+                    Get.to(()=>OverallMedicalDataHistoryPage());
+                  },
+                  child: Container(
+                    height: 64,
+                    width: 186,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Color.fromRGBO(234, 221, 255, 1),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.3),
+                            blurRadius: 2,
+                          ),
+                        ]),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 12,
                         ),
-                      ]),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 12,
-                      ),
-                      Icon(
-                        Icons.widgets_outlined,
-                        size: 40,
-                        color: Color.fromRGBO(101, 85, 143, 1),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Text("Tất cả",
-                          style: TextStyle(
-                            color: Color.fromRGBO(33, 0, 93, 1),
-                            fontSize: 24,
-                          )),
-                    ],
+                        Icon(
+                          Icons.widgets_outlined,
+                          size: 40,
+                          color: Color.fromRGBO(101, 85, 143, 1),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text("Tất cả",
+                            style: TextStyle(
+                              color: Color.fromRGBO(33, 0, 93, 1),
+                              fontSize: 24,
+                            )),
+                      ],
+                    ),
                   ),
                 ),
                 Container(
