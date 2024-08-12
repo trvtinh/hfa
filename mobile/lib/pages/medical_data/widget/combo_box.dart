@@ -20,7 +20,7 @@ class ComboBox extends StatefulWidget {
   final TextEditingController unitController;
   final TextEditingController noteController;
 
-  ComboBox({
+  const ComboBox({
     super.key,
     required this.leadingiconpath,
     required this.title,
@@ -43,14 +43,16 @@ class _ComboBoxState extends State<ComboBox> {
   void updateFiles(List<XFile> newFiles) {
     setState(() {
       selectedFiles = newFiles;
-      for (var i in selectedFiles) log('combobox : ' + i.path);
+      for (var i in selectedFiles) {
+        log('combobox : ${i.path}');
+      }
     });
   }
 
   RxBool ischeck = false.obs;
   @override
   Widget build(BuildContext context) {
-    bool haveFile = (selectedFiles.length > 0);
+    bool haveFile = (selectedFiles.isNotEmpty);
     bool haveNote = widget.noteController.text.isNotEmpty;
     return GestureDetector(
       onTap: () {
@@ -350,8 +352,6 @@ class _ComboBoxState extends State<ComboBox> {
         TextButton(
           onPressed: () async {
             ischeck.value = false;
-
-            // Await the result of getDocumentId
             medicalController.clearController();
             Get.back();
           },

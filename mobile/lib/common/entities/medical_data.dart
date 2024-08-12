@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class MedicalEntity {
   String? id;
   String? typeId;
-  String? time;
+  Timestamp? time;
   String? value;
   List<String>? imageUrls;
   List<String>? commentIds;
@@ -38,7 +38,7 @@ class MedicalEntity {
     return MedicalEntity(
       id: snapshot.id,
       typeId: data?['typeId'],
-      time: data?['time'],
+      time: data?['time'] as Timestamp,
       value: data?['value'],
       imageUrls: data?['imageUrls'],
       commentIds: data?['commentIds'],
