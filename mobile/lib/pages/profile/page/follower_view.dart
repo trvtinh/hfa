@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
 import 'package:health_for_all/pages/profile/widget/user_ListTile.dart';
-
 import 'search_view.dart';
 
 class FollowerPage extends StatefulWidget {
@@ -16,6 +15,11 @@ class _FollowerPageState extends State<FollowerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final relativesIds =
+        controller.appController.state.profile.value?.relatives ?? [];
+    final doctorsIds =
+        controller.appController.state.profile.value?.doctors ?? [];
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -23,111 +27,92 @@ class _FollowerPageState extends State<FollowerPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SearchingBar(false),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Text(
-                'Người thân (${controller.appController.state.profile.value!.relatives!.length})'),
+              'Người thân (${relativesIds.length})',
+            ),
             const Divider(),
-            // if (controller.state.profile.value!.relatives!.isEmpty)
-            //   const SizedBox.shrink()
-            // else
-            Container(
-              constraints: const BoxConstraints(maxHeight: 150),
-              child: StreamBuilder(
-                stream: controller.getUserByIds(
-                    controller.appController.state.profile.value!.relatives!),
+            if (relativesIds.isEmpty)
+              const Center(child: Text("Chưa có người thân"))
+            else
+              StreamBuilder(
+                stream: controller.getUserByIds(relativesIds),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('Chưa có người thân!'),
-                    );
+                    return const Center(child: Text('Lỗi khi tải người thân!'));
                   } else if (snapshot.hasData) {
                     final users = snapshot.data ?? [];
                     if (users.isEmpty) {
-                      return const Center(
-                        child: Text("Chưa có người thân"),
-                      );
+                      return const Center(child: Text("Chưa có người thân"));
                     }
                     return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: users.length,
                       itemBuilder: (context, index) {
                         final user = users[index];
                         return UserListTile(
-                            name: user.name!,
-                            description: user.id!,
-                            imageUrl: user.photourl!,
-                            onTap: () {},
-                            id: controller
-                                .appController.state.profile.value!.id!,
-                            collection: 'users',
-                            fieldName: 'relatives',
-                            valueToRemove: user.id!);
+                          name: user.name!,
+                          description: user.id!,
+                          imageUrl: user.photourl!,
+                          onTap: () {},
+                          id: controller.appController.state.profile.value!.id!,
+                          collection: 'users',
+                          fieldName: 'relatives',
+                          valueToRemove: user.id!,
+                        );
                       },
                     );
                   } else {
-                    return const Center(
-                      child: Text("Chưa có bác sĩ!!!"),
-                    );
+                    return const Center(child: Text("Chưa có người thân"));
                   }
                 },
               ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             Text(
-                'Chuyên gia y tế (${controller.appController.state.profile.value!.doctors!.length})'),
+              'Chuyên gia y tế (${doctorsIds.length})',
+            ),
             const Divider(),
-            Container(
-              constraints: const BoxConstraints(maxHeight: 200),
-              child: StreamBuilder(
-                stream: controller.getUserByIds(
-                    controller.appController.state.profile.value!.doctors!),
+            if (doctorsIds.isEmpty)
+              const Center(child: Text("Chưa có bác sĩ"))
+            else
+              StreamBuilder(
+                stream: controller.getUserByIds(doctorsIds),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return const Center(
-                      child: Text('Chưa có bác sĩ!'),
-                    );
+                    return const Center(child: Text('Lỗi khi tải bác sĩ!'));
                   } else if (snapshot.hasData) {
                     final users = snapshot.data ?? [];
                     if (users.isEmpty) {
-                      return const Center(
-                        child: Text("Chưa có bác sĩ"),
-                      );
+                      return const Center(child: Text("Chưa có bác sĩ"));
                     }
                     return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: users.length,
                       itemBuilder: (context, index) {
                         final user = users[index];
                         return UserListTile(
-                            id: controller
-                                .appController.state.profile.value!.id!,
-                            collection: 'users',
-                            fieldName: 'doctors',
-                            valueToRemove: user.id!,
-                            name: user.name!,
-                            description: user.id!,
-                            imageUrl: user.photourl!,
-                            onTap: () {});
+                          id: controller.appController.state.profile.value!.id!,
+                          collection: 'users',
+                          fieldName: 'doctors',
+                          valueToRemove: user.id!,
+                          name: user.name!,
+                          description: user.id!,
+                          imageUrl: user.photourl!,
+                          onTap: () {},
+                        );
                       },
                     );
                   } else {
-                    return const Center(
-                      child: Text("Chưa có bác sĩ!!!"),
-                    );
+                    return const Center(child: Text("Chưa có bác sĩ"));
                   }
                 },
               ),
-            ),
           ],
         ),
       ),

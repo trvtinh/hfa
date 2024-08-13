@@ -12,7 +12,15 @@
           "package_name": "com.example.health_for_all"
         }
       },
-      "oauth_client": [ 
+      "oauth_client": [
+        {
+          "client_id": "857860432080-v9k6mjt66fotqldm2d04g6tg3s81mm5j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.health_for_all",
+            "certificate_hash": "5c858669d7e0ae24a8e60c82ad95c994fac9e145"
+          }
+        },
         {
           "client_id": "857860432080-jsp2a8k1v1v13b8jglncbrjlj9iltnf5.apps.googleusercontent.com",
           "client_type": 3

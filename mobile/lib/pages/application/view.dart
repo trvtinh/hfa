@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
@@ -19,7 +20,7 @@ class ApplicationPage extends GetView<ApplicationController> {
         onPageChanged: controller.handPageChanged,
         children: [
           Homepage(),
-          OverallMedicalDataHistoryPage(),
+          Following(),
           MedicalDataPage(),
           NotificationPage(),
           const ProfilePage()

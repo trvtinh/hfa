@@ -10,8 +10,8 @@ import 'package:health_for_all/common/store/user.dart';
 
 import 'state.dart';
 
-GoogleSignIn _googleSignIn =
-    GoogleSignIn(scopes: <String>['https://www.googleapis.com/auth/drive']);
+GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>['https://www.googleapis.com/auth/cloud-platform']);
 
 class SignInController extends GetxController {
   final state = SignInState();
