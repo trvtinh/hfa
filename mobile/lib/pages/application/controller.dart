@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_for_all/common/entities/user.dart';
+import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
 import 'index.dart';
@@ -51,6 +52,10 @@ class ApplicationController extends GetxController {
           final documentSnapshot = querySnapshot
               .docs.first; // Lấy tài liệu đầu tiên từ kết quả truy vấn
           state.profile.value = UserData.fromFirestore(documentSnapshot, null);
+          if (state.profile.value?.dateOfBirth != null) {
+            state.profile.value?.age =
+                DatetimeChange.getAge(state.profile.value!.dateOfBirth!);
+          }
           log(state.profile.value.toString());
 
           // Thực hiện các thao tác khác với userData

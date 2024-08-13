@@ -1,9 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
 import 'package:health_for_all/pages/homepage/widget/OrangeBox.dart';
 
 class Homepage extends StatelessWidget {
-  const Homepage({super.key});
+  Homepage({super.key});
+  final appController = Get.find<ApplicationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -32,28 +36,26 @@ class Homepage extends StatelessWidget {
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Row(
-                        // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(width: 12),
+                    Obx(() => Row(children: [
+                          const SizedBox(width: 12),
                           CircleAvatar(
-                            radius: 28,
-                            backgroundImage: NetworkImage(
-                              'https://s3-alpha-sig.figma.com/img/447d/ffec/b39241368aea1a19b6a61652750c7316?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Q3518w86n~r1T95c867IZ4KfhmZWH2VjaBSvsuGASCjV4DVOqIHyyX1aTHbMwVGavXu~nj1hwsqyUk2fLCst~Mv7Ld5495xnB9vABr5rP4QgaSsfLkZyS0plApMhQ7P4gJn1wXNvZRc2yq6UELDcyg6ZrfnJUDna7i7dW6z7hDCg2-2uSATU8v4-uq5U5mhrZ883gatl7ZNw5sLmCFB3LNN-2SmCbskKe2rPynkWEr4kXg8UIRdmCw2zsJN2EEwnwkvJUaj3qVucjsImnnQ65EuF8V7LhOpVP3l3qBkxlK-IpQjPAlQ23j-d2Bsa9PavrclCgDwLkaO66tX3vzJpFQ__',
-                            ),
-                          ),
-                          SizedBox(width: 12),
+                              radius: 28,
+                              backgroundImage: CachedNetworkImageProvider(
+                                  appController.state.profile.value?.photourl ??
+                                      "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficonduck.com%2Ficons%2F160691%2Favatar-default-symbolic&psig=AOvVaw2gPEQ_lKQuUXivxfgTKXo-&ust=1723564687779000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIi5g4Hp74cDFQAAAAAdAAAAABAE")),
+                          const SizedBox(width: 12),
                           Container(
                             width: 130,
                             height: 56,
-                            padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                            padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
                             child: Column(
                               children: [
                                 Row(
                                   children: [
                                     Text(
-                                      "Nguyễn Văn A",
-                                      style: TextStyle(fontSize: 16),
+                                      appController.state.profile.value?.name ??
+                                          "",
+                                      style: const TextStyle(fontSize: 16),
                                     ),
                                   ],
                                 ),
@@ -65,19 +67,26 @@ class Homepage extends StatelessWidget {
                                       child: Row(
                                         children: [
                                           Text(
-                                            "Nam",
-                                            style: TextStyle(
+                                            appController.state.profile.value
+                                                    ?.gender ??
+                                                "",
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               color: Color.fromRGBO(
                                                   121, 116, 126, 1),
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             width: 12,
                                           ),
                                           Text(
-                                            "25 tuổi",
-                                            style: TextStyle(
+                                            appController.state.profile.value
+                                                        ?.age
+                                                        .toString() !=
+                                                    null
+                                                ? ("${appController.state.profile.value?.age} tuổi")
+                                                : '',
+                                            style: const TextStyle(
                                               fontSize: 14,
                                               color: Color.fromRGBO(
                                                   121, 116, 126, 1),
@@ -91,7 +100,7 @@ class Homepage extends StatelessWidget {
                               ],
                             ),
                           ),
-                          SizedBox(width: 12),
+                          const SizedBox(width: 12),
                           SizedBox(
                             width: 146,
                             height: 56,
@@ -105,7 +114,7 @@ class Homepage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Người nhà:",
                                         style: TextStyle(
                                           fontSize: 12,
@@ -118,10 +127,13 @@ class Homepage extends StatelessWidget {
                                       // ),
                                       Badge(
                                         // child: Text("2"),
-                                        label: Text("2"),
+                                        label: Text(appController.state.profile
+                                                .value?.relatives?.length
+                                                .toString() ??
+                                            "0"),
                                         largeSize: 16,
-                                        backgroundColor:
-                                            Color.fromRGBO(125, 82, 96, 1),
+                                        backgroundColor: const Color.fromRGBO(
+                                            125, 82, 96, 1),
                                       )
                                     ],
                                   ),
@@ -133,7 +145,7 @@ class Homepage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Chuyên gia:",
                                         style: TextStyle(
                                           fontSize: 12,
@@ -146,10 +158,13 @@ class Homepage extends StatelessWidget {
                                       // ),
                                       Badge(
                                         // child: Text("2"),
-                                        label: Text("1"),
+                                        label: Text(appController.state.profile
+                                                .value?.doctors?.length
+                                                .toString() ??
+                                            "0"),
                                         largeSize: 16,
-                                        backgroundColor:
-                                            Color.fromRGBO(125, 82, 96, 1),
+                                        backgroundColor: const Color.fromRGBO(
+                                            125, 82, 96, 1),
                                       )
                                     ],
                                   ),
@@ -161,7 +176,7 @@ class Homepage extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
+                                      const Text(
                                         "Đang theo dõi:",
                                         style: TextStyle(
                                           fontSize: 12,
@@ -174,10 +189,23 @@ class Homepage extends StatelessWidget {
                                       // ),
                                       Badge(
                                         // child: Text("2"),
-                                        label: Text("1"),
+                                        label: Text(
+                                          ((appController.state.profile.value
+                                                          ?.relatives?.length ??
+                                                      0) +
+                                                  (appController
+                                                          .state
+                                                          .profile
+                                                          .value
+                                                          ?.patients
+                                                          ?.length ??
+                                                      0))
+                                              .toString(),
+                                        ),
+
                                         largeSize: 16,
-                                        backgroundColor:
-                                            Color.fromRGBO(125, 82, 96, 1),
+                                        backgroundColor: const Color.fromRGBO(
+                                            125, 82, 96, 1),
                                       )
                                     ],
                                   ),
@@ -185,21 +213,21 @@ class Homepage extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ])
+                        ]))
                   ]),
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Orangebox(
+            const Orangebox(
                 val1: "03",
                 val2: "07",
                 val3: "10",
                 time: 'Cập nhật lúc 06:00, 27/07/2024'),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBox(
@@ -218,10 +246,10 @@ class Homepage extends StatelessWidget {
                     value2: '07'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBoxnoW(
@@ -236,10 +264,10 @@ class Homepage extends StatelessWidget {
                     value1: '07'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBox(
@@ -256,13 +284,13 @@ class Homepage extends StatelessWidget {
                     text2: 'với HFA'),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
             Container(
               height: 84,
               width: 380,
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   color: const Color.fromRGBO(234, 221, 255, 1),
@@ -333,7 +361,7 @@ class Homepage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
           ],

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DatetimeChange {
   DatetimeChange._();
 
@@ -15,5 +17,22 @@ class DatetimeChange {
 
   static int getDuration(DateTime time1, DateTime time2) {
     return getDMYTime(time1).difference(getDMYTime(time2)).inDays;
+  }
+
+  static String getDatetimeString(DateTime date) {
+    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    return formatter.format(date);
+  }
+
+  static String getHourString(DateTime date) {
+    final DateFormat formatter = DateFormat('HH:mm');
+    return formatter.format(date);
+  }
+
+  static int getAge(String date) {
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
+    final DateTime birthDate = dateFormat.parse(date);
+    final DateTime now = DateTime.now();
+    return now.year - birthDate.year;
   }
 }

@@ -9,5 +9,6 @@ class ApplicationState {
   set page(value) => _page.value = value;
   var head_detail = Rx<UserLoginResponseEntity?>(null);
   var profile = Rx<UserData?>(null);
+  RxInt age = 0.obs;
   // var user = Rxn<UserDB>();
 }
