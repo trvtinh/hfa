@@ -1,4 +1,8 @@
+import 'dart:developer';
+import 'package:intl/intl.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/API/item.dart';
@@ -11,6 +15,9 @@ import 'package:health_for_all/pages/overall_medical_data_history/widget/combo_b
 class OverallMedicalDataHistoryController extends GetxController {
   final state = OverrallMedicalDataHistoryState();
   final appController = Get.find<ApplicationController>();
+  DateTime datetime = DateTime.now();
+  RxString dateSelected = "".obs;
+  Rx<DateTime> dateTimeSelected = DateTime.now().obs;
   static int length = 10;
   void updateLength() {
     length++;
@@ -19,7 +26,7 @@ class OverallMedicalDataHistoryController extends GetxController {
   Future<List<ComboBox>> getEntries() async {
     final futures = List.generate(length, (index) async {
       final MedicalEntity? data = await fetchLatestEventInDay(
-          DateTime(2024, 8, 12), Item.getTitle(index), 1);
+          dateTimeSelected.value, Item.getTitle(index), 1);
       return ComboBox(
         leadingiconpath: Item.getIconPath(index),
         title: Item.getTitle(index),
@@ -32,6 +39,43 @@ class OverallMedicalDataHistoryController extends GetxController {
     });
 
     return await Future.wait(futures);
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    dateSelected.value = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    log(dateSelected.value);
+    // fetchEventsInDay(DateTime(2024, 8, 14), 'Huyết áp', 1);
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    ever(dateTimeSelected, (_) async {
+      dateSelected.value =
+          DateFormat('dd/MM/yyyy').format(dateTimeSelected.value);
+    });
+
+    ever(dateSelected, (_) {});
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate:
+          dateTimeSelected.value, // Dùng dateTimeSelected thay vì datetime
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null) {
+      datetime = selectedDate;
+      final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
+      dateSelected.value = formattedDate;
+      dateTimeSelected.value = selectedDate;
+      await getEntries();
+    }
   }
 
   Future<MedicalEntity?> fetchLatestEventInDay(
@@ -52,14 +96,12 @@ class OverallMedicalDataHistoryController extends GetxController {
       final query = await FirebaseApi.getQuerySnapshot(
           'type_medical_data', 'name', value);
       final docs = query.docs;
-
       if (docs.isEmpty) {
         // Không tìm thấy tài liệu với 'name' là specificValue
         return null;
       }
 
       final typeId = docs.first.id;
-
       // Tìm tài liệu từ collection 'medicalData' với typeId và userId
       // Và lọc theo thời gian trong ngày
       final querySnapshot = await db
@@ -76,20 +118,19 @@ class OverallMedicalDataHistoryController extends GetxController {
           .limit(limit ??
               1) // Giới hạn kết quả để lấy tài liệu muộn nhất trong ngày
           .get();
-
       final documents = querySnapshot.docs;
-
       if (documents.isEmpty) {
         // Không tìm thấy tài liệu phù hợp trong ngày
         return null;
       }
-
+      log(documents.first.toString());
       // Chuyển đổi dữ liệu tài liệu thành đối tượng MedicalEntity
       final data = MedicalEntity.fromFirestore(documents.first, null);
+      log(data.toString());
       return data;
     } catch (e) {
       // Xử lý lỗi
-      print('Error fetching latest event in day: $e');
+      print('Error fetching latest event in day $date: $e');
       return null;
     }
   }
@@ -150,7 +191,7 @@ class OverallMedicalDataHistoryController extends GetxController {
       state.history[DatetimeChange.getDMYTime(date)] = data;
     } catch (e) {
       // Xử lý lỗi
-      print('Error fetching latest event in day: $e');
+      print('Error fetching event in day: $e');
       return null;
     }
   }
