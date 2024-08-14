@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/pages/application/index.dart';
 import 'package:health_for_all/pages/medical_data/state.dart';
 import 'package:health_for_all/pages/medical_data/widget/combo_box.dart';
@@ -48,60 +49,12 @@ class MedicalDataController extends GetxController {
           noteController: noteController,
           unitController: unitController,
           valueController: valueController,
-          leadingiconpath: _getIconPath(index),
-          title: _getTitle(index),
+          leadingiconpath: Item.getIconPath(index),
+          title: Item.getTitle(index),
           value: valueController.text.obs,
           unit: unitController.text.obs,
         );
       });
-
-  static String _getIconPath(int index) {
-    const iconPaths = [
-      'assets/images/huyet_ap.png',
-      'assets/images/than_nhiet.png',
-      'assets/images/duong_huyet.png',
-      'assets/images/nhip_tim.png',
-      'assets/images/spo2.png',
-      'assets/images/hrv.png',
-      'assets/images/ecg.png',
-      'assets/images/can_nang.png',
-      'assets/images/xet_nghiem_mau.png',
-      'assets/images/axit_uric.png',
-    ];
-    return iconPaths[index];
-  }
-
-  static String _getTitle(int index) {
-    const titles = [
-      'Huyết áp',
-      'Thân nhiệt',
-      'Đường huyết',
-      'Nhịp tim',
-      'SPO2',
-      'HRV',
-      'ECG - Điện tâm đồ',
-      'Cân nặng',
-      'Xét nghiệm máu',
-      'Axit Uric',
-    ];
-    return titles[index];
-  }
-
-  static RxString _getUnit(int index) {
-    const units = [
-      'mmHg',
-      '°C',
-      'mg/dL',
-      'lần/phút',
-      '%',
-      'ms',
-      '--',
-      'kg',
-      '--',
-      '--',
-    ];
-    return units[index].obs;
-  }
 
   Future<void> selectDate(BuildContext context) async {
     final selectedDate = await showDatePicker(

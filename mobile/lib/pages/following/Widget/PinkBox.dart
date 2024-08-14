@@ -27,13 +27,12 @@ class PinkBoxState extends State<Pinkbox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 92,
-      width: 380,
+      width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: const Color.fromRGBO(255, 216, 228, 1),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 1,
@@ -46,12 +45,10 @@ class PinkBoxState extends State<Pinkbox> {
             radius: 28,
             backgroundImage: NetworkImage(widget.avapath),
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
-          SizedBox(
-            width: 130,
-            height: 68,
+          Expanded(
             child: Column(
               children: [
                 Row(
@@ -73,6 +70,8 @@ class PinkBoxState extends State<Pinkbox> {
                         fontSize: 14,
                         color: Theme.of(context).colorScheme.outline,
                       ),
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(width: 12),
                     Text(
@@ -112,67 +111,59 @@ class PinkBoxState extends State<Pinkbox> {
               ],
             ),
           ),
-          SizedBox(
-            width: 12,
-          ),
-          SizedBox(
-            width: 146,
-            height: 52,
-            child: Column(
-              children: [
-                Container(
-                  width: 120,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Theme.of(context).colorScheme.primaryFixedDim,
+          Column(
+            children: [
+              Container(
+                width: 120,
+                height: 24,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Theme.of(context).colorScheme.primaryFixedDim,
+                ),
+                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                child: SizedBox(
+                  width: 88,
+                  height: 16,
+                  child: Text(
+                    widget.person,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
                   ),
-                  padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-                  child: SizedBox(
-                    width: 88,
-                    height: 16,
-                    child: Text(
-                      widget.person,
+                ),
+              ),
+              SizedBox(height: 4),
+              Container(
+                width: 120,
+                height: 24,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Theme.of(context).colorScheme.primaryFixedDim,
+                ),
+                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Cảnh báo',
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
                     ),
-                  ),
+                    Badge(
+                      // child: Text("2"),
+                      label: Text(widget.warning),
+                      largeSize: 16,
+                      backgroundColor: widget.warning == '0'
+                          ? Theme.of(context).colorScheme.secondary
+                          : Theme.of(context).colorScheme.error,
+                    )
+                  ],
                 ),
-                SizedBox(height: 4),
-                Container(
-                  width: 120,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Theme.of(context).colorScheme.primaryFixedDim,
-                  ),
-                  padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Cảnh báo',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                      Badge(
-                        // child: Text("2"),
-                        label: Text(widget.warning),
-                        largeSize: 16,
-                        backgroundColor: widget.warning == '0'
-                            ? Theme.of(context).colorScheme.secondary
-                            : Theme.of(context).colorScheme.error,
-                      )
-                    ],
-                  ),
-                )
-              ],
-            ),
+              ),
+            ],
           )
         ],
       ),
