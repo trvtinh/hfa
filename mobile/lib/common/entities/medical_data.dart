@@ -37,16 +37,24 @@ class MedicalEntity {
     final data = snapshot.data();
     return MedicalEntity(
       id: snapshot.id,
-      typeId: data?['typeId'],
-      time: data?['time'] as Timestamp,
-      value: data?['value'],
-      imageUrls: data?['imageUrls'],
-      commentIds: data?['commentIds'],
-      dianoticIds: data?['dianoticIds'],
-      userId: data?['userId'],
-      unit: data?['unit'],
-      note: data?['note'],
-      imagePaths: data?['imagePaths'],
+      typeId: data?['typeId'] as String?,
+      time: data?['time'] as Timestamp?,
+      value: data?['value'] as String?,
+      imageUrls: (data?['imageUrls'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
+      commentIds: (data?['commentIds'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
+      dianoticIds: (data?['dianoticIds'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
+      userId: data?['userId'] as String?,
+      unit: data?['unit'] as String?,
+      note: data?['note'] as String?,
+      imagePaths: (data?['imagePaths'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
     );
   }
 
