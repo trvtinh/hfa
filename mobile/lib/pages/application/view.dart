@@ -4,6 +4,7 @@ import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
+import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
 import 'controller.dart';
@@ -61,9 +62,14 @@ class ApplicationPage extends GetView<ApplicationController> {
             leading: Icon(Icons.monitor_heart),
             title: Text('Dữ liệu sức khỏe'),
           ),
-          const ListTile(
-            leading: Icon(Icons.health_and_safety),
-            title: Text('Chuẩn đoán'),
+          InkWell(
+            onTap: () {
+              Get.to(() => diagnostic_page());
+            },
+            child: const ListTile(
+              leading: Icon(Icons.health_and_safety),
+              title: Text('Chẩn đoán'),
+            ),
           ),
           const ListTile(
             leading: Icon(Icons.medication_liquid),
