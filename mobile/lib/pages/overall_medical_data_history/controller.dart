@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,6 +19,7 @@ class OverallMedicalDataHistoryController extends GetxController {
   DateTime datetime = DateTime.now();
   RxString dateSelected = "".obs;
   Rx<DateTime> dateTimeSelected = DateTime.now().obs;
+  RxMap<String, MedicalEntity> listEveryData = <String, MedicalEntity>{}.obs;
   static int length = 10;
   void updateLength() {
     length++;
@@ -50,14 +52,31 @@ class OverallMedicalDataHistoryController extends GetxController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+    await fetchLastEventEveryData();
+
     ever(dateTimeSelected, (_) async {
       dateSelected.value =
           DateFormat('dd/MM/yyyy').format(dateTimeSelected.value);
     });
 
     ever(dateSelected, (_) {});
+  }
+
+  Future fetchLastEventEveryData() async {
+    for (int i = 0; i <= 9; i++) {
+      final data = await fetchLatestEvent(DateTime.now(), i.toString());
+      if (data != null) {
+        listEveryData[Item.getTitle(i)] = data;
+      }
+    }
+    for (var i in listEveryData.keys) {
+      log(i);
+    }
+    for (var i in listEveryData.values) {
+      log(i.toString());
+    }
   }
 
   Future<void> selectDate(BuildContext context) async {
@@ -75,6 +94,43 @@ class OverallMedicalDataHistoryController extends GetxController {
       dateSelected.value = formattedDate;
       dateTimeSelected.value = selectedDate;
       await getEntries();
+    }
+  }
+
+  Future<MedicalEntity?> fetchLatestEvent(DateTime date, String typeId) async {
+    final db = FirebaseFirestore.instance;
+
+    try {
+      // Chuyển đổi DateTime thành Timestamp
+      final time = Timestamp.fromDate(date);
+
+      // Tìm tài liệu từ collection 'medicalData' với typeId và userId
+      // Và lọc theo thời gian trong ngày
+      final querySnapshot = await db
+          .collection('medicalData')
+          .where('typeId', isEqualTo: typeId)
+          .where('userId',
+              isEqualTo: appController.state.profile.value
+                  ?.id) // Lọc tài liệu với 'time' >= startOfDay
+          .where('time',
+              isLessThanOrEqualTo: time) // Lọc tài liệu với 'time' <= endOfDay
+          .orderBy('time', descending: true) // Sắp xếp theo 'time' giảm dần
+          .limit(1) // Giới hạn kết quả để lấy tài liệu muộn nhất trong ngày
+          .get();
+      final documents = querySnapshot.docs;
+      if (documents.isEmpty) {
+        // Không tìm thấy tài liệu phù hợp trong ngày
+        return null;
+      }
+      log(documents.first.toString());
+      // Chuyển đổi dữ liệu tài liệu thành đối tượng MedicalEntity
+      final data = MedicalEntity.fromFirestore(documents.first, null);
+      log(data.toString());
+      return data;
+    } catch (e) {
+      // Xử lý lỗi
+      print('Error fetching latest event in day $date: $e');
+      return null;
     }
   }
 

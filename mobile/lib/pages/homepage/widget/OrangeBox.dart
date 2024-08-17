@@ -29,7 +29,7 @@ class OrangeboxState extends State<Orangebox> {
         //   context,
         //   MaterialPageRoute(builder: (context) => Medical_data_Home()),
         // );
-        Get.to(() => Medical_data_Home());
+        Get.to(() => MedicalDataHome());
       },
       child: Container(
         height: 124,
