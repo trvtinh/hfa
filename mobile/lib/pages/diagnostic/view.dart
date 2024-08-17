@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic/page/important_view.dart';
 import 'package:health_for_all/pages/diagnostic/page/unread_view.dart';
 import 'package:health_for_all/pages/diagnostic/page/seen_view.dart';
-import 'package:health_for_all/pages/diagnostic/page/add_view.dart';
+import 'package:health_for_all/pages/diagnostic_add/view.dart';
 
 class diagnostic_page extends StatelessWidget {
   const diagnostic_page({super.key});
