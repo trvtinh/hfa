@@ -65,13 +65,13 @@ class ApplicationPage extends GetView<ApplicationController> {
         children: [
           buildDrawerHeader(),
           ListTile(
-            onTap: () => Get.to(() => MedicalDataHome()),
-            leading: Icon(Icons.monitor_heart),
-            title: Text('Dữ liệu sức khỏe'),
+            onTap: () => Get.to(() => const MedicalDataHome()),
+            leading: const Icon(Icons.monitor_heart),
+            title: const Text('Dữ liệu sức khỏe'),
           ),
           InkWell(
             onTap: () {
-              Get.to(() => diagnostic_page());
+              Get.to(() => const DiagnosticPage());
             },
             child: const ListTile(
               leading: Icon(Icons.health_and_safety),
@@ -80,12 +80,12 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () => Get.to(() => PrescriptionPage()),
-            leading: Icon(Icons.medication_liquid),
-            title: Text('Đơn thuốc'),
+            leading: const Icon(Icons.medication_liquid),
+            title: const Text('Đơn thuốc'),
           ),
           ListTile(
-            leading: Icon(Icons.date_range),
-            title: Text('Nhắc nhở'),
+            leading: const Icon(Icons.date_range),
+            title: const Text('Nhắc nhở'),
             onTap: () => Get.to(() => ReminderPage()),
           ),
           const ListTile(
@@ -94,26 +94,26 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () => Get.to(() => AlarmPage()),
-            leading: Icon(Icons.warning_amber),
-            title: Text('Cảnh báo'),
+            leading: const Icon(Icons.warning_amber),
+            title: const Text('Cảnh báo'),
           ),
           ListTile(
             onTap: () => Get.to(() => ConnectHardwarePage()),
-            leading: Icon(Icons.memory),
-            title: Text('Kết nối với thiết bị'),
+            leading: const Icon(Icons.memory),
+            title: const Text('Kết nối với thiết bị'),
           ),
           ListTile(
             onTap: () => Get.to(() => ChatbotPage()),
-            leading: Icon(Icons.smart_toy),
-            title: Text('Trò chuyện với HFA-Bot'),
+            leading: const Icon(Icons.smart_toy),
+            title: const Text('Trò chuyện với HFA-Bot'),
           ),
           const ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('Tài khoản'),
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Đăng xuất'),
+            leading: const Icon(Icons.account_circle),
+            title: const Text('Đăng xuất'),
             onTap: () async {
               await controller.onLogOut();
             },
@@ -158,12 +158,12 @@ class About_HFA extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Về chúng tôi"),
+        title: const Text("Về chúng tôi"),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back),
+          child: const Icon(Icons.arrow_back),
         ),
       ),
       body: const Center(

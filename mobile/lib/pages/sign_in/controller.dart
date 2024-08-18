@@ -87,7 +87,12 @@ class SignInController extends GetxController {
       }
     } catch (e) {
       // Replace with a proper error handling mechanism
-      print("Login error: $e");
+      log("Login error: $e");
+      Get.snackbar(
+        "Login Error",
+        "An error occurred while logging in. Please try again.",
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 

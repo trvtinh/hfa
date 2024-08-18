@@ -20,7 +20,7 @@ class _ImportantPageState extends State<ImportantPage> {
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
   ];
 
-  List<String> _Doctors = [
+  List<String> doctors = [
     'Nguyễn Văn A',
     'Nguyễn Thị B',
     'Trần Văn C',
@@ -158,7 +158,7 @@ class _ImportantPageState extends State<ImportantPage> {
                                     ),
                                   ),
                                   Text(
-                                    _Doctors[index],
+                                    doctors[index],
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Theme.of(context)
