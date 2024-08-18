@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/body/comment_screen.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/detail_screen.dart';
 import 'package:intl/intl.dart';
 
@@ -17,6 +18,7 @@ import 'package:health_for_all/pages/overall_medical_data_history/widget/combo_b
 class OverallMedicalDataHistoryController extends GetxController {
   final state = OverrallMedicalDataHistoryState();
   final appController = Get.find<ApplicationController>();
+  final commentController = TextEditingController();
   DateTime datetime = DateTime.now();
   RxString dateSelected = "".obs;
   Rx<DateTime> dateTimeSelected = DateTime.now().obs;
@@ -98,7 +100,10 @@ class OverallMedicalDataHistoryController extends GetxController {
                                 note: data?.note ?? "",
                                 images: data?.imageUrls ?? [],
                               )),
-                              Center(child: Text('Nội dung Tab 2')),
+                              Center(
+                                  child: CommentScreen(
+                                commentList: const [],
+                              )),
                               Center(child: Text('Nội dung Tab 3')),
                               Center(child: Text('Nội dung Tab 4')),
                             ],

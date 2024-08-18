@@ -5,8 +5,8 @@ import 'package:health_for_all/pages/diagnostic/page/unread_view.dart';
 import 'package:health_for_all/pages/diagnostic/page/seen_view.dart';
 import 'package:health_for_all/pages/diagnostic_add/view.dart';
 
-class diagnostic_page extends StatelessWidget {
-  const diagnostic_page({super.key});
+class DiagnosticPage extends StatelessWidget {
+  const DiagnosticPage({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

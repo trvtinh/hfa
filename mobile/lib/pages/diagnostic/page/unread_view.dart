@@ -91,7 +91,7 @@ class _UnreadPageState extends State<UnreadPage> {
                 return GestureDetector(
                   onTap: () => _toggleContainer(index),
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 300),
                     width: MediaQuery.of(context).size.width,
                     height: _isExpandedList[index]
                         ? _IsAttached[index]
