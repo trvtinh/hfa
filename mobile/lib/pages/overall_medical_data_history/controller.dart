@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/body/detail_screen.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,18 +26,129 @@ class OverallMedicalDataHistoryController extends GetxController {
     length++;
   }
 
-  Future<List<ComboBox>> getEntries() async {
+  Future getEntries(BuildContext context) async {
     final futures = List.generate(length, (index) async {
       final MedicalEntity? data = await fetchLatestEventInDay(
           dateTimeSelected.value, Item.getTitle(index), 1);
-      return ComboBox(
-        leadingiconpath: Item.getIconPath(index),
-        title: Item.getTitle(index),
-        value: data?.value ?? '--',
-        unit: Item.getUnit(index),
-        time: data != null
-            ? DatetimeChange.getHourString(data.time!.toDate())
-            : '--',
+      return GestureDetector(
+        onTap: () {
+          print(data.toString());
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                contentPadding: EdgeInsets.zero,
+                content: Container(
+                  padding: EdgeInsets.all(16),
+                  width: MediaQuery.of(context).size.width,
+                  child: DefaultTabController(
+                    length: 4,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Row(
+                          children: [
+                            Image.asset(Item.getIconPath(index)),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Text(
+                              Item.getTitle(index),
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              data != null
+                                  ? ('${DatetimeChange.getHourString(data.time!.toDate())}, ${DatetimeChange.getDatetimeString(data.time!.toDate())}')
+                                  : '--',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant),
+                            ),
+                            Text(data?.value ?? "--",
+                                style: TextStyle(
+                                    fontSize: 32,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimaryContainer)),
+                            Text(Item.getUnit(index),
+                                style: TextStyle(
+                                    fontSize: 11,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary)),
+                          ],
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            children: [
+                              Container(
+                                  child: DetailScreen(
+                                note: data?.note ?? "",
+                                images: data?.imageUrls ?? [],
+                              )),
+                              Center(child: Text('Nội dung Tab 2')),
+                              Center(child: Text('Nội dung Tab 3')),
+                              Center(child: Text('Nội dung Tab 4')),
+                            ],
+                          ),
+                        ),
+                        const TabBar(
+                          tabs: [
+                            Tab(
+                              text: 'Chi tiết',
+                            ),
+                            Tab(text: 'Bình luận'),
+                            Tab(text: 'Chuẩn đoán'),
+                            Tab(text: 'Cảnh báo'),
+                          ],
+                          labelStyle: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        const Divider(
+                          height: 1,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                child: const Text('Huỷ')),
+                            TextButton(
+                                onPressed: () {}, child: const Text('Sửa'))
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+        child: ComboBox(
+          leadingiconpath: Item.getIconPath(index),
+          title: Item.getTitle(index),
+          value: data?.value ?? '--',
+          unit: Item.getUnit(index),
+          time: data != null
+              ? DatetimeChange.getHourString(data.time!.toDate())
+              : '--',
+        ),
       );
     });
 
@@ -93,7 +205,7 @@ class OverallMedicalDataHistoryController extends GetxController {
       final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
       dateSelected.value = formattedDate;
       dateTimeSelected.value = selectedDate;
-      await getEntries();
+      await getEntries(context);
     }
   }
 
