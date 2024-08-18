@@ -45,7 +45,7 @@ class CommentScreen extends StatelessWidget {
                     future: controller.getUser(comment.uid),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
@@ -110,10 +110,6 @@ class CommentScreen extends StatelessWidget {
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            // border: Border(
-            //   bottom: BorderSide(color: Colors.grey),
-            //   top: BorderSide(color: Colors.grey),
-            // ),
             color: Theme.of(context).colorScheme.surfaceContainerLowest),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
