@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
-import 'package:health_for_all/pages/overall_medical_data_history/widget/combo_box.dart';
 
 class OverallMedicalDataHistoryPage
     extends GetView<OverallMedicalDataHistoryController> {
+  OverallMedicalDataHistoryPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     Future<void> _selectDate() async {
@@ -18,7 +19,7 @@ class OverallMedicalDataHistoryPage
     }
 
     Future<List<Widget>> _buildComboBoxes() async {
-      final entries = await controller.getEntries();
+      final entries = await controller.getEntries(context);
       return entries
           .map((item) => Column(
                 children: [
@@ -60,6 +61,7 @@ class OverallMedicalDataHistoryPage
                 ),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
                     child: Row(
@@ -67,19 +69,36 @@ class OverallMedicalDataHistoryPage
                         Icon(Icons.calendar_month,
                             color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 10),
-                        Icon(Icons.arrow_back_ios_new,
-                            color: Theme.of(context).colorScheme.secondary),
-                        GestureDetector(
-                          onTap: _selectDate,
-                          child: Text(
-                            DatetimeChange.getDatetimeString(DateTime.now()),
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: Theme.of(context).colorScheme.secondary),
-                          ),
+                        IconButton(
+                          icon: Icon(Icons.arrow_back_ios_new,
+                              color: Theme.of(context).colorScheme.secondary),
+                          onPressed: () {
+                            controller.dateTimeSelected.value = controller
+                                .dateTimeSelected.value
+                                .subtract(Duration(days: 1));
+                          },
                         ),
-                        Icon(Icons.arrow_forward_ios,
-                            color: Theme.of(context).colorScheme.secondary),
+                        GestureDetector(
+                            onTap: () => controller.selectDate(context),
+                            child: Obx(
+                              () => Text(
+                                controller.dateSelected.value,
+                                style: TextStyle(
+                                    fontSize: 22,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              ),
+                            )),
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward_ios,
+                              color: Theme.of(context).colorScheme.secondary),
+                          onPressed: () {
+                            controller.dateTimeSelected.value = controller
+                                .dateTimeSelected.value
+                                .add(Duration(days: 1));
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -93,20 +112,22 @@ class OverallMedicalDataHistoryPage
                 ],
               ),
             ),
-            FutureBuilder<List<Widget>>(
-              future: _buildComboBoxes(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(child: Text('No data available'));
-                } else {
-                  return Column(children: snapshot.data!);
-                }
-              },
-            ),
+            Obx(() {
+              return FutureBuilder(
+                future: controller.getEntries(context),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text('No data available'));
+                  } else {
+                    return Column(children: snapshot.data!);
+                  }
+                },
+              );
+            }),
           ],
         ),
       ),

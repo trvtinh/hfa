@@ -147,14 +147,14 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Thành công'),
-                    content: Text('Dữ liệu đã được ghi nhận'),
+                    title: const Text('Thành công'),
+                    content: const Text('Dữ liệu đã được ghi nhận'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // Dismiss the dialog
                         },
-                        child: Text('OK'),
+                        child: const Text('OK'),
                       ),
                     ],
                   );
@@ -167,15 +167,15 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Error'),
-                    content: Text(
+                    title: const Text('Error'),
+                    content: const Text(
                         'An error occurred while saving data. Please try again.'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // Dismiss the dialog
                         },
-                        child: Text('OK'),
+                        child: const Text('OK'),
                       ),
                     ],
                   );
