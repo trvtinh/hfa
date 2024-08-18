@@ -3,6 +3,7 @@ import 'package:health_for_all/common/entities/comment.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/comment_screen.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/detail_screen.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/body/diagnostic.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -130,16 +131,14 @@ class OverallMedicalDataHistoryController extends GetxController {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                data != null
-                                    ? ('${DatetimeChange.getHourString(data.time!.toDate())}, ${DatetimeChange.getDatetimeString(data.time!.toDate())}')
-                                    : '--',
+                                ('${DatetimeChange.getHourString(data.time!.toDate())}, ${DatetimeChange.getDatetimeString(data.time!.toDate())}'),
                                 style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onSurfaceVariant),
                               ),
-                              Text(data?.value ?? "--",
+                              Text(data.value ?? "--",
                                   style: TextStyle(
                                       fontSize: 32,
                                       color: Theme.of(context)
@@ -156,13 +155,12 @@ class OverallMedicalDataHistoryController extends GetxController {
                           Expanded(
                             child: TabBarView(
                               children: [
-                                Container(
-                                    child: DetailScreen(
-                                  note: data?.note ?? "",
-                                  images: data?.imageUrls ?? [],
-                                )),
-                                Center(child: CommentScreen()),
-                                const Center(child: Text('Nội dung Tab 3')),
+                                DetailScreen(
+                                  note: data.note ?? "",
+                                  images: data.imageUrls ?? [],
+                                ),
+                                CommentScreen(),
+                                DiagnosticScrenn(),
                                 const Center(child: Text('Nội dung Tab 4')),
                               ],
                             ),
