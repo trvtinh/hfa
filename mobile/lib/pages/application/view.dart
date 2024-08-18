@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/alarm/view.dart';
+import 'package:health_for_all/pages/chatbot/view.dart';
+import 'package:health_for_all/pages/connect_hardware/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
+import 'package:health_for_all/pages/medical_data_homepage/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
+import 'package:health_for_all/pages/prescription/view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
+import 'package:health_for_all/pages/reminder/view.dart';
 import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
@@ -57,7 +63,8 @@ class ApplicationPage extends GetView<ApplicationController> {
         padding: EdgeInsets.zero,
         children: [
           buildDrawerHeader(),
-          const ListTile(
+          ListTile(
+            onTap: () => Get.to(() => MedicalDataHome()),
             leading: Icon(Icons.monitor_heart),
             title: Text('Dữ liệu sức khỏe'),
           ),
@@ -65,27 +72,32 @@ class ApplicationPage extends GetView<ApplicationController> {
             leading: Icon(Icons.health_and_safety),
             title: Text('Chuẩn đoán'),
           ),
-          const ListTile(
+          ListTile(
+            onTap: () => Get.to(() => PrescriptionPage()),
             leading: Icon(Icons.medication_liquid),
             title: Text('Đơn thuốc'),
           ),
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.date_range),
-            title: Text('Nhắc nhỏ'),
+            title: Text('Nhắc nhở'),
+            onTap: () => Get.to(() => ReminderPage()),
           ),
           const ListTile(
             leading: Icon(Icons.notifications_none),
             title: Text('Thông báo'),
           ),
-          const ListTile(
+          ListTile(
+            onTap: () => Get.to(() => AlarmPage()),
             leading: Icon(Icons.warning_amber),
             title: Text('Cảnh báo'),
           ),
-          const ListTile(
+          ListTile(
+            onTap: () => Get.to(() => ConnectHardwarePage()),
             leading: Icon(Icons.memory),
             title: Text('Kết nối với thiết bị'),
           ),
-          const ListTile(
+          ListTile(
+            onTap: () => Get.to(() => ChatbotPage()),
             leading: Icon(Icons.smart_toy),
             title: Text('Trò chuyện với HFA-Bot'),
           ),
