@@ -9,8 +9,8 @@ class DiagnosticPage extends StatelessWidget {
   const DiagnosticPage({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
+    return Scaffold(
+      body: DefaultTabController(
         length: 3,
         child: Scaffold(
           appBar: AppBar(
