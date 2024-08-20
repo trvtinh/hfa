@@ -5,8 +5,7 @@ import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
 class CommentScreen extends StatelessWidget {
-  CommentScreen({super.key, required this.commentList});
-  List<Comment> commentList = [];
+  CommentScreen({super.key});
   RxBool isExpanded = false.obs;
   final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
@@ -23,23 +22,47 @@ class CommentScreen extends StatelessWidget {
             const SizedBox(
               width: 10,
             ),
-            Text('Bình luận (${commentList.length})')
+            Obx(() =>
+                Text('Bình luận (${controller.state.commmentList.length})'))
           ],
         ),
         const SizedBox(height: 10),
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            padding: const EdgeInsets.all(8),
-            child: ListView.builder(
-              itemCount: commentList.length,
-              itemBuilder: (context, index) {
-                final comment = commentList[index];
-                return buildBoxComment(comment, context);
-              },
+        Obx(
+          () => Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: Colors.grey),
+                    bottom: BorderSide(color: Colors.grey),
+                  ),
+                  color: Theme.of(context).colorScheme.surfaceContainer),
+              padding: const EdgeInsets.all(8),
+              child: ListView.builder(
+                itemCount: controller.state.commmentList.length,
+                itemBuilder: (context, index) {
+                  final comment = controller.state.commmentList[index];
+                  return FutureBuilder<String>(
+                    future: controller.getUser(comment.uid),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        final name = snapshot.data ?? 'Unknown';
+                        return Column(
+                          children: [
+                            buildBoxComment(comment, context, name),
+                            SizedBox(
+                              height: 16,
+                            )
+                          ],
+                        );
+                      }
+                    },
+                  );
+                },
+              ),
             ),
           ),
         ),
@@ -64,7 +87,11 @@ class CommentScreen extends StatelessWidget {
               ),
             )),
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await controller.addComment(context);
+                  await controller.getAllCommentByMedicalType();
+                  controller.commentController.clear();
+                },
                 icon: Icon(
                   Icons.send,
                   size: 18,
@@ -76,12 +103,14 @@ class CommentScreen extends StatelessWidget {
     );
   }
 
-  Widget buildBoxComment(Comment comment, BuildContext context) {
+  Widget buildBoxComment(Comment comment, BuildContext context, String name) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
-      return AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
+      return Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Theme.of(context).colorScheme.surfaceContainerLowest),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -99,7 +128,7 @@ class CommentScreen extends StatelessWidget {
                 const SizedBox(
                   width: 6,
                 ),
-                Text(comment.name),
+                Text(name),
                 const SizedBox(
                   width: 6,
                 ),
@@ -113,26 +142,26 @@ class CommentScreen extends StatelessWidget {
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onPrimaryContainer),
                 ),
-                Spacer(),
-                Obx(() => IconButton(
-                    onPressed: () {
-                      isExpanded.value = !isExpanded.value;
-                    },
-                    icon: isExpanded.value
-                        ? const Icon(Icons.keyboard_arrow_up_rounded)
-                        : const Icon(Icons.keyboard_arrow_down_rounded)))
+                // Spacer(),
+                // Obx(() => IconButton(
+                //     onPressed: () {
+                //       isExpanded.value = !isExpanded.value;
+                //     },
+                //     icon: isExpanded.value
+                //         ? const Icon(Icons.keyboard_arrow_up_rounded)
+                //         : const Icon(Icons.keyboard_arrow_down_rounded)))
               ],
             ),
-            Row(
+            const Row(
               children: [
                 Text('Đã bình luận'),
-                const SizedBox(
+                SizedBox(
                   width: 6,
                 ),
-                const Text("·"),
-                const SizedBox(
-                  width: 6,
-                ),
+                // const Text("·"),
+                // const SizedBox(
+                //   width: 6,
+                // ),
               ],
             ),
             Text(comment.content)

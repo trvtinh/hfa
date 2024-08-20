@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Comment {
-  final String name;
+  final String uid;
   final String content;
   final Timestamp time;
   final String medicalId;
 
   Comment({
-    required this.name,
+    required this.uid,
     required this.content,
     required this.time,
     required this.medicalId,
@@ -16,18 +16,18 @@ class Comment {
   @override
   String toString() {
     return 'Comment('
-        'name: $name, '
+        'uid: $uid, '
         'content: $content, '
         'time: $time, '
         'medicalId: $medicalId'
         ')';
   }
 
-  factory Comment.fromFirestore(DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options) {
+  factory Comment.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
     final data = snapshot.data();
     return Comment(
-        name: data?['name'] as String,
+        uid: data?['uid'] as String,
         content: data?['content'] as String,
         time: data?['time'] != null
             ? Timestamp.fromMillisecondsSinceEpoch(data?['time'])
@@ -37,7 +37,7 @@ class Comment {
 
   Map<String, dynamic> toFirestore() {
     return {
-      'name': name,
+      'uid': uid,
       'content': content,
       'time': time.millisecondsSinceEpoch,
       'medicalId': medicalId,
