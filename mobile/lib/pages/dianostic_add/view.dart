@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/pages/dianostic_add/widget/send_diagnostic.dart';
 import 'package:get/get.dart';
 
 class AddView extends StatelessWidget {
@@ -6,18 +7,17 @@ class AddView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Thêm chẩn đoán'),
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              'assets/images/HFA_small_icon.png',
-            ),
+        appBar: AppBar(
+          title: const Text('Thêm chẩn đoán'),
+          elevation: 0,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              SendDiagnostic(),
+              const SizedBox(height: 16),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
