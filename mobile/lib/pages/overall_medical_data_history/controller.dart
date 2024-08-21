@@ -1,5 +1,9 @@
 import 'dart:developer';
-import 'package:get/get_rx/get_rx.dart';
+import 'package:health_for_all/common/entities/comment.dart';
+import 'package:health_for_all/common/entities/user.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/body/comment_screen.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/body/detail_screen.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/body/diagnostic.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +20,7 @@ import 'package:health_for_all/pages/overall_medical_data_history/widget/combo_b
 class OverallMedicalDataHistoryController extends GetxController {
   final state = OverrallMedicalDataHistoryState();
   final appController = Get.find<ApplicationController>();
+  final commentController = TextEditingController();
   DateTime datetime = DateTime.now();
   RxString dateSelected = "".obs;
   Rx<DateTime> dateTimeSelected = DateTime.now().obs;
@@ -25,18 +30,207 @@ class OverallMedicalDataHistoryController extends GetxController {
     length++;
   }
 
-  Future<List<ComboBox>> getEntries() async {
+  Future addComment(BuildContext context) async {
+    try {
+      final comment = Comment(
+          uid: appController.state.profile.value!.id!,
+          content: commentController.text,
+          time: Timestamp.fromDate(DateTime.now()),
+          medicalId: state.medicalId.value);
+      log(comment.toString());
+      await FirebaseApi.addDocument('comments', comment.toFirestore());
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Lỗi'),
+            content: Text('Lỗi thêm bình luận: $e'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future getAllCommentByMedicalType() async {
+    state.commmentList.clear();
+    final snapshot = await FirebaseApi.getQuerySnapshot(
+        'comments', 'medicalId', state.medicalId.value);
+    if (snapshot.docs.isNotEmpty) {
+      for (var doc in snapshot.docs) {
+        final comment = Comment.fromFirestore(doc);
+        state.commmentList.add(comment);
+      }
+    }
+  }
+
+  Future<String> getUser(String userId) async {
+    final db = FirebaseFirestore.instance;
+    final querySnapshot =
+        await db.collection("users").where('id', isEqualTo: userId).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = await querySnapshot.docs.first.reference.get();
+      final userData = UserData.fromFirestore(docSnapshot, null);
+      return userData.name!;
+    }
+    return '';
+  }
+
+  Future getEntries(BuildContext context) async {
     final futures = List.generate(length, (index) async {
       final MedicalEntity? data = await fetchLatestEventInDay(
           dateTimeSelected.value, Item.getTitle(index), 1);
-      return ComboBox(
-        leadingiconpath: Item.getIconPath(index),
-        title: Item.getTitle(index),
-        value: data?.value ?? '--',
-        unit: Item.getUnit(index),
-        time: data != null
-            ? DatetimeChange.getHourString(data.time!.toDate())
-            : '--',
+      return GestureDetector(
+        onTap: () {
+          print(data.toString());
+          if (data != null) {
+            state.medicalId.value = data.id!;
+            getAllCommentByMedicalType();
+            log(state.medicalId.value);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  contentPadding: EdgeInsets.zero,
+                  content: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    width: MediaQuery.of(context).size.width,
+                    child: DefaultTabController(
+                      length: 4,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Row(
+                            children: [
+                              Image.asset(Item.getIconPath(index)),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                Item.getTitle(index),
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                ('${DatetimeChange.getHourString(data.time!.toDate())}, ${DatetimeChange.getDatetimeString(data.time!.toDate())}'),
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant),
+                              ),
+                              Text(data.value ?? "--",
+                                  style: TextStyle(
+                                      fontSize: 32,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer)),
+                              Text(Item.getUnit(index),
+                                  style: TextStyle(
+                                      fontSize: 11,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
+                            ],
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              children: [
+                                DetailScreen(
+                                  note: data.note ?? "",
+                                  images: data.imageUrls ?? [],
+                                ),
+                                CommentScreen(),
+                                DiagnosticScrenn(),
+                                const Center(child: Text('Nội dung Tab 4')),
+                              ],
+                            ),
+                          ),
+                          const TabBar(
+                            tabs: [
+                              Tab(
+                                text: 'Chi tiết',
+                              ),
+                              Tab(text: 'Bình luận'),
+                              Tab(text: 'Chuẩn đoán'),
+                              Tab(text: 'Cảnh báo'),
+                            ],
+                            labelStyle: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                          const Divider(
+                            height: 1,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: const Text('Huỷ')),
+                              TextButton(
+                                  onPressed: () {}, child: const Text('Sửa'))
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          } else {
+            print('No data available');
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Không có dữ liệu'),
+                  content:
+                      const Text('Không có dữ liệu bạn đã chọn trong ngày này'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Close'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+        },
+        child: ComboBox(
+          leadingiconpath: Item.getIconPath(index),
+          title: Item.getTitle(index),
+          value: data?.value ?? '--',
+          unit: Item.getUnit(index),
+          time: data != null
+              ? DatetimeChange.getHourString(data.time!.toDate())
+              : '--',
+        ),
       );
     });
 
@@ -93,7 +287,7 @@ class OverallMedicalDataHistoryController extends GetxController {
       final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
       dateSelected.value = formattedDate;
       dateTimeSelected.value = selectedDate;
-      await getEntries();
+      await getEntries(context);
     }
   }
 

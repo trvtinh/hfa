@@ -19,7 +19,7 @@ class OverallMedicalDataHistoryPage
     }
 
     Future<List<Widget>> _buildComboBoxes() async {
-      final entries = await controller.getEntries();
+      final entries = await controller.getEntries(context);
       return entries
           .map((item) => Column(
                 children: [
@@ -113,8 +113,8 @@ class OverallMedicalDataHistoryPage
               ),
             ),
             Obx(() {
-              return FutureBuilder<List<Widget>>(
-                future: controller.getEntries(),
+              return FutureBuilder(
+                future: controller.getEntries(context),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());

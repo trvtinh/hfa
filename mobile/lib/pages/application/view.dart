@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/alarm/view.dart';
+import 'package:health_for_all/pages/chatbot/view.dart';
+import 'package:health_for_all/pages/connect_hardware/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
+import 'package:health_for_all/pages/medical_data_homepage/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
+import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
+import 'package:health_for_all/pages/prescription/view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
+import 'package:health_for_all/pages/reminder/view.dart';
 import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
@@ -57,45 +64,56 @@ class ApplicationPage extends GetView<ApplicationController> {
         padding: EdgeInsets.zero,
         children: [
           buildDrawerHeader(),
-          const ListTile(
-            leading: Icon(Icons.monitor_heart),
-            title: Text('Dữ liệu sức khỏe'),
+          ListTile(
+            onTap: () => Get.to(() => const MedicalDataHome()),
+            leading: const Icon(Icons.monitor_heart),
+            title: const Text('Dữ liệu sức khỏe'),
           ),
-          const ListTile(
-            leading: Icon(Icons.health_and_safety),
-            title: Text('Chuẩn đoán'),
+          InkWell(
+            onTap: () {
+              Get.to(() => const DiagnosticPage());
+            },
+            child: const ListTile(
+              leading: Icon(Icons.health_and_safety),
+              title: Text('Chẩn đoán'),
+            ),
           ),
-          const ListTile(
-            leading: Icon(Icons.medication_liquid),
-            title: Text('Đơn thuốc'),
+          ListTile(
+            onTap: () => Get.to(() => PrescriptionPage()),
+            leading: const Icon(Icons.medication_liquid),
+            title: const Text('Đơn thuốc'),
           ),
-          const ListTile(
-            leading: Icon(Icons.date_range),
-            title: Text('Nhắc nhỏ'),
+          ListTile(
+            leading: const Icon(Icons.date_range),
+            title: const Text('Nhắc nhở'),
+            onTap: () => Get.to(() => ReminderPage()),
           ),
           const ListTile(
             leading: Icon(Icons.notifications_none),
             title: Text('Thông báo'),
           ),
-          const ListTile(
-            leading: Icon(Icons.warning_amber),
-            title: Text('Cảnh báo'),
+          ListTile(
+            onTap: () => Get.to(() => AlarmPage()),
+            leading: const Icon(Icons.warning_amber),
+            title: const Text('Cảnh báo'),
           ),
-          const ListTile(
-            leading: Icon(Icons.memory),
-            title: Text('Kết nối với thiết bị'),
+          ListTile(
+            onTap: () => Get.to(() => ConnectHardwarePage()),
+            leading: const Icon(Icons.memory),
+            title: const Text('Kết nối với thiết bị'),
           ),
-          const ListTile(
-            leading: Icon(Icons.smart_toy),
-            title: Text('Trò chuyện với HFA-Bot'),
+          ListTile(
+            onTap: () => Get.to(() => ChatbotPage()),
+            leading: const Icon(Icons.smart_toy),
+            title: const Text('Trò chuyện với HFA-Bot'),
           ),
           const ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('Tài khoản'),
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Đăng xuất'),
+            leading: const Icon(Icons.account_circle),
+            title: const Text('Đăng xuất'),
             onTap: () async {
               await controller.onLogOut();
             },
@@ -140,12 +158,12 @@ class About_HFA extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Về chúng tôi"),
+        title: const Text("Về chúng tôi"),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(Icons.arrow_back),
+          child: const Icon(Icons.arrow_back),
         ),
       ),
       body: const Center(
