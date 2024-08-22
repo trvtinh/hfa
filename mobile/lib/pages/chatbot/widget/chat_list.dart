@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -14,7 +16,7 @@ class ChatList extends GetView<ChatbotController> {
           color: Theme.of(context).colorScheme.surface,
           padding: EdgeInsets.only(bottom: 50.h),
           child: CustomScrollView(
-            reverse: false,
+            reverse: true,
             controller: controller.scrollController,
             slivers: [
               SliverPadding(
@@ -22,8 +24,9 @@ class ChatList extends GetView<ChatbotController> {
                 sliver: SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                   var item = controller.state.chatList[index];
+                  log(item.toString());
                   if (item.role == 'User') {
-                    return RightChat(item);
+                    return RightChat(item, context);
                   }
                   return LeftChat(item);
                 }, childCount: controller.state.chatList.length)),

@@ -23,24 +23,44 @@ class ChatbotController extends GetxController {
     model: 'gemini-1.5-flash',
     apiKey: dotenv.env['GOOGLE_API_KEY']!,
     systemInstruction: Content.system(
-        'Bạn là một người bác sĩ. Bạn tên là HFA. Bạn là sản phẩm AI của nhóm nghiên cứu khoa học trường Amsterdam. Bạn sẽ hỗ trợ mọi người thông qua'
-        ' các câu hỏi liên quan đến sức khoẻ và các chỉ số y tế, từ đó bạn đưa ra đánh giá và'
-        ' lời khuyên cho họ'),
+        'Bạn là một người bác sĩ. Bạn tên là HFA. Bạn là sản phẩm AI của nhóm nghiên cứu khoa học trường Amsterdam.'
+        ' Bạn sẽ hỗ trợ mọi người thông qua các câu hỏi liên quan đến sức khoẻ và các chỉ số y tế, ngoài ra bạn có'
+        ' thể đọc hình ảnh là các chỉ số từ máy đo y tế và phân tích và trả về số liệu, từ đó bạn đưa ra đánh giá và lời khuyên cho họ'),
   );
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+    await getHistory();
   }
 
   @override
-  void onReady() {}
+  void onReady() async {
+    super.onReady();
+  }
 
   @override
   void dispose() {
     textController.dispose();
     scrollController.dispose();
     super.dispose();
+  }
+
+  Future getHistory() async {
+    final uid = appController.state.profile.value!.id!;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('chatbots')
+        .where('uid', isEqualTo: uid)
+        .orderBy('timestamp', descending: true)
+        .get();
+
+    final chatList = querySnapshot.docs.map((doc) {
+      return ChatbotEntity.fromFirestore(doc);
+    }).toList();
+
+    state.chatList.clear();
+    state.chatList.addAll(chatList);
+    scrollToEnd();
   }
 
   Future sendMessage() async {
@@ -55,7 +75,7 @@ class ChatbotController extends GetxController {
         content: query,
         image: "");
     await FirebaseApi.addDocument('chatbots', data.value.toMap());
-    state.chatList.add(data.value);
+    state.chatList.insert(0, data.value);
     scrollToEnd();
     await model
         .generateContent(content,
@@ -69,7 +89,7 @@ class ChatbotController extends GetxController {
           content: value.text);
       FirebaseApi.addDocument('chatbots', data.value.toMap());
 
-      state.chatList.add(data.value);
+      state.chatList.insert(0, data.value);
     });
     scrollToEnd();
   }
@@ -79,7 +99,7 @@ class ChatbotController extends GetxController {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
-      state.image!.value = image;
+      state.image.value = image;
       await sendMessage();
     } else {
       // Người dùng không chọn ảnh
@@ -91,7 +111,7 @@ class ChatbotController extends GetxController {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
 
     if (image != null) {
-      state.image!.value = image;
+      state.image.value = image;
     } else {
       // Người dùng không chụp ảnh
     }
@@ -109,8 +129,8 @@ class ChatbotController extends GetxController {
         timestamp: Timestamp.fromDate(DateTime.now()),
         content: query,
         image: image ?? "");
-    await FirebaseApi.addDocument('chatbots', data.toJson());
-    state.chatList.add(data.value);
+    await FirebaseApi.addDocument('chatbots', data.value.toMap());
+    state.chatList.insert(0, data.value);
 
     final imageBytes = await state.image.value!.readAsBytes();
 
@@ -121,17 +141,17 @@ class ChatbotController extends GetxController {
     state.image.value = null;
     await model.generateContent([
       Content.multi([prompt, imagePart])
-    ], generationConfig: GenerationConfig(maxOutputTokens: 200)).then((value) {
+    ], generationConfig: GenerationConfig(maxOutputTokens: 250)).then((value) {
       data.value = ChatbotEntity(
           role: 'HFA',
           uid: appController.state.profile.value!.id!,
           timestamp: Timestamp.fromDate(DateTime.now()),
           image: '',
           content: value.text);
-      state.chatList.add(data.value);
+      state.chatList.insert(0, data.value);
     });
     scrollToEnd();
-    await FirebaseApi.addDocument('chatbots', data.toJson());
+    await FirebaseApi.addDocument('chatbots', data.value.toMap());
   }
 
   void scrollToEnd() {

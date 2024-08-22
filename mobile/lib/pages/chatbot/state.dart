@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ChatbotState {
   RxList<ChatbotEntity> chatList = <ChatbotEntity>[].obs;
-  var image = Rx<XFile?>(null);
+  Rx<XFile?> image = Rx<XFile?>(null);
 
   RxBool loading = false.obs;
   RxBool loadMore = false.obs;

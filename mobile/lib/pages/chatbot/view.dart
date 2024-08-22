@@ -14,10 +14,10 @@ class ChatbotPage extends GetView<ChatbotController> {
       ),
       body: SafeArea(
         child: ConstrainedBox(
-          constraints: BoxConstraints.expand(),
+          constraints: const BoxConstraints.expand(),
           child: Stack(
             children: [
-              ChatList(),
+              const ChatList(),
               Positioned(
                   bottom: 0,
                   height: 50,
@@ -47,45 +47,55 @@ class ChatbotPage extends GetView<ChatbotController> {
                             ),
                           ),
                         ),
-                        // Container(
-                        //   height: 30,
-                        //   width: 30,
-                        //   margin: EdgeInsets.only(left: 5),
-                        //   child: GestureDetector(
-                        //     child: Icon(
-                        //       Icons.photo_outlined,
-                        //       size: 35,
-                        //       color: Colors.blue,
-                        //     ),
-                        //     onTap: () {
-                        //       controller.pickImageFromGallery();
-                        //     },
-                        //   ),
-                        // ),
-                        // Container(
-                        //   height: 30,
-                        //   width: 30,
-                        //   margin: EdgeInsets.only(left: 5),
-                        //   child: GestureDetector(
-                        //     child: Icon(
-                        //       Icons.camera,
-                        //       size: 35,
-                        //       color: Colors.blue,
-                        //     ),
-                        //     onTap: () {
-                        //       controller.pickImageFromCamera();
-                        //     },
-                        //   ),
-                        // ),
                         Container(
-                          margin: EdgeInsets.only(left: 10, top: 5),
+                          height: 30,
+                          width: 30,
+                          margin: const EdgeInsets.only(left: 5),
+                          child: GestureDetector(
+                            child: const Icon(
+                              Icons.photo_outlined,
+                              size: 35,
+                              color: Colors.blue,
+                            ),
+                            onTap: () {
+                              controller.pickImageFromGallery();
+                            },
+                          ),
+                        ),
+                        Container(
+                          height: 30,
+                          width: 30,
+                          margin: const EdgeInsets.only(left: 5),
+                          child: GestureDetector(
+                            child: const Icon(
+                              Icons.camera,
+                              size: 35,
+                              color: Colors.blue,
+                            ),
+                            onTap: () {
+                              controller.pickImageFromCamera();
+                            },
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 10, top: 5),
                           height: 35,
                           child: ElevatedButton(
                             child: const Text("Send"),
-                            onPressed: () {
-                              controller.sendMessage();
-                              for (var i in controller.state.chatList) {
-                                log(i.toString());
+                            onPressed: () async {
+                              if (controller.textController.text != '') {
+                                if (controller.state.image.value != null) {
+                                  await controller.sendImageWithMessage();
+                                } else {
+                                  await controller.sendMessage();
+                                }
+                              } else {
+                                // Hiển thị thông báo lỗi nếu không có nội dung hoặc hình ảnh
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Xin hãy nhập tin nhắn."),
+                                  ),
+                                );
                               }
                             },
                           ),
