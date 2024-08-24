@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/API/firebase_API.dart';
-
+import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'common/routes/pages.dart';
 import 'common/services/storage.dart';
 import 'common/store/config.dart';
@@ -31,7 +30,7 @@ Future<void> main() async {
     androidProvider: AndroidProvider.playIntegrity, // For Android
     appleProvider: AppleProvider.deviceCheck, // For iOS
   );
-  // await FirebaseApi.initNotifications();
+  await FirebaseMessagingApi.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   try {
     await dotenv.load(fileName: ".env");
