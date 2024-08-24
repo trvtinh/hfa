@@ -4,14 +4,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
 
 import 'state.dart';
 
-GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: <String>['https://www.googleapis.com/auth/cloud-platform']);
+GoogleSignIn _googleSignIn = GoogleSignIn(scopes: <String>[
+  'https://www.googleapis.com/auth/cloud-platform',
+]);
 
 class SignInController extends GetxController {
   final state = SignInState();
@@ -82,6 +84,8 @@ class SignInController extends GetxController {
               )
               .add(data);
         }
+        await FirebaseMessagingApi.updateFcmTokenInFirestore(id);
+
         log('đăng nhâp thành công');
         Get.offAndToNamed(AppRoutes.Application);
       }

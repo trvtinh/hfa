@@ -1,19 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseApi {
   FirebaseApi._();
   static final FirebaseStorage _storage = FirebaseStorage.instance;
   static final db = FirebaseFirestore.instance;
-  static Future<void> initNotifications() async {
-    final firebaseMessaging = FirebaseMessaging.instance;
-    await firebaseMessaging.requestPermission();
-    final fCMToken = await firebaseMessaging.getToken();
-    print('FCM Token: $fCMToken');
-  }
 
   static Future<QuerySnapshot<Map<String, dynamic>>> getQuerySnapshot(
       String collection, String field, String value) async {
