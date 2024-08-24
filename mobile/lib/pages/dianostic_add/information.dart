@@ -1,4 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:ffi';
+
+import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 
 List<bool> ontap = [
   false,
@@ -47,3 +50,20 @@ List<String> warning = [
   '0',
   '0',
 ];
+
+List<RxBool> chose = [
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+];
+
+RxBool existed = false.obs;
+
+int lengthofdata = 0;

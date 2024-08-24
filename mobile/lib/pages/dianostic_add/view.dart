@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:health_for_all/pages/dianostic_add/widget/send_diagnostic.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/dianostic_add/widget/send_diagnostic.dart';
+import 'package:health_for_all/pages/dianostic_add/widget/type_of_data.dart';
 
 class AddView extends StatelessWidget {
   const AddView({super.key});
@@ -16,6 +17,7 @@ class AddView extends StatelessWidget {
             children: [
               SendDiagnostic(),
               const SizedBox(height: 16),
+              TypeOfData(),
             ],
           ),
         ));

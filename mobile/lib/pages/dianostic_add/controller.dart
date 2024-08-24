@@ -1,0 +1,102 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/pages/dianostic_add/widget/data_box.dart';
+import 'package:intl/intl.dart';
+
+class DiagnosticAddController extends GetxController {
+  final dateController = TextEditingController();
+  final timeController = TextEditingController();
+  final noteController = TextEditingController();
+  final unitController = TextEditingController();
+  final valueController = TextEditingController();
+  static int length = 5;
+  List<int> ind = [
+    0,
+    1,
+    2,
+    3,
+    8,
+  ];
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+  }
+
+  DateTime datetime = DateTime.now();
+  TimeOfDay timeOfDay = TimeOfDay.now();
+
+  String formatTimeOfDay() {
+    TimeOfDay timeOfDay = TimeOfDay.now();
+    String formattedTime =
+        "${timeOfDay.hour.toString().padLeft(2, '0')}:${timeOfDay.minute.toString().padLeft(2, '0')}";
+    return formattedTime; // In ra thời gian dưới dạng chuỗi "hh:mm"
+  }
+
+  List<DataBox> get entries => List.generate(length, (index) {
+        return DataBox(
+          time: formatTimeOfDay(),
+          noteController: noteController,
+          unitController: unitController,
+          valueController: valueController,
+          leadingiconpath: Item.getIconPath(ind[index]),
+          title: Item.getTitle(ind[index]),
+          value: valueController.text.obs,
+          unit: unitController.text.obs,
+          pos: ind[index],
+        );
+      });
+
+  Future<void> selectDate(BuildContext context) async {
+    final selectedDate = await showDatePicker(
+      context: context,
+      initialDate: datetime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (selectedDate != null) {
+      datetime = selectedDate;
+      final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
+      dateController.text = formattedDate;
+      updateTimestamp(); // Cập nhật timestamp
+    }
+  }
+
+  Future<void> selectTime(BuildContext context) async {
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: timeOfDay,
+    );
+
+    if (selectedTime != null) {
+      timeOfDay = selectedTime;
+      final formattedTime = selectedTime.format(context);
+      timeController.text = formattedTime;
+      updateTimestamp(); // Cập nhật timestamp
+    }
+  }
+
+  Timestamp updateTimestamp() {
+    final updatedDateTime = DateTime(
+      datetime.year,
+      datetime.month,
+      datetime.day,
+      timeOfDay.hour,
+      timeOfDay.minute,
+    );
+
+    final finalDateTime = updatedDateTime.copyWith(second: 0, millisecond: 0);
+
+    // Định dạng DateTime thành chuỗi
+    final formattedDateTime =
+        DateFormat('dd/MM/yyyy HH:mm:ss').format(finalDateTime);
+    final dateTimestamp = Timestamp.fromDate(finalDateTime);
+    // In ra hoặc làm gì đó với formattedDateTime
+    return dateTimestamp;
+  }
+}
