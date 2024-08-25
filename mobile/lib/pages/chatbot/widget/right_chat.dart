@@ -12,6 +12,7 @@ Widget RightChat(ChatbotEntity item, BuildContext context) {
     padding: EdgeInsets.only(top: 10.w, left: 15.w, right: 15.w, bottom: 10.w),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ConstrainedBox(
             constraints: BoxConstraints(
@@ -21,19 +22,25 @@ Widget RightChat(ChatbotEntity item, BuildContext context) {
                 margin: EdgeInsets.only(right: 10.w, top: 0.w),
                 padding: EdgeInsets.only(top: 10.w, left: 10.w, right: 10.w),
                 decoration: BoxDecoration(
-                    gradient: const LinearGradient(colors: [
-                      Color.fromARGB(255, 176, 106, 231),
-                      Color.fromARGB(255, 166, 112, 231),
-                      Color.fromARGB(255, 131, 123, 231),
-                      Color.fromARGB(255, 104, 132, 231),
-                    ], transform: GradientRotation(90)),
-                    borderRadius: BorderRadius.all(Radius.circular(10.w))),
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: BorderRadius.all(Radius.circular(10.w))
+                ),
                 child: item.image == ""
-                    ? Text("${item.content}")
+                    ? Text(
+                        "${item.content}",
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary,
+                        ),
+                      )
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text("${item.content}"),
+                          Text(
+                            "${item.content}",
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary,
+                            ),
+                          ),
                           SizedBox(
                             height: 6,
                           ),
@@ -49,7 +56,7 @@ Widget RightChat(ChatbotEntity item, BuildContext context) {
                             height: 10,
                           )
                         ],
-                      )))
+                      ))),
       ],
     ),
   );

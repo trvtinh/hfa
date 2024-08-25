@@ -11,99 +11,153 @@ class ChatbotPage extends GetView<ChatbotController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat với HFA'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Icon(Icons.more_vert),
+          ),
+        ],
       ),
       body: SafeArea(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints.expand(),
-          child: Stack(
-            children: [
-              const ChatList(),
-              Positioned(
-                  bottom: 0,
-                  height: 50,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 50,
-                    color: Colors.grey,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: 50,
-                            child: TextField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines: 3,
-                              controller: controller.textController,
-                              autofocus: false,
-                              focusNode: controller.textNode,
-                              decoration: const InputDecoration(
-                                  hintText: "Nhập tin nhắn ..."),
-                              onTap: () {
-                                for (var i in controller.state.chatList) {
-                                  log(i.toString());
-                                }
-                              },
-                            ),
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints.expand(),
+            child: Stack(
+              children: [
+                const ChatList(),
+                Positioned(
+                    bottom: 0,
+                    height: 88,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      color: Theme.of(context).colorScheme.surfaceContainer,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 16,
                           ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          margin: const EdgeInsets.only(left: 5),
-                          child: GestureDetector(
+                          // GestureDetector(
+                          //   child: const Icon(
+                          //     Icons.add_circle,
+                          //     size: 20,
+                          //     color: Colors.blue,
+                          //   ),
+                          //   onTap: () {
+                          //     controller.pickImageFromGallery();
+                          //   },
+                          // ),
+                          // SizedBox(width: 10,),
+                          GestureDetector(
                             child: const Icon(
                               Icons.photo_outlined,
-                              size: 35,
+                              size: 20,
                               color: Colors.blue,
                             ),
                             onTap: () {
                               controller.pickImageFromGallery();
                             },
                           ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          margin: const EdgeInsets.only(left: 5),
-                          child: GestureDetector(
+                          SizedBox(
+                            width: 8,
+                          ),
+                          GestureDetector(
                             child: const Icon(
                               Icons.camera,
-                              size: 35,
+                              size: 20,
                               color: Colors.blue,
                             ),
                             onTap: () {
                               controller.pickImageFromCamera();
                             },
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 10, top: 5),
-                          height: 35,
-                          child: ElevatedButton(
-                            child: const Text("Send"),
-                            onPressed: () async {
-                              if (controller.textController.text != '') {
-                                if (controller.state.image.value != null) {
-                                  await controller.sendImageWithMessage();
-                                } else {
-                                  await controller.sendMessage();
-                                }
-                              } else {
-                                // Hiển thị thông báo lỗi nếu không có nội dung hoặc hình ảnh
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Xin hãy nhập tin nhắn."),
-                                  ),
-                                );
-                              }
-                            },
+                          SizedBox(
+                            width: 16,
                           ),
-                        ),
-                      ],
-                    ),
-                  ))
-            ],
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(28),
+                                color: Theme.of(context).colorScheme.surfaceDim,
+                              ),
+                              height: 56,
+                              child: TextField(
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 3,
+                                controller: controller.textController,
+                                autofocus: false,
+                                focusNode: controller.textNode,
+                                decoration: InputDecoration(
+                                  suffixIcon: IconButton(
+                                    onPressed: () async {
+                                      if (controller.textController.text !=
+                                          '') {
+                                        if (controller.state.image.value !=
+                                            null) {
+                                          await controller
+                                              .sendImageWithMessage();
+                                        } else {
+                                          await controller.sendMessage();
+                                        }
+                                      } else {
+                                        // Hiển thị thông báo lỗi nếu không có nội dung hoặc hình ảnh
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content:
+                                                Text("Xin hãy nhập tin nhắn."),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    icon: Icon(Icons.send),
+                                  ),
+                                  border: InputBorder.none,
+                                  hintText: "Nhập tin nhắn ...",
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 12),
+                                ),
+                                onTap: () {
+                                  for (var i in controller.state.chatList) {
+                                    log(i.toString());
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(left: 10, top: 5),
+                            height: 35,
+                            child: ElevatedButton(
+                              child: const Text("Send"),
+                              onPressed: () async {
+                                if (controller.textController.text != '') {
+                                  if (controller.state.image.value != null) {
+                                    await controller.sendImageWithMessage();
+                                  } else {
+                                    await controller.sendMessage();
+                                  }
+                                } else {
+                                  // Hiển thị thông báo lỗi nếu không có nội dung hoặc hình ảnh
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Xin hãy nhập tin nhắn."),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ))
+              ],
+            ),
           ),
         ),
       ),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/pages/chart/view.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
 
@@ -13,12 +14,17 @@ class MedicalDataPage extends GetView<MedicalDataController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Thêm dữ liệu y tế',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurface,
-            fontWeight: FontWeight.normal,
-            fontFamily: 'Roboto',
+        title: GestureDetector(
+          onTap: (){
+            Get.to(ChartPage());
+          },
+          child: Text(
+            'Thêm dữ liệu y tế',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.normal,
+              fontFamily: 'Roboto',
+            ),
           ),
         ),
         bottom: PreferredSize(

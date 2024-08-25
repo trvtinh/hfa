@@ -28,7 +28,7 @@ class ChatList extends GetView<ChatbotController> {
                   if (item.role == 'User') {
                     return RightChat(item, context);
                   }
-                  return LeftChat(item);
+                  return LeftChat(item, context);
                 }, childCount: controller.state.chatList.length)),
               )
             ],
