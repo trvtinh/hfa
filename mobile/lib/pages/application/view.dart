@@ -11,6 +11,7 @@ import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/prescription/view.dart';
+import 'package:health_for_all/pages/profile/page/information_view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
 import 'package:health_for_all/pages/reminder/view.dart';
 import 'controller.dart';
@@ -88,9 +89,10 @@ class ApplicationPage extends GetView<ApplicationController> {
             title: const Text('Nhắc nhở'),
             onTap: () => Get.to(() => ReminderPage()),
           ),
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.notifications_none),
             title: Text('Thông báo'),
+            onTap: () => Get.to(() => NotificationPage()),
           ),
           ListTile(
             onTap: () => Get.to(() => AlarmPage()),
@@ -107,9 +109,10 @@ class ApplicationPage extends GetView<ApplicationController> {
             leading: const Icon(Icons.smart_toy),
             title: const Text('Trò chuyện với HFA-Bot'),
           ),
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('Tài khoản'),
+            onTap: () => Get.to(() => InformationPage()),
           ),
           ListTile(
             leading: const Icon(Icons.account_circle),

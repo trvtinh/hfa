@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,17 +7,19 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_messaging_api.dart';
+import 'package:health_for_all/common/services/notification.dart';
 import 'common/routes/pages.dart';
 import 'common/services/storage.dart';
 import 'common/store/config.dart';
 import 'common/store/user.dart';
-import 'firebase_options.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print(
-      'Title: ${message.notification!.title}'); // Handle background message here
-  print('Body: ${message.notification!.body}');
-  print('Payload: ${message.data}');
+  log('background message');
+  LocalNotifications.showNotification(
+    title: message.notification?.title,
+    body: message.notification?.body,
+    payload: message.data.toString(),
+  );
 }
 
 Future<void> main() async {
@@ -34,10 +37,11 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   try {
     await dotenv.load(fileName: ".env");
+    String accessToken = await FirebaseMessagingApi.getAccessToken();
+    log('access token$accessToken');
   } catch (e) {
     print("Error loading .env file: $e");
   }
-
   runApp(const MyApp());
 }
 
