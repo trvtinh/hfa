@@ -112,12 +112,16 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                       ],
                     ),
                     SizedBox(width: 16),
-                    IconButton(
-                      onPressed: () => _showDialog(context),
-                      icon: Icon(Icons.border_color,
-                      size: 20,
-                      color: Theme.of(context).colorScheme.primary),
-                    )
+                    GestureDetector(
+                      onTap: (){
+                        _showDialog(context);
+                      },
+                      child: Icon(
+                        Icons.border_color,
+                        size: 20,
+                        color: Theme.of(context).colorScheme.primary
+                      ),
+                    ),
                   ],
                 ),
               ],

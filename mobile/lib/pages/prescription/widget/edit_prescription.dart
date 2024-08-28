@@ -204,10 +204,13 @@ class _EditPrescriptionState extends State<EditPrescription> {
           SizedBox(
             width: 12,
           ),
-          Icon(
-            Icons.clear,
-            size: 24,
-            color: Theme.of(context).colorScheme.error,
+          GestureDetector(
+            onTap: (){},
+            child: Icon(
+              Icons.clear,
+              size: 24,
+              color: Theme.of(context).colorScheme.error,
+            ),
           )
         ],
       ),
