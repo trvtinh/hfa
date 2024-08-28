@@ -125,7 +125,7 @@ class _FollowingPageState extends State<FollowingPage> {
             ),
             // ignore: prefer_const_constructors
             Text(
-              'Chờ được duyệt (0)',
+              'Chờ được duyệt ',
               style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
             const Divider(),

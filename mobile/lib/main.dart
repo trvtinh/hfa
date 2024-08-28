@@ -7,6 +7,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_messaging_api.dart';
+import 'package:health_for_all/common/entities/user.dart';
+import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/services/notification.dart';
 import 'common/routes/pages.dart';
 import 'common/services/storage.dart';
@@ -42,12 +44,26 @@ Future<void> main() async {
   } catch (e) {
     print("Error loading .env file: $e");
   }
-  runApp(const MyApp());
+  final credentials = await StorageService.to.getUserCredentials();
+  if (credentials['userEmail'] != null && credentials['accessToken'] != null) {
+    final userProfile = UserLoginResponseEntity()
+      ..email = credentials['userEmail']!
+      ..accessToken = credentials['accessToken']!
+      ..displayName = credentials['displayName']!
+      ..photoUrl = credentials['photoUrl']!;
+
+    log(userProfile.toString());
+    UserStore.to.saveProfile(userProfile);
+
+    runApp(const MyApp(initialRoute: AppRoutes.Application));
+  } else {
+    runApp(const MyApp(initialRoute: AppPages.SignIn));
+  }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  final String initialRoute;
+  const MyApp({super.key, required this.initialRoute});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -57,7 +73,7 @@ class MyApp extends StatelessWidget {
               // theme: ThemeData(
               //   primarySwatch: Colors.,
               // ),
-              initialRoute: AppPages.SignIn,
+              initialRoute: initialRoute,
               getPages: AppPages.routes,
               debugShowCheckedModeBanner: false,
             ));

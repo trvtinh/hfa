@@ -116,16 +116,16 @@ class UserLoginResponseEntity {
 
   factory UserLoginResponseEntity.fromJson(Map<String, dynamic> json) =>
       UserLoginResponseEntity(
-        accessToken: json["access_token"],
-        displayName: json["display_name"],
-        email: json["email"],
-        photoUrl: json["photourl"],
+        accessToken: json["accessToken"],
+        displayName: json["displayName"],
+        email: json["userEmail"],
+        photoUrl: json["photoUrl"],
       );
 
   Map<String, dynamic> toJson() => {
-        "access_token": accessToken,
-        "display_name": displayName,
-        "email": email,
-        "photourl": photoUrl,
+        "accessToken": accessToken,
+        "displayName": displayName,
+        "userEmail": email,
+        "photoUrl": photoUrl,
       };
 }

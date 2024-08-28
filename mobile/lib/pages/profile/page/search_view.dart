@@ -255,7 +255,9 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                             widget.follower['fcmtoken'],
                             'Yêu cầu làm người nhà ',
                             "${appController.state.profile.value!.name!} muốn trở thành người nhà của bạn",
-                            "/user");
+                            'unread',
+                            'follow',
+                            widget.follower['id']);
                       } else {
                         if (widget.following) {
                           controller.sendRequest(
@@ -264,7 +266,9 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                               widget.follower['fcmtoken'],
                               'Yêu cầu làm bác sĩ ',
                               "${appController.state.profile.value!.name!} muốn trở trành bác sĩ của bạn",
-                              "/user");
+                              "unread",
+                              "follow",
+                              widget.follower['id']);
                         } else {
                           controller.sendRequest(
                               widget.follower['id'], 'patient');
@@ -272,7 +276,9 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                               widget.follower['fcmtoken'],
                               'Yêu cầu làm bệnh nhân ',
                               "${appController.state.profile.value!.name!} muốn trở trành bệnh nhân của bạn",
-                              "/user");
+                              "unread",
+                              "follow",
+                              widget.follower['id']);
                         }
                       }
                     }

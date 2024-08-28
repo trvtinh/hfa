@@ -35,29 +35,23 @@ class ApplicationController extends GetxController {
   Future<UserData> getProfile() async {
     try {
       String profile = await UserStore.to.getProfile();
-
       if (profile.isNotEmpty) {
         UserLoginResponseEntity userdata =
             UserLoginResponseEntity.fromJson(jsonDecode(profile));
         state.head_detail.value = userdata;
         log('Dữ liệu local: ${state.head_detail.value.toString()}');
-
         final userCollection = FirebaseFirestore.instance.collection('users');
         final query = userCollection.where('id',
             isEqualTo: state.head_detail.value!.accessToken);
-
         final querySnapshot = await query.get();
-
         if (querySnapshot.docs.isNotEmpty) {
           final documentSnapshot = querySnapshot
               .docs.first; // Lấy tài liệu đầu tiên từ kết quả truy vấn
           state.profile.value = UserData.fromFirestore(documentSnapshot, null);
-          if (state.profile.value?.dateOfBirth != null) {
-            state.profile.value?.age =
-                DatetimeChange.getAge(state.profile.value!.dateOfBirth!);
+          if (state.profile.value?.dateOfBirth != "") {
+            state.profile.value?.age = DatetimeChange.getAge(
+                state.profile.value!.dateOfBirth!.toString());
           }
-          log(state.profile.value.toString());
-
           // Thực hiện các thao tác khác với userData
         } else {
           log('User does not exist.');
@@ -119,7 +113,7 @@ class ApplicationController extends GetxController {
   }
 
   Future<void> onLogOut() async {
-    UserStore.to.onLogout();
+    await UserStore.to.onLogout();
     await googleSignIn.signOut();
     Get.offAndToNamed(AppRoutes.SIGN_IN);
   }

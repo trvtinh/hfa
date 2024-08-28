@@ -9,7 +9,6 @@ import 'package:health_for_all/pages/medical_data/view.dart';
 import 'package:health_for_all/pages/medical_data_homepage/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
-import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/prescription/view.dart';
 import 'package:health_for_all/pages/profile/page/information_view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
