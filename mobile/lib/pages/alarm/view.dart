@@ -7,7 +7,9 @@ class AlarmPage extends GetView<AlarmController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cài đặt cảnh báo'),
+        title: Text(
+          'Cài đặt cảnh báo'
+        ),
       ),
       body: Center(
         child: Column(
