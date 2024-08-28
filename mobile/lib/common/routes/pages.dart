@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:health_for_all/common/middlewares/router_welcome.dart';
 import 'package:health_for_all/pages/application/index.dart';
 import 'package:health_for_all/pages/sign_in/bindings.dart';
 import 'package:health_for_all/pages/sign_in/index.dart';
@@ -20,10 +21,11 @@ class AppPages {
     GetPage(
         name: AppRoutes.SIGN_IN,
         page: () => SignInPage(),
-        binding: SignInBinding()),
+        binding: SignInBinding(),
+        middlewares: [RouteWelcomeMiddleware(priority: 1)]),
     GetPage(
         name: AppRoutes.Profile,
-        page: () => ProfilePage(),
+        page: () => const ProfilePage(),
         binding: ProfileBinding()),
   ];
 }

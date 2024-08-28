@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class DatetimeChange {
@@ -34,5 +35,23 @@ class DatetimeChange {
     final DateTime birthDate = dateFormat.parse(date);
     final DateTime now = DateTime.now();
     return now.year - birthDate.year;
+  }
+
+  static String timestampToString(Timestamp timestamp) {
+    final DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(date);
+
+    if (difference.inMinutes < 60) {
+      return '${difference.inMinutes} phút trước';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} giờ trước';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} ngày trước';
+    } else {
+      final DateFormat formatter = DateFormat('dd/MM/yyyy');
+      return formatter.format(date);
+    }
   }
 }
