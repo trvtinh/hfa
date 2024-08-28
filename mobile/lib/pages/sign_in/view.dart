@@ -46,30 +46,31 @@ class SignInPage extends GetView<SignInController> {
               const SizedBox(height: 25),
 
               //Health For All
-              const Text(
+              Text(
                 "Health For All",
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 36,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
 
               const SizedBox(height: 25),
 
               //Welcome
-              const Text(
+              Text(
                 "Chào mừng!",
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
 
               //Login to continue
-              const Text(
+              Text(
                 "Xin hãy đăng nhập để tiếp tục",
                 style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 22,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
               ),
 

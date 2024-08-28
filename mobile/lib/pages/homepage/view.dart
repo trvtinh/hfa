@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
 import 'package:health_for_all/pages/homepage/widget/OrangeBox.dart';
+import 'package:health_for_all/pages/prescription/index.dart';
 
 class Homepage extends StatelessWidget {
   Homepage({super.key});
@@ -227,7 +228,7 @@ class Homepage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBox(
@@ -237,13 +238,18 @@ class Homepage extends StatelessWidget {
                     text2: 'Đã xem',
                     value1: '03',
                     value2: '07'),
-                WhiteBox(
-                    title: 'Đơn thuốc',
-                    iconpath: 'assets/images/medication_liquid.png',
-                    text1: 'Đang uống',
-                    text2: 'Hoàn thành',
-                    value1: '03',
-                    value2: '07'),
+                GestureDetector(
+                  onTap: (){
+                    Get.to(PrescriptionPage());
+                  },
+                  child: WhiteBox(
+                      title: 'Đơn thuốc',
+                      iconpath: 'assets/images/medication_liquid.png',
+                      text1: 'Đang uống',
+                      text2: 'Hoàn thành',
+                      value1: '03',
+                      value2: '07'),
+                ),
               ],
             ),
             const SizedBox(

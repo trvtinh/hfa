@@ -14,17 +14,12 @@ class MedicalDataPage extends GetView<MedicalDataController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: GestureDetector(
-          onTap: (){
-            Get.to(ChartPage());
-          },
-          child: Text(
-            'Thêm dữ liệu y tế',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.onSurface,
-              fontWeight: FontWeight.normal,
-              fontFamily: 'Roboto',
-            ),
+        title: Text(
+          'Thêm dữ liệu y tế',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
+            fontWeight: FontWeight.normal,
+            fontFamily: 'Roboto',
           ),
         ),
         bottom: PreferredSize(
