@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/connect_hardware/view.dart';
 import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
 import 'package:health_for_all/pages/homepage/widget/OrangeBox.dart';
+import 'package:health_for_all/pages/prescription/index.dart';
 
 class Homepage extends StatelessWidget {
   Homepage({super.key});
@@ -227,7 +229,7 @@ class Homepage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 WhiteBox(
@@ -237,13 +239,18 @@ class Homepage extends StatelessWidget {
                     text2: 'Đã xem',
                     value1: '03',
                     value2: '07'),
-                WhiteBox(
-                    title: 'Đơn thuốc',
-                    iconpath: 'assets/images/medication_liquid.png',
-                    text1: 'Đang uống',
-                    text2: 'Hoàn thành',
-                    value1: '03',
-                    value2: '07'),
+                GestureDetector(
+                  onTap: (){
+                    Get.to(PrescriptionPage());
+                  },
+                  child: WhiteBox(
+                      title: 'Đơn thuốc',
+                      iconpath: 'assets/images/medication_liquid.png',
+                      text1: 'Đang uống',
+                      text2: 'Hoàn thành',
+                      value1: '03',
+                      value2: '07'),
+                ),
               ],
             ),
             const SizedBox(
@@ -287,78 +294,83 @@ class Homepage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            Container(
-              height: 84,
-              width: 380,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: const Color.fromRGBO(234, 221, 255, 1),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.3),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      // offset: Offset(0, 3), // changes position of shadow
+            GestureDetector(
+              onTap: (){
+                Get.to(ConnectHardwarePage());
+              },
+              child: Container(
+                height: 84,
+                width: 380,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: const Color.fromRGBO(234, 221, 255, 1),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromRGBO(0, 0, 0, 0.3),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        // offset: Offset(0, 3), // changes position of shadow
+                      )
+                    ]),
+                child: const Column(
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: 356,
+                      height: 20,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Kết nối với thiết bị",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                            ),
+                          ),
+                          Icon(
+                            Icons.open_in_new,
+                            size: 16,
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      width: 356,
+                      height: 32,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.developer_board,
+                            size: 32,
+                            color: Color.fromRGBO(101, 85, 143, 1),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            "Đang kết nối",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color.fromRGBO(52, 199, 89, 1),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Text(
+                            "HFA-Careport-0123",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color.fromRGBO(33, 0, 93, 1),
+                            ),
+                          )
+                        ],
+                      ),
                     )
-                  ]),
-              child: const Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: 356,
-                    height: 20,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Kết nối với thiết bị",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Icon(
-                          Icons.open_in_new,
-                          size: 16,
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 356,
-                    height: 32,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.developer_board,
-                          size: 32,
-                          color: Color.fromRGBO(101, 85, 143, 1),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          "Đang kết nối",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color.fromRGBO(52, 199, 89, 1),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          "HFA-Careport-0123",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color.fromRGBO(33, 0, 93, 1),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+                  ],
+                ),
               ),
             ),
             const SizedBox(

@@ -56,7 +56,6 @@ class _AddFileState extends State<AddFile> {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         border: Border.all(color: Theme.of(context).colorScheme.outline),
-        borderRadius: BorderRadius.circular(4),
       ),
       child: Column(
         children: [
@@ -127,7 +126,7 @@ class _AddFileState extends State<AddFile> {
         dashPattern: const [2, 3],
         color: Theme.of(context).colorScheme.outline,
         child: Container(
-          width: MediaQuery.of(context).size.width-110,
+          width: 260,
           height: 30,
           alignment: Alignment.center,
           child: Text(
