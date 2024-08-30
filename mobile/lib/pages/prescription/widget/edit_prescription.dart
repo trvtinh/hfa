@@ -165,53 +165,62 @@ class _EditPrescriptionState extends State<EditPrescription> {
   Widget choose_med() {
     return Container(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          DropdownMenu(
-            width: (MediaQuery.of(context).size.width - 95) / 6 * 3.7,
-            initialSelection: dropdownValue,
-            onSelected: (String? value) {
-              setState(() {
-                dropdownValue = value!;
-              });
-            },
-            dropdownMenuEntries:
-                list.map<DropdownMenuEntry<String>>((String value) {
-              return DropdownMenuEntry<String>(value: value, label: value);
-            }).toList(),
-          ),
-          SizedBox(
-            width: 12,
-          ),
-          Container(
-            width: (MediaQuery.of(context).size.width - 95) / 6 * 1.4,
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                  color: Theme.of(context).colorScheme.outline,
-                  width: 1,
-                )),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 1,
+          Row(
+            children: [
+              DropdownMenu(
+                width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
+                initialSelection: dropdownValue,
+                onSelected: (String? value) {
+                  setState(() {
+                    dropdownValue = value!;
+                  });
+                },
+                dropdownMenuEntries:
+                    list.map<DropdownMenuEntry<String>>((String value) {
+                  return DropdownMenuEntry<String>(value: value, label: value);
+                }).toList(),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Container(
+                width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
+                child: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                      width: 1,
+                    )),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 1,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
+              SizedBox(
+                width: 12,
+              ),
+            ],
           ),
-          SizedBox(
-            width: 12,
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {},
+                child: Icon(
+                  Icons.clear,
+                  size: 24,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              )
+            ],
           ),
-          GestureDetector(
-            onTap: (){},
-            child: Icon(
-              Icons.clear,
-              size: 24,
-              color: Theme.of(context).colorScheme.error,
-            ),
-          )
         ],
       ),
     );
@@ -311,7 +320,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: () async{
+          onPressed: () async {
             Get.back();
           },
           child: Text(
@@ -324,7 +333,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
         ),
         const SizedBox(width: 16),
         TextButton(
-          onPressed: () async{
+          onPressed: () async {
             Get.back();
           },
           child: Text(
@@ -337,7 +346,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
         ),
         const SizedBox(width: 16),
         TextButton(
-          onPressed: () async{
+          onPressed: () async {
             Get.back();
           },
           child: Text(
