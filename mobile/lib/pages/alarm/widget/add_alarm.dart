@@ -8,12 +8,6 @@ class AddAlarm extends StatefulWidget {
 }
 
 class _AddAlarmState extends State<AddAlarm> {
-  List<String> list = <String>[
-    "Huyết áp",
-    "Cân nặng",
-  ];
-  String dropdownValue = 'Loại dữ liệu';
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -70,36 +64,112 @@ class _AddAlarmState extends State<AddAlarm> {
   Widget body() {
     return Column(
       children: [
-        SizedBox(
-          height: 24,
-        ),
-        DropdownMenu(
-          label: Text("Loại dữ liệu sức khỏe"),
-          width: MediaQuery.sizeOf(context).width,
-          initialSelection: dropdownValue,
-          onSelected: (String? value) {
-            setState(() {
-              dropdownValue = value!;
-            });
-          },
-          dropdownMenuEntries:
-              list.map<DropdownMenuEntry<String>>((String value) {
-            return DropdownMenuEntry<String>(value: value, label: value);
-          }).toList(),
-        ),
-        SizedBox(
-          height: 24,
-        ),
-        MyTextField("Đơn vị", "Đơn vị", TextEditingController()),
-        SizedBox(
-          height: 24,
-        ),
-        MyTextField("Ngưỡng cao", "Ngưỡng cao", TextEditingController()),
-        SizedBox(
-          height: 24,
-        ),
-        MyTextField("Ngưỡng thấp", "Ngưỡng thấp", TextEditingController()),
+        drop(),
+        // SizedBox(
+        //   height: 24,
+        // ),
+        // SizedBox(
+        //   height: 24,
+        // ),
+        // MyTextField("Đơn vị", "Đơn vị", TextEditingController()),
+        // SizedBox(
+        //   height: 24,
+        // ),
+        // MyTextField("Ngưỡng cao", "Ngưỡng cao", TextEditingController()),
+        // SizedBox(
+        //   height: 24,
+        // ),
+        // MyTextField("Ngưỡng thấp", "Ngưỡng thấp", TextEditingController()),
       ],
     );
   }
+
+  Widget drop() {
+    String? _mySelection;
+    return DropdownButtonHideUnderline(
+      child: ButtonTheme(
+        alignedDropdown: true,
+        child: DropdownButton<String>(
+          isDense: true,
+          hint: const Text("Chọn loại dữ liệu"),
+          value: _mySelection,
+          onChanged: (newValue) {
+            setState(() {
+              _mySelection = newValue;
+            });
+          },
+          items: MedData.map((Map map) {
+            return DropdownMenuItem<String>(
+              value: map["name"].toString(),
+              child: Row(
+                children: [
+                  Image.asset(
+                    map["image"],
+                    width: 25,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 10),
+                    child: Text(map["name"].toString()),
+                  ),
+                ],
+              ),
+            );
+          }).toList(), // Convert the Iterable to a List
+        ),
+      ),
+    );
+  }
+
+  List<Map> MedData = [
+    {
+      "id": 1,
+      "image": 'assets/medical_data_Home_images/blood-pressure.png',
+      "name": 'Huyết áp'
+    },
+    {
+      "id": 2,
+      "image": 'assets/medical_data_Home_images/thermometer.png',
+      "name": 'Thân nhiệt'
+    },
+    {
+      "id": 3,
+      "image": 'assets/medical_data_Home_images/blood sugar.png',
+      "name": 'Đường huyết'
+    },
+    {
+      "id": 4,
+      "image": 'assets/medical_data_Home_images/heart-rate.png',
+      "name": 'Nhịp tim'
+    },
+    {
+      "id": 5,
+      "image": 'assets/medical_data_Home_images/spo2.png',
+      "name": 'SPO2'
+    },
+    {
+      "id": 6,
+      "image": 'assets/medical_data_Home_images/favorite_border.png',
+      "name": 'HRV'
+    },
+    {
+      "id": 7,
+      "image": 'assets/medical_data_Home_images/ecg-outline.png',
+      "name": 'ECG - Điện tâm đồ'
+    },
+    {
+      "id": 8,
+      "image": 'assets/medical_data_Home_images/scale.png',
+      "name": 'Cân nặng'
+    },
+    {
+      "id": 9,
+      "image": 'assets/medical_data_Home_images/result.png',
+      "name": 'Xét nghiệm máu'
+    },
+    {
+      "id": 10,
+      "image": 'assets/medical_data_Home_images/Axit Uric.png',
+      "name": 'Axit Uric'
+    },
+  ];
 }
