@@ -3,10 +3,10 @@ import 'dart:ffi';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 
-List<bool> ontap = [
-  false,
-  false,
-  false,
+List<RxBool> ontap = [
+  false.obs,
+  false.obs,
+  false.obs,
 ];
 
 List<String> avapath = [
@@ -67,3 +67,25 @@ List<RxBool> chose = [
 RxBool existed = false.obs;
 
 int lengthofdata = 0;
+
+List<String> doctor = [
+  'Nguyễn Văn B',
+];
+
+List<RxBool> tapped = [
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+  false.obs,
+];
+
+List<int> ind = [
+  0,
+  1,
+  2,
+  3,
+  8,
+];
+
+List<int> view = <int>[].obs;

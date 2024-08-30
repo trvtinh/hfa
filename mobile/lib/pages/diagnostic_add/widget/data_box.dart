@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -10,10 +11,8 @@ class DataBox extends StatefulWidget {
   final String leadingiconpath;
   final String title;
   final String time;
-  final RxString? value; // Changed to RxString
-  final RxString? unit; // Changed to RxString
-  final TextEditingController valueController;
-  final TextEditingController unitController;
+  final String value;
+  final String unit;
   final TextEditingController noteController;
   final int pos;
 
@@ -21,10 +20,8 @@ class DataBox extends StatefulWidget {
     super.key,
     required this.leadingiconpath,
     required this.title,
-    this.value,
-    this.unit,
-    required this.valueController,
-    required this.unitController,
+    required this.value,
+    required this.unit,
     required this.noteController,
     required this.time,
     required this.pos,
@@ -52,15 +49,23 @@ class _DataBoxState extends State<DataBox> {
   Widget build(BuildContext context) {
     bool haveFile = (selectedFiles.isNotEmpty);
     bool haveNote = widget.noteController.text.isNotEmpty;
-    return GestureDetector(
-      onTap: () {},
-      child: Column(
-        children: [
-          Obx(
-            () => Container(
+    return Obx(
+      () => GestureDetector(
+        onTap: () {
+          ischeck.value = !ischeck.value;
+          tapped[widget.pos].value = !tapped[widget.pos].value;
+          if (ischeck.value == true) {
+            view.add(widget.pos);
+          } else {
+            view.remove(widget.pos);
+          }
+        },
+        child: Column(
+          children: [
+            Container(
               width: double.infinity,
               height: 71,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               decoration: BoxDecoration(
                 color: ischeck.value
                     ? Theme.of(context).colorScheme.primaryContainer
@@ -69,12 +74,13 @@ class _DataBoxState extends State<DataBox> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  const SizedBox(width: 16),
                   Image.asset(widget.leadingiconpath),
                   const SizedBox(width: 8),
                   Expanded(
                       child: _buildTextContainer(widget.title, widget.time)),
                   Expanded(child: _buildValueUnitColumn(context)),
-                  const SizedBox(width: 8),
+                  // const SizedBox(width: 8),
                   Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -84,30 +90,29 @@ class _DataBoxState extends State<DataBox> {
                           color: Theme.of(context).colorScheme.outlineVariant),
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.all(1.5),
-                        child: haveNote
-                            ? Badge(
-                                child: Icon(
-                                  Icons
-                                      .edit_note, // Icon when files are present
-                                  color: ischeck.value
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant,
-                                ),
-                              )
-                            : Obx(
-                                () => Icon(
-                                  Icons
-                                      .edit_note, // Icon when no files are present
-                                  color: ischeck.value
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant,
-                                ),
-                              )),
+                      padding: const EdgeInsets.all(1.5),
+                      child: haveNote
+                          ? Badge(
+                              child: Icon(
+                                Icons.edit_note, // Icon when files are present
+                                color: ischeck.value
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                                size: 16,
+                              ),
+                            )
+                          : Icon(
+                              Icons.edit_note, // Icon when no files are present
+                              color: ischeck.value
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                              size: 16,
+                            ),
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Obx(
@@ -133,7 +138,7 @@ class _DataBoxState extends State<DataBox> {
                                       : Theme.of(context)
                                           .colorScheme
                                           .outlineVariant,
-                                  size: 10,
+                                  size: 16,
                                 ),
                               )
                             : Icon(
@@ -144,7 +149,7 @@ class _DataBoxState extends State<DataBox> {
                                     : Theme.of(context)
                                         .colorScheme
                                         .outlineVariant,
-                                size: 10,
+                                size: 16,
                               ),
                       ),
                     ),
@@ -175,16 +180,18 @@ class _DataBoxState extends State<DataBox> {
                                   : Theme.of(context)
                                       .colorScheme
                                       .outlineVariant,
+                              size: 16,
                             ),
                           )),
                     ),
                   ),
+                  const SizedBox(width: 16),
                 ],
               ),
             ),
-          ),
-          const Divider(height: 1),
-        ],
+            const Divider(height: 1),
+          ],
+        ),
       ),
     );
   }
@@ -202,6 +209,7 @@ class _DataBoxState extends State<DataBox> {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.w500,
+                fontSize: 14,
               ),
             ),
           ),
@@ -222,35 +230,33 @@ class _DataBoxState extends State<DataBox> {
 
   Widget _buildValueUnitColumn(BuildContext context) {
     return SizedBox(
-        height: 55,
-        child: Obx(
-          () => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // Align text to the start
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  medicalController.state.data[widget.title]?.value ?? "",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                  ),
-                ),
+      height: 55,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              widget.value,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                fontSize: 14,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  medicalController.state.data[widget.title]?.unit ?? "",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ));
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              widget.unit,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 11,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

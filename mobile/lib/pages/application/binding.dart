@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/chatbot/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
-import 'package:health_for_all/pages/dianostic_add/controller.dart';
+import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';

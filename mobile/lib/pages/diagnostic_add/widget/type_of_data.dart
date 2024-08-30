@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/dianostic_add/information.dart';
-import 'package:health_for_all/pages/dianostic_add/controller.dart';
-import 'package:health_for_all/pages/dianostic_add/information.dart';
-import 'package:health_for_all/pages/dianostic_add/widget/medical_data_box.dart';
+import 'package:health_for_all/pages/diagnostic_add/information.dart';
+import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 
 class TypeOfData extends GetView<DiagnosticAddController> {
   TypeOfData({super.key});
@@ -57,7 +55,7 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                   ),
                 ],
               ),
-              existed == false.obs
+              Obx(() => view.isEmpty
                   ? SizedBox(
                       height: 40,
                       width: 356,
@@ -76,35 +74,45 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                     )
                   : Container(
                       width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+                      // padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        color: const Color.fromRGBO(255, 216, 228, 1),
+                        // color: const Color.fromRGBO(255, 216, 228, 1),
                         border: Border.all(width: 1),
                       ),
                       child: Column(
                         children: [
-                          Row(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerHigh,
-                                ),
-                                padding:
-                                    const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                                child: Text(
-                                  '27/07/2024',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
-                                    fontSize: 12,
-                                  ),
-                                ),
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHigh,
+                            ),
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                            child: Text(
+                              '27/07/2024',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.outline,
+                                fontSize: 12,
                               ),
-                            ],
+                            ),
                           ),
+                          // ...controller.listview,
+
+                          // for(int i=0; i<tapped.length; i++){
+                          //   if(tapped[i].value == true){
+                          //     DataBox(
+                          //     time: formatTimeOfDay(),
+                          //     noteController: noteController,
+                          //     leadingiconpath: Item.getIconPath(ind[i]),
+                          //     title: Item.getTitle(ind[i]),
+                          //     value: Item.getUnit(ind[i]),
+                          //     unit: Item.getUnit(ind[i]),
+                          //     pos: i,
+                          //     ),
+                          //   }
+                          // }
                           // ListBody(
                           //   mainAxis: Axis.vertical,
                           //   children: [
@@ -113,7 +121,7 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                           // )
                         ],
                       ),
-                    )
+                    ))
             ],
           ),
         ),
@@ -131,7 +139,7 @@ class TypeOfData extends GetView<DiagnosticAddController> {
           ),
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -177,7 +185,7 @@ class TypeOfData extends GetView<DiagnosticAddController> {
       children: [
         TextButton(
           onPressed: () async {
-            ontap.fillRange(0, ontap.length, false);
+            ontap.fillRange(0, ontap.length, false.obs);
             // showpatient = -1;
             Get.back();
           },
@@ -218,16 +226,18 @@ class TypeOfData extends GetView<DiagnosticAddController> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Row(
-            children: [
-              _buildDateTimeField(context, 'Ngày', Icons.event_note,
-                  controller.selectDate, controller.dateController,
-                  width: MediaQuery.of(context).size.width / 5 * 3),
-              _buildDateTimeField(context, 'Thời gian', Icons.schedule,
-                  controller.selectTime, controller.timeController,
-                  width: MediaQuery.of(context).size.width / 5 * 2),
-            ],
-          ),
+          Flex(direction: Axis.horizontal, children: [
+            Expanded(
+              flex: 3,
+              child: _buildDateTimeField(context, 'Ngày', Icons.event_note,
+                  controller.selectDate, controller.dateController),
+            ),
+            Expanded(
+              flex: 2,
+              child: _buildDateTimeField(context, 'Thời gian', Icons.schedule,
+                  controller.selectTime, controller.timeController),
+            ),
+          ]),
           ...controller.entries,
         ],
       ),
@@ -239,11 +249,9 @@ class TypeOfData extends GetView<DiagnosticAddController> {
       String label,
       IconData icon,
       Future<void> Function(BuildContext) onTap,
-      TextEditingController controller,
-      {required double width}) {
+      TextEditingController controller) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      width: width,
       child: TextField(
         controller: controller,
         decoration: InputDecoration(

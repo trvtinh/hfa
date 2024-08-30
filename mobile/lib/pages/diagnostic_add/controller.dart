@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
-import 'package:health_for_all/pages/dianostic_add/widget/data_box.dart';
+import 'package:health_for_all/pages/diagnostic_add/information.dart';
+import 'package:health_for_all/pages/diagnostic_add/widget/data_box.dart';
+import 'package:health_for_all/pages/diagnostic_add/widget/view_data_box.dart';
 import 'package:intl/intl.dart';
 
 class DiagnosticAddController extends GetxController {
@@ -12,13 +14,6 @@ class DiagnosticAddController extends GetxController {
   final unitController = TextEditingController();
   final valueController = TextEditingController();
   static int length = 5;
-  List<int> ind = [
-    0,
-    1,
-    2,
-    3,
-    8,
-  ];
 
   @override
   void onInit() {
@@ -41,13 +36,22 @@ class DiagnosticAddController extends GetxController {
         return DataBox(
           time: formatTimeOfDay(),
           noteController: noteController,
-          unitController: unitController,
-          valueController: valueController,
           leadingiconpath: Item.getIconPath(ind[index]),
           title: Item.getTitle(ind[index]),
-          value: valueController.text.obs,
-          unit: unitController.text.obs,
+          value: Item.getUnit(ind[index]),
+          unit: Item.getUnit(ind[index]),
           pos: ind[index],
+        );
+      });
+
+  List<ViewDataBox> get listview => List.generate(view.length, (index) {
+        return ViewDataBox(
+          time: formatTimeOfDay(),
+          noteController: noteController,
+          leadingiconpath: Item.getIconPath(view[index]),
+          title: Item.getTitle(view[index]),
+          value: Item.getUnit(view[index]),
+          unit: Item.getUnit(view[index]),
         );
       });
 

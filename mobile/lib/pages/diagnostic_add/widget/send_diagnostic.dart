@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/dianostic_add/information.dart';
-import 'package:health_for_all/pages/dianostic_add/widget/patient_box_full.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:health_for_all/pages/diagnostic_add/information.dart';
+import 'package:health_for_all/pages/diagnostic_add/widget/patient_box_full.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 
 class SendDiagnostic extends StatefulWidget {
@@ -10,13 +11,12 @@ class SendDiagnostic extends StatefulWidget {
 }
 
 class SendDiagnosticState extends State<SendDiagnostic> {
-  int showpatient = -1;
+  RxInt showpatient = (-1).obs;
 
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: IntrinsicHeight(
-        child: GestureDetector(
+    return IntrinsicHeight(
+      child: Obx(
+        () => GestureDetector(
           onTap: () {
             showPopup(context);
           },
@@ -62,7 +62,7 @@ class SendDiagnosticState extends State<SendDiagnostic> {
                     ),
                   ],
                 ),
-                showpatient == -1
+                showpatient.value == -1
                     ? SizedBox(
                         height: 40,
                         width: 356,
@@ -81,11 +81,11 @@ class SendDiagnosticState extends State<SendDiagnostic> {
                         ),
                       )
                     : FollowingPersonBox(
-                        avapath: avapath[showpatient],
-                        name: patientname[showpatient],
-                        gender: gender[showpatient],
-                        age: age[showpatient],
-                        person: people[showpatient])
+                        avapath: avapath[showpatient.value],
+                        name: patientname[showpatient.value],
+                        gender: gender[showpatient.value],
+                        age: age[showpatient.value],
+                        person: people[showpatient.value])
               ],
             ),
           ),
@@ -94,26 +94,35 @@ class SendDiagnosticState extends State<SendDiagnostic> {
     );
   }
 
+  void init(int index) {
+    for (int i = 0; i < ontap.length; i++) {
+      ontap[i] = false.obs;
+    }
+    ontap[index] = true.obs;
+  }
+
   void showPopup(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(28),
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  buildpopupHeader(),
-                  const SizedBox(height: 24),
-                  buildpopupPeople(),
-                  const SizedBox(height: 24),
-                  buildpopupActions(),
-                ],
+        return Obx(
+          () => Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(28),
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    buildpopupHeader(),
+                    const SizedBox(height: 24),
+                    buildpopupPeople(),
+                    const SizedBox(height: 24),
+                    buildpopupActions(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -149,13 +158,10 @@ class SendDiagnosticState extends State<SendDiagnostic> {
       children: [
         GestureDetector(
           onTap: () {
-            for (int i = 0; i < ontap.length; i++) {
-              ontap[i] = false;
-            }
-            ontap[0] = true;
+            init(0);
           },
           child: PatientBoxFull(
-              boxcolor: ontap[0] == true
+              boxcolor: ontap[0] == true.obs
                   ? Theme.of(context).colorScheme.tertiaryContainer
                   : Theme.of(context).colorScheme.surface,
               avapath: avapath[0],
@@ -171,13 +177,10 @@ class SendDiagnosticState extends State<SendDiagnostic> {
         ),
         GestureDetector(
           onTap: () {
-            for (int i = 0; i < ontap.length; i++) {
-              ontap[i] = false;
-            }
-            ontap[1] = true;
+            init(1);
           },
           child: PatientBoxFull(
-              boxcolor: ontap[1] == true
+              boxcolor: ontap[1] == true.obs
                   ? Theme.of(context).colorScheme.tertiaryContainer
                   : Theme.of(context).colorScheme.surface,
               avapath: avapath[1],
@@ -193,13 +196,10 @@ class SendDiagnosticState extends State<SendDiagnostic> {
         ),
         GestureDetector(
           onTap: () {
-            for (int i = 0; i < ontap.length; i++) {
-              ontap[i] = false;
-            }
-            ontap[2] = true;
+            init(2);
           },
           child: PatientBoxFull(
-              boxcolor: ontap[2] == true
+              boxcolor: ontap[2] == true.obs
                   ? Theme.of(context).colorScheme.tertiaryContainer
                   : Theme.of(context).colorScheme.surface,
               avapath: avapath[2],
@@ -221,9 +221,9 @@ class SendDiagnosticState extends State<SendDiagnostic> {
         TextButton(
           onPressed: () async {
             for (int i = 0; i < ontap.length; i++) {
-              ontap[i] = false;
+              ontap[i] = false.obs;
             }
-            showpatient = -1;
+            showpatient.value = -1;
             Get.back();
           },
           child: Text(
@@ -240,8 +240,8 @@ class SendDiagnosticState extends State<SendDiagnostic> {
             // List<String> imageUrl = [];
 
             for (int i = 0; i < ontap.length; i++) {
-              if (ontap[i] == true) {
-                showpatient = i;
+              if (ontap[i] == true.obs) {
+                showpatient.value = i;
               }
             }
             // Create MedicalEntity with the obtained typeId
