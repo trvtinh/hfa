@@ -12,7 +12,7 @@ class ImportantPage extends StatefulWidget {
 class _ImportantPageState extends State<ImportantPage> {
   List<bool> _isExpandedList = [false, false, false, false, false];
 
-  List<String> _Notifications = [
+  List<String> notifications = [
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
@@ -28,7 +28,7 @@ class _ImportantPageState extends State<ImportantPage> {
     'Đặng Văn E',
   ];
 
-  List<String> _Time = [
+  List<String> time = [
     '06:00,  29/07/2024',
     '06:00,  29/07/2024',
     '06:00,  29/07/2024',
@@ -36,7 +36,7 @@ class _ImportantPageState extends State<ImportantPage> {
     '06:00,  29/07/2024',
   ];
 
-  List<String> _Title = [
+  List<String> title = [
     'Huyết áp',
     'Huyết áp',
     'Huyết áp',
@@ -44,7 +44,7 @@ class _ImportantPageState extends State<ImportantPage> {
     'Huyết áp',
   ];
 
-  List<String> _Value = [
+  List<String> value = [
     '125/80',
     '125/80',
     '125/80',
@@ -52,7 +52,7 @@ class _ImportantPageState extends State<ImportantPage> {
     '125/80',
   ];
 
-  List<String> _Unit = [
+  List<String> unit = [
     'mg/dL',
     'mg/dL',
     'mg/dL',
@@ -60,7 +60,7 @@ class _ImportantPageState extends State<ImportantPage> {
     'mg/dL',
   ];
 
-  List<String> _Attachments = [
+  List<String> attachments = [
     '1',
     '2',
     '0',
@@ -69,7 +69,7 @@ class _ImportantPageState extends State<ImportantPage> {
     '0',
   ];
 
-  List<bool> _IsAttached = [
+  List<bool> isattached = [
     true,
     true,
     false,
@@ -78,7 +78,7 @@ class _ImportantPageState extends State<ImportantPage> {
     false,
   ];
 
-  List<bool> _Important = [
+  List<bool> important = [
     true,
     true,
     true,
@@ -89,7 +89,7 @@ class _ImportantPageState extends State<ImportantPage> {
 
   void _setImportant(int index) {
     setState(() {
-      _Important[index] = !_Important[index];
+      important[index] = !important[index];
     });
   }
 
@@ -115,7 +115,7 @@ class _ImportantPageState extends State<ImportantPage> {
                     duration: Duration(milliseconds: 300),
                     width: MediaQuery.of(context).size.width,
                     height: _isExpandedList[index]
-                        ? _IsAttached[index]
+                        ? isattached[index]
                             ? 190
                             : 168
                         : 104,
@@ -183,7 +183,7 @@ class _ImportantPageState extends State<ImportantPage> {
                                     ),
                                   ),
                                   Text(
-                                    _Time[index],
+                                    time[index],
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Theme.of(context)
@@ -196,7 +196,7 @@ class _ImportantPageState extends State<ImportantPage> {
                                   ),
                                   Icon(
                                     Icons.star,
-                                    color: _Important[index]
+                                    color: important[index]
                                         ? Theme.of(context).colorScheme.primary
                                         : Theme.of(context)
                                             .colorScheme
@@ -246,7 +246,7 @@ class _ImportantPageState extends State<ImportantPage> {
                                 ),
                               ),
                               Text(
-                                _Title[index],
+                                title[index],
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
@@ -268,7 +268,7 @@ class _ImportantPageState extends State<ImportantPage> {
                                 ),
                               ),
                               Text(
-                                _Value[index] + ' ' + _Unit[index],
+                                '${value[index]} ${unit[index]}',
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
@@ -281,7 +281,7 @@ class _ImportantPageState extends State<ImportantPage> {
                           height: 4,
                         ),
                         Text(
-                          _Notifications[index],
+                          notifications[index],
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme
@@ -292,7 +292,7 @@ class _ImportantPageState extends State<ImportantPage> {
                         SizedBox(
                           height: 4,
                         ),
-                        _IsAttached[index]
+                        isattached[index]
                             ? Column(
                                 children: [
                                   Row(
@@ -318,7 +318,7 @@ class _ImportantPageState extends State<ImportantPage> {
                                               height: 18,
                                               child: Text(
                                                 'Đính kèm (' +
-                                                    _Attachments[index] +
+                                                    attachments[index] +
                                                     ')',
                                                 style: TextStyle(
                                                   fontSize: 12,
@@ -385,7 +385,7 @@ class _ImportantPageState extends State<ImportantPage> {
                                       width: 8,
                                     ),
                                     Icon(
-                                      _Important[index]
+                                      important[index]
                                           ? Icons.star
                                           : Icons.star_border_outlined,
                                       color:

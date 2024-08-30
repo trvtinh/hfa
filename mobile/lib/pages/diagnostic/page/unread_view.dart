@@ -12,7 +12,7 @@ class UnreadPage extends StatefulWidget {
 class _UnreadPageState extends State<UnreadPage> {
   List<bool> _isExpandedList = [false, false, false];
 
-  List<String> _Notifications = [
+  List<String> notifications = [
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại'
@@ -24,28 +24,10 @@ class _UnreadPageState extends State<UnreadPage> {
     'Trần Văn C',
   ];
 
-  List<String> _Time = [
+  List<String> timedate = [
     '06:00,  29/07/2024',
     '06:00,  29/07/2024',
     '06:00,  29/07/2024',
-  ];
-
-  List<String> _Title = [
-    'Huyết áp',
-    'Huyết áp',
-    'Huyết áp',
-  ];
-
-  List<String> _Value = [
-    '125/80',
-    '125/80',
-    '125/80',
-  ];
-
-  List<String> _Unit = [
-    'mg/dL',
-    'mg/dL',
-    'mg/dL',
   ];
 
   List<String> _Attachments = [
@@ -64,6 +46,78 @@ class _UnreadPageState extends State<UnreadPage> {
     false,
     true,
     true,
+  ];
+
+  List<List<String>> title = [
+    [
+      'Huyết áp',
+      'Thân nhiệt',
+      'XN Máu',
+    ],
+    [
+      'Huyết áp',
+      'Thân nhiệt',
+      'XN Máu',
+    ],
+    [
+      'Huyết áp',
+      'Thân nhiệt',
+      'XN Máu',
+    ],
+  ];
+
+  List<List<String>> time = [
+    [
+      '09:00',
+      '09:00',
+      '09:00',
+    ],
+    [
+      '09:00',
+      '09:00',
+      '09:00',
+    ],
+    [
+      '09:00',
+      '09:00',
+      '09:00',
+    ],
+  ];
+
+  List<List<String>> value = [
+    [
+      '120/80',
+      '36',
+      'XN',
+    ],
+    [
+      '120/80',
+      '36',
+      'XN',
+    ],
+    [
+      '120/80',
+      '36',
+      'XN',
+    ],
+  ];
+
+  List<List<String>> unit = [
+    [
+      'mmHg',
+      '°C',
+      '--',
+    ],
+    [
+      'mmHg',
+      '°C',
+      '--',
+    ],
+    [
+      'mmHg',
+      '°C',
+      '--',
+    ],
   ];
 
   void _setImportant(int index) {
@@ -162,7 +216,7 @@ class _UnreadPageState extends State<UnreadPage> {
                                     ),
                                   ),
                                   Text(
-                                    _Time[index],
+                                    timedate[index],
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Theme.of(context)
@@ -225,7 +279,7 @@ class _UnreadPageState extends State<UnreadPage> {
                                 ),
                               ),
                               Text(
-                                _Title[index],
+                                title[index][0],
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
@@ -247,7 +301,7 @@ class _UnreadPageState extends State<UnreadPage> {
                                 ),
                               ),
                               Text(
-                                _Value[index] + ' ' + _Unit[index],
+                                value[index][0] + ' ' + unit[index][0],
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.secondary,
@@ -260,7 +314,7 @@ class _UnreadPageState extends State<UnreadPage> {
                           height: 4,
                         ),
                         Text(
-                          _Notifications[index],
+                          notifications[index],
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme

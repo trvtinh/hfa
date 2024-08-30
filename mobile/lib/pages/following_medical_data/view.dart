@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
 
 class FollowingMedicalData extends StatelessWidget {
@@ -26,104 +27,13 @@ class FollowingMedicalData extends StatelessWidget {
               thickness: 0.5,
             ),
             SizedBox(height: 12),
-            Container(
-              height: 80,
-              width: 380,
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).colorScheme.errorContainer,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.3),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                    )
-                  ]),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundImage: NetworkImage(
-                        'https://s3-alpha-sig.figma.com/img/72f7/1c48/1924a99473c91bfdac585c9cc9c2bc58?Expires=1724025600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=X6quQiCcFFGcfoofQCAGCsblRzhs3bElFjlYDJk8LJAY99JkXmHDxvzkoxZ3DglGkWmVMyT7Ph-KHYGEEzb7zAy-XInm5gD97KSEFKeQJin1xZZoYv7oz8~-MWPoiZfxHs6iK5Yln4TdblueC64ZI8iMgy45QrrrawUvlJDsE8VsF057jJp91m9bazCZgcY69qm9cq4g5ftg8mXCNl~lvn9s4MpOLBGlLiRSL6K168BU30~oevuzsWcUBDd7ln6BZFYur0oEQpq4jyRrfbpIMC-u0USM3jMk78YodrTEH79Y~IC4MwUzCfq92fGUUi2Y3r1u7VJmI37Cqvkon3HJTw__'),
-                  ),
-                  SizedBox(
-                    width: 12,
-                  ),
-                  SizedBox(
-                    width: 130,
-                    height: 68,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Nguyễn Văn A',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              'Nam',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                            Text(
-                              '25 tuổi',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 12,
-                  ),
-                  SizedBox(
-                    width: 146,
-                    height: 52,
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 120,
-                          height: 24,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color:
-                                Theme.of(context).colorScheme.primaryFixedDim,
-                          ),
-                          padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-                          child: SizedBox(
-                            width: 88,
-                            height: 16,
-                            child: Text(
-                              'Người nhà',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+            FollowingPersonBox(
+              avapath:
+                  'https://s3-alpha-sig.figma.com/img/72f7/1c48/1924a99473c91bfdac585c9cc9c2bc58?Expires=1725235200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=JJRQyU2WPw3bxkBouF3GMVKTXeI8FJP6AWDZpHW~WI09zPcha1Xz7-Y1sK6gWGjKMCkE8y2FdGGMdEMJfVED0AO9yjx3Z1H~iTSI6MGuo2-9QRAeZ48ncVe22fnrO3Xiy2yVdcEfy~YQ0yMt02E8tlA0zye0kmxpw3HNXeoPYt0VDTfQblXn6tJ00AE3wp2aUzpVvXmXnOEq2PjlNUDPA457zIbZSVhoNjK-umG8zol-qVQXCktEDKUuY6DEfjiux9EcIszGQYHMTck8WVVrMh9xdIcdNOHg2~aF7POwxKLefX68Ig-CnbdKbiaosFdOZ4ZKsz3Hb-mrXBRPrRfNzw__',
+              name: 'Nguyễn Văn A',
+              gender: 'Nam',
+              age: '25',
+              person: 'Người nhà',
             ),
             SizedBox(height: 16),
             Container(
