@@ -1,10 +1,9 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/chart/controller.dart';
 import 'package:health_for_all/pages/chart/widget/show.dart';
 
-class ChartPage extends GetView<ChartController>{
+class ChartPage extends GetView<ChartController> {
   ChartPage({super.key});
 
   @override
@@ -113,10 +112,13 @@ class ChartPage extends GetView<ChartController>{
             ),
           ),
           Divider(height: 1, thickness: 1, color: Colors.black),
-          Expanded( // Wrap Show in Expanded
+          Expanded(
+            // Wrap Show in Expanded
             child: Show(),
           ),
-          SizedBox(height: 200,),
+          SizedBox(
+            height: 200,
+          ),
         ],
       ),
     );
