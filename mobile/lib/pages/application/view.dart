@@ -29,7 +29,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           Homepage(),
           Following(),
           MedicalDataPage(),
-          NotificationPage(),
+          const NotificationPage(),
           const ProfilePage()
         ],
       );

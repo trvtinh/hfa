@@ -27,7 +27,7 @@ class WhiteBoxState extends State<WhiteBox> {
     return Container(
       height: 100,
       width: 185,
-      padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: const Color.fromRGBO(255, 255, 255, 1),
@@ -56,14 +56,14 @@ class WhiteBoxState extends State<WhiteBox> {
                     color: Color.fromRGBO(29, 27, 32, 1),
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.open_in_new_outlined,
                   size: 16,
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           SizedBox(
@@ -83,14 +83,14 @@ class WhiteBoxState extends State<WhiteBox> {
                           children: [
                             Text(
                               widget.text1,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                                 color: Color.fromRGBO(98, 91, 113, 1),
                               ),
                             ),
                             Text(
                               widget.value1,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Color.fromRGBO(179, 38, 30, 1),
                                 fontSize: 16,
@@ -102,15 +102,15 @@ class WhiteBoxState extends State<WhiteBox> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              widget.text1,
-                              style: TextStyle(
+                              widget.text2,
+                              style: const TextStyle(
                                 fontSize: 12,
                                 color: Color.fromRGBO(98, 91, 113, 1),
                               ),
                             ),
                             Text(
                               widget.value2,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Color.fromRGBO(98, 91, 113, 1),
                                 fontSize: 16,
@@ -152,7 +152,7 @@ class WhiteBoxnoWState extends State<WhiteBoxnoW> {
     return Container(
       height: 100,
       width: 185,
-      padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: const Color.fromRGBO(255, 255, 255, 1),
@@ -181,14 +181,14 @@ class WhiteBoxnoWState extends State<WhiteBoxnoW> {
                     color: Color.fromRGBO(29, 27, 32, 1),
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.open_in_new_outlined,
                   size: 16,
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           SizedBox(
@@ -208,14 +208,14 @@ class WhiteBoxnoWState extends State<WhiteBoxnoW> {
                           children: [
                             Text(
                               widget.text1,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                                 color: Color.fromRGBO(98, 91, 113, 1),
                               ),
                             ),
                             Text(
                               widget.value1,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 color: Color.fromRGBO(98, 91, 113, 1),
                                 fontSize: 16,
@@ -257,7 +257,7 @@ class WhiteBoxnoValState extends State<WhiteBoxnoVal> {
     return Container(
       height: 100,
       width: 185,
-      padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: const Color.fromRGBO(255, 255, 255, 1),
@@ -286,14 +286,14 @@ class WhiteBoxnoValState extends State<WhiteBoxnoVal> {
                     color: Color.fromRGBO(29, 27, 32, 1),
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.open_in_new_outlined,
                   size: 16,
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           SizedBox(
@@ -313,7 +313,7 @@ class WhiteBoxnoValState extends State<WhiteBoxnoVal> {
                           children: [
                             Text(
                               widget.text1,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                                 color: Color.fromRGBO(98, 91, 113, 1),
                               ),
@@ -325,7 +325,7 @@ class WhiteBoxnoValState extends State<WhiteBoxnoVal> {
                           children: [
                             Text(
                               widget.text2,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
                                 color: Color.fromRGBO(98, 91, 113, 1),
                               ),

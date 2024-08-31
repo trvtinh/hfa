@@ -28,8 +28,8 @@ class Homepage extends StatelessWidget {
               thickness: 0.5,
             ),
             GestureDetector(
-              onTap: (){
-                Get.to(ProfilePage());
+              onTap: () {
+                Get.to(const ProfilePage());
               },
               child: Container(
                 height: 80,
@@ -53,7 +53,8 @@ class Homepage extends StatelessWidget {
                             CircleAvatar(
                                 radius: 28,
                                 backgroundImage: CachedNetworkImageProvider(
-                                    appController.state.profile.value?.photourl ??
+                                    appController
+                                            .state.profile.value?.photourl ??
                                         "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficonduck.com%2Ficons%2F160691%2Favatar-default-symbolic&psig=AOvVaw2gPEQ_lKQuUXivxfgTKXo-&ust=1723564687779000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIi5g4Hp74cDFQAAAAAdAAAAABAE")),
                             const SizedBox(width: 12),
                             Container(
@@ -65,7 +66,8 @@ class Homepage extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text(
-                                        appController.state.profile.value?.name ??
+                                        appController
+                                                .state.profile.value?.name ??
                                             "",
                                         style: const TextStyle(fontSize: 16),
                                       ),
@@ -93,9 +95,8 @@ class Homepage extends StatelessWidget {
                                             ),
                                             Text(
                                               appController.state.profile.value
-                                                          ?.age
-                                                          .toString() !=
-                                                      null
+                                                          ?.age !=
+                                                      0
                                                   ? ("${appController.state.profile.value?.age} tuổi")
                                                   : '',
                                               style: const TextStyle(
@@ -117,7 +118,8 @@ class Homepage extends StatelessWidget {
                               width: 146,
                               height: 56,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   SizedBox(
                                     width: 120,
@@ -130,8 +132,8 @@ class Homepage extends StatelessWidget {
                                           "Người nhà:",
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color:
-                                                Color.fromRGBO(121, 116, 126, 1),
+                                            color: Color.fromRGBO(
+                                                121, 116, 126, 1),
                                           ),
                                         ),
                                         // SizedBox(
@@ -139,8 +141,12 @@ class Homepage extends StatelessWidget {
                                         // ),
                                         Badge(
                                           // child: Text("2"),
-                                          label: Text(appController.state.profile
-                                                  .value?.relatives?.length
+                                          label: Text(appController
+                                                  .state
+                                                  .profile
+                                                  .value
+                                                  ?.relatives
+                                                  ?.length
                                                   .toString() ??
                                               "0"),
                                           largeSize: 16,
@@ -161,8 +167,8 @@ class Homepage extends StatelessWidget {
                                           "Chuyên gia:",
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color:
-                                                Color.fromRGBO(121, 116, 126, 1),
+                                            color: Color.fromRGBO(
+                                                121, 116, 126, 1),
                                           ),
                                         ),
                                         // SizedBox(
@@ -170,8 +176,12 @@ class Homepage extends StatelessWidget {
                                         // ),
                                         Badge(
                                           // child: Text("2"),
-                                          label: Text(appController.state.profile
-                                                  .value?.doctors?.length
+                                          label: Text(appController
+                                                  .state
+                                                  .profile
+                                                  .value
+                                                  ?.doctors
+                                                  ?.length
                                                   .toString() ??
                                               "0"),
                                           largeSize: 16,
@@ -192,8 +202,8 @@ class Homepage extends StatelessWidget {
                                           "Đang theo dõi:",
                                           style: TextStyle(
                                             fontSize: 12,
-                                            color:
-                                                Color.fromRGBO(121, 116, 126, 1),
+                                            color: Color.fromRGBO(
+                                                121, 116, 126, 1),
                                           ),
                                         ),
                                         // SizedBox(
@@ -202,8 +212,12 @@ class Homepage extends StatelessWidget {
                                         Badge(
                                           // child: Text("2"),
                                           label: Text(
-                                            ((appController.state.profile.value
-                                                            ?.relatives?.length ??
+                                            ((appController
+                                                            .state
+                                                            .profile
+                                                            .value
+                                                            ?.relatives
+                                                            ?.length ??
                                                         0) +
                                                     (appController
                                                             .state
@@ -214,7 +228,7 @@ class Homepage extends StatelessWidget {
                                                         0))
                                                 .toString(),
                                           ),
-              
+
                                           largeSize: 16,
                                           backgroundColor: const Color.fromRGBO(
                                               125, 82, 96, 1),
@@ -244,10 +258,10 @@ class Homepage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: (){
-                    Get.to(DiagnosticPage());
+                  onTap: () {
+                    Get.to(const DiagnosticPage());
                   },
-                  child: WhiteBox(
+                  child: const WhiteBox(
                       title: 'Chẩn đoán',
                       iconpath: 'assets/images/health_and_safety.png',
                       text1: 'Chưa xem',
@@ -256,10 +270,10 @@ class Homepage extends StatelessWidget {
                       value2: '07'),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Get.to(PrescriptionPage());
                   },
-                  child: WhiteBox(
+                  child: const WhiteBox(
                       title: 'Đơn thuốc',
                       iconpath: 'assets/images/medication_liquid.png',
                       text1: 'Đang uống',
@@ -276,20 +290,20 @@ class Homepage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Get.to(ReminderPage());
                   },
-                  child: WhiteBoxnoW(
+                  child: const WhiteBoxnoW(
                       title: 'Nhắc nhở',
                       iconpath: 'assets/images/date_range.png',
                       text1: 'Số lời nhắc',
                       value1: '07'),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Get.to(AlarmPage());
                   },
-                  child: WhiteBoxnoW(
+                  child: const WhiteBoxnoW(
                       title: 'Cảnh báo',
                       iconpath: 'assets/images/warning_amber.png',
                       text1: 'Số cảnh báo',
@@ -304,22 +318,24 @@ class Homepage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 GestureDetector(
-                  onTap: (){
-                    Get.to(NotificationPage());
+                  onTap: () {
+                    Get.to(const NotificationPage());
                   },
                   child: WhiteBox(
                       title: 'Thông báo',
                       iconpath: 'assets/images/notifications.png',
                       text1: 'Chưa xem',
                       text2: 'Đã xem',
-                      value1: '03',
-                      value2: '07'),
+                      value1: appController.notificationController.state.unread
+                          .toString(),
+                      value2: appController.notificationController.state.read
+                          .toString()),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     Get.to(ChatbotPage());
                   },
-                  child: WhiteBoxnoVal(
+                  child: const WhiteBoxnoVal(
                       title: 'Trò chuyện với HFA',
                       iconpath: 'assets/images/smart_toy.png',
                       text1: 'Trò chuyện y tế',
@@ -331,7 +347,7 @@ class Homepage extends StatelessWidget {
               height: 16,
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 Get.to(ConnectHardwarePage());
               },
               child: Container(

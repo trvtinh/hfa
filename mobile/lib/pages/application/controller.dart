@@ -8,6 +8,7 @@ import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
 import 'index.dart';
 
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class ApplicationController extends GetxController {
     'http://www.googleapis.com/auth/contacts.readonly'
   ]);
   ApplicationController();
-
+  final notificationController = Get.find<NotificationController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -68,8 +69,6 @@ class ApplicationController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    getProfile();
-
     tabTitles = ['Của tôi', 'Đang theo dõi', "Thêm", "Thông báo", 'Cá nhân'];
     bottomTabs = <BottomNavigationBarItem>[
       const BottomNavigationBarItem(
@@ -110,6 +109,16 @@ class ApplicationController extends GetxController {
       ),
     ];
     pageController = PageController(initialPage: state.page);
+  }
+
+  @override
+  void onReady() async {
+    await getProfile();
+    notificationController.state.profile.value = state.profile.value;
+    notificationController.fetchNotificationCounts();
+    log('Dữ liệu profile: ${state.profile.value.toString()}');
+    log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');
+    super.onReady();
   }
 
   Future<void> onLogOut() async {
