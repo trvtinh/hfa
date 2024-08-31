@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/medical_data_homepage/widget/GreyBox.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 
 class MedicalDataHome extends StatelessWidget {
-  const MedicalDataHome({super.key});
+  const MedicalDataHome({super.key, this.time, this.user});
+  final String? time;
+  final UserData? user;
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,7 @@ class MedicalDataHome extends StatelessWidget {
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
@@ -81,7 +84,7 @@ class MedicalDataHome extends StatelessWidget {
             ],
           ),
           Text(
-            "Cập nhật lúc 06:00, 27/07/2024",
+            time != "" ? time! : "Chưa cập nhật",
             style: TextStyle(
               color: Color.fromRGBO(121, 116, 126, 1),
               fontSize: 12,

@@ -118,6 +118,7 @@ class ApplicationController extends GetxController {
     notificationController.fetchNotificationCounts();
     log('Dữ liệu profile: ${state.profile.value.toString()}');
     log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');
+    getUpdatedDataTime(); // Chuyển từ await sang chỉ gọi hàm để tạo stream lắng nghe
     super.onReady();
   }
 
@@ -125,6 +126,36 @@ class ApplicationController extends GetxController {
     await UserStore.to.onLogout();
     await googleSignIn.signOut();
     Get.offAndToNamed(AppRoutes.SIGN_IN);
+  }
+
+  void getUpdatedDataTime() {
+    final db = FirebaseFirestore.instance;
+    try {
+      final time = Timestamp.fromDate(DateTime.now());
+
+      // Lắng nghe sự thay đổi của dữ liệu trong Firestore
+      db
+          .collection('medicalData')
+          .where('userId', isEqualTo: state.profile.value!.id!)
+          .where('time', isLessThanOrEqualTo: time)
+          .orderBy('time', descending: true)
+          .limit(1)
+          .snapshots()
+          .listen((querySnapshot) {
+        if (querySnapshot.docs.isEmpty) {
+          state.updateTime.value = '';
+        } else {
+          final data = querySnapshot.docs.first.data();
+          log(data.toString());
+          state.updateTime.value =
+              '${DatetimeChange.getHourString(data['time'].toDate())} ${DatetimeChange.getDatetimeString(data['time'].toDate())}';
+        }
+      }, onError: (error) {
+        print('Error fetching updated time: $error');
+      });
+    } catch (e) {
+      print('Error setting up listener for updated time: $e');
+    }
   }
 
   @override

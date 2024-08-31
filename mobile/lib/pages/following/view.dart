@@ -154,10 +154,11 @@ class Following extends GetView<FollowingController> {
 
   Widget _buildUserTile(user, String role) {
     return InkWell(
-      onTap: () => Get.to(() => FollowingMedicalData(
+      onTap: () => Get.to(() => Obx(() => FollowingMedicalData(
             user: user,
             role: role,
-          )),
+            time: controller.updatedTimeMap[user.id] ?? '',
+          ))),
       child: Obx(() {
         final time = controller.updatedTimeMap[user.id] ?? '';
         final warningCount =
