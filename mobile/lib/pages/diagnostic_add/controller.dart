@@ -40,7 +40,7 @@ class DiagnosticAddController extends GetxController {
           title: Item.getTitle(ind[index]),
           value: Item.getUnit(ind[index]),
           unit: Item.getUnit(ind[index]),
-          pos: ind[index],
+          pos: index,
         );
       });
 

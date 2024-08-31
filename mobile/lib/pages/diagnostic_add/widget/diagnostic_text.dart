@@ -9,35 +9,31 @@ class DiagnosticText extends StatefulWidget {
 
 class DiagnosticTextState extends State<DiagnosticText> {
   Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          width: 1,
+    return TextField(
+      // minLines: 3,
+      maxLines: 3,
+      decoration: InputDecoration(
+        labelText: 'Chẩn đoán',
+        labelStyle: TextStyle(
+          color: Theme.of(context).colorScheme.outline,
+          fontSize: 16,
         ),
-      ),
-      child: TextField(
-        // minLines: 3,
-        maxLines: null,
-        decoration: InputDecoration(
-          labelText: 'Chẩn đoán',
-          labelStyle: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontSize: 16,
-          ),
-          hintText: 'Chẩn đoán ....',
-          hintStyle: TextStyle(
-            color: Theme.of(context).colorScheme.outline,
-            fontSize: 16,
-          ),
-          border: OutlineInputBorder(),
-          prefixIcon: Icon(
-            Icons.edit_note,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          // contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 100),
+        hintText: 'Chẩn đoán',
+        hintStyle: TextStyle(
+          color: Theme.of(context).colorScheme.outline,
+          fontSize: 16,
         ),
+        border: OutlineInputBorder(),
+        prefixIcon: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.edit_note,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ],
+        ),
+        // contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 100),
       ),
     );
   }
