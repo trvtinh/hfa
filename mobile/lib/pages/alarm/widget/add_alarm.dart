@@ -64,22 +64,22 @@ class _AddAlarmState extends State<AddAlarm> {
   Widget body() {
     return Column(
       children: [
-        drop(),
-        // SizedBox(
-        //   height: 24,
-        // ),
-        // SizedBox(
-        //   height: 24,
-        // ),
-        // MyTextField("Đơn vị", "Đơn vị", TextEditingController()),
-        // SizedBox(
-        //   height: 24,
-        // ),
-        // MyTextField("Ngưỡng cao", "Ngưỡng cao", TextEditingController()),
-        // SizedBox(
-        //   height: 24,
-        // ),
-        // MyTextField("Ngưỡng thấp", "Ngưỡng thấp", TextEditingController()),
+        // drop(),
+        SizedBox(
+          height: 24,
+        ),
+        SizedBox(
+          height: 24,
+        ),
+        MyTextField("Đơn vị", "Đơn vị", TextEditingController()),
+        SizedBox(
+          height: 24,
+        ),
+        MyTextField("Ngưỡng cao", "Ngưỡng cao", TextEditingController()),
+        SizedBox(
+          height: 24,
+        ),
+        MyTextField("Ngưỡng thấp", "Ngưỡng thấp", TextEditingController()),
       ],
     );
   }

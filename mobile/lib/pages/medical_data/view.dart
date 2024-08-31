@@ -29,7 +29,15 @@ class MedicalDataPage extends GetView<MedicalDataController> {
             height: 0.7,
           ),
         ),
-      ),
+        actions: [
+          Icon(
+            Icons.add_to_photos,
+            size: 24,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          SizedBox(width: 12,),
+        ],
+      ),  
       body: SingleChildScrollView(
         child: Column(
           children: [
