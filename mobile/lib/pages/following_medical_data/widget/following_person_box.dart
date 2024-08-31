@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FollowingPersonBox extends StatefulWidget {
+class FollowingPersonBox extends StatelessWidget {
   final String avapath;
   final String name;
   final String gender;
@@ -17,87 +17,64 @@ class FollowingPersonBox extends StatefulWidget {
   });
 
   @override
-  State<FollowingPersonBox> createState() => FollowingPersonBoxState();
-}
-
-class FollowingPersonBoxState extends State<FollowingPersonBox> {
-  @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      width: 380,
-      padding: EdgeInsets.all(12),
+      height: 90,
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: Theme.of(context).colorScheme.errorContainer,
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.3),
-              spreadRadius: 1,
-              blurRadius: 2,
-            )
-          ]),
+        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).colorScheme.errorContainer,
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.errorContainer,
+            spreadRadius: 1,
+            blurRadius: 2,
+          ),
+        ],
+      ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 28,
-            backgroundImage: NetworkImage(widget.avapath),
+            backgroundImage: NetworkImage(avapath),
           ),
           const SizedBox(
             width: 12,
           ),
-          SizedBox(
-            width: 130,
-            height: 68,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      widget.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  ],
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
-                Row(
-                  children: [
-                    Text(
-                      widget.gender,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      widget.age,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    Text(
-                      ' tuổi',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                  ],
+              ),
+              Text(
+                gender,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.outline,
                 ),
-              ],
-            ),
+              ),
+              Text(
+                '$age tuổi',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+            ],
           ),
+          const Spacer(),
           SizedBox(
-            width: 12,
-          ),
-          SizedBox(
-            width: 146,
+            width: 140,
             height: 52,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   width: 120,
@@ -106,22 +83,19 @@ class FollowingPersonBoxState extends State<FollowingPersonBox> {
                     borderRadius: BorderRadius.circular(16),
                     color: Theme.of(context).colorScheme.primaryFixedDim,
                   ),
-                  padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-                  child: SizedBox(
-                    width: 88,
-                    height: 16,
-                    child: Text(
-                      widget.person,
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
+                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                  child: Text(
+                    person,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

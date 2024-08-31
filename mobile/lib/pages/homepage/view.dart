@@ -246,11 +246,13 @@ class Homepage extends StatelessWidget {
             const SizedBox(
               height: 16,
             ),
-            const Orangebox(
+            Obx(() => Orangebox(
                 val1: "03",
                 val2: "07",
                 val3: "10",
-                time: 'Cập nhật lúc 06:00, 27/07/2024'),
+                time: appController.state.updateTime.value == ""
+                    ? "Chưa cập nhật dữ liệu lần nào"
+                    : "Cập nhật lúc ${appController.state.updateTime.value}")),
             const SizedBox(
               height: 16,
             ),

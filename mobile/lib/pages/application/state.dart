@@ -10,5 +10,6 @@ class ApplicationState {
   var head_detail = Rx<UserLoginResponseEntity?>(null);
   var profile = Rx<UserData?>(null);
   RxInt age = 0.obs;
+  RxString updateTime = ''.obs;
   // var user = Rxn<UserDB>();
 }

@@ -1,88 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/common/entities/user.dart';
 
-class Pinkbox extends StatefulWidget {
-  final String avapath;
-  final String name;
-  final String gender;
-  final String age;
+class Pinkbox extends StatelessWidget {
+  final UserData user;
+  final String role;
+  final String warningCount;
   final String time;
-  final String person;
-  final String warning;
+  const Pinkbox({
+    super.key,
+    required this.user,
+    required this.role,
+    required this.warningCount,
+    required this.time,
+  });
 
-  const Pinkbox(
-      {super.key,
-      required this.avapath,
-      required this.name,
-      required this.gender,
-      required this.age,
-      required this.time,
-      required this.person,
-      required this.warning});
-
-  @override
-  State<Pinkbox> createState() => PinkBoxState();
-}
-
-class PinkBoxState extends State<Pinkbox> {
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          color: const Color.fromRGBO(255, 216, 228, 1),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.3),
-              spreadRadius: 1,
-              blurRadius: 2,
-            )
-          ]),
+        borderRadius: BorderRadius.circular(16),
+        color: const Color.fromRGBO(255, 216, 228, 1),
+        boxShadow: const [
+          BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.3),
+            spreadRadius: 1,
+            blurRadius: 2,
+          ),
+        ],
+      ),
       child: Row(
         children: [
           CircleAvatar(
             radius: 28,
-            backgroundImage: NetworkImage(widget.avapath),
+            backgroundImage: NetworkImage(user.photourl!),
           ),
-          const SizedBox(
-            width: 12,
-          ),
+          const SizedBox(width: 12),
           Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      widget.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.onSurface,
-                      ),
-                    ),
-                  ],
+                Text(
+                  user.name ?? 'Chưa cập nhật tên',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
                 Row(
                   children: [
-                    Text(
-                      widget.gender,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.outline,
+                    if (user.gender != null)
+                      Text(
+                        user.gender!,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(width: 12),
+                    if (user.gender != null) const SizedBox(width: 12),
                     Text(
-                      widget.age,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    Text(
-                      ' tuổi',
+                      user.age != 0 ? "${user.age} tuổi" : 'Chưa cập nhật tuổi',
                       style: TextStyle(
                         fontSize: 14,
                         color: Theme.of(context).colorScheme.outline,
@@ -100,14 +80,14 @@ class PinkBoxState extends State<Pinkbox> {
                       ),
                     ),
                     Text(
-                      widget.time,
+                      time,
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -120,12 +100,12 @@ class PinkBoxState extends State<Pinkbox> {
                   borderRadius: BorderRadius.circular(16),
                   color: Theme.of(context).colorScheme.primaryFixedDim,
                 ),
-                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: SizedBox(
                   width: 88,
                   height: 16,
                   child: Text(
-                    widget.person,
+                    role,
                     style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -133,7 +113,7 @@ class PinkBoxState extends State<Pinkbox> {
                   ),
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Container(
                 width: 120,
                 height: 24,
@@ -141,7 +121,7 @@ class PinkBoxState extends State<Pinkbox> {
                   borderRadius: BorderRadius.circular(16),
                   color: Theme.of(context).colorScheme.primaryFixedDim,
                 ),
-                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -153,18 +133,17 @@ class PinkBoxState extends State<Pinkbox> {
                       ),
                     ),
                     Badge(
-                      // child: Text("2"),
-                      label: Text(widget.warning),
+                      label: Text(warningCount),
                       largeSize: 16,
-                      backgroundColor: widget.warning == '0'
+                      backgroundColor: warningCount == '0'
                           ? Theme.of(context).colorScheme.secondary
                           : Theme.of(context).colorScheme.error,
-                    )
+                    ),
                   ],
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

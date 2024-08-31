@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
 class OverallMedicalDataHistoryPage
     extends GetView<OverallMedicalDataHistoryController> {
-  OverallMedicalDataHistoryPage({super.key});
+  const OverallMedicalDataHistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
