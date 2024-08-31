@@ -1,7 +1,5 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/add_file.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/diagnostic_text.dart';
@@ -10,12 +8,14 @@ import 'package:health_for_all/pages/diagnostic_add/widget/send_diagnostic.dart'
 import 'package:health_for_all/pages/diagnostic_add/widget/type_of_data.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddView extends StatefulWidget {
+class DiagnosticAddView extends StatefulWidget {
+  const DiagnosticAddView({super.key});
+
   @override
-  State<AddView> createState() => AddViewState();
+  State<DiagnosticAddView> createState() => DiagnosticAddViewState();
 }
 
-class AddViewState extends State<AddView> {
+class DiagnosticAddViewState extends State<DiagnosticAddView> {
   List<XFile> selectedFiles = [];
   void updateFiles(List<XFile> newFiles) {
     setState(() {

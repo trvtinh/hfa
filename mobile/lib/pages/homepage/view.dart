@@ -321,15 +321,18 @@ class Homepage extends StatelessWidget {
                   onTap: () {
                     Get.to(const NotificationPage());
                   },
-                  child: WhiteBox(
-                      title: 'Thông báo',
-                      iconpath: 'assets/images/notifications.png',
-                      text1: 'Chưa xem',
-                      text2: 'Đã xem',
-                      value1: appController.notificationController.state.unread
-                          .toString(),
-                      value2: appController.notificationController.state.read
-                          .toString()),
+                  child: Obx(
+                    () => WhiteBox(
+                        title: 'Thông báo',
+                        iconpath: 'assets/images/notifications.png',
+                        text1: 'Chưa xem',
+                        text2: 'Đã xem',
+                        value1: appController
+                            .notificationController.state.unread
+                            .toString(),
+                        value2: appController.notificationController.state.read
+                            .toString()),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/dianostic.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/diagnostic_add/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
 class DiagnosticScrenn extends StatelessWidget {
@@ -69,7 +70,7 @@ class DiagnosticScrenn extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
           onTap: () {
-            print('on tap');
+            Get.to(() => const DiagnosticAddView());
           },
           child: Container(
             color: Colors.transparent,
@@ -140,7 +141,7 @@ class DiagnosticScrenn extends StatelessWidget {
           ),
           const Row(
             children: [
-              Text('Đã bình luận'),
+              Text('Đã chẩn đoán'),
               SizedBox(
                 width: 6,
               ),
