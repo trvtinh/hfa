@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
@@ -11,9 +10,11 @@ import 'package:health_for_all/pages/diagnostic_add/widget/send_diagnostic.dart'
 import 'package:health_for_all/pages/diagnostic_add/widget/type_of_data.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddView extends StatefulWidget {
+class DiagnosticAddView extends StatefulWidget {
+  const DiagnosticAddView({super.key});
+
   @override
-  State<AddView> createState() => AddViewState();
+  State<DiagnosticAddView> createState() => DiagnosticAddViewState();
 }
 
 class DiagnosticAddViewState extends State<DiagnosticAddView> {
