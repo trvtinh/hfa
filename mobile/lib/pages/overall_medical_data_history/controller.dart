@@ -167,6 +167,7 @@ class OverallMedicalDataHistoryController extends GetxController {
                             ),
                           ),
                           const TabBar(
+                            labelPadding: EdgeInsets.symmetric(horizontal: 1),
                             tabs: [
                               Tab(
                                 text: 'Chi tiết',
