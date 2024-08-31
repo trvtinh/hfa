@@ -133,10 +133,15 @@ class _AddPrescriptionState extends State<AddPrescription> {
                 ),
                 Row(
                   children: [
-                    Icon(
-                      Icons.add_circle_outline,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.primary,
+                    GestureDetector(
+                      onTap: (){
+                        Get.to(ChooseTypeMed());
+                      },
+                      child: Icon(
+                        Icons.add_circle_outline,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     )
                   ],
                 )
@@ -170,9 +175,6 @@ class _AddPrescriptionState extends State<AddPrescription> {
               Container(
                 width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
                 child: TextField(
-                  onTap: (){
-                    Get.to(ChooseTypeMed());
-                  },
                   readOnly: true,
                   controller: TextEditingController(),
                   decoration: InputDecoration(
