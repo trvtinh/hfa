@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
 
 class FollowingMedicalData extends StatelessWidget {
-  const FollowingMedicalData({super.key});
+  final UserData user;
+  final String role;
+  const FollowingMedicalData(
+      {super.key, required this.user, required this.role});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +32,11 @@ class FollowingMedicalData extends StatelessWidget {
             ),
             SizedBox(height: 12),
             FollowingPersonBox(
-              avapath:
-                  'https://s3-alpha-sig.figma.com/img/72f7/1c48/1924a99473c91bfdac585c9cc9c2bc58?Expires=1725235200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=JJRQyU2WPw3bxkBouF3GMVKTXeI8FJP6AWDZpHW~WI09zPcha1Xz7-Y1sK6gWGjKMCkE8y2FdGGMdEMJfVED0AO9yjx3Z1H~iTSI6MGuo2-9QRAeZ48ncVe22fnrO3Xiy2yVdcEfy~YQ0yMt02E8tlA0zye0kmxpw3HNXeoPYt0VDTfQblXn6tJ00AE3wp2aUzpVvXmXnOEq2PjlNUDPA457zIbZSVhoNjK-umG8zol-qVQXCktEDKUuY6DEfjiux9EcIszGQYHMTck8WVVrMh9xdIcdNOHg2~aF7POwxKLefX68Ig-CnbdKbiaosFdOZ4ZKsz3Hb-mrXBRPrRfNzw__',
-              name: 'Nguyễn Văn A',
-              gender: 'Nam',
-              age: '25',
-              person: 'Người nhà',
+              avapath: user.photourl!,
+              name: user.name!,
+              gender: user.gender ?? 'Nam',
+              age: user.age == 0 ? 'Chưa cập nhật' : user.age.toString(),
+              person: role,
             ),
             SizedBox(height: 16),
             Container(

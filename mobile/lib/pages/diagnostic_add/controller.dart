@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/data_box.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/view_data_box.dart';
@@ -13,6 +14,7 @@ class DiagnosticAddController extends GetxController {
   final noteController = TextEditingController();
   final unitController = TextEditingController();
   final valueController = TextEditingController();
+  final appController = Get.find<ApplicationController>();
   static int length = 5;
 
   @override

@@ -1,5 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/add_file.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/diagnostic_text.dart';
@@ -16,6 +18,7 @@ class DiagnosticAddView extends StatefulWidget {
 }
 
 class DiagnosticAddViewState extends State<DiagnosticAddView> {
+  final diagnosticController = Get.find<DiagnosticAddController>();
   List<XFile> selectedFiles = [];
   void updateFiles(List<XFile> newFiles) {
     setState(() {
@@ -32,26 +35,34 @@ class DiagnosticAddViewState extends State<DiagnosticAddView> {
           title: const Text('Thêm chẩn đoán'),
           elevation: 0,
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                SendDiagnostic(),
-                const SizedBox(height: 16),
-                TypeOfData(),
-                const SizedBox(height: 16),
-                DiagnosticText(),
-                const SizedBox(height: 16),
-                AddFile(
-                  files: selectedFiles,
-                  onFilesChanged: updateFiles,
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SendDiagnostic(),
+                      const SizedBox(height: 16),
+                      TypeOfData(),
+                      const SizedBox(height: 16),
+                      DiagnosticText(),
+                      const SizedBox(height: 16),
+                      AddFile(
+                        files: selectedFiles,
+                        onFilesChanged: updateFiles,
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 16),
-                FromDoctor(doctorname: doctor[0]),
-                _buildActionButtons(context),
-              ],
-            ),
+              ),
+              FromDoctor(
+                  doctorname: diagnosticController
+                          .appController.state.profile.value!.name ??
+                      ""),
+              _buildActionButtons(context),
+            ],
           ),
         ));
   }

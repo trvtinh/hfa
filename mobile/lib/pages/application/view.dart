@@ -89,9 +89,9 @@ class ApplicationPage extends GetView<ApplicationController> {
             onTap: () => Get.to(() => ReminderPage()),
           ),
           ListTile(
-            leading: Icon(Icons.notifications_none),
-            title: Text('Thông báo'),
-            onTap: () => Get.to(() => NotificationPage()),
+            leading: const Icon(Icons.notifications_none),
+            title: const Text('Thông báo'),
+            onTap: () => Get.to(() => const NotificationPage()),
           ),
           ListTile(
             onTap: () => Get.to(() => AlarmPage()),
@@ -109,9 +109,9 @@ class ApplicationPage extends GetView<ApplicationController> {
             title: const Text('Trò chuyện với HFA-Bot'),
           ),
           ListTile(
-            leading: Icon(Icons.account_circle),
-            title: Text('Tài khoản'),
-            onTap: () => Get.to(() => InformationPage()),
+            leading: const Icon(Icons.account_circle),
+            title: const Text('Tài khoản'),
+            onTap: () => Get.to(() => const InformationPage()),
           ),
           ListTile(
             leading: const Icon(Icons.account_circle),
