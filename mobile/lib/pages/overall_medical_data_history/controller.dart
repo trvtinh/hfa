@@ -99,10 +99,11 @@ class OverallMedicalDataHistoryController extends GetxController {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  contentPadding: EdgeInsets.zero,
+                  insetPadding: EdgeInsets.symmetric(horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28),
+                  ),
                   content: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
                     width: MediaQuery.of(context).size.width,
                     child: DefaultTabController(
                       length: 4,
