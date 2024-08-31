@@ -3,20 +3,22 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic_detail/widget/patient_box.dart';
 
 class DetailView extends StatefulWidget {
+  final int index;
   // final String avapath;
   // final String name;
   // final String gender;
   // final String age;
   // final String person;
 
-  // const DetailView({
-  //   super.key,
-  //   required this.avapath,
-  //   required this.name,
-  //   required this.gender,
-  //   required this.age,
-  //   required this.person,
-  // });
+  const DetailView({
+    super.key,
+    required this.index,
+    // required this.avapath,
+    // required this.name,
+    // required this.gender,
+    // required this.age,
+    // required this.person,
+  });
 
   @override
   State<DetailView> createState() => DetailViewState();

@@ -11,6 +11,10 @@ class TypeOfData extends GetView<DiagnosticAddController> {
     return IntrinsicHeight(
       child: GestureDetector(
         onTap: () {
+          view.clear();
+          for (int i = 0; i < tapped.length; i++) {
+            tapped[i].value = false;
+          }
           showPopup(context);
         },
         child: Container(
@@ -98,7 +102,7 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                               ),
                             ),
                           ),
-                          // ...controller.listview,
+                          ...controller.listview,
 
                           // for(int i=0; i<tapped.length; i++){
                           //   if(tapped[i].value == true){
@@ -185,8 +189,10 @@ class TypeOfData extends GetView<DiagnosticAddController> {
       children: [
         TextButton(
           onPressed: () async {
-            ontap.fillRange(0, ontap.length, false.obs);
-            // showpatient = -1;
+            view.clear();
+            for (int i = 0; i < tapped.length; i++) {
+              tapped[i].value = false;
+            } // showpatient = -1;
             Get.back();
           },
           child: Text(

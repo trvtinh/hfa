@@ -55,9 +55,9 @@ class _DataBoxState extends State<DataBox> {
           ischeck.value = !ischeck.value;
           tapped[widget.pos].value = !tapped[widget.pos].value;
           if (ischeck.value == true) {
-            view.add(widget.pos);
+            view.add(ind[widget.pos]);
           } else {
-            view.remove(widget.pos);
+            view.remove(ind[widget.pos]);
           }
         },
         child: Column(
