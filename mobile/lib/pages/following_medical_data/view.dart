@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
-import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
+import 'package:health_for_all/pages/homepage/widget/white_box.dart';
 
 class FollowingMedicalData extends StatelessWidget {
   final UserData user;

@@ -44,11 +44,11 @@ class OverallMedicalDataHistoryController extends GetxController {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Lỗi'),
+            title: const Text('Lỗi'),
             content: Text('Lỗi thêm bình luận: $e'),
             actions: <Widget>[
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

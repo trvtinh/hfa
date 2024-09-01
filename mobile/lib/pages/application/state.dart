@@ -11,5 +11,6 @@ class ApplicationState {
   var profile = Rx<UserData?>(null);
   RxInt age = 0.obs;
   RxString updateTime = ''.obs;
+  RxMap<String, dynamic> medicalData = <String, dynamic>{}.obs;
   // var user = Rxn<UserDB>();
 }

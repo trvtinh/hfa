@@ -54,4 +54,11 @@ class DatetimeChange {
       return formatter.format(date);
     }
   }
+
+  static String timestamptoHHMMDDMMYYYY(Timestamp timestamp) {
+    final DateTime date =
+        DateTime.fromMillisecondsSinceEpoch(timestamp.millisecondsSinceEpoch);
+    final DateFormat formatter = DateFormat('HH:mm dd/MM/yyyy');
+    return formatter.format(date);
+  }
 }

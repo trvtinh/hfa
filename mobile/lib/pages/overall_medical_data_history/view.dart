@@ -74,7 +74,7 @@ class OverallMedicalDataHistoryPage
                           onPressed: () {
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
-                                .subtract(Duration(days: 1));
+                                .subtract(const Duration(days: 1));
                           },
                         ),
                         GestureDetector(
@@ -95,7 +95,7 @@ class OverallMedicalDataHistoryPage
                           onPressed: () {
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
-                                .add(Duration(days: 1));
+                                .add(const Duration(days: 1));
                           },
                         ),
                       ],

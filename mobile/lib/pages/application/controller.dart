@@ -119,6 +119,13 @@ class ApplicationController extends GetxController {
     log('Dữ liệu profile: ${state.profile.value.toString()}');
     log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');
     getUpdatedDataTime(); // Chuyển từ await sang chỉ gọi hàm để tạo stream lắng nghe
+    for (int i = 0; i < 10; i++) {
+      getUpdatedLatestMedical(i.toString());
+    }
+
+    state.medicalData.forEach((key, value) {
+      log('Dữ liệu y tế: $key - $value');
+    });
     super.onReady();
   }
 
@@ -149,6 +156,37 @@ class ApplicationController extends GetxController {
           log(data.toString());
           state.updateTime.value =
               '${DatetimeChange.getHourString(data['time'].toDate())} ${DatetimeChange.getDatetimeString(data['time'].toDate())}';
+        }
+      }, onError: (error) {
+        print('Error fetching updated time: $error');
+      });
+    } catch (e) {
+      print('Error setting up listener for updated time: $e');
+    }
+  }
+
+  void getUpdatedLatestMedical(String type) {
+    final db = FirebaseFirestore.instance;
+    try {
+      final time = Timestamp.fromDate(DateTime.now());
+
+      // Lắng nghe sự thay đổi của dữ liệu trong Firestore
+      db
+          .collection('medicalData')
+          .where('userId', isEqualTo: state.profile.value!.id!)
+          .where('typeId', isEqualTo: type)
+          .where('time', isLessThanOrEqualTo: time)
+          .orderBy('time', descending: true)
+          .limit(1)
+          .snapshots()
+          .listen((querySnapshot) {
+        if (querySnapshot.docs.isEmpty) {
+          state.medicalData[type] = '';
+        } else {
+          final data = querySnapshot.docs.first.data();
+          log(data.toString());
+          state.medicalData[type] = data;
+          // '${DatetimeChange.getHourString(data['time'].toDate())} ${DatetimeChange.getDatetimeString(data['time'].toDate())}';
         }
       }, onError: (error) {
         print('Error fetching updated time: $error');

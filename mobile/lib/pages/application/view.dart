@@ -65,7 +65,7 @@ class ApplicationPage extends GetView<ApplicationController> {
         children: [
           buildDrawerHeader(),
           ListTile(
-            onTap: () => Get.to(() => const MedicalDataHome()),
+            onTap: () => Get.to(() => MedicalDataHome()),
             leading: const Icon(Icons.monitor_heart),
             title: const Text('Dữ liệu sức khỏe'),
           ),
