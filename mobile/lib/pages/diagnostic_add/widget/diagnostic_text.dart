@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
+import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 
-class DiagnosticText extends StatefulWidget {
+class DiagnosticText extends StatelessWidget {
+  final controller = Get.find<DiagnosticAddController>();
+
+  DiagnosticText({super.key});
   @override
-  State<DiagnosticText> createState() => DiagnosticTextState();
-}
-
-class DiagnosticTextState extends State<DiagnosticText> {
   Widget build(BuildContext context) {
     return TextField(
       // minLines: 3,
@@ -23,7 +22,7 @@ class DiagnosticTextState extends State<DiagnosticText> {
           color: Theme.of(context).colorScheme.outline,
           fontSize: 16,
         ),
-        border: OutlineInputBorder(),
+        border: const OutlineInputBorder(),
         prefixIcon: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -33,8 +32,8 @@ class DiagnosticTextState extends State<DiagnosticText> {
             ),
           ],
         ),
-        // contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 100),
       ),
+      controller: controller.noteController,
     );
   }
 }

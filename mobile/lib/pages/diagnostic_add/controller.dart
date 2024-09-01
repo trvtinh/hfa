@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/data_box.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/view_data_box.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class DiagnosticAddController extends GetxController {
@@ -15,9 +20,30 @@ class DiagnosticAddController extends GetxController {
   final unitController = TextEditingController();
   final valueController = TextEditingController();
   final appController = Get.find<ApplicationController>();
+  final RxList<XFile> selectedFiles = <XFile>[].obs;
+  final RxList<String> selectedImagesURL = <String>[].obs;
   static int length = 5;
 
-  Future addDiagnostic() async {}
+  Future addDiagnostic(String medicalId, String toUId) async {
+    final data = Diagnostic(
+      content: noteController.text,
+      timestamp: Timestamp.fromDate(DateTime.now()),
+      fromUId: appController.state.profile.value!.id!,
+      toUId: toUId,
+      medicalId: medicalId,
+      imageURL: selectedImagesURL,
+    );
+    await FirebaseApi.addDocument('diagnostic', data.toMap());
+  }
+
+  Future<void> addImage() async {
+    for (var value in selectedFiles) {
+      final imageUrl = await FirebaseApi.uploadImage(value.path, 'diagnostic');
+      selectedImagesURL.add(imageUrl!);
+      log(value.toString());
+      log(selectedImagesURL.toString());
+    }
+  }
 
   @override
   void onInit() {
@@ -45,17 +71,6 @@ class DiagnosticAddController extends GetxController {
           value: Item.getUnit(ind[index]),
           unit: Item.getUnit(ind[index]),
           pos: index,
-        );
-      });
-
-  List<ViewDataBox> get listview => List.generate(view.length, (index) {
-        return ViewDataBox(
-          time: formatTimeOfDay(),
-          noteController: noteController,
-          leadingiconpath: Item.getIconPath(view[index]),
-          title: Item.getTitle(view[index]),
-          value: Item.getUnit(view[index]),
-          unit: Item.getUnit(view[index]),
         );
       });
 
@@ -108,3 +123,15 @@ class DiagnosticAddController extends GetxController {
     return dateTimestamp;
   }
 }
+
+
+ // List<ViewDataBox> get listview => List.generate(view.length, (index) {
+  //       return ViewDataBox(
+  //         time: formatTimeOfDay(),
+  //         noteController: noteController,
+  //         leadingiconpath: Item.getIconPath(view[index]),
+  //         title: Item.getTitle(view[index]),
+  //         value: Item.getUnit(view[index]),
+  //         unit: Item.getUnit(view[index]),
+  //       );
+  //     });

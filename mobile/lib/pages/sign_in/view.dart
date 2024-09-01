@@ -14,21 +14,6 @@ class SignInPage extends GetView<SignInController> {
 
   @override
   Widget build(BuildContext context) {
-    //sign user in method
-    void signUserIn() async {
-      // show loading circle
-      showDialog(
-        context: context,
-        builder: (context) {
-          return const Center(
-            child: CircularProgressIndicator(
-              color: Colors.black,
-            ),
-          );
-        },
-      );
-    }
-
     return Scaffold(
       // backgroundColor: Colors.grey[300],
       body: SafeArea(

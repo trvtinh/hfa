@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/add_file.dart';
@@ -8,25 +9,31 @@ import 'package:health_for_all/pages/diagnostic_add/widget/diagnostic_text.dart'
 import 'package:health_for_all/pages/diagnostic_add/widget/from_doctor.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/send_diagnostic.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/type_of_data.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 class DiagnosticAddView extends StatelessWidget {
-  DiagnosticAddView({super.key, required this.user});
-
+  DiagnosticAddView({
+    super.key,
+    required this.user,
+    required this.medicalData,
+  });
+  final notiController = Get.find<NotificationController>();
+  final MedicalEntity medicalData;
   final UserData user;
   final diagnosticController = Get.find<DiagnosticAddController>();
-  final RxList<XFile> selectedFiles = <XFile>[].obs;
 
   void updateFiles(List<XFile> newFiles) {
-    selectedFiles.assignAll(newFiles);
-    for (var i in selectedFiles) {
-      log('combobox : ${i.path}');
+    diagnosticController.selectedFiles.assignAll(newFiles);
+    for (var file in diagnosticController.selectedFiles) {
+      log('combobox: ${file.path}');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Thêm chẩn đoán'),
         elevation: 0,
@@ -41,12 +48,12 @@ class DiagnosticAddView extends StatelessWidget {
                   children: [
                     SendDiagnostic(user: user),
                     const SizedBox(height: 16),
-                    TypeOfData(),
+                    TypeOfData(medicalData: medicalData),
                     const SizedBox(height: 16),
                     DiagnosticText(),
                     const SizedBox(height: 16),
                     AddFile(
-                      files: selectedFiles.value,
+                      files: diagnosticController.selectedFiles,
                       onFilesChanged: updateFiles,
                     ),
                   ],
@@ -55,7 +62,7 @@ class DiagnosticAddView extends StatelessWidget {
             ),
             FromDoctor(
               doctorname: diagnosticController
-                      .appController.state.profile.value!.name ??
+                      .appController.state.profile.value?.name ??
                   "",
             ),
             _buildActionButtons(context),
@@ -89,48 +96,11 @@ class DiagnosticAddView extends StatelessWidget {
       width: (MediaQuery.of(context).size.width / 2) - 40,
       child: TextButton(
         onPressed: () async {
+          FocusScope.of(context).unfocus();
           if (label == 'Lưu') {
-            try {
-              // Show success dialog
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Thành công'),
-                    content: const Text('Dữ liệu đã được ghi nhận'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Dismiss the dialog
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            } catch (e) {
-              // Handle any errors
-              print('Error saving data: $e');
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Error'),
-                    content: const Text(
-                        'An error occurred while saving data. Please try again.'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Dismiss the dialog
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
+            await _handleSave(context);
+          } else {
+            Get.back();
           }
         },
         child: Text(
@@ -141,6 +111,82 @@ class DiagnosticAddView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _handleSave(BuildContext context) async {
+    try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      // Perform the saving operation
+      await diagnosticController.addImage();
+      await diagnosticController.addDiagnostic(
+        medicalData.id!,
+        user.id!,
+      );
+      notiController.addNoti(
+          'Chẩn đoán',
+          "${diagnosticController.appController.state.profile.value!.name!} đã gửi chuẩn đoán đến bạn",
+          "/",
+          'diagnostic',
+          user.id!,
+          'unread');
+      Future.delayed(const Duration(seconds: 1), () {
+        if (Get.isDialogOpen ?? false) {
+          Get.back(); // Close loading dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Thành công'),
+                content: Text(
+                    'Thành công thêm chẩn đoán cho bệnh nhân ${user.name!}'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Get.back(); // Close success dialog
+                      Get.back(); // Navigate back
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      });
+
+      // Clear the data after saving
+      diagnosticController.selectedFiles.clear();
+      diagnosticController.selectedImagesURL.clear();
+    } catch (e) {
+      // Handle any errors
+      log('Error saving data: $e');
+      _showErrorDialog(context);
+    }
+  }
+
+  void _showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: const Text(
+              'An error occurred while saving data. Please try again.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

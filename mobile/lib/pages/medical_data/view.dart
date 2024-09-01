@@ -35,9 +35,11 @@ class MedicalDataPage extends GetView<MedicalDataController> {
             size: 24,
             color: Theme.of(context).colorScheme.primary,
           ),
-          SizedBox(width: 12,),
+          const SizedBox(
+            width: 12,
+          ),
         ],
-      ),  
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [

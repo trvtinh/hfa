@@ -116,7 +116,12 @@ class Following extends GetView<FollowingController> {
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
-              return _buildUserTile(user, "Người thân");
+              return Column(
+                children: [
+                  _buildUserTile(user, "Người thân"),
+                  const SizedBox(height: 10),
+                ],
+              );
             },
           );
         } else {
@@ -145,7 +150,12 @@ class Following extends GetView<FollowingController> {
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
-              return _buildUserTile(user, "Bệnh nhân");
+              return Column(
+                children: [
+                  _buildUserTile(user, "Bệnh nhân"),
+                  const SizedBox(height: 10),
+                ],
+              );
             },
           );
         } else {

@@ -93,6 +93,7 @@ class OverallMedicalDataHistoryController extends GetxController {
           print(data.toString());
           if (data != null) {
             state.medicalId.value = data.id!;
+            state.selectedData.value = data;
             getAllCommentByMedicalType();
             log(state.medicalId.value);
             showDialog(
