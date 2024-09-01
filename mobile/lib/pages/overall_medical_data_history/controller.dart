@@ -161,7 +161,7 @@ class OverallMedicalDataHistoryController extends GetxController {
                                   images: data.imageUrls ?? [],
                                 ),
                                 CommentScreen(),
-                                DiagnosticScrenn(),
+                                DiagnosticScreen(),
                                 const Center(child: Text('Nội dung Tab 4')),
                               ],
                             ),

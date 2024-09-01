@@ -1,13 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/white_box.dart';
-import 'package:health_for_all/pages/overall_medical_data_history/binding.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
-
 import 'controller.dart';
 
 class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
@@ -22,6 +18,14 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
       appBar: AppBar(
         title: const Text('Đang theo dõi'),
         elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            controller.followingController.overallMedicalDataHistoryController
+                .state.selectedUserId.value = '';
+            Get.back();
+          },
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -87,13 +91,13 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 356,
                       height: 48,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.monitor_heart_outlined,
                             size: 48,
                             color: Color.fromRGBO(101, 85, 143, 1),
@@ -101,10 +105,10 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           SizedBox(
                             child: Row(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   height: 48,
-                                  child: const Column(
+                                  child: Column(
                                     children: [
                                       Text(
                                         "Chưa cập nhật",
@@ -124,10 +128,10 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                     ],
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   height: 48,
-                                  child: const Column(
+                                  child: Column(
                                     children: [
                                       Text(
                                         "Đã cập nhật",
@@ -147,10 +151,10 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                     ],
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 100,
                                   height: 48,
-                                  child: const Column(
+                                  child: Column(
                                     children: [
                                       Text(
                                         "Tổng số",

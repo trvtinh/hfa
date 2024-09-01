@@ -73,4 +73,10 @@ class FollowingController extends GetxController {
       getFollowingData(id);
     });
   }
+
+  @override
+  void onClose() {
+    overallMedicalDataHistoryController.dispose();
+    super.onClose();
+  }
 }

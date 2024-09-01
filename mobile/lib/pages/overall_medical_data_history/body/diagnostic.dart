@@ -4,8 +4,8 @@ import 'package:health_for_all/common/entities/dianostic.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
-class DiagnosticScrenn extends StatelessWidget {
-  DiagnosticScrenn({super.key});
+class DiagnosticScreen extends StatelessWidget {
+  DiagnosticScreen({super.key});
 
   final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
@@ -69,7 +69,7 @@ class DiagnosticScrenn extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
           onTap: () {
-            print('on tap');
+            // Get.to(() => DiagnosticScrenn());
           },
           child: Container(
             color: Colors.transparent,
