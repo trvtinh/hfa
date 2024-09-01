@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/dianostic.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
-import 'package:health_for_all/pages/diagnostic_add/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
 class DiagnosticScrenn extends StatelessWidget {
@@ -32,7 +31,7 @@ class DiagnosticScrenn extends StatelessWidget {
           () => Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border(
+                  border: const Border(
                     top: BorderSide(color: Colors.grey),
                     bottom: BorderSide(color: Colors.grey),
                   ),
@@ -54,7 +53,7 @@ class DiagnosticScrenn extends StatelessWidget {
                         return Column(
                           children: [
                             buildDianosticBox(dianostic, context, name),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             )
                           ],
@@ -70,7 +69,7 @@ class DiagnosticScrenn extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
           onTap: () {
-            Get.to(() => const DiagnosticAddView());
+            print('on tap');
           },
           child: Container(
             color: Colors.transparent,
@@ -94,7 +93,7 @@ class DiagnosticScrenn extends StatelessWidget {
   Widget buildDianosticBox(
       Dianostic dianostic, BuildContext context, String name) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).colorScheme.surfaceContainerLowest),
@@ -141,7 +140,7 @@ class DiagnosticScrenn extends StatelessWidget {
           ),
           const Row(
             children: [
-              Text('Đã chẩn đoán'),
+              Text('Đã bình luận'),
               SizedBox(
                 width: 6,
               ),

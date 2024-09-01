@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
-class OverallMedicalDataHistoryPage
-    extends GetView<OverallMedicalDataHistoryController> {
-  const OverallMedicalDataHistoryPage({super.key});
-
+class OverallMedicalDataHistoryPage extends StatelessWidget {
+  OverallMedicalDataHistoryPage({super.key});
+  final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
   Widget build(BuildContext context) {
     Future<void> _selectDate() async {

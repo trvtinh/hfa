@@ -3,9 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
 class FollowingController extends GetxController {
   final appController = Get.find<ApplicationController>();
+  final overallMedicalDataHistoryController =
+      Get.find<OverallMedicalDataHistoryController>();
   Map<dynamic, int> warningCountMap = <String, int>{}.obs;
   Map<String, String> updatedTimeMap = <String, String>{}.obs;
   Future getWarningCount(String id) async {

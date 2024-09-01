@@ -10,4 +10,5 @@ class OverrallMedicalDataHistoryState {
   RxList<Comment> commmentList = <Comment>[].obs;
   RxList<Dianostic> diagnosticList = <Dianostic>[].obs;
   RxString medicalId = ''.obs;
+  RxString selectedUserId = ''.obs;
 }

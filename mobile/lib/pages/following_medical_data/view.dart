@@ -1,11 +1,16 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/white_box.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/binding.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 
-class FollowingMedicalData extends StatelessWidget {
+import 'controller.dart';
+
+class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
   final UserData user;
   final String role;
   final String time;
@@ -44,7 +49,7 @@ class FollowingMedicalData extends StatelessWidget {
             const SizedBox(height: 16),
             GestureDetector(
               onTap: () {
-                log('ontap');
+                Get.to(() => OverallMedicalDataHistoryPage());
               },
               child: Container(
                 height: 124,

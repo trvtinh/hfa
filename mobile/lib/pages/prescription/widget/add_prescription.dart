@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/choose_type_med/view.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
 import 'package:intl/intl.dart';
 
@@ -73,12 +74,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
     );
   }
 
-  final controller = TextEditingController();
   Widget name() {
     return Container(
       width: MediaQuery.of(context).size.width - 32,
       child: TextField(
-        controller: controller,
+        controller: TextEditingController(),
         decoration: InputDecoration(
           label: Text("Tên đơn thuốc"),
           border: OutlineInputBorder(
@@ -133,10 +133,15 @@ class _AddPrescriptionState extends State<AddPrescription> {
                 ),
                 Row(
                   children: [
-                    Icon(
-                      Icons.add_circle_outline,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.primary,
+                    GestureDetector(
+                      onTap: (){
+                        Get.to(ChooseTypeMed());
+                      },
+                      child: Icon(
+                        Icons.add_circle_outline,
+                        size: 24,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     )
                   ],
                 )
@@ -160,8 +165,6 @@ class _AddPrescriptionState extends State<AddPrescription> {
     );
   }
 
-  String dropdownValue = 'Vitamin C';
-  List<String> list = <String>['Vitamin C'];
   Widget choose_med() {
     return Container(
       child: Row(
@@ -169,18 +172,25 @@ class _AddPrescriptionState extends State<AddPrescription> {
         children: [
           Row(
             children: [
-              DropdownMenu(
+              Container(
                 width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
-                initialSelection: dropdownValue,
-                onSelected: (String? value) {
-                  setState(() {
-                    dropdownValue = value!;
-                  });
-                },
-                dropdownMenuEntries:
-                    list.map<DropdownMenuEntry<String>>((String value) {
-                  return DropdownMenuEntry<String>(value: value, label: value);
-                }).toList(),
+                child: TextField(
+                  readOnly: true,
+                  controller: TextEditingController(),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                      color: Theme.of(context).colorScheme.outline,
+                      width: 1,
+                    )),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(
                 width: 12,
@@ -188,7 +198,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
               Container(
                 width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
                 child: TextField(
-                  controller: controller,
+                  controller: TextEditingController(),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                         borderSide: BorderSide(

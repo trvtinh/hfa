@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/application/controller.dart';
-import 'package:health_for_all/pages/following/Widget/PinkBox.dart';
+import 'package:health_for_all/pages/following/widget/PinkBox.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/following/controller.dart';
 import 'package:health_for_all/pages/following_medical_data/view.dart';
@@ -152,13 +153,17 @@ class Following extends GetView<FollowingController> {
     );
   }
 
-  Widget _buildUserTile(user, String role) {
+  Widget _buildUserTile(UserData user, String role) {
     return InkWell(
-      onTap: () => Get.to(() => Obx(() => FollowingMedicalData(
-            user: user,
-            role: role,
-            time: controller.updatedTimeMap[user.id] ?? '',
-          ))),
+      onTap: () {
+        controller.overallMedicalDataHistoryController.state.selectedUserId
+            .value = user.id ?? "";
+        Get.to(() => Obx(() => FollowingMedicalData(
+              user: user,
+              role: role,
+              time: controller.updatedTimeMap[user.id] ?? '',
+            )));
+      },
       child: Obx(() {
         final time = controller.updatedTimeMap[user.id] ?? '';
         final warningCount =
