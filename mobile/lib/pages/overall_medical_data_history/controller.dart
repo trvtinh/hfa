@@ -255,6 +255,9 @@ class OverallMedicalDataHistoryController extends GetxController {
     });
 
     ever(dateSelected, (_) {});
+    // ever(state.selectedUserId, (_) async {
+    //   await getUserData();
+    // });
   }
 
   Future fetchLastEventEveryData() async {

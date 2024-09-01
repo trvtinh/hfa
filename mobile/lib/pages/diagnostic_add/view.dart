@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
-import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/add_file.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/diagnostic_text.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/from_doctor.dart';
@@ -10,61 +10,59 @@ import 'package:health_for_all/pages/diagnostic_add/widget/send_diagnostic.dart'
 import 'package:health_for_all/pages/diagnostic_add/widget/type_of_data.dart';
 import 'package:image_picker/image_picker.dart';
 
-class DiagnosticAddView extends StatefulWidget {
-  const DiagnosticAddView({super.key});
+class DiagnosticAddView extends StatelessWidget {
+  DiagnosticAddView({super.key, required this.user});
 
-  @override
-  State<DiagnosticAddView> createState() => DiagnosticAddViewState();
-}
-
-class DiagnosticAddViewState extends State<DiagnosticAddView> {
+  final UserData user;
   final diagnosticController = Get.find<DiagnosticAddController>();
-  List<XFile> selectedFiles = [];
+  final RxList<XFile> selectedFiles = <XFile>[].obs;
+
   void updateFiles(List<XFile> newFiles) {
-    setState(() {
-      selectedFiles = newFiles;
-      for (var i in selectedFiles) {
-        log('combobox : ${i.path}');
-      }
-    });
+    selectedFiles.assignAll(newFiles);
+    for (var i in selectedFiles) {
+      log('combobox : ${i.path}');
+    }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Thêm chẩn đoán'),
-          elevation: 0,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SendDiagnostic(),
-                      const SizedBox(height: 16),
-                      TypeOfData(),
-                      const SizedBox(height: 16),
-                      DiagnosticText(),
-                      const SizedBox(height: 16),
-                      AddFile(
-                        files: selectedFiles,
-                        onFilesChanged: updateFiles,
-                      ),
-                    ],
-                  ),
+      appBar: AppBar(
+        title: const Text('Thêm chẩn đoán'),
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SendDiagnostic(user: user),
+                    const SizedBox(height: 16),
+                    TypeOfData(),
+                    const SizedBox(height: 16),
+                    DiagnosticText(),
+                    const SizedBox(height: 16),
+                    AddFile(
+                      files: selectedFiles.value,
+                      onFilesChanged: updateFiles,
+                    ),
+                  ],
                 ),
               ),
-              FromDoctor(
-                  doctorname: diagnosticController
-                          .appController.state.profile.value!.name ??
-                      ""),
-              _buildActionButtons(context),
-            ],
-          ),
-        ));
+            ),
+            FromDoctor(
+              doctorname: diagnosticController
+                      .appController.state.profile.value!.name ??
+                  "",
+            ),
+            _buildActionButtons(context),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildActionButtons(BuildContext context) {

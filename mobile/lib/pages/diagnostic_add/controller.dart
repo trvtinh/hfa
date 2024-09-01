@@ -17,6 +17,8 @@ class DiagnosticAddController extends GetxController {
   final appController = Get.find<ApplicationController>();
   static int length = 5;
 
+  Future addDiagnostic() async {}
+
   @override
   void onInit() {
     // TODO: implement onInit

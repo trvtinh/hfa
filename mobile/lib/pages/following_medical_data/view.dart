@@ -23,6 +23,8 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
           onPressed: () {
             controller.followingController.overallMedicalDataHistoryController
                 .state.selectedUserId.value = '';
+            controller.followingController.overallMedicalDataHistoryController
+                .state.selectedUser.value = UserData();
             Get.back();
           },
         ),

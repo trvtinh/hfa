@@ -157,7 +157,11 @@ class _FollowingPageState extends State<FollowingPage> {
                         name: user.user!.name!,
                         description: user.user!.id!,
                         imageUrl: user.user!.photourl!,
-                        role: user.role!,
+                        role: user.role! == 'doctor'
+                            ? 'Bác sĩ'
+                            : user.role! == 'patient'
+                                ? 'Bệnh nhân'
+                                : 'Người thân',
                         onDone: () async {
                           // Xử lý cho vai trò 'doctor'
                           if (user.role == 'doctor') {

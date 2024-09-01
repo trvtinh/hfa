@@ -36,7 +36,7 @@ class FollowingPersonBox extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            radius: 28,
+            radius: 24,
             backgroundImage: NetworkImage(avapath),
           ),
           const SizedBox(
@@ -54,14 +54,14 @@ class FollowingPersonBox extends StatelessWidget {
                 ),
               ),
               Text(
-                gender,
+                'Giới tính: $gender',
                 style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.outline,
                 ),
               ),
               Text(
-                '$age tuổi',
+                'Tuổi: $age',
                 style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.outline,
@@ -70,30 +70,20 @@ class FollowingPersonBox extends StatelessWidget {
             ],
           ),
           const Spacer(),
-          SizedBox(
-            width: 140,
-            height: 52,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: 120,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Theme.of(context).colorScheme.primaryFixedDim,
-                  ),
-                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                  child: Text(
-                    person,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
+          Container(
+            height: 24,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: Theme.of(context).colorScheme.primaryFixedDim,
+            ),
+            padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+            child: Text(
+              person,
+              style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ],

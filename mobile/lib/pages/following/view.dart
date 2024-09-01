@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/application/controller.dart';
-import 'package:health_for_all/pages/following/widget/PinkBox.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/following/Widget/PinkBox.dart';
 import 'package:health_for_all/pages/following/controller.dart';
 import 'package:health_for_all/pages/following_medical_data/view.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
@@ -158,6 +160,9 @@ class Following extends GetView<FollowingController> {
       onTap: () {
         controller.overallMedicalDataHistoryController.state.selectedUserId
             .value = user.id ?? "";
+        controller.overallMedicalDataHistoryController.state.selectedUser
+            .value = user;
+        log('User id: ${controller.overallMedicalDataHistoryController.state.selectedUser.value.id}');
         Get.to(() => Obx(() => FollowingMedicalData(
               user: user,
               role: role,
