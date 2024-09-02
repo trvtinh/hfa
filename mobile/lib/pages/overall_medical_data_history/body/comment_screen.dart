@@ -31,7 +31,7 @@ class CommentScreen extends StatelessWidget {
           () => Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border(
+                  border: const Border(
                     top: BorderSide(color: Colors.grey),
                     bottom: BorderSide(color: Colors.grey),
                   ),
@@ -53,7 +53,7 @@ class CommentScreen extends StatelessWidget {
                         return Column(
                           children: [
                             buildBoxComment(comment, context, name),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             )
                           ],
@@ -107,7 +107,7 @@ class CommentScreen extends StatelessWidget {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
       return Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Theme.of(context).colorScheme.surfaceContainerLowest),

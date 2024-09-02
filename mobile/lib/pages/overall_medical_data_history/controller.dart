@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:health_for_all/common/entities/comment.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/comment_screen.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/detail_screen.dart';

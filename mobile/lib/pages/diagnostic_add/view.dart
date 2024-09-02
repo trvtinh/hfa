@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
@@ -123,17 +124,21 @@ class DiagnosticAddView extends StatelessWidget {
 
       // Perform the saving operation
       await diagnosticController.addImage();
-      await diagnosticController.addDiagnostic(
+      final docId = await diagnosticController.addDiagnostic(
         medicalData.id!,
         user.id!,
       );
-      notiController.addNoti(
+      FirebaseMessagingApi.sendMessage(
+          user.fcmtoken!,
           'Chẩn đoán',
           "${diagnosticController.appController.state.profile.value!.name!} đã gửi chuẩn đoán đến bạn",
-          "/",
           'diagnostic',
+          '/',
           user.id!,
-          'unread');
+          'unread',
+          diagnosticId: docId,
+          medicalId: medicalData.id!);
+
       Future.delayed(const Duration(seconds: 1), () {
         if (Get.isDialogOpen ?? false) {
           Get.back(); // Close loading dialog

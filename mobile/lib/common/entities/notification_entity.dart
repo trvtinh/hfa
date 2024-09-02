@@ -10,7 +10,8 @@ class NotificationEntity {
   String? toUId;
   String? fromUId;
   String? status;
-
+  String? medicalId;
+  String? diagnosticId;
   NotificationEntity({
     this.title,
     this.body,
@@ -21,11 +22,13 @@ class NotificationEntity {
     this.toUId,
     this.fromUId,
     this.status,
+    this.medicalId,
+    this.diagnosticId,
   });
 
   @override
   String toString() {
-    return 'NotificationEntity{title: $title, body: $body, type: $type, id: $id, time: $time, page: $page, uid: $toUId}';
+    return 'NotificationEntity{title: $title, body: $body, type: $type, id: $id, time: $time, page: $page, uid: $toUId, from_uid: $fromUId, status: $status,  medicalId: $medicalId, diagnosticId: $diagnosticId}';
   }
 
   Map<String, dynamic> toMap() {
@@ -39,6 +42,8 @@ class NotificationEntity {
       'to_uid': toUId,
       'from_uid': fromUId,
       'status': status,
+      'medical_id': medicalId,
+      'diagnostic_id': diagnosticId,
     };
   }
 
@@ -54,6 +59,8 @@ class NotificationEntity {
       toUId: data['to_uid'],
       fromUId: data['from_uid'],
       status: data['status'],
+      medicalId: data['medical_id'],
+      diagnosticId: data['diagnostic_id'],
     );
   }
 }

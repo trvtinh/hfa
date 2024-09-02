@@ -33,7 +33,8 @@ class DiagnosticAddController extends GetxController {
       medicalId: medicalId,
       imageURL: selectedImagesURL,
     );
-    await FirebaseApi.addDocument('diagnostic', data.toMap());
+    final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
+    return docId;
   }
 
   Future<void> addImage() async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:health_for_all/pages/diagnostic/page/important_view.dart';
-import 'package:health_for_all/pages/diagnostic/page/unread_view.dart';
-import 'package:health_for_all/pages/diagnostic/page/seen_view.dart';
+import 'package:health_for_all/pages/diagnostic/screen/important_view.dart';
+import 'package:health_for_all/pages/diagnostic/screen/unread_view.dart';
+import 'package:health_for_all/pages/diagnostic/screen/seen_view.dart';
 
 class DiagnosticPage extends StatelessWidget {
   const DiagnosticPage({super.key});
@@ -36,17 +36,6 @@ class DiagnosticPage extends StatelessWidget {
               ],
             ),
           ),
-          // body:
-          // Obx(
-          //   () => controller.appController.state.profile.value != null
-          //       ? const TabBarView(
-          //           children: [
-          //             UnreadPage(),
-          //             ImportantPage(),
-          //             SeenPage(),
-          //           ],
-          //         )
-          // ),
           body: const TabBarView(
             children: [
               UnreadPage(),
