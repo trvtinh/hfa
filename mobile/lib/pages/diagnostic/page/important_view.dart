@@ -10,7 +10,7 @@ class ImportantPage extends StatefulWidget {
 }
 
 class _ImportantPageState extends State<ImportantPage> {
-  List<bool> _isExpandedList = [false, false, false, false, false];
+  List<bool> important = [true, true, true, true, true];
 
   List<String> notifications = [
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
@@ -66,36 +66,13 @@ class _ImportantPageState extends State<ImportantPage> {
     '0',
     '0',
     '3',
-    '0',
   ];
 
-  List<bool> isattached = [
-    true,
-    true,
-    false,
-    false,
-    true,
-    false,
-  ];
-
-  List<bool> important = [
-    true,
-    true,
-    true,
-    true,
-    true,
-    true,
-  ];
+  List<bool> isattached = [true, true, false, false, true];
 
   void _setImportant(int index) {
     setState(() {
       important[index] = !important[index];
-    });
-  }
-
-  void _toggleContainer(int index) {
-    setState(() {
-      _isExpandedList[index] = !_isExpandedList[index];
     });
   }
 
@@ -107,331 +84,232 @@ class _ImportantPageState extends State<ImportantPage> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
-            children: List.generate(_isExpandedList.length, (index) {
-              return GestureDetector(
-                onTap: () => _toggleContainer(index),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  width: MediaQuery.of(context).size.width,
-                  height: _isExpandedList[index]
-                      ? isattached[index]
-                          ? 190
-                          : 168
-                      : 104,
-                  margin: EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerLow,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  padding: EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 16,
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.health_and_safety_outlined,
-                                  size: 16,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      '•',
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  doctors[index],
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: Align(
-                                    alignment: Alignment.topCenter,
-                                    child: Text(
-                                      '•',
-                                      style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  time[index],
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSurfaceVariant,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 6,
-                                ),
-                                Icon(
-                                  Icons.star,
-                                  color: important[index]
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .surfaceContainerLow,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                            Icon(
-                              _isExpandedList[index]
-                                  ? Icons.keyboard_arrow_up_outlined
-                                  : Icons.keyboard_arrow_down_outlined,
-                              size: 16,
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      SizedBox(
-                        height: 20,
-                        width: 348,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Đã gửi chẩn đoán',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  '•',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              title[index],
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  '•',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Text(
-                              '${value[index]} ${unit[index]}',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        notifications[index],
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          fontSize: 14,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      isattached[index]
-                          ? Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 18,
-                                      width: 95,
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.attach_file_outlined,
-                                            size: 18,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
-                                          SizedBox(
-                                            width: 4,
-                                          ),
-                                          SizedBox(
-                                            width: 73,
-                                            height: 18,
-                                            child: Text(
-                                              'Đính kèm (' +
-                                                  attachments[index] +
-                                                  ')',
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                              ),
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 4,
-                                ),
-                              ],
-                            )
-                          : SizedBox(
-                              height: 0,
-                            ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(() => DetailView(
-                                    index: index,
-                                  ));
-                            },
-                            child: SizedBox(
-                              height: 40,
-                              width:
-                                  (MediaQuery.of(context).size.width - 64) / 3,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Chi tiết',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          // const VerticalDivider(
-                          //   // width: 0,
-                          //   // indent: 0,
-                          //   // endIndent: 0,
-                          //   thickness: 5,
-                          //   color: Colors.black,
-                          // ),
-                          InkWell(
-                            onTap: () {
-                              _setImportant(index);
-                            },
-                            child: SizedBox(
-                              height: 40,
-                              width:
-                                  (MediaQuery.of(context).size.width - 64) / 3,
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Icon(
-                                    important[index]
-                                        ? Icons.star
-                                        : Icons.star_border_outlined,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    size: 18,
-                                  ),
-                                  SizedBox(
-                                    width: 8,
-                                  ),
-                                  Text(
-                                    'Quan trọng',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {},
-                            child: SizedBox(
-                              height: 40,
-                              width:
-                                  (MediaQuery.of(context).size.width - 64) / 3,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'Đã đọc',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
+            children: List.generate(notifications.length, (index) {
+              return NotificationContainer(
+                doctor: doctors[index],
+                time: time[index],
+                title: title[index],
+                value: value[index],
+                unit: unit[index],
+                notification: notifications[index],
+                isImportant: important[index],
+                attachments: attachments[index],
+                isAttached: isattached[index],
+                onTapImportant: () => _setImportant(index),
+                onTapDetail: () {
+                  Get.to(() => DetailView(index: index));
+                },
               );
             }),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class NotificationContainer extends StatelessWidget {
+  final String doctor;
+  final String time;
+  final String title;
+  final String value;
+  final String unit;
+  final String notification;
+  final bool isImportant;
+  final String attachments;
+  final bool isAttached;
+  final VoidCallback onTapImportant;
+  final VoidCallback onTapDetail;
+
+  const NotificationContainer({
+    Key? key,
+    required this.doctor,
+    required this.time,
+    required this.title,
+    required this.value,
+    required this.unit,
+    required this.notification,
+    required this.isImportant,
+    required this.attachments,
+    required this.isAttached,
+    required this.onTapImportant,
+    required this.onTapDetail,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.health_and_safety_outlined,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    doctor,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Text(
+                    time,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Icon(
+                    Icons.star,
+                    color: isImportant
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.surfaceContainerLow,
+                    size: 16,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Text(
+                'Đã gửi chẩn đoán',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                title,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Text(
+                '$value $unit',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(
+            notification,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSecondaryContainer,
+              fontSize: 14,
+            ),
+          ),
+          const SizedBox(height: 4),
+          if (isAttached)
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.attach_file_outlined,
+                      size: 18,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Đính kèm ($attachments)',
+                      style: const TextStyle(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: onTapDetail,
+                child: SizedBox(
+                  height: 40,
+                  width: (MediaQuery.of(context).size.width - 64) / 3,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Chi tiết',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: onTapImportant,
+                child: SizedBox(
+                  height: 40,
+                  width: (MediaQuery.of(context).size.width - 64) / 3,
+                  child: Row(
+                    children: [
+                      const SizedBox(width: 8),
+                      Icon(
+                        isImportant ? Icons.star : Icons.star_border_outlined,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Quan trọng',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {},
+                child: SizedBox(
+                  height: 40,
+                  width: (MediaQuery.of(context).size.width - 64) / 3,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Đã đọc',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
