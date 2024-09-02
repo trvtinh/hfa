@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
-class OverallMedicalDataHistoryPage
-    extends GetView<OverallMedicalDataHistoryController> {
+class OverallMedicalDataHistoryPage extends StatelessWidget {
   OverallMedicalDataHistoryPage({super.key});
-
+  final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
   Widget build(BuildContext context) {
     Future<void> _selectDate() async {
@@ -75,7 +73,7 @@ class OverallMedicalDataHistoryPage
                           onPressed: () {
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
-                                .subtract(Duration(days: 1));
+                                .subtract(const Duration(days: 1));
                           },
                         ),
                         GestureDetector(
@@ -96,7 +94,7 @@ class OverallMedicalDataHistoryPage
                           onPressed: () {
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
-                                .add(Duration(days: 1));
+                                .add(const Duration(days: 1));
                           },
                         ),
                       ],

@@ -44,11 +44,11 @@ class OverallMedicalDataHistoryController extends GetxController {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Lỗi'),
+            title: const Text('Lỗi'),
             content: Text('Lỗi thêm bình luận: $e'),
             actions: <Widget>[
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -93,16 +93,18 @@ class OverallMedicalDataHistoryController extends GetxController {
           print(data.toString());
           if (data != null) {
             state.medicalId.value = data.id!;
+            state.selectedData.value = data;
             getAllCommentByMedicalType();
             log(state.medicalId.value);
             showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  contentPadding: EdgeInsets.zero,
-                  content: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  content: SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: DefaultTabController(
                       length: 4,
@@ -160,16 +162,15 @@ class OverallMedicalDataHistoryController extends GetxController {
                                   images: data.imageUrls ?? [],
                                 ),
                                 CommentScreen(),
-                                DiagnosticScrenn(),
+                                DiagnosticScreen(),
                                 const Center(child: Text('Nội dung Tab 4')),
                               ],
                             ),
                           ),
                           const TabBar(
+                            labelPadding: EdgeInsets.symmetric(horizontal: 1),
                             tabs: [
-                              Tab(
-                                text: 'Chi tiết',
-                              ),
+                              Tab(text: 'Chi tiết'),
                               Tab(text: 'Bình luận'),
                               Tab(text: 'Chuẩn đoán'),
                               Tab(text: 'Cảnh báo'),
@@ -201,7 +202,6 @@ class OverallMedicalDataHistoryController extends GetxController {
               },
             );
           } else {
-            print('No data available');
             showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -256,6 +256,9 @@ class OverallMedicalDataHistoryController extends GetxController {
     });
 
     ever(dateSelected, (_) {});
+    // ever(state.selectedUserId, (_) async {
+    //   await getUserData();
+    // });
   }
 
   Future fetchLastEventEveryData() async {
@@ -304,8 +307,10 @@ class OverallMedicalDataHistoryController extends GetxController {
           .collection('medicalData')
           .where('typeId', isEqualTo: typeId)
           .where('userId',
-              isEqualTo: appController.state.profile.value
-                  ?.id) // Lọc tài liệu với 'time' >= startOfDay
+              isEqualTo: state.selectedUserId.value != ""
+                  ? state.selectedUserId.value
+                  : appController.state.profile.value
+                      ?.id) // Lọc tài liệu với 'time' >= startOfDay
           .where('time',
               isLessThanOrEqualTo: time) // Lọc tài liệu với 'time' <= endOfDay
           .orderBy('time', descending: true) // Sắp xếp theo 'time' giảm dần
@@ -357,7 +362,10 @@ class OverallMedicalDataHistoryController extends GetxController {
       final querySnapshot = await db
           .collection('medicalData')
           .where('typeId', isEqualTo: typeId)
-          .where('userId', isEqualTo: appController.state.profile.value?.id)
+          .where('userId',
+              isEqualTo: state.selectedUserId.value != ""
+                  ? state.selectedUserId.value
+                  : appController.state.profile.value?.id)
           .where('time',
               isGreaterThanOrEqualTo:
                   startTimestamp) // Lọc tài liệu với 'time' >= startOfDay
@@ -415,7 +423,10 @@ class OverallMedicalDataHistoryController extends GetxController {
       final querySnapshot = await db
           .collection('medicalData')
           .where('typeId', isEqualTo: typeId)
-          .where('userId', isEqualTo: appController.state.profile.value?.id)
+          .where('userId',
+              isEqualTo: state.selectedUserId.value != ""
+                  ? state.selectedUserId.value
+                  : appController.state.profile.value?.id)
           .where('time',
               isGreaterThanOrEqualTo:
                   startTimestamp) // Lọc tài liệu với 'time' >= startOfDay

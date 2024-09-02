@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/enum/type_notification_status.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
-import 'package:health_for_all/pages/notification/screen/unread.dart';
-import 'package:health_for_all/pages/notification/screen/notice.dart';
+import 'package:health_for_all/pages/notification/screen/notification_screen.dart';
 
 class NotificationPage extends GetView<NotificationController> {
   const NotificationPage({super.key});
@@ -74,7 +74,7 @@ class NotificationPage extends GetView<NotificationController> {
                           width: 2,
                         ),
                         Obx(() {
-                          if (controller.state.unread.value > 0) {
+                          if (controller.state.warning.value > 0) {
                             return Container(
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
@@ -114,7 +114,7 @@ class NotificationPage extends GetView<NotificationController> {
                           width: 2,
                         ),
                         Obx(() {
-                          if (controller.state.unread.value > 0) {
+                          if (controller.state.reminder.value > 0) {
                             return Container(
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
@@ -154,7 +154,7 @@ class NotificationPage extends GetView<NotificationController> {
                           width: 2,
                         ),
                         Obx(() {
-                          if (controller.state.unread.value > 0) {
+                          if (controller.state.read.value > 0) {
                             return Container(
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
@@ -163,7 +163,7 @@ class NotificationPage extends GetView<NotificationController> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                      controller.state.unread.value.toString(),
+                                      controller.state.read.value.toString(),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -181,15 +181,21 @@ class NotificationPage extends GetView<NotificationController> {
           Expanded(
               child: TabBarView(
             children: [
-              Unread(
-                uid: controller.appController.state.profile.value!.id!,
-                type: 'unread',
+              NotificationScreen(
+                uid: controller.state.profile.value!.id!,
+                status: TypeNotificationStatus.unread,
               ),
-              Notice(),
-              Notice(),
-              Unread(
-                uid: controller.appController.state.profile.value!.id!,
-                type: 'read',
+              NotificationScreen(
+                uid: controller.state.profile.value!.id!,
+                status: TypeNotificationStatus.warning,
+              ),
+              NotificationScreen(
+                uid: controller.state.profile.value!.id!,
+                status: TypeNotificationStatus.reminder,
+              ),
+              NotificationScreen(
+                uid: controller.state.profile.value!.id!,
+                status: TypeNotificationStatus.read,
               ),
             ],
           ))

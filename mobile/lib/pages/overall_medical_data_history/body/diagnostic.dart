@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/entities/dianostic.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/diagnostic_add/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
-class DiagnosticScrenn extends StatelessWidget {
-  DiagnosticScrenn({super.key});
+class DiagnosticScreen extends StatelessWidget {
+  DiagnosticScreen({super.key});
 
   final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
@@ -31,7 +32,7 @@ class DiagnosticScrenn extends StatelessWidget {
           () => Expanded(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border(
+                  border: const Border(
                     top: BorderSide(color: Colors.grey),
                     bottom: BorderSide(color: Colors.grey),
                   ),
@@ -40,9 +41,9 @@ class DiagnosticScrenn extends StatelessWidget {
               child: ListView.builder(
                 itemCount: controller.state.diagnosticList.length,
                 itemBuilder: (context, index) {
-                  final dianostic = controller.state.diagnosticList[index];
+                  final diagnostic = controller.state.diagnosticList[index];
                   return FutureBuilder<String>(
-                    future: controller.getUser(dianostic.userId),
+                    future: controller.getUser(diagnostic.fromUId!),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -52,8 +53,8 @@ class DiagnosticScrenn extends StatelessWidget {
                         final name = snapshot.data ?? 'Unknown';
                         return Column(
                           children: [
-                            buildDianosticBox(dianostic, context, name),
-                            SizedBox(
+                            buildDiagnosticBox(diagnostic, context, name),
+                            const SizedBox(
                               height: 16,
                             )
                           ],
@@ -69,7 +70,9 @@ class DiagnosticScrenn extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
           onTap: () {
-            print('on tap');
+            Get.to(() => DiagnosticAddView(
+                user: controller.state.selectedUser.value,
+                medicalData: controller.state.selectedData.value));
           },
           child: Container(
             color: Colors.transparent,
@@ -90,10 +93,10 @@ class DiagnosticScrenn extends StatelessWidget {
     );
   }
 
-  Widget buildDianosticBox(
-      Dianostic dianostic, BuildContext context, String name) {
+  Widget buildDiagnosticBox(
+      Diagnostic diagnostic, BuildContext context, String name) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Theme.of(context).colorScheme.surfaceContainerLowest),
@@ -123,7 +126,7 @@ class DiagnosticScrenn extends StatelessWidget {
                 width: 6,
               ),
               Text(
-                '${DatetimeChange.getHourString(dianostic.timestamp.toDate())}, ${DatetimeChange.getDatetimeString(dianostic.timestamp.toDate())}',
+                '${DatetimeChange.getHourString(diagnostic.timestamp!.toDate())}, ${DatetimeChange.getDatetimeString(diagnostic.timestamp!.toDate())}',
                 style: TextStyle(
                     fontSize: 12,
                     color: Theme.of(context).colorScheme.onPrimaryContainer),
@@ -150,7 +153,7 @@ class DiagnosticScrenn extends StatelessWidget {
               // ),
             ],
           ),
-          Text(dianostic.content)
+          Text(diagnostic.content!)
         ],
       ),
     );

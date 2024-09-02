@@ -137,7 +137,7 @@ class FirebaseMessagingApi {
   }
 
   static Future sendMessage(String fcmtoken, String title, String body,
-      String type, String page, String uid) async {
+      String type, String page, String uid, String status) async {
     final String serverkey = await getAccessToken();
     const String endpointCloudMessaging =
         'https://fcm.googleapis.com/v1/projects/hfa---health-for-all/messages:send';
@@ -145,7 +145,7 @@ class FirebaseMessagingApi {
       'message': {
         "token": fcmtoken,
         'notification': {"title": title, "body": body},
-        'data': {"page": page, 'type': type}
+        'data': {"page": page, 'type': type, 'status': status}
       }
     };
     try {
@@ -158,8 +158,10 @@ class FirebaseMessagingApi {
               })
           .then((response) => log('thanh cong gui tin nhan$response'))
           .catchError((e) => log(e.toString()));
-      notiController.addNoti(title, body, page, type, uid);
-    } catch (e) {}
+      notiController.addNoti(title, body, page, type, uid, status);
+    } catch (e) {
+      print('Error sending message: $e');
+    }
   }
 
   static Future<String> getAccessToken() async {

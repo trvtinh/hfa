@@ -257,7 +257,8 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                             "${appController.state.profile.value!.name!} muốn trở thành người nhà của bạn",
                             'unread',
                             'follow',
-                            widget.follower['id']);
+                            widget.follower['id'],
+                            'common');
                       } else {
                         if (widget.following) {
                           controller.sendRequest(
@@ -268,7 +269,8 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                               "${appController.state.profile.value!.name!} muốn trở trành bác sĩ của bạn",
                               "unread",
                               "follow",
-                              widget.follower['id']);
+                              widget.follower['id'],
+                              'common');
                         } else {
                           controller.sendRequest(
                               widget.follower['id'], 'patient');
@@ -278,7 +280,8 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                               "${appController.state.profile.value!.name!} muốn trở trành bệnh nhân của bạn",
                               "unread",
                               "follow",
-                              widget.follower['id']);
+                              widget.follower['id'],
+                              'common');
                         }
                       }
                     }

@@ -2,6 +2,9 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/chatbot/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
+import 'package:health_for_all/pages/diagnostic_add/controller.dart';
+import 'package:health_for_all/pages/following/controller.dart';
+import 'package:health_for_all/pages/following_medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
@@ -25,6 +28,10 @@ class ApplicationBinding implements Bindings {
     Get.lazyPut(() => ReminderController(), fenix: true);
     Get.lazyPut(() => ConnectHardwareController(), fenix: true);
     Get.lazyPut(() => NotificationController(), fenix: true);
+    Get.lazyPut(() => DiagnosticAddController(), fenix: true);
+    Get.lazyPut(() => FollowingController(), fenix: true);
+    Get.lazyPut(() => FollowingMedicalDataController(), fenix: true);
+
     // Get.lazyPut(() => HomeController());
     // Get.lazyPut(() => PostController());
     // Get.lazyPut(()=> ProfileController());

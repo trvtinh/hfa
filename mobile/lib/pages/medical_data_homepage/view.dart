@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/user.dart';
+import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/medical_data_homepage/widget/GreyBox.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 
 class MedicalDataHome extends StatelessWidget {
-  const MedicalDataHome({super.key});
+  MedicalDataHome({super.key, this.time, this.user});
+  final String? time;
+  final UserData? user;
+  final appController = Get.find<ApplicationController>();
 
   @override
   Widget build(BuildContext context) {
@@ -21,25 +27,101 @@ class MedicalDataHome extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-          child: Column(
-            children: [
-              _buildHeader(context),
-              const SizedBox(height: 16),
-              _buildButtons(context),
-              const SizedBox(height: 16),
-              _buildGreyBoxRow1(),
-              const SizedBox(height: 16),
-              _buildGreyBoxRow2(),
-              const SizedBox(height: 16),
-              _buildGreyBoxRow3(),
-              const SizedBox(height: 16),
-              _buildGreyBoxRow4(),
-              const SizedBox(height: 16),
-              _buildGreyBoxRow5(),
-            ],
-          ),
-        ),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            child: Obx(
+              () => Column(
+                children: [
+                  _buildHeader(context),
+                  const SizedBox(height: 16),
+                  _buildButtons(context),
+                  const SizedBox(height: 16),
+                  _buildGreyBoxRow1(
+                    appController.state.medicalData['3'] != ""
+                        ? appController.state.medicalData['3']['value']
+                        : "",
+                    appController.state.medicalData['3'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['3']['time'])
+                        : "",
+                    appController.state.medicalData['4'] != ""
+                        ? appController.state.medicalData['4']['value']
+                        : "",
+                    appController.state.medicalData['4'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['4']['time'])
+                        : "",
+                  ),
+                  const SizedBox(height: 16),
+                  _buildGreyBoxRow2(
+                    appController.state.medicalData['0'] != ""
+                        ? appController.state.medicalData['0']['value']
+                        : "",
+                    appController.state.medicalData['0'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['0']['time'])
+                        : "",
+                    appController.state.medicalData['2'] != ""
+                        ? appController.state.medicalData['2']['value']
+                        : "",
+                    appController.state.medicalData['2'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['2']['time'])
+                        : "",
+                  ),
+                  const SizedBox(height: 16),
+                  _buildGreyBoxRow3(
+                    appController.state.medicalData['5'] != ""
+                        ? appController.state.medicalData['5']['value']
+                        : "",
+                    appController.state.medicalData['5'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['5']['time'])
+                        : "",
+                    appController.state.medicalData['6'] != ""
+                        ? appController.state.medicalData['6']['value']
+                        : "",
+                    appController.state.medicalData['6'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['6']['time'])
+                        : "",
+                  ),
+                  const SizedBox(height: 16),
+                  _buildGreyBoxRow4(
+                    appController.state.medicalData['1'] != ""
+                        ? appController.state.medicalData['1']['value']
+                        : "",
+                    appController.state.medicalData['1'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['1']['time'])
+                        : "",
+                    appController.state.medicalData['9'] != ""
+                        ? appController.state.medicalData['9']['value']
+                        : "",
+                    appController.state.medicalData['9'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['9']['time'])
+                        : "",
+                  ),
+                  const SizedBox(height: 16),
+                  _buildGreyBoxRow5(
+                    appController.state.medicalData['7'] != ""
+                        ? appController.state.medicalData['7']['value']
+                        : "",
+                    appController.state.medicalData['7'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['7']['time'])
+                        : "",
+                    appController.state.medicalData['8'] != ""
+                        ? appController.state.medicalData['8']['value']
+                        : "",
+                    appController.state.medicalData['8'] != ""
+                        ? DatetimeChange.timestamptoHHMMDDMMYYYY(
+                            appController.state.medicalData['8']['time'])
+                        : "",
+                  ),
+                ],
+              ),
+            )),
       ),
     );
   }
@@ -61,10 +143,10 @@ class MedicalDataHome extends StatelessWidget {
         ),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
+          const Row(
             children: [
               Icon(
                 Icons.monitor_heart_outlined,
@@ -81,8 +163,8 @@ class MedicalDataHome extends StatelessWidget {
             ],
           ),
           Text(
-            "Cập nhật lúc 06:00, 27/07/2024",
-            style: TextStyle(
+            time != "" ? time! : "Chưa cập nhật",
+            style: const TextStyle(
               color: Color.fromRGBO(121, 116, 126, 1),
               fontSize: 12,
             ),
@@ -105,7 +187,7 @@ class MedicalDataHome extends StatelessWidget {
             label: "Tất cả",
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
@@ -155,30 +237,31 @@ class MedicalDataHome extends StatelessWidget {
     );
   }
 
-  Widget _buildGreyBoxRow1() {
-    return const Row(
+  Widget _buildGreyBoxRow1(
+      String value1, String time1, String value2, String time2) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
           child: GreyBox(
             title: 'Nhịp tim',
             iconpath: 'assets/medical_data_Home_images/heart-rate.png',
-            value: '80',
+            value: value1,
             unit: 'lần/phút',
-            time: '06:00, 27/07/2024',
+            time: time1,
             warning: false,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
           child: GreyBox(
             title: 'SPO2',
             iconpath: 'assets/medical_data_Home_images/spo2.png',
-            value: '98',
+            value: value2,
             unit: '%',
-            time: '06:00, 27/07/2024',
+            time: time2,
             warning: false,
           ),
         ),
@@ -186,30 +269,31 @@ class MedicalDataHome extends StatelessWidget {
     );
   }
 
-  Widget _buildGreyBoxRow2() {
-    return const Row(
+  Widget _buildGreyBoxRow2(
+      String value1, String time1, String value2, String time2) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
           child: GreyBox(
             title: 'Huyết áp',
             iconpath: 'assets/medical_data_Home_images/blood-pressure.png',
-            value: '120/80',
+            value: value1 != "" ? value1 : "--",
             unit: 'mmHg',
-            time: '06:00, 27/07/2024',
+            time: time1 == '' ? "Chưa cập nhật" : time1,
             warning: false,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
           child: GreyBox(
             title: 'Đường huyết',
             iconpath: 'assets/medical_data_Home_images/blood sugar.png',
-            value: '100',
+            value: value2 != "" ? value2 : "--",
             unit: 'mg/dL',
-            time: '06:00, 27/07/2024',
+            time: time2 == '' ? "Chưa cập nhật" : time2,
             warning: false,
           ),
         ),
@@ -217,30 +301,31 @@ class MedicalDataHome extends StatelessWidget {
     );
   }
 
-  Widget _buildGreyBoxRow3() {
-    return const Row(
+  Widget _buildGreyBoxRow3(
+      String value1, String time1, String value2, String time2) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
           child: GreyBox(
             title: 'HRV',
             iconpath: 'assets/medical_data_Home_images/favorite_border.png',
-            value: '--',
+            value: value1 != "" ? value1 : "--",
             unit: 'ms',
-            time: '-',
+            time: time1 == '' ? "Chưa cập nhật" : time1,
             warning: false,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
           child: GreyBox(
             title: 'ECG',
             iconpath: 'assets/medical_data_Home_images/ecg-outline.png',
-            value: 'ECG',
+            value: value2 != "" ? value2 : "--",
             unit: ' ',
-            time: '06:00, 27/07/2024',
+            time: time2 == '' ? "Chưa cập nhật" : time2,
             warning: false,
           ),
         ),
@@ -248,30 +333,31 @@ class MedicalDataHome extends StatelessWidget {
     );
   }
 
-  Widget _buildGreyBoxRow4() {
-    return const Row(
+  Widget _buildGreyBoxRow4(
+      String value1, String time1, String value2, String time2) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
           child: GreyBox(
             title: 'Thân nhiệt',
             iconpath: 'assets/medical_data_Home_images/thermometer.png',
-            value: '36',
+            value: value1 != "" ? value1 : "--",
             unit: '°C',
-            time: '06:00, 20/07/2024',
+            time: time1 == '' ? "Chưa cập nhật" : time1,
             warning: true,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
           child: GreyBox(
             title: 'Axit Uric',
             iconpath: 'assets/medical_data_Home_images/Axit Uric.png',
-            value: '7.0',
+            value: value2 != "" ? value2 : "--",
             unit: 'mg/dL',
-            time: '06:00, 21/07/2024',
+            time: time2 == '' ? "Chưa cập nhật" : time2,
             warning: true,
           ),
         ),
@@ -279,21 +365,22 @@ class MedicalDataHome extends StatelessWidget {
     );
   }
 
-  Widget _buildGreyBoxRow5() {
-    return const Row(
+  Widget _buildGreyBoxRow5(
+      String value1, String time1, String value2, String time2) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
           child: GreyBox(
             title: 'Cân nặng',
             iconpath: 'assets/medical_data_Home_images/scale.png',
-            value: '70',
+            value: value1 != "" ? value1 : "--",
             unit: 'Kg',
-            time: '06:00, 27/07/2024',
+            time: time1 == '' ? "Chưa cập nhật" : time1,
             warning: false,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 15,
         ),
         Expanded(
@@ -302,7 +389,7 @@ class MedicalDataHome extends StatelessWidget {
             iconpath: 'assets/medical_data_Home_images/medical_information.png',
             value: 'OK',
             unit: ' ',
-            time: '06:00, 01/07/2024',
+            time: time2 == '' ? "Chưa cập nhật" : time2,
             warning: true,
           ),
         ),

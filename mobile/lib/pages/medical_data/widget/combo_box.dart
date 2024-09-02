@@ -258,28 +258,26 @@ class _ComboBoxState extends State<ComboBox> {
     showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
+        return AlertDialog(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildDialogHeader(),
-                  const SizedBox(height: 24),
-                  _buildDialogInputFields(),
-                  const SizedBox(height: 4),
-                  AddFile(
-                    files: selectedFiles,
-                    onFilesChanged: updateFiles,
-                  ),
-                  const SizedBox(height: 24),
-                  _buildDialogActions(context),
-                ],
-              ),
+          insetPadding: EdgeInsets.all(10),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDialogHeader(),
+                const SizedBox(height: 24),
+                _buildDialogInputFields(),
+                const SizedBox(height: 4),
+                AddFile(
+                  files: selectedFiles,
+                  onFilesChanged: updateFiles,
+                ),
+                const SizedBox(height: 24),
+                _buildDialogActions(context),
+              ],
             ),
           ),
         );
@@ -291,8 +289,14 @@ class _ComboBoxState extends State<ComboBox> {
     return Row(
       children: [
         Image.asset(widget.leadingiconpath),
-        const SizedBox(width: 10),
-        Text(widget.title, style: const TextStyle(fontSize: 24)),
+        SizedBox(width: 10),
+        Text(
+          widget.title, 
+          style: TextStyle(
+            fontSize: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+          )
+          ),
       ],
     );
   }

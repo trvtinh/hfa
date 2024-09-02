@@ -9,6 +9,7 @@ class NotificationEntity {
   String? page;
   String? toUId;
   String? fromUId;
+  String? status;
 
   NotificationEntity({
     this.title,
@@ -19,6 +20,7 @@ class NotificationEntity {
     this.page,
     this.toUId,
     this.fromUId,
+    this.status,
   });
 
   @override
@@ -36,6 +38,7 @@ class NotificationEntity {
       'page': page,
       'to_uid': toUId,
       'from_uid': fromUId,
+      'status': status,
     };
   }
 
@@ -50,6 +53,7 @@ class NotificationEntity {
       page: data['page'],
       toUId: data['to_uid'],
       fromUId: data['from_uid'],
+      status: data['status'],
     );
   }
 }

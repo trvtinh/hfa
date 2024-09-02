@@ -8,6 +8,7 @@ import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
 import 'index.dart';
 
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class ApplicationController extends GetxController {
     'http://www.googleapis.com/auth/contacts.readonly'
   ]);
   ApplicationController();
-
+  final notificationController = Get.find<NotificationController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -68,8 +69,6 @@ class ApplicationController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    getProfile();
-
     tabTitles = ['Của tôi', 'Đang theo dõi', "Thêm", "Thông báo", 'Cá nhân'];
     bottomTabs = <BottomNavigationBarItem>[
       const BottomNavigationBarItem(
@@ -112,10 +111,89 @@ class ApplicationController extends GetxController {
     pageController = PageController(initialPage: state.page);
   }
 
+  @override
+  void onReady() async {
+    await getProfile();
+    notificationController.state.profile.value = state.profile.value;
+    notificationController.fetchNotificationCounts();
+    log('Dữ liệu profile: ${state.profile.value.toString()}');
+    log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');
+    getUpdatedDataTime(); // Chuyển từ await sang chỉ gọi hàm để tạo stream lắng nghe
+    for (int i = 0; i < 10; i++) {
+      getUpdatedLatestMedical(i.toString());
+    }
+
+    state.medicalData.forEach((key, value) {
+      log('Dữ liệu y tế: $key - $value');
+    });
+    super.onReady();
+  }
+
   Future<void> onLogOut() async {
     await UserStore.to.onLogout();
     await googleSignIn.signOut();
     Get.offAndToNamed(AppRoutes.SIGN_IN);
+  }
+
+  void getUpdatedDataTime() {
+    final db = FirebaseFirestore.instance;
+    try {
+      final time = Timestamp.fromDate(DateTime.now());
+
+      // Lắng nghe sự thay đổi của dữ liệu trong Firestore
+      db
+          .collection('medicalData')
+          .where('userId', isEqualTo: state.profile.value!.id!)
+          .where('time', isLessThanOrEqualTo: time)
+          .orderBy('time', descending: true)
+          .limit(1)
+          .snapshots()
+          .listen((querySnapshot) {
+        if (querySnapshot.docs.isEmpty) {
+          state.updateTime.value = '';
+        } else {
+          final data = querySnapshot.docs.first.data();
+          log(data.toString());
+          state.updateTime.value =
+              '${DatetimeChange.getHourString(data['time'].toDate())} ${DatetimeChange.getDatetimeString(data['time'].toDate())}';
+        }
+      }, onError: (error) {
+        print('Error fetching updated time: $error');
+      });
+    } catch (e) {
+      print('Error setting up listener for updated time: $e');
+    }
+  }
+
+  void getUpdatedLatestMedical(String type) {
+    final db = FirebaseFirestore.instance;
+    try {
+      final time = Timestamp.fromDate(DateTime.now());
+
+      // Lắng nghe sự thay đổi của dữ liệu trong Firestore
+      db
+          .collection('medicalData')
+          .where('userId', isEqualTo: state.profile.value!.id!)
+          .where('typeId', isEqualTo: type)
+          .where('time', isLessThanOrEqualTo: time)
+          .orderBy('time', descending: true)
+          .limit(1)
+          .snapshots()
+          .listen((querySnapshot) {
+        if (querySnapshot.docs.isEmpty) {
+          state.medicalData[type] = '';
+        } else {
+          final data = querySnapshot.docs.first.data();
+          log(data.toString());
+          state.medicalData[type] = data;
+          // '${DatetimeChange.getHourString(data['time'].toDate())} ${DatetimeChange.getDatetimeString(data['time'].toDate())}';
+        }
+      }, onError: (error) {
+        print('Error fetching updated time: $error');
+      });
+    } catch (e) {
+      print('Error setting up listener for updated time: $e');
+    }
   }
 
   @override
