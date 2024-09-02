@@ -31,7 +31,8 @@ class SearchingBar extends GetView<SearchingController> {
             prefixIcon: Obx(() => IconButton(
                   icon: Icon(controller.hasText.value
                       ? Icons.arrow_back
-                      : Icons.add_circle_outline),
+                      : Icons.add_circle_outline,
+                      color: Theme.of(context).colorScheme.primary,),
                   onPressed: () {
                     if (controller.hasText.value) {
                       _clearText();
