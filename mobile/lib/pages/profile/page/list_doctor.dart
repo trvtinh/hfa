@@ -29,6 +29,18 @@ class _ListDoctorState extends State<ListDoctor> {
     5.0,
     5.0,
   ];
+  List<String> email = [
+    "sample@gmail.com",
+    "sample@gmail.com",
+    "sample@gmail.com",
+    "sample@gmail.com",
+  ];
+  List<String> mobile = [
+    "+84 123456789",
+    "+84 123456789",
+    "+84 123456789",
+    "+84 123456789",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +188,7 @@ class _ListDoctorState extends State<ListDoctor> {
                   children: [
                     GestureDetector(
                       onTap: (){
-                        Get.to(InfoDoctor());
+                        Get.to(InfoDoctor(ten: name[index], rate: rate[index], id: id[index], email: email[index], mobile: mobile[index]));
                       },
                       child: Icon(
                         Icons.info_outline,

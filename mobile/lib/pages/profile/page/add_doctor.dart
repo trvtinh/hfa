@@ -16,6 +16,7 @@ class _AddDoctorState extends State<AddDoctor> {
       onTap: (){
         Get.to(ListDoctor());
       },
+      readOnly: true,
       controller: TextEditingController(),
       decoration: InputDecoration(
         hintText: "Thêm chuyên gia y tế",
