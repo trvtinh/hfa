@@ -5,26 +5,33 @@ import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/diagnostic_add/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
-class DiagnosticScreen extends StatelessWidget {
-  DiagnosticScreen({super.key});
+class AlertScreen extends StatelessWidget {
+  AlertScreen({super.key});
 
   final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
   Widget build(BuildContext context) {
+    int num_alert = 1;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            const Icon(
-              Icons.health_and_safety_outlined,
-              size: 20,
+             Icon(
+              Icons.warning_amber,
+              size: 24,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(
               width: 10,
             ),
-            Obx(() =>
-                Text('Chẩn đoán (${controller.state.diagnosticList.length})'))
+            Text(
+              "Cảnh báo (" + num_alert.toString() + ")",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontSize: 14,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 10),
@@ -81,7 +88,7 @@ class DiagnosticScreen extends StatelessWidget {
             child: Row(
               children: [
                 Icon(
-                  Icons.add_circle_outline,
+                  Icons.tune,
                   size: 24,
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
@@ -89,7 +96,7 @@ class DiagnosticScreen extends StatelessWidget {
                   width: 16,
                 ),
                 Text(
-                  "Thêm chuẩn đoán",
+                  "Cài đặt cảnh báo",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
