@@ -10,10 +10,10 @@ import 'package:health_for_all/pages/application/controller.dart';
 
 class ImageAnalyzeController extends GetxController {
   ImageAnalyzeController();
-  
+
   final state = ImageAnalyzeState();
   final appController = Get.find<ApplicationController>();
-  
+
   final model = GenerativeModel(
     model: 'gemini-1.5-flash',
     apiKey: dotenv.env['GOOGLE_API_KEY']!,
@@ -63,7 +63,22 @@ class ImageAnalyzeController extends GetxController {
         Content.multi([imagePart])
       ], generationConfig: GenerationConfig(maxOutputTokens: 250));
 
-      state.analysisResult.value = 'Kết quả phân tích: ${result.text}';
+      final resultText = result.text ??
+          ''; // Handle null case by defaulting to an empty string
+
+      // Giả sử mô hình trả về kết quả dưới dạng văn bản chứa số đo huyết áp.
+      // Ví dụ: "Số đo huyết áp là: 120/80 mmHg"
+      final regex = RegExp(r'(\d{2,3})/(\d{2,3}) mmHg');
+      final match = regex.firstMatch(resultText);
+
+      if (match != null) {
+        final systolic = match.group(1); // Số đo huyết áp tâm thu
+        final diastolic = match.group(2); // Số đo huyết áp tâm trương
+        state.analysisResult.value =
+            'Số đo huyết áp là: $systolic/$diastolic mmHg';
+      } else {
+        state.analysisResult.value = 'Không thể phân tích số đo huyết áp.';
+      }
     } catch (e) {
       state.analysisResult.value = 'Lỗi phân tích hình ảnh: $e';
     }
