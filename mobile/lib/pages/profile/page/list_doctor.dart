@@ -46,7 +46,7 @@ class _ListDoctorState extends State<ListDoctor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Danh sách chuyên gia y tế",
         ),
         actions: [
@@ -55,7 +55,7 @@ class _ListDoctorState extends State<ListDoctor> {
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             size: 24,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
         ],
@@ -65,12 +65,12 @@ class _ListDoctorState extends State<ListDoctor> {
           Expanded(
             child: Column(
               children: [
-                Divider(
+                const Divider(
                   height: 1,
                 ),
                 search_bar(),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
@@ -83,11 +83,11 @@ class _ListDoctorState extends State<ListDoctor> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: GestureDetector(
               onTap: () {},
               child: Container(
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                   horizontal: 24,
                   vertical: 10,
                 ),
@@ -97,7 +97,7 @@ class _ListDoctorState extends State<ListDoctor> {
                 ),
                 child: Center(
                   child: Text(
-                    "Xem thêm " + (num_doctor - 4).toString() + " chuyên gia",
+                    "Xem thêm ${num_doctor - 4} chuyên gia",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 14,
@@ -120,7 +120,7 @@ class _ListDoctorState extends State<ListDoctor> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
               vertical: 12,
               horizontal: 8,
             ),
@@ -130,7 +130,7 @@ class _ListDoctorState extends State<ListDoctor> {
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(
+                      padding: const EdgeInsets.symmetric(
                         horizontal: 30,
                         vertical: 24,
                       ),
@@ -146,7 +146,7 @@ class _ListDoctorState extends State<ListDoctor> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Column(
@@ -159,7 +159,7 @@ class _ListDoctorState extends State<ListDoctor> {
                               fontSize: 16,
                               fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 8,
                         ),
                         Row(
@@ -173,7 +173,7 @@ class _ListDoctorState extends State<ListDoctor> {
                                 fontSize: 14,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 30,
                             ),
                             Text(
@@ -199,7 +199,7 @@ class _ListDoctorState extends State<ListDoctor> {
                         )
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                   ],
@@ -225,7 +225,7 @@ class _ListDoctorState extends State<ListDoctor> {
               ],
             ),
           ),
-          Divider(
+          const Divider(
             height: 1,
           ),
         ],
@@ -241,7 +241,7 @@ class _ListDoctorState extends State<ListDoctor> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -256,22 +256,22 @@ class _ListDoctorState extends State<ListDoctor> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 4,
                         ),
                         child: Row(
                           children: [
                             Container(
-                              padding: EdgeInsets.all(14),
+                              padding: const EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: Theme.of(context)
@@ -288,7 +288,7 @@ class _ListDoctorState extends State<ListDoctor> {
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 12,
                             ),
                             Column(
@@ -316,7 +316,7 @@ class _ListDoctorState extends State<ListDoctor> {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Row(
@@ -369,7 +369,7 @@ class _ListDoctorState extends State<ListDoctor> {
 
   Widget search_bar() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
       child: TextField(
         controller: TextEditingController(),
         decoration: InputDecoration(
@@ -385,7 +385,7 @@ class _ListDoctorState extends State<ListDoctor> {
             borderRadius: BorderRadius.circular(28),
             borderSide: BorderSide.none,
           ),
-          contentPadding: EdgeInsets.all(4),
+          contentPadding: const EdgeInsets.all(4),
         ),
       ),
     );

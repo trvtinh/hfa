@@ -180,10 +180,10 @@ class PrescriptionPage extends GetView<PrescriptionController> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          insetPadding: EdgeInsets.all(10),
+          insetPadding: const EdgeInsets.all(10),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width-70,
-            child: SingleChildScrollView(
+            width: MediaQuery.of(context).size.width - 70,
+            child: const SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
