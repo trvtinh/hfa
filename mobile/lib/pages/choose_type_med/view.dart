@@ -57,7 +57,6 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                         const SizedBox(
                           height: 12,
                         ),
-                        Stream
                       ],
                     ),
                   ),
