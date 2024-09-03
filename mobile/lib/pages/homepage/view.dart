@@ -327,7 +327,7 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(const NotificationPage());
+                    Get.to(() => NotiPage());
                   },
                   child: WhiteBox(
                       title: 'Thông báo',
@@ -443,5 +443,20 @@ class Homepage extends StatelessWidget {
     // return const Center(
     //   child: Text('Homepage'),
     // );
+  }
+}
+
+class NotiPage extends StatelessWidget {
+  const NotiPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Thông báo'),
+        centerTitle: true,
+      ),
+      body: const NotificationPage(),
+    );
   }
 }

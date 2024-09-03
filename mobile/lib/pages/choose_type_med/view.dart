@@ -27,7 +27,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             size: 24,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
         ],
@@ -38,19 +38,19 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Divider(
+                  const Divider(
                     height: 1,
                   ),
                   Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
                         add_type_med(),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                         head_list(),
-                        SizedBox(
+                        const SizedBox(
                           height: 12,
                         ),
                         for (int i = 0; i < num_type; i++) type_med(i),
@@ -62,11 +62,11 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: OutlinedButton(
-              onPressed: (){},
+              onPressed: () {},
               child: Container(
-                width: MediaQuery.of(context).size.width-81,
+                width: MediaQuery.of(context).size.width - 81,
                 child: Center(
                   child: Text(
                     "Xem thêm " + (num_type - 4).toString() + " loại thuốc",
@@ -83,12 +83,13 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               OutlinedButton(
-                onPressed: (){
+                onPressed: () {
                   Get.back();
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width/2-75,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  width: MediaQuery.of(context).size.width / 2 - 75,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   child: Center(
                     child: Text(
                       "Hủy",
@@ -99,17 +100,26 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                     ),
                   ),
                 ),
-              ),  
-              SizedBox(width: 10,),
-              VerticalDivider(width: 1, thickness: 1, color: Colors.black,),
-              SizedBox(width: 10,),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              const VerticalDivider(
+                width: 1,
+                thickness: 1,
+                color: Colors.black,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               OutlinedButton(
-                onPressed: (){
+                onPressed: () {
                   Get.back();
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width/2-75,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  width: MediaQuery.of(context).size.width / 2 - 75,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   child: Center(
                     child: Text(
                       "Xác nhận",
@@ -123,7 +133,9 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               )
             ],
           ),
-          SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
         ],
       ),
     );
@@ -151,7 +163,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
               Text(
@@ -164,7 +176,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             ],
           ),
         ),
-        Divider(
+        const Divider(
           height: 1,
         ),
       ],
@@ -173,7 +185,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
 
   Widget type_med(int index) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -187,7 +199,9 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                         choose[index] = newBool!;
                       });
                     }),
-                SizedBox(width: 16,),
+                const SizedBox(
+                  width: 16,
+                ),
                 Text(
                   med[index],
                   style: TextStyle(
@@ -200,8 +214,8 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             ),
           ),
           GestureDetector(
-            onTap: (){
-              _showDialog(context, EditTypedMed());
+            onTap: () {
+              _showDialog(context, const EditTypedMed());
             },
             child: Icon(
               Icons.info,
@@ -216,15 +230,15 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
   Widget add_type_med() {
     return GestureDetector(
       onTap: () {
-        _showDialog(context, AddTypedMed());
+        _showDialog(context, const AddTypedMed());
       },
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
-            BoxShadow(
+            const BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
               blurRadius: 2,
@@ -239,7 +253,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               size: 24,
               color: Theme.of(context).colorScheme.primary,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(
@@ -263,7 +277,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,

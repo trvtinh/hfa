@@ -14,7 +14,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 12,
         ),
         header(),
@@ -32,7 +32,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
         Text(
@@ -48,27 +48,30 @@ class _AddTypedMedState extends State<AddTypedMed> {
 
   Widget body() {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 24,
       ),
       child: Column(children: [
         _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc"),
-        SizedBox(height: 24,),
-        _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc"),
-        SizedBox(height: 24,),
+        const SizedBox(
+          height: 24,
+        ),
+        _buildDialogTextField("Mô tả", "Công dụng, cách dùng, liều lượng",
+            maxLines: 3),
+        const SizedBox(
+          height: 24,
+        ),
         AddFile(),
       ]),
     );
   }
 
-  Widget _buildDialogTextField(
-    String label,
-    String hint,
-  ) {
+  Widget _buildDialogTextField(String label, String hint, {int? maxLines}) {
     return Container(
-      width: MediaQuery.of(context).size.width-20,
+      width: MediaQuery.of(context).size.width - 20,
       child: TextField(
         controller: TextEditingController(),
+        maxLines: maxLines ?? 1,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,

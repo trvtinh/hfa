@@ -19,31 +19,31 @@ class _AddPrescriptionState extends State<AddPrescription> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           header(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           name(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           med_list(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           choose_date(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           AddFile(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           _buildDialogTextField('Ghi chú', 'Ghi chú', TextEditingController()),
-          SizedBox(
+          const SizedBox(
             height: 55,
           ),
           build_button(),
@@ -60,7 +60,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
         Text(
@@ -75,12 +75,12 @@ class _AddPrescriptionState extends State<AddPrescription> {
   }
 
   Widget name() {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width - 32,
       child: TextField(
         controller: TextEditingController(),
         decoration: InputDecoration(
-          label: Text("Tên đơn thuốc"),
+          label: const Text("Tên đơn thuốc"),
           border: OutlineInputBorder(
               borderSide: BorderSide(
             color: Theme.of(context).colorScheme.outline,
@@ -100,7 +100,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
   Widget med_list() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(4),
           topRight: Radius.circular(4),
         ),
@@ -109,9 +109,9 @@ class _AddPrescriptionState extends State<AddPrescription> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
               ),
@@ -134,8 +134,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
                 Row(
                   children: [
                     GestureDetector(
-                      onTap: (){
-                        Get.to(ChooseTypeMed());
+                      onTap: () {
+                        Get.to(const ChooseTypeMed());
                       },
                       child: Icon(
                         Icons.add_circle_outline,
@@ -149,11 +149,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 choose_med(),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 choose_med(),
@@ -172,7 +172,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
         children: [
           Row(
             children: [
-              Container(
+              SizedBox(
                 width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
                 child: TextField(
                   readOnly: true,
@@ -192,10 +192,10 @@ class _AddPrescriptionState extends State<AddPrescription> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
-              Container(
+              SizedBox(
                 width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
                 child: TextField(
                   controller: TextEditingController(),
@@ -214,7 +214,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
             ],
@@ -248,7 +248,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           TextEditingController(),
           width: (MediaQuery.of(context).size.width - 70) / 2 - 5,
         ),
-        SizedBox(
+        const SizedBox(
           width: 12,
         ),
         _buildDateTimeField(
@@ -289,7 +289,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
       Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
-    return Container(
+    return SizedBox(
       width: width,
       child: TextField(
         controller: controller,

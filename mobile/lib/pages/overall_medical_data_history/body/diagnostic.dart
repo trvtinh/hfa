@@ -110,7 +110,7 @@ class DiagnosticScreen extends StatelessWidget {
                     size: 24,
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16,
                   ),
                   Text(
