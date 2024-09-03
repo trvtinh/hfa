@@ -133,7 +133,7 @@ class DiagnosticAddView extends StatelessWidget {
           'Chẩn đoán',
           "${diagnosticController.appController.state.profile.value!.name!} đã gửi chuẩn đoán đến bạn",
           'diagnostic',
-          '/',
+          '/diagnotic',
           user.id!,
           'unread',
           diagnosticId: docId,

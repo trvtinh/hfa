@@ -91,7 +91,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ListTile(
             leading: const Icon(Icons.notifications_none),
             title: const Text('Thông báo'),
-            onTap: () => Get.to(() => const NotificationPage()),
+            onTap: () => Get.to(() => const NotiPage()),
           ),
           ListTile(
             onTap: () => Get.to(() => AlarmPage()),
@@ -180,6 +180,21 @@ class About_HFA extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class NotiPage extends StatelessWidget {
+  const NotiPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Thông báo'),
+        centerTitle: true,
+      ),
+      body: NotificationPage(),
     );
   }
 }

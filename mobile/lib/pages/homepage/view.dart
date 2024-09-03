@@ -252,7 +252,7 @@ class Homepage extends StatelessWidget {
                 val3: "10",
                 time: appController.state.updateTime.value == ""
                     ? "Chưa cập nhật dữ liệu lần nào"
-                    : "Cập nhật lúc ${appController.state.updateTime.value}")),
+                    : "Cập nhật lần cuối ${appController.state.updateTime.value}")),
             const SizedBox(
               height: 16,
             ),
@@ -263,13 +263,19 @@ class Homepage extends StatelessWidget {
                   onTap: () {
                     Get.to(const DiagnosticPage());
                   },
-                  child: const WhiteBox(
-                      title: 'Chẩn đoán',
-                      iconpath: 'assets/images/health_and_safety.png',
-                      text1: 'Chưa xem',
-                      text2: 'Đã xem',
-                      value1: '03',
-                      value2: '07'),
+                  child: Obx(
+                    () => WhiteBox(
+                        title: 'Chẩn đoán',
+                        iconpath: 'assets/images/health_and_safety.png',
+                        text1: 'Chưa xem',
+                        text2: 'Đã xem',
+                        value1: appController
+                            .diagnosticController.state.unread.value
+                            .toString(),
+                        value2: appController
+                            .diagnosticController.state.read.value
+                            .toString()),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {

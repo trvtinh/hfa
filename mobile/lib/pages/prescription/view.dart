@@ -10,33 +10,33 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Đơn thuốc'),
+        title: const Text('Đơn thuốc'),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.help_outline),
+            icon: const Icon(Icons.help_outline),
           ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Divider(
+            const Divider(
               height: 1.2,
             ),
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   add_prescrition(context),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   filter_prescription(context),
-                  Divider(
+                  const Divider(
                     height: 1.2,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   list_prescription(),
@@ -58,7 +58,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           color: Theme.of(context).colorScheme.errorContainer,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
@@ -67,7 +67,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
             )
           ],
         ),
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Row(
           children: [
             Icon(
@@ -93,7 +93,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
 
   Widget filter_prescription(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
           Expanded(
@@ -115,7 +115,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
               size: 24,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 8,
           ),
         ],
@@ -125,16 +125,16 @@ class PrescriptionPage extends GetView<PrescriptionController> {
 
   void bottom_sheet(BuildContext context) {
     showModalBottomSheet(
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
       ),
       context: context,
-      builder: (ctx) => FilterSheet(),
+      builder: (ctx) => const FilterSheet(),
     );
   }
 
   Widget list_prescription() {
-    return Column(
+    return const Column(
       children: [
         PrescriptionBox(
           name: "Đơn thuốc 1",
@@ -180,8 +180,8 @@ class PrescriptionPage extends GetView<PrescriptionController> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
-          content: SingleChildScrollView(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          content: const SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

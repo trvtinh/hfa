@@ -38,18 +38,18 @@ class MedicalDataHome extends StatelessWidget {
                   _buildGreyBoxRow1(
                     appController.state.medicalData['3'] != ""
                         ? appController.state.medicalData['3']['value']
-                        : "",
+                        : "--",
                     appController.state.medicalData['3'] != ""
                         ? DatetimeChange.timestamptoHHMMDDMMYYYY(
                             appController.state.medicalData['3']['time'])
-                        : "",
+                        : "Chưa cập nhật",
                     appController.state.medicalData['4'] != ""
                         ? appController.state.medicalData['4']['value']
-                        : "",
+                        : "--",
                     appController.state.medicalData['4'] != ""
                         ? DatetimeChange.timestamptoHHMMDDMMYYYY(
                             appController.state.medicalData['4']['time'])
-                        : "",
+                        : "Chưa cập nhật",
                   ),
                   const SizedBox(height: 16),
                   _buildGreyBoxRow2(

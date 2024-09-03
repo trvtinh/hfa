@@ -93,27 +93,28 @@ class DiagnosticScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        GestureDetector(
-          onTap: () {
-            Get.to(() => DiagnosticAddView(
-                user: controller.state.selectedUser.value,
-                medicalData: controller.state.selectedData.value));
-          },
-          child: Container(
-            color: Colors.transparent,
-            width: double
-                .infinity, // Ensures the container takes the full width of its parent
-            child: const Row(
-              children: [
-                Icon(Icons.add_circle_outline),
-                SizedBox(
-                  width: 16,
-                ),
-                Text('Thêm chẩn đoán'),
-              ],
+        if (controller.state.selectedUser.value.id != "")
+          GestureDetector(
+            onTap: () {
+              Get.to(() => DiagnosticAddView(
+                  user: controller.state.selectedUser.value,
+                  medicalData: controller.state.selectedData.value));
+            },
+            child: Container(
+              color: Colors.transparent,
+              width: double
+                  .infinity, // Ensures the container takes the full width of its parent
+              child: const Row(
+                children: [
+                  Icon(Icons.add_circle_outline),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Text('Thêm chẩn đoán'),
+                ],
+              ),
             ),
-          ),
-        )
+          )
       ],
     );
   }
@@ -168,7 +169,7 @@ class DiagnosticScreen extends StatelessWidget {
           ),
           const Row(
             children: [
-              Text('Đã bình luận'),
+              Text('Đã chẩn đoán'),
               SizedBox(
                 width: 6,
               ),
