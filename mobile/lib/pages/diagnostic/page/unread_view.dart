@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic_detail/view.dart';
 
-class SeenPage extends StatefulWidget {
-  const SeenPage({super.key});
+class UnreadPage extends StatefulWidget {
+  const UnreadPage({super.key});
 
   @override
-  State<SeenPage> createState() => _SeenPageState();
+  State<UnreadPage> createState() => _UnreadPageState();
 }
 
-class _SeenPageState extends State<SeenPage> {
+class _UnreadPageState extends State<UnreadPage> {
   List<bool> _important = [false, true, true];
 
   List<String> notifications = [

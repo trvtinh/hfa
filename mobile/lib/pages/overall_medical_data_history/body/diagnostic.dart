@@ -18,7 +18,7 @@ class DiagnosticScreen extends StatelessWidget {
         Row(
           children: [
             const Icon(
-              Icons.health_and_safety,
+              Icons.health_and_safety_outlined,
               size: 20,
             ),
             const SizedBox(
@@ -93,8 +93,7 @@ class DiagnosticScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        if (controller.state.selectedUser.value.id != "")
-          GestureDetector(
+        GestureDetector(
             onTap: () {
               Get.to(() => DiagnosticAddView(
                   user: controller.state.selectedUser.value,
@@ -104,17 +103,25 @@ class DiagnosticScreen extends StatelessWidget {
               color: Colors.transparent,
               width: double
                   .infinity, // Ensures the container takes the full width of its parent
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.add_circle_outline),
+                  Icon(
+                    Icons.add_circle_outline,
+                    size: 24,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                   SizedBox(
                     width: 16,
                   ),
-                  Text('Thêm chẩn đoán'),
+                  Text(
+                    "Thêm chuẩn đoán",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
                 ],
               ),
-            ),
-          )
+            ))
       ],
     );
   }
