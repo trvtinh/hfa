@@ -276,18 +276,21 @@ class _AddReminderState extends State<AddReminder> {
   ];
 
   Widget drop_alt1() {
-    return DropdownMenu(
-      label: Text("Nhắc nhở các loại dữ liệu y tế"),
+    return Container(
       width: MediaQuery.sizeOf(context).width - 32,
-      initialSelection: dropdownValue,
-      onSelected: (String? value) {
-        setState(() {
-          dropdownValue = value!;
-        });
-      },
-      dropdownMenuEntries: list1.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
-      }).toList(),
+      child: DropdownMenu(
+        width: MediaQuery.sizeOf(context).width - 32,
+        label: Text("Nhắc nhở các loại dữ liệu y tế"),
+        initialSelection: dropdownValue,
+        onSelected: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        dropdownMenuEntries: list1.map<DropdownMenuEntry<String>>((String value) {
+          return DropdownMenuEntry<String>(value: value, label: value);
+        }).toList(),
+      ),
     );
   }
 
@@ -303,18 +306,21 @@ class _AddReminderState extends State<AddReminder> {
   ];
 
   Widget drop_alt2() {
-    return DropdownMenu(
-      label: Text("Nhắc nhở các đơn thuốc"),
+    return Container(
       width: MediaQuery.sizeOf(context).width - 32,
-      initialSelection: dropdownValue,
-      onSelected: (String? value) {
-        setState(() {
-          dropdownValue = value!;
-        });
-      },
-      dropdownMenuEntries: list2.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
-      }).toList(),
+      child: DropdownMenu(
+        label: Text("Nhắc nhở các đơn thuốc"),
+        width: MediaQuery.sizeOf(context).width - 32,
+        initialSelection: dropdownValue,
+        onSelected: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        dropdownMenuEntries: list2.map<DropdownMenuEntry<String>>((String value) {
+          return DropdownMenuEntry<String>(value: value, label: value);
+        }).toList(),
+      ),
     );
   }
 }
