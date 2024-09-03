@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:googleapis/admob/v1.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
 import 'package:health_for_all/pages/connect_hardware/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
+import 'package:health_for_all/pages/image_analyze/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
 import 'package:health_for_all/pages/medical_data_homepage/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
@@ -111,7 +113,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ListTile(
             leading: const Icon(Icons.account_circle),
             title: const Text('Tài khoản'),
-            onTap: () => Get.to(() => const InformationPage()),
+            onTap: () => Get.to(() => const InfoPage()),
           ),
           ListTile(
             leading: const Icon(Icons.account_circle),
@@ -119,6 +121,11 @@ class ApplicationPage extends GetView<ApplicationController> {
             onTap: () async {
               await controller.onLogOut();
             },
+          ),
+          ListTile(
+            onTap: () => Get.to(() => ImageAnalyzePage()),
+            leading: const Icon(Icons.memory),
+            title: const Text('Phân tích hình ảnh'),
           ),
         ],
       ));
@@ -195,6 +202,21 @@ class NotiPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: const NotificationPage(),
+    );
+  }
+}
+
+
+class InfoPage extends StatelessWidget {
+  const InfoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Thông tin tài khoản"),
+      ),
+      body: const InformationPage(),
     );
   }
 }
