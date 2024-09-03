@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/add_typed_med.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/edit_typed_med.dart';
 
@@ -56,7 +57,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                         const SizedBox(
                           height: 12,
                         ),
-                        for (int i = 0; i < num_type; i++) type_med(i),
+                        Stream
                       ],
                     ),
                   ),
@@ -186,7 +187,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
     );
   }
 
-  Widget type_med(int index) {
+  Widget type_med(int index, MedicineBase medicine) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -195,18 +196,24 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
           Expanded(
             child: Row(
               children: [
-                Checkbox(
-                    value: choose[index],
-                    onChanged: (newBool) {
-                      setState(() {
-                        choose[index] = newBool!;
-                      });
-                    }),
+                Obx(
+                  () => Checkbox(
+                      value: medicineController.state.selectedMedicine
+                          .contains(index),
+                      onChanged: (newBool) {
+                        if (newBool!) {
+                          medicineController.state.selectedMedicine.add(index);
+                        } else {
+                          medicineController.state.selectedMedicine
+                              .remove(index);
+                        }
+                      }),
+                ),
                 const SizedBox(
                   width: 16,
                 ),
                 Text(
-                  med[index],
+                  medicine.name ?? "",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
                     fontSize: 16,
