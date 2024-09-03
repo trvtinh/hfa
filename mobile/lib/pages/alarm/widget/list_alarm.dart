@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/pages/alarm/widget/edit_alarm.dart';
 
 class ListAlarm extends StatefulWidget {
   final int index;
@@ -141,9 +142,11 @@ class _ListAlarmState extends State<ListAlarm> {
                 ),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: (){
+                  _showAddDialog(context);
+                },
                 child: Icon(
-                  Icons.border_color,
+                  Icons.border_color_outlined,
                   size: 20,
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -167,6 +170,28 @@ class _ListAlarmState extends State<ListAlarm> {
           height: 12,
         ),
       ],
+    );
+  }
+
+  void _showAddDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          insetPadding: EdgeInsets.symmetric(horizontal: 10),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                EditAlarm(),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

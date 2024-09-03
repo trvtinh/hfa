@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class AddAlarm extends StatefulWidget {
-  const AddAlarm({super.key});
+class EditAlarm extends StatefulWidget {
+  const EditAlarm({super.key});
 
   @override
-  State<AddAlarm> createState() => _AddAlarmState();
+  State<EditAlarm> createState() => _EditAlarmState();
 }
 
-class _AddAlarmState extends State<AddAlarm> {
+class _EditAlarmState extends State<EditAlarm> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,7 +22,7 @@ class _AddAlarmState extends State<AddAlarm> {
           Row(
             children: [
               Image.asset(
-                "assets/images/warning_add.png",
+                "assets/images/warning_amber.png",
                 width: 32,
                 height: 32,
               ),
@@ -30,7 +30,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 width: 16,
               ),
               Text(
-                "Thêm cảnh báo",
+                "Sửa cảnh báo",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 24,
@@ -93,9 +93,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 elevation: 0,
                 backgroundColor: Colors.transparent,
               ),
-              onPressed: () {
-                Get.back();
-              },
+              onPressed: (){Get.back();},
               child: Text(
                 "Đóng",
                 style: TextStyle(
@@ -109,9 +107,21 @@ class _AddAlarmState extends State<AddAlarm> {
                 elevation: 0,
                 backgroundColor: Colors.transparent,
               ),
-              onPressed: () {
-                Get.back();
-              },
+              onPressed: (){Get.back();},
+              child: Text(
+                "Xóa",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
+              onPressed: (){Get.back();},
               child: Text(
                 "Xác nhận",
                 style: TextStyle(
@@ -123,6 +133,37 @@ class _AddAlarmState extends State<AddAlarm> {
           ],
         ),
       ],
+    );
+  }
+
+  String dropdownValue = 'Loại dữ liệu';
+
+  List<String> list = <String>[
+    'Loại dữ liệu',
+    'Huyết áp',
+    'Thân nhiệt',
+    'Đường huyết',
+    'Nhịp tim',
+    'SPO2',
+    'HRV',
+    'ECG - Điện tâm đồ',
+    'Cân nặng',
+    'Xét nghiệm máu',
+    'Axit Uric',
+  ];
+
+  Widget drop_alt() {
+    return DropdownMenu(
+      width: MediaQuery.sizeOf(context).width - 32,
+      initialSelection: dropdownValue,
+      onSelected: (String? value) {
+        setState(() {
+          dropdownValue = value!;
+        });
+      },
+      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+        return DropdownMenuEntry<String>(value: value, label: value);
+      }).toList(),
     );
   }
 
@@ -159,37 +200,6 @@ class _AddAlarmState extends State<AddAlarm> {
           }).toList(), // Convert the Iterable to a List
         ),
       ),
-    );
-  }
-
-  String dropdownValue = 'Loại dữ liệu';
-
-  List<String> list = <String>[
-    'Loại dữ liệu',
-    'Huyết áp',
-    'Thân nhiệt',
-    'Đường huyết',
-    'Nhịp tim',
-    'SPO2',
-    'HRV',
-    'ECG - Điện tâm đồ',
-    'Cân nặng',
-    'Xét nghiệm máu',
-    'Axit Uric',
-  ];
-
-  Widget drop_alt() {
-    return DropdownMenu(
-      width: MediaQuery.sizeOf(context).width - 32,
-      initialSelection: dropdownValue,
-      onSelected: (String? value) {
-        setState(() {
-          dropdownValue = value!;
-        });
-      },
-      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
-      }).toList(),
     );
   }
 
