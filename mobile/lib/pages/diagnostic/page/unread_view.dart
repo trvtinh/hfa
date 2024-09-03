@@ -10,7 +10,7 @@ class UnreadPage extends StatefulWidget {
 }
 
 class _UnreadPageState extends State<UnreadPage> {
-  List<bool> _important = [false, true, true];
+  final List<bool> _important = [false, true, true];
 
   List<String> notifications = [
     'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
@@ -30,9 +30,9 @@ class _UnreadPageState extends State<UnreadPage> {
     '06:00, 29/07/2024',
   ];
 
-  List<String> _attachments = ['1', '2', '0'];
+  final List<String> _attachments = ['1', '2', '0'];
 
-  List<bool> _isAttached = [true, true, false];
+  final List<bool> _isAttached = [true, true, false];
 
   List<List<String>> title = [
     ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
@@ -61,7 +61,7 @@ class _UnreadPageState extends State<UnreadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -104,7 +104,7 @@ class NotificationCard extends StatelessWidget {
   final VoidCallback onDetailTap;
 
   const NotificationCard({
-    Key? key,
+    super.key,
     required this.patientName,
     required this.timeDate,
     required this.notification,
@@ -116,7 +116,7 @@ class NotificationCard extends StatelessWidget {
     required this.isImportant,
     required this.onImportantToggle,
     required this.onDetailTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -255,9 +255,7 @@ class NotificationCard extends StatelessWidget {
                     children: [
                       const SizedBox(width: 8),
                       Icon(
-                        isImportant
-                            ? Icons.star
-                            : Icons.star_border_outlined,
+                        isImportant ? Icons.star : Icons.star_border_outlined,
                         color: Theme.of(context).colorScheme.primary,
                         size: 18,
                       ),

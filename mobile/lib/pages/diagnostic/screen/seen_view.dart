@@ -60,7 +60,7 @@ class _SeenPageState extends State<SeenPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(

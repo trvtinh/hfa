@@ -23,8 +23,7 @@ Widget RightChat(ChatbotEntity item, BuildContext context) {
                 padding: EdgeInsets.only(top: 10.w, left: 10.w, right: 10.w),
                 decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
-                    borderRadius: BorderRadius.all(Radius.circular(10.w))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(10.w))),
                 child: item.image == ""
                     ? Text(
                         "${item.content}",
@@ -41,7 +40,7 @@ Widget RightChat(ChatbotEntity item, BuildContext context) {
                               color: Theme.of(context).colorScheme.onSecondary,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 6,
                           ),
                           GestureDetector(
@@ -52,7 +51,7 @@ Widget RightChat(ChatbotEntity item, BuildContext context) {
                                 item.image!,
                                 width: MediaQuery.of(context).size.width * 0.7,
                               )),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           )
                         ],

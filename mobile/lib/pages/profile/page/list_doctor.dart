@@ -246,7 +246,7 @@ class _ListDoctorState extends State<ListDoctor> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
                   child: Text(
                     "Thêm chuyên gia y tế",

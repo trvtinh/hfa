@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/middlewares/router_welcome.dart';
 import 'package:health_for_all/pages/application/index.dart';
 import 'package:health_for_all/pages/sign_in/bindings.dart';
-import 'package:health_for_all/pages/sign_in/index.dart';
 import 'package:health_for_all/pages/sign_in/view.dart';
 
 import '../../pages/profile/index.dart';

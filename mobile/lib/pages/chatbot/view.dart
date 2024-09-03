@@ -8,14 +8,16 @@ import 'package:health_for_all/pages/chatbot/widget/chat_list.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ChatbotPage extends GetView<ChatbotController> {
+  const ChatbotPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chat với HFA'),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: EdgeInsets.symmetric(horizontal: 10.0),
             child: Icon(Icons.more_vert),
           ),
         ],
@@ -25,8 +27,8 @@ class ChatbotPage extends GetView<ChatbotController> {
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
-              Expanded(
-                child: const ChatList(),
+              const Expanded(
+                child: ChatList(),
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
@@ -114,7 +116,7 @@ class ChatbotPage extends GetView<ChatbotController> {
                                       ],
                                     );
                                   } else {
-                                    return SizedBox
+                                    return const SizedBox
                                         .shrink(); // Returns an empty widget if no image
                                   }
                                 }),

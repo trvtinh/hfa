@@ -221,8 +221,8 @@ class CustomIcon extends StatelessWidget {
     required this.icon,
     required this.size,
     required this.sizeIcon,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

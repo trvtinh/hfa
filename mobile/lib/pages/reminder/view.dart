@@ -7,6 +7,8 @@ import 'package:health_for_all/pages/reminder/widget/add_reminder.dart';
 import 'package:health_for_all/pages/reminder/widget/list_reminder.dart';
 
 class ReminderPage extends GetView<AlarmController> {
+  ReminderPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,22 +26,22 @@ class ReminderPage extends GetView<AlarmController> {
             size: 24,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
         ],
       ),
       body: Column(
         children: [
-          Divider(
+          const Divider(
             height: 1,
           ),
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 add_reminder(context),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 list_reminder(context),
@@ -56,19 +58,19 @@ class ReminderPage extends GetView<AlarmController> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
               Text(
-                "Danh sách nhắc nhở (" + number_reminder.toString() + ")",
+                "Danh sách nhắc nhở ($number_reminder)",
               ),
             ],
           ),
         ),
-        Divider(
+        const Divider(
           height: 1,
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         for (int i = 0; i < number_reminder; i++) ListReminder(index: i),
@@ -78,15 +80,15 @@ class ReminderPage extends GetView<AlarmController> {
 
   Widget add_reminder(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         _showAddDialog(context);
       },
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           color: Theme.of(context).colorScheme.errorContainer,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
@@ -102,7 +104,7 @@ class ReminderPage extends GetView<AlarmController> {
               size: 32,
               color: Theme.of(context).colorScheme.primary,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(
@@ -117,7 +119,7 @@ class ReminderPage extends GetView<AlarmController> {
       ),
     );
   }
-  
+
   void _showAddDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -126,8 +128,8 @@ class ReminderPage extends GetView<AlarmController> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
-          content: SingleChildScrollView(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          content: const SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

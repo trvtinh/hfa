@@ -30,20 +30,20 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
     return GestureDetector(
       onTap: () {
         Get.to(() => PrescriptionDetail(
-          name: widget.name,
-          order: widget.order,
-          tablet: ["Vitamin C", "Vitamin B1"],
-          sl_tablet: [1, 1],
-        ));
+              name: widget.name,
+              order: widget.order,
+              tablet: const ["Vitamin C", "Vitamin B1"],
+              sl_tablet: const [1, 1],
+            ));
       },
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(18),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Color.fromRGBO(0, 0, 0, 0.3),
                   spreadRadius: 0.6,
@@ -62,7 +62,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                       color: Theme.of(context).colorScheme.primary,
                       size: 32,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Column(
@@ -76,10 +76,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                           ),
                         ),
                         Text(
-                          widget.num_type.toString() +
-                              " loại thuốc, " +
-                              widget.num_tablet.toString() +
-                              " viên",
+                          "${widget.num_type} loại thuốc, ${widget.num_tablet} viên",
                           style: TextStyle(
                             fontSize: 12,
                             color: Theme.of(context).colorScheme.outline,
@@ -89,21 +86,20 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                     ),
                   ],
                 ),
-
                 Row(
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Từ ngày:  " + widget.start_date,
+                          "Từ ngày:  ${widget.start_date}",
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 12,
                           ),
                         ),
                         Text(
-                          "Tới ngày: " + widget.end_date,
+                          "Tới ngày: ${widget.end_date}",
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 12,
@@ -111,23 +107,21 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                         ),
                       ],
                     ),
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         _showDialog(context);
                       },
-                      child: Icon(
-                        Icons.border_color,
-                        size: 20,
-                        color: Theme.of(context).colorScheme.primary
-                      ),
+                      child: Icon(Icons.border_color,
+                          size: 20,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                   ],
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
         ],
@@ -143,10 +137,10 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          insetPadding: EdgeInsets.all(10),
+          insetPadding: const EdgeInsets.all(10),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width-70,
-            child: SingleChildScrollView(
+            width: MediaQuery.of(context).size.width - 70,
+            child: const SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -17,12 +17,14 @@ class _FindDeviceState extends State<FindDevice> {
         mainAxisSize: MainAxisSize.min,
         children: [
           header(),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           if (widget.complete_find_all == false) finding(),
           list_founded_device(),
-          SizedBox(height: 45,),
+          const SizedBox(
+            height: 45,
+          ),
           build_button(),
         ],
       ),
@@ -37,7 +39,7 @@ class _FindDeviceState extends State<FindDevice> {
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
         Text(
@@ -56,7 +58,7 @@ class _FindDeviceState extends State<FindDevice> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset("assets/images/circular-indeterminate.png"),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             Text(
@@ -68,7 +70,7 @@ class _FindDeviceState extends State<FindDevice> {
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],
@@ -97,7 +99,7 @@ class _FindDeviceState extends State<FindDevice> {
   Widget list_founded_device() {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(4),
             topRight: Radius.circular(4),
           ),
@@ -107,13 +109,13 @@ class _FindDeviceState extends State<FindDevice> {
         children: [
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
               ),
               color: Theme.of(context).colorScheme.surfaceContainer,
             ),
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Row(
               children: [
                 Text(
@@ -133,12 +135,12 @@ class _FindDeviceState extends State<FindDevice> {
     );
   }
 
-  Widget founded_device(String name_device, String id_device, double distance) {
+  Widget founded_device(String nameDevice, String idDevice, double distance) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
           Row(
@@ -150,17 +152,17 @@ class _FindDeviceState extends State<FindDevice> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        name_device,
+                        nameDevice,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontSize: 14,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Text(
-                        id_device,
+                        idDevice,
                         style: TextStyle(
                           fontSize: 12,
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -192,7 +194,7 @@ class _FindDeviceState extends State<FindDevice> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(
-          onPressed: () async{
+          onPressed: () async {
             Get.back();
           },
           child: Text(
@@ -205,7 +207,7 @@ class _FindDeviceState extends State<FindDevice> {
         ),
         const SizedBox(width: 16),
         TextButton(
-          onPressed: () async{
+          onPressed: () async {
             Get.back();
           },
           child: Text(

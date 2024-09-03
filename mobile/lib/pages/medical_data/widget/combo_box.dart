@@ -190,7 +190,7 @@ class _ComboBoxState extends State<ComboBox> {
   }
 
   Widget _buildTextContainer(String name, String time) {
-    return Container(
+    return SizedBox(
       height: 76,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -262,9 +262,9 @@ class _ComboBoxState extends State<ComboBox> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          insetPadding: EdgeInsets.all(10),
+          insetPadding: const EdgeInsets.all(10),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width-70,
+            width: MediaQuery.of(context).size.width - 70,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -294,7 +294,7 @@ class _ComboBoxState extends State<ComboBox> {
     return Row(
       children: [
         Image.asset(widget.leadingiconpath),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(widget.title,
             style: TextStyle(
               fontSize: 24,

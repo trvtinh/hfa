@@ -13,8 +13,8 @@ class _AddDoctorState extends State<AddDoctor> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      onTap: (){
-        Get.to(() => ListDoctor());
+      onTap: () {
+        Get.to(() => const ListDoctor());
       },
       readOnly: true,
       controller: TextEditingController(),

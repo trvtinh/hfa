@@ -23,7 +23,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Đơn thuốc " + widget.order.toString(),
+          "Đơn thuốc ${widget.order}",
           style: TextStyle(
             fontSize: 22,
             color: Theme.of(context).colorScheme.onSurface,
@@ -35,18 +35,18 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
             size: 48,
             color: Theme.of(context).colorScheme.primary,
           ),
-          SizedBox(
+          const SizedBox(
             width: 10,
           ),
         ],
       ),
       body: Column(
         children: [
-          Divider(
+          const Divider(
             height: 1,
           ),
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 name_prescription(),
@@ -66,7 +66,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
     return Container(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
           Row(
@@ -80,11 +80,11 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             height: 56,
             decoration: BoxDecoration(
                 border: Border.all(
@@ -96,7 +96,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
                   Icons.medication_liquid,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 12,
                 ),
                 Text(
@@ -109,7 +109,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
         ],
@@ -121,13 +121,13 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
     return Container(
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
           Row(
             children: [
               Text(
-                "Danh sách thuốc (" + widget.sl_tablet.length.toString() + ")",
+                "Danh sách thuốc (${widget.sl_tablet.length})",
                 style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.secondary,
@@ -135,12 +135,12 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
               )
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
@@ -150,9 +150,9 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(16),
                       topRight: Radius.circular(16),
                     ),
@@ -184,7 +184,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 16,
           ),
         ],
@@ -196,7 +196,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -207,7 +207,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
                     size: 24,
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 6,
                   ),
                   Text(
@@ -234,7 +234,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
           ),
         ),
         if (ok)
-          Divider(
+          const Divider(
             height: 1,
           ),
       ],
@@ -245,7 +245,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Row(
@@ -259,7 +259,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         _buildDateTimeField(
@@ -269,7 +269,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
           TextEditingController(),
           width: (MediaQuery.of(context).size.width - 32),
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],
@@ -300,7 +300,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
       Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
-    return Container(
+    return SizedBox(
       width: width,
       child: TextField(
         controller: controller,
@@ -328,7 +328,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
   Widget file() {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Row(
@@ -342,23 +342,23 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Container(
           width: MediaQuery.of(context).size.width - 32,
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               border: Border.all(
                   color: Theme.of(context).colorScheme.outlineVariant)),
-          child: Column(
+          child: const Column(
             children: [
               Text("..."),
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],
@@ -368,7 +368,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
   Widget note() {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Row(
@@ -382,7 +382,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
             )
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         _buildNoteField(context, Icons.edit_note, noteController,
@@ -395,7 +395,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
   Widget _buildNoteField(
       BuildContext context, IconData icon, TextEditingController controller,
       {required double width}) {
-    return Container(
+    return SizedBox(
       width: width,
       child: TextField(
         controller: controller,

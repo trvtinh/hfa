@@ -10,14 +10,14 @@ class Show extends StatefulWidget {
 
 class _ShowState extends State<Show> {
   List<FlSpot> get allSpots => const [
-    FlSpot(0, 20),
-    FlSpot(2, 21),
-    FlSpot(3, 24),
-    FlSpot(6, 25),
-    FlSpot(7, 27),
-    FlSpot(10, 29),
-    FlSpot(11, 34),
-  ];
+        FlSpot(0, 20),
+        FlSpot(2, 21),
+        FlSpot(3, 24),
+        FlSpot(6, 25),
+        FlSpot(7, 27),
+        FlSpot(10, 29),
+        FlSpot(11, 34),
+      ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +32,13 @@ class _ShowState extends State<Show> {
               drawVerticalLine: true,
               drawHorizontalLine: true,
               getDrawingHorizontalLine: (value) {
-                return FlLine(
+                return const FlLine(
                   color: Colors.black12,
                   strokeWidth: 1,
                 );
               },
               getDrawingVerticalLine: (value) {
-                return FlLine(
+                return const FlLine(
                   color: Colors.black12,
                   strokeWidth: 1,
                 );
@@ -58,15 +58,15 @@ class _ShowState extends State<Show> {
                     );
                     switch (value.toInt()) {
                       case 0:
-                        return Text('21/07', style: style);
+                        return const Text('21/07', style: style);
                       case 2:
-                        return Text('23/07', style: style);
+                        return const Text('23/07', style: style);
                       case 4:
-                        return Text('25/07', style: style);
+                        return const Text('25/07', style: style);
                       case 6:
-                        return Text('27/07', style: style);
+                        return const Text('27/07', style: style);
                       case 8:
-                        return Text('29/07', style: style);
+                        return const Text('29/07', style: style);
                     }
                     return Container();
                   },
@@ -83,25 +83,25 @@ class _ShowState extends State<Show> {
                     );
                     switch (value.toInt()) {
                       case 20:
-                        return Text('85/80', style: style);
+                        return const Text('85/80', style: style);
                       case 40:
-                        return Text('95/80', style: style);
+                        return const Text('95/80', style: style);
                       case 60:
-                        return Text('105/80', style: style);
+                        return const Text('105/80', style: style);
                       case 80:
-                        return Text('115/80', style: style);
+                        return const Text('115/80', style: style);
                       case 100:
-                        return Text('125/80', style: style);
+                        return const Text('125/80', style: style);
                     }
                     return Container();
                   },
                   reservedSize: 42,
                 ),
               ),
-              rightTitles: AxisTitles(
+              rightTitles: const AxisTitles(
                 sideTitles: SideTitles(showTitles: false),
               ),
-              topTitles: AxisTitles(
+              topTitles: const AxisTitles(
                 sideTitles: SideTitles(showTitles: false),
               ),
             ),
@@ -125,10 +125,13 @@ class _ShowState extends State<Show> {
                 belowBarData: BarAreaData(
                   show: true,
                   gradient: LinearGradient(
-                    colors: [Colors.red.withOpacity(0.3), Colors.red.withOpacity(0.3)],
+                    colors: [
+                      Colors.red.withOpacity(0.3),
+                      Colors.red.withOpacity(0.3)
+                    ],
                   ),
                 ),
-                dotData: FlDotData(show: true),
+                dotData: const FlDotData(show: true),
               ),
             ],
           ),

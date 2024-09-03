@@ -12,12 +12,12 @@ class AddReminder extends StatefulWidget {
 class _AddReminderState extends State<AddReminder> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.sizeOf(context).width - 32,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           Row(
@@ -27,7 +27,7 @@ class _AddReminderState extends State<AddReminder> {
                 size: 32,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 16,
               ),
               Text(
@@ -57,7 +57,7 @@ class _AddReminderState extends State<AddReminder> {
             fontSize: 16,
             color: Theme.of(context).colorScheme.outline,
           ),
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
@@ -65,41 +65,63 @@ class _AddReminderState extends State<AddReminder> {
 
   Widget body() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 24),
+      padding: const EdgeInsets.symmetric(vertical: 24),
       child: Column(
         children: [
           date_time(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           Wrap(
             children: [
-              choice("T2"), SizedBox(width: 4,),
-              choice("T3"), SizedBox(width: 4,),
-              choice("T4"), SizedBox(width: 4,),
-              choice("T5"), SizedBox(width: 4,),
-              choice("T6"), SizedBox(width: 4,),
-              choice("T7"), SizedBox(width: 4,),
-              choice("CN"), SizedBox(width: 4,),
+              choice("T2"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T3"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T4"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T5"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T6"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T7"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("CN"),
+              const SizedBox(
+                width: 4,
+              ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
-          _buildDialogTextField("Tên nhắc nhở", "Tên nhăc nhở", TextEditingController()),
-          SizedBox(
+          _buildDialogTextField(
+              "Tên nhắc nhở", "Tên nhăc nhở", TextEditingController()),
+          const SizedBox(
             height: 24,
           ),
           drop_alt1(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           drop_alt2(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           _buildDialogTextField("Mô tả", "Mô tả", TextEditingController()),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Row(
@@ -168,7 +190,7 @@ class _AddReminderState extends State<AddReminder> {
   Widget choice(String name) {
     bool isSelected = _selectedChoices.contains(name);
 
-    return Container(
+    return SizedBox(
       width: (MediaQuery.sizeOf(context).width - 3) / 5,
       child: ChoiceChip(
         label: Text(
@@ -204,7 +226,7 @@ class _AddReminderState extends State<AddReminder> {
             TextEditingController(),
             width: (MediaQuery.of(context).size.width - 80) / 2,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
           _buildDateTimeField(
@@ -246,7 +268,7 @@ class _AddReminderState extends State<AddReminder> {
       Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
-    return Container(
+    return SizedBox(
       width: width,
       child: TextField(
         controller: controller,

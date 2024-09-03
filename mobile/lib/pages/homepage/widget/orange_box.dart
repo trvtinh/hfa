@@ -73,7 +73,7 @@ class Orangebox extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Container(
+                      SizedBox(
                         width: 100,
                         height: 48,
                         child: Column(
@@ -95,7 +95,7 @@ class Orangebox extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
                         height: 48,
                         child: Column(
@@ -117,7 +117,7 @@ class Orangebox extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
                         height: 48,
                         child: Column(

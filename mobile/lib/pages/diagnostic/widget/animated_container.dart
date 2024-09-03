@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:health_for_all/pages/diagnostic_detail/view.dart';
 
 class animatedcontainer extends StatelessWidget {

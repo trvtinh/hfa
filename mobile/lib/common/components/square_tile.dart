@@ -18,7 +18,7 @@ class SquareTile extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         height: 40,
         decoration: BoxDecoration(
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
@@ -57,7 +57,7 @@ class SquareTile extends StatelessWidget {
                 ),
               )
             else
-              Text(
+              const Text(
                 "Đăng nhập bằng Apple  ",
                 style: TextStyle(
                   color: Colors.white,

@@ -28,7 +28,7 @@ class _AddFileState extends State<AddFile> {
   }
 
   void pickMultipleImages() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final List<XFile> images = await _picker.pickMultiImage();
     if (images != null) {
       setState(() {
         selectedFiles.addAll(images);
@@ -138,7 +138,7 @@ class _AddFileState extends State<AddFile> {
       );
     } else {
       return ConstrainedBox(
-        constraints: BoxConstraints(
+        constraints: const BoxConstraints(
           maxHeight: 200, // Adjust this value based on your layout needs
         ),
         child: ListView.builder(

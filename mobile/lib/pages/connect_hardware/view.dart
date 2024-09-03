@@ -5,6 +5,8 @@ import 'package:health_for_all/pages/connect_hardware/widget/find_device.dart';
 import 'package:health_for_all/pages/connect_hardware/widget/status_device.dart';
 
 class ConnectHardwarePage extends GetView<ConnectHardwareController> {
+  ConnectHardwarePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,22 +24,28 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
             color: Theme.of(context).colorScheme.onSurfaceVariant,
             size: 24,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           )
         ],
       ),
       body: Column(
         children: [
-          Divider(
+          const Divider(
             height: 1,
           ),
           Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
-                find_device(context), SizedBox(height: 16,),
-                connect_samsung(context), SizedBox(height: 16,),
+                find_device(context),
+                const SizedBox(
+                  height: 16,
+                ),
+                connect_samsung(context),
+                const SizedBox(
+                  height: 16,
+                ),
                 list_connect(context),
               ],
             ),
@@ -53,11 +61,11 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
         _showDialog(context);
       },
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.errorContainer,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
@@ -73,7 +81,7 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
               size: 32,
               color: Theme.of(context).colorScheme.primary,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(
@@ -93,11 +101,11 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
@@ -112,7 +120,9 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
               color: Theme.of(context).colorScheme.primary,
               size: 32,
             ),
-            SizedBox(width: 8,),
+            const SizedBox(
+              width: 8,
+            ),
             Text(
               "Kết nối với Samsung Health",
               style: TextStyle(
@@ -127,26 +137,26 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
   }
 
   int num_device = 3;
-  List<String> name_device=[
+  List<String> name_device = [
     "HFA-Careport-0123",
     "HFA-Careport-0124",
     "HFA-Careport-0125",
   ];
-  List<bool> check_device=[
+  List<bool> check_device = [
     true,
     false,
     false,
   ];
 
-  Widget list_connect(BuildContext context){
+  Widget list_connect(BuildContext context) {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
               Text(
-                "Danh sách nhắc nhở (" + num_device.toString() + ")",
+                "Danh sách nhắc nhở ($num_device)",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 14,
@@ -155,9 +165,13 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
             ],
           ),
         ),
-        Divider(height: 1,),
-        SizedBox(height: 16,),
-        for (int i = 0; i < num_device; i++) 
+        const Divider(
+          height: 1,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        for (int i = 0; i < num_device; i++)
           StatusDevice(connected: check_device[i], name_device: name_device[i]),
       ],
     );
@@ -171,12 +185,14 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
-          content: SingleChildScrollView(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          content: const SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                FindDevice(complete_find_all: false,),
+                FindDevice(
+                  complete_find_all: false,
+                ),
               ],
             ),
           ),

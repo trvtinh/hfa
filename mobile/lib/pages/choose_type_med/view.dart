@@ -1,7 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/add_typed_med.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/edit_typed_med.dart';
+
 
 class ChooseTypeMed extends StatefulWidget {
   const ChooseTypeMed({super.key});
@@ -65,11 +67,11 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             padding: const EdgeInsets.all(16),
             child: OutlinedButton(
               onPressed: () {},
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width - 81,
                 child: Center(
                   child: Text(
-                    "Xem thêm " + (num_type - 4).toString() + " loại thuốc",
+                    "Xem thêm ${num_type - 4} loại thuốc",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 14,
@@ -167,7 +169,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
           child: Row(
             children: [
               Text(
-                "Danh sách thuốc (" + num_type.toString() + ")",
+                "Danh sách thuốc ($num_type)",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                   fontSize: 14,
@@ -277,9 +279,9 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          insetPadding: EdgeInsets.all(10),
+          insetPadding: const EdgeInsets.all(10),
           content: SizedBox(
-            width: MediaQuery.of(context).size.width-70,
+            width: MediaQuery.of(context).size.width - 70,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,

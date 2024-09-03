@@ -198,7 +198,7 @@ class _EditAlarmState extends State<EditAlarm> {
   }
 
   Widget drop() {
-    String? _mySelection;
+    String? mySelection;
     final List<Map> medData = getMedData();
 
     return DropdownButtonHideUnderline(
@@ -207,10 +207,10 @@ class _EditAlarmState extends State<EditAlarm> {
         child: DropdownButton<String>(
           isDense: true,
           hint: const Text("Chọn loại dữ liệu"),
-          value: _mySelection,
+          value: mySelection,
           onChanged: (newValue) {
             setState(() {
-              _mySelection = newValue;
+              mySelection = newValue;
             });
           },
           items: medData.map((Map map) {

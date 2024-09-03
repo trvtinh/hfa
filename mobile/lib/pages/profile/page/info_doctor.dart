@@ -25,17 +25,17 @@ class _InfoDoctorState extends State<InfoDoctor> {
       length: 2,
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Thông tin chuyên gia y tế"),
+            title: const Text("Thông tin chuyên gia y tế"),
             actions: [
               Icon(
                 Icons.more_vert,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
             ],
-            bottom: TabBar(
+            bottom: const TabBar(
               tabs: <Widget>[
                 Tab(
                   text: "Thông tin",
@@ -59,13 +59,13 @@ class _InfoDoctorState extends State<InfoDoctor> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                   ),
                   Container(
@@ -73,7 +73,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                       color: Theme.of(context).colorScheme.secondaryContainer,
                       shape: BoxShape.circle,
                     ),
-                    padding: EdgeInsets.all(9),
+                    padding: const EdgeInsets.all(9),
                     child: Icon(
                       Icons.add_task,
                       color: Theme.of(context).colorScheme.primary,
@@ -86,7 +86,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                 child: Column(
                   children: [
                     Image.asset("assets/images/3d_avatar_24.png"),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Text(
@@ -96,7 +96,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                         fontSize: 22,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 16,
                     ),
                     Row(
@@ -109,7 +109,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                             fontSize: 22,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         for (int i = 1; i <= 5; i++)
@@ -118,7 +118,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                             color: Theme.of(context).colorScheme.secondary,
                             size: 20,
                           ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         Text(
@@ -138,7 +138,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
               small_box(
@@ -208,14 +208,14 @@ class _InfoDoctorState extends State<InfoDoctor> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
           child: Row(
             children: [
               Expanded(
                 child: Row(
                   children: [
                     lead,
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Column(
@@ -251,7 +251,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
       ],
@@ -266,7 +266,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainer,
             ),
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Column(
               children: [
                 message("Nguyễn Văn B", "06:00", "29/07/2024", 5.0, "Rất tốt",
@@ -286,11 +286,11 @@ class _InfoDoctorState extends State<InfoDoctor> {
 
   Widget rating() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -299,7 +299,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                   color: Theme.of(context).colorScheme.secondary,
                   size: 40,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Icon(
@@ -307,7 +307,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                   color: Theme.of(context).colorScheme.secondary,
                   size: 40,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Icon(
@@ -315,7 +315,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                   color: Theme.of(context).colorScheme.secondary,
                   size: 40,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Icon(
@@ -323,7 +323,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                   color: Theme.of(context).colorScheme.secondary,
                   size: 40,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Icon(
@@ -334,7 +334,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Row(
@@ -356,19 +356,22 @@ class _InfoDoctorState extends State<InfoDoctor> {
                       borderRadius: BorderRadius.circular(28),
                       borderSide: BorderSide.none,
                     ),
-                    contentPadding: EdgeInsets.symmetric(vertical: 14),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 14),
                     filled: true,
-                    fillColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+                    fillColor:
+                        Theme.of(context).colorScheme.surfaceContainerHigh,
                   ),
                 ),
               ),
-              SizedBox(width: 4,),
+              const SizedBox(
+                width: 4,
+              ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: Colors.transparent,
                 ),
-                onPressed: (){},
+                onPressed: () {},
                 child: Icon(
                   Icons.send,
                   size: 24,
@@ -387,7 +390,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
@@ -411,7 +414,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                   ),
                   seperator(Colors.black),
                   Text(
-                    time + ", " + date,
+                    "$time, $date",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 12,
@@ -419,7 +422,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               Row(
@@ -452,7 +455,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
                     ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 4,
               ),
               Row(
@@ -469,7 +472,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 8,
         ),
       ],
@@ -479,7 +482,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
   Widget seperator(Color color) {
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 6,
         ),
         Container(
@@ -487,7 +490,7 @@ class _InfoDoctorState extends State<InfoDoctor> {
           height: 3,
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        SizedBox(
+        const SizedBox(
           width: 6,
         ),
       ],

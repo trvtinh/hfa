@@ -12,10 +12,6 @@ import 'package:intl/intl.dart';
 class ProfileController extends GetxController {
   final state = ProfileState();
   final appController = Get.find<ApplicationController>();
-  @override
-  void onInit() async {
-    super.onInit();
-  }
 
   DateTime parseDate(String dateString) {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
