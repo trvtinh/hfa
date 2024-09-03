@@ -127,9 +127,9 @@ class _AddFileState extends State<AddFile> {
         dashPattern: const [2, 3],
         color: Theme.of(context).colorScheme.outline,
         child: Container(
-          width: MediaQuery.of(context).size.width-110,
-          height: 30,
-          alignment: Alignment.center,
+          height: 32,
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+          alignment: Alignment.topLeft,
           child: Text(
             'Chưa có file đính kèm',
             style: TextStyle(color: Theme.of(context).colorScheme.outline),
@@ -137,13 +137,17 @@ class _AddFileState extends State<AddFile> {
         ),
       );
     } else {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: selectedFiles.length,
-        itemBuilder: (context, index) {
-          final XFile file = selectedFiles[index];
-          return _buildFileItem(file);
-        },
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+          maxHeight: 200, // Adjust this value based on your layout needs
+        ),
+        child: ListView.builder(
+          itemCount: selectedFiles.length,
+          itemBuilder: (context, index) {
+            final XFile file = selectedFiles[index];
+            return _buildFileItem(file);
+          },
+        ),
       );
     }
   }

@@ -117,7 +117,7 @@ class _ListDoctorState extends State<ListDoctor> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 12,horizontal: 16,),
+            padding: EdgeInsets.symmetric(vertical: 12,horizontal: 8,),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

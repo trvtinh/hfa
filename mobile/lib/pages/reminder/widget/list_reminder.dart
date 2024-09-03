@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_for_all/pages/reminder/widget/edit_reminder.dart';
+import 'package:health_for_all/pages/reminder/widget/info_reminder.dart';
 
 class ListReminder extends StatefulWidget {
   final int index;
@@ -10,6 +12,13 @@ class ListReminder extends StatefulWidget {
 }
 
 class _ListReminderState extends State<ListReminder> {
+  List<String> expired = [
+    "2024/09/30",
+    "2024/09/30",
+    "2024/09/30",
+    "2024/09/30",
+  ];
+
   List<String> remind_name = [
     "Nhắc nhở 1",
     "Nhắc nhở 2",
@@ -86,14 +95,23 @@ class _ListReminderState extends State<ListReminder> {
       }
     }
 
-    return Column(
-      children: [
-        if (isSwitched[widget.index]) switched(check)
-        else unswitched(check),
-        SizedBox(
-          height: 12,
-        ),
-      ],
+    return GestureDetector(
+      onTap: () {
+        Get.to(InfoReminder(
+          name: remind_name[widget.index],
+          gio: time[widget.index],
+          ngay: expired[widget.index],
+          choosen_day: isRemind[widget.index],
+        ));
+      },
+      child: Column(
+        children: [
+          if (isSwitched[widget.index]) switched(check) else unswitched(check),
+          SizedBox(
+            height: 12,
+          ),
+        ],
+      ),
     );
   }
 
@@ -244,7 +262,7 @@ class _ListReminderState extends State<ListReminder> {
     );
   }
 
-  Widget unswitched(int check){
+  Widget unswitched(int check) {
     return Container(
       decoration: BoxDecoration(
         boxShadow: [

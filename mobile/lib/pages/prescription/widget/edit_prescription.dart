@@ -236,7 +236,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
           Icons.today,
           selectDate,
           TextEditingController(),
-          width: (MediaQuery.of(context).size.width - 70) / 2 - 5,
+          width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
         SizedBox(
           width: 12,
@@ -247,7 +247,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
           Icons.today,
           selectDate,
           TextEditingController(),
-          width: (MediaQuery.of(context).size.width - 70) / 2 - 5,
+          width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
       ],
     );

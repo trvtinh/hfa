@@ -180,7 +180,7 @@ class _AddAlarmState extends State<AddAlarm> {
 
   Widget drop_alt() {
     return DropdownMenu(
-      width: MediaQuery.sizeOf(context).width - 32,
+      width: MediaQuery.sizeOf(context).width - 64,
       initialSelection: dropdownValue,
       onSelected: (String? value) {
         setState(() {
