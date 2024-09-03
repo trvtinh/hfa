@@ -72,16 +72,12 @@ class _AddReminderState extends State<AddReminder> {
           SizedBox(
             height: 24,
           ),
-          Row(
+          Wrap(
             children: [
               choice("T2"), SizedBox(width: 4,),
               choice("T3"), SizedBox(width: 4,),
               choice("T4"), SizedBox(width: 4,),
               choice("T5"), SizedBox(width: 4,),
-            ],
-          ),
-          Row(
-            children: [
               choice("T6"), SizedBox(width: 4,),
               choice("T7"), SizedBox(width: 4,),
               choice("CN"), SizedBox(width: 4,),
