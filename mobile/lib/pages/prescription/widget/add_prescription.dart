@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/choose_type_med/view.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AddPrescription extends StatefulWidget {
@@ -12,6 +15,16 @@ class AddPrescription extends StatefulWidget {
 }
 
 class _AddPrescriptionState extends State<AddPrescription> {
+  List<XFile> selectedFiles = [];
+  void updateFiles(List<XFile> newFiles) {
+    setState(() {
+      selectedFiles = newFiles;
+      for (var i in selectedFiles) {
+        log('combobox : ${i.path}');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,7 +51,12 @@ class _AddPrescriptionState extends State<AddPrescription> {
           const SizedBox(
             height: 24,
           ),
-          AddFile(),
+          Flexible(
+            child: AddFile(
+              files: selectedFiles,
+              onFilesChanged: updateFiles,
+            ),
+          ),
           const SizedBox(
             height: 24,
           ),
@@ -246,7 +264,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           Icons.today,
           selectDate,
           TextEditingController(),
-          width: (MediaQuery.of(context).size.width - 70) / 2 - 5,
+          width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
         const SizedBox(
           width: 12,
@@ -257,7 +275,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           Icons.today,
           selectDate,
           TextEditingController(),
-          width: (MediaQuery.of(context).size.width - 70) / 2 - 5,
+          width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
       ],
     );

@@ -178,15 +178,18 @@ class PrescriptionPage extends GetView<PrescriptionController> {
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16.0),
           ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          content: const SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AddPrescription(),
-              ],
+          insetPadding: EdgeInsets.all(10),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width-70,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(child: AddPrescription()),
+                ],
+              ),
             ),
           ),
         );
