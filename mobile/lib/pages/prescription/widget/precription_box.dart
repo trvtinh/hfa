@@ -29,7 +29,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(PrescriptionDetail(
+        Get.to(() => PrescriptionDetail(
           name: widget.name,
           order: widget.order,
           tablet: ["Vitamin C", "Vitamin B1"],

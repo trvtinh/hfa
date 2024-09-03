@@ -29,7 +29,7 @@ class Homepage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(const ProfilePage());
+                Get.to(() => ProfilePage());
               },
               child: Container(
                 height: 80,
@@ -261,7 +261,7 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(const DiagnosticPage());
+                    Get.to(() => DiagnosticPage());
                   },
                   child: Obx(
                     () => WhiteBox(
@@ -279,7 +279,7 @@ class Homepage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(PrescriptionPage());
+                    Get.to(() => PrescriptionPage());
                   },
                   child: const WhiteBox(
                       title: 'Đơn thuốc',
@@ -299,7 +299,7 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(ReminderPage());
+                    Get.to(() => ReminderPage());
                   },
                   child: const WhiteBoxnoW(
                       title: 'Nhắc nhở',
@@ -343,7 +343,7 @@ class Homepage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(ChatbotPage());
+                    Get.to(() => ChatbotPage());
                   },
                   child: const WhiteBoxnoVal(
                       title: 'Trò chuyện với HFA',
@@ -358,7 +358,7 @@ class Homepage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(ConnectHardwarePage());
+                Get.to(() => ConnectHardwarePage());
               },
               child: Container(
                 height: 84,

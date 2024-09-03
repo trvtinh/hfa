@@ -97,7 +97,7 @@ class _ListReminderState extends State<ListReminder> {
 
     return GestureDetector(
       onTap: () {
-        Get.to(InfoReminder(
+        Get.to(() => InfoReminder(
           name: remind_name[widget.index],
           gio: time[widget.index],
           ngay: expired[widget.index],
