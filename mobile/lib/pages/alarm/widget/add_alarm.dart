@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/pages/alarm/controller.dart';
 
 class AddAlarm extends StatefulWidget {
   const AddAlarm({super.key});
@@ -9,6 +13,7 @@ class AddAlarm extends StatefulWidget {
 }
 
 class _AddAlarmState extends State<AddAlarm> {
+  final alarmController = Get.find<AlarmController>();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,7 +21,7 @@ class _AddAlarmState extends State<AddAlarm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           Row(
@@ -26,7 +31,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 width: 32,
                 height: 32,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 16,
               ),
               Text(
@@ -44,11 +49,12 @@ class _AddAlarmState extends State<AddAlarm> {
     );
   }
 
-  Widget MyTextField(
-      String name, String hint, TextEditingController controller) {
+  Widget myTextField(String name, String hint, TextEditingController controller,
+      {bool? readOnly}) {
     return SizedBox(
       child: TextField(
         controller: controller,
+        readOnly: readOnly ?? false,
         decoration: InputDecoration(
           labelText: name,
           hintText: hint,
@@ -56,7 +62,7 @@ class _AddAlarmState extends State<AddAlarm> {
             fontSize: 16,
             color: Theme.of(context).colorScheme.outline,
           ),
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );
@@ -65,24 +71,37 @@ class _AddAlarmState extends State<AddAlarm> {
   Widget body() {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 24,
         ),
         // drop(),
         drop_alt(),
-        SizedBox(
+        const SizedBox(
           height: 24,
         ),
-        MyTextField("Đơn vị", "Đơn vị", TextEditingController()),
-        SizedBox(
+        myTextField(
+          "Đơn vị",
+          "Đơn vị",
+          alarmController.unitController,
+          readOnly: true,
+        ),
+        const SizedBox(
           height: 24,
         ),
-        MyTextField("Ngưỡng cao", "Ngưỡng cao", TextEditingController()),
-        SizedBox(
+        myTextField(
+          "Ngưỡng cao",
+          "Ngưỡng cao",
+          alarmController.highThresholdController,
+        ),
+        const SizedBox(
           height: 24,
         ),
-        MyTextField("Ngưỡng thấp", "Ngưỡng thấp", TextEditingController()),
-        SizedBox(
+        myTextField(
+          "Ngưỡng thấp",
+          "Ngưỡng thấp",
+          alarmController.lowThresholdController,
+        ),
+        const SizedBox(
           height: 50,
         ),
         Row(
@@ -94,6 +113,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
+                alarmController.clearData();
                 Get.back();
               },
               child: Text(
@@ -110,7 +130,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                Get.back();
+                alarmController.addAlarm(context);
               },
               child: Text(
                 "Xác nhận",
@@ -128,6 +148,7 @@ class _AddAlarmState extends State<AddAlarm> {
 
   Widget drop() {
     String? _mySelection;
+    final List<Map> medData = getMedData();
     return DropdownButtonHideUnderline(
       child: ButtonTheme(
         alignedDropdown: true,
@@ -140,7 +161,7 @@ class _AddAlarmState extends State<AddAlarm> {
               _mySelection = newValue;
             });
           },
-          items: MedData.map((Map map) {
+          items: medData.map((Map map) {
             return DropdownMenuItem<String>(
               value: map["name"].toString(),
               child: Row(
@@ -162,30 +183,19 @@ class _AddAlarmState extends State<AddAlarm> {
     );
   }
 
-  String dropdownValue = 'Loại dữ liệu';
-
-  List<String> list = <String>[
-    'Loại dữ liệu',
-    'Huyết áp',
-    'Thân nhiệt',
-    'Đường huyết',
-    'Nhịp tim',
-    'SPO2',
-    'HRV',
-    'ECG - Điện tâm đồ',
-    'Cân nặng',
-    'Xét nghiệm máu',
-    'Axit Uric',
-  ];
+  final List<String> list = List.generate(
+      10,
+      (index) =>
+          Item.getTitle(index)); // Use Item.getTitle to populate the list
 
   Widget drop_alt() {
     return DropdownMenu(
-      width: MediaQuery.sizeOf(context).width - 32,
-      initialSelection: dropdownValue,
+      width: MediaQuery.of(context).size.width - 70,
+      hintText: "Chọn loại dữ liệu",
       onSelected: (String? value) {
-        setState(() {
-          dropdownValue = value!;
-        });
+        alarmController.seletedTypeId.value = list.indexOf(value!).toString();
+        log(alarmController.seletedTypeId.value);
+        alarmController.unitController.text = Item.getUnit(list.indexOf(value));
       },
       dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
         return DropdownMenuEntry<String>(value: value, label: value);
@@ -193,56 +203,16 @@ class _AddAlarmState extends State<AddAlarm> {
     );
   }
 
-  List<Map> MedData = [
-    {
-      "id": 1,
-      "image": 'assets/medical_data_Home_images/blood-pressure.png',
-      "name": 'Huyết áp'
-    },
-    {
-      "id": 2,
-      "image": 'assets/medical_data_Home_images/thermometer.png',
-      "name": 'Thân nhiệt'
-    },
-    {
-      "id": 3,
-      "image": 'assets/medical_data_Home_images/blood sugar.png',
-      "name": 'Đường huyết'
-    },
-    {
-      "id": 4,
-      "image": 'assets/medical_data_Home_images/heart-rate.png',
-      "name": 'Nhịp tim'
-    },
-    {
-      "id": 5,
-      "image": 'assets/medical_data_Home_images/spo2.png',
-      "name": 'SPO2'
-    },
-    {
-      "id": 6,
-      "image": 'assets/medical_data_Home_images/favorite_border.png',
-      "name": 'HRV'
-    },
-    {
-      "id": 7,
-      "image": 'assets/medical_data_Home_images/ecg-outline.png',
-      "name": 'ECG - Điện tâm đồ'
-    },
-    {
-      "id": 8,
-      "image": 'assets/medical_data_Home_images/scale.png',
-      "name": 'Cân nặng'
-    },
-    {
-      "id": 9,
-      "image": 'assets/medical_data_Home_images/result.png',
-      "name": 'Xét nghiệm máu'
-    },
-    {
-      "id": 10,
-      "image": 'assets/medical_data_Home_images/Axit Uric.png',
-      "name": 'Axit Uric'
-    },
-  ];
+  List<Map> getMedData() {
+    return List.generate(10, (index) {
+      return {
+        "id": index,
+        "image": Item.getIconPath(index),
+        "name": Item.getTitle(index),
+        "unit": Item.getUnit(index),
+      };
+    });
+  }
+
+  // List<Map> MedData = getMedData();
 }

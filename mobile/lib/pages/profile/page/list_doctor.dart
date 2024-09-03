@@ -85,9 +85,12 @@ class _ListDoctorState extends State<ListDoctor> {
           Padding(
             padding: EdgeInsets.all(16),
             child: GestureDetector(
-              onTap: (){},
+              onTap: () {},
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10,),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(),
                   borderRadius: BorderRadius.circular(100),
@@ -111,55 +114,68 @@ class _ListDoctorState extends State<ListDoctor> {
 
   Widget doctor(int index) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         add(context, index);
       },
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 12,horizontal: 16,),
+            padding: EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 8,
+            ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 30,vertical: 24,),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(16)
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 24,
                       ),
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(16)),
                       child: Text(
                         "A",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
                           fontSize: 16,
                         ),
                       ),
                     ),
-                    SizedBox(width: 16,),
+                    SizedBox(
+                      width: 16,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           name[index],
                           style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500
-                          ),
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
                         ),
-                        SizedBox(height: 8,),
+                        SizedBox(
+                          height: 8,
+                        ),
                         Row(
                           children: [
                             Text(
                               id[index],
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
                                 fontSize: 14,
                               ),
                             ),
-                            SizedBox(width: 30,),
+                            SizedBox(
+                              width: 30,
+                            ),
                             Text(
                               rate[index].toString(),
                               style: TextStyle(
@@ -174,21 +190,30 @@ class _ListDoctorState extends State<ListDoctor> {
                             Text(
                               "(10)",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
                               ),
                             ),
                           ],
                         )
                       ],
                     ),
-                    SizedBox(width: 16,),
+                    SizedBox(
+                      width: 16,
+                    ),
                   ],
                 ),
                 Column(
                   children: [
                     GestureDetector(
-                      onTap: (){
-                        Get.to(InfoDoctor(ten: name[index], rate: rate[index], id: id[index], email: email[index], mobile: mobile[index]));
+                      onTap: () {
+                        Get.to(InfoDoctor(
+                            ten: name[index],
+                            rate: rate[index],
+                            id: id[index],
+                            email: email[index],
+                            mobile: mobile[index]));
                       },
                       child: Icon(
                         Icons.info_outline,
@@ -200,7 +225,9 @@ class _ListDoctorState extends State<ListDoctor> {
               ],
             ),
           ),
-          Divider(height: 1,),
+          Divider(
+            height: 1,
+          ),
         ],
       ),
     );
@@ -220,7 +247,7 @@ class _ListDoctorState extends State<ListDoctor> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: MediaQuery.of(context).size.width-100,
+                  width: MediaQuery.of(context).size.width - 100,
                   child: Text(
                     "Thêm chuyên gia y tế",
                     style: TextStyle(
@@ -229,44 +256,58 @@ class _ListDoctorState extends State<ListDoctor> {
                     ),
                   ),
                 ),
-                SizedBox(height: 24,),
+                SizedBox(
+                  height: 24,
+                ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4,),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
                         child: Row(
                           children: [
                             Container(
                               padding: EdgeInsets.all(14),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Theme.of(context).colorScheme.primaryContainer,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
                               ),
                               child: Text(
                                 "A",
                                 style: TextStyle(
                                   fontSize: 16,
-                                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 12,),
+                            SizedBox(
+                              width: 12,
+                            ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   name[index],
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurface,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                     fontSize: 16,
                                   ),
                                 ),
                                 Text(
                                   id[index],
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -275,7 +316,9 @@ class _ListDoctorState extends State<ListDoctor> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -284,16 +327,15 @@ class _ListDoctorState extends State<ListDoctor> {
                               elevation: 0,
                               backgroundColor: Colors.transparent,
                             ),
-                            onPressed: (){
+                            onPressed: () {
                               Get.back();
                             },
                             child: Text(
                               "Hủy",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500
-                              ),
+                                  color: Theme.of(context).colorScheme.error,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500),
                             ),
                           ),
                           ElevatedButton(
@@ -301,16 +343,15 @@ class _ListDoctorState extends State<ListDoctor> {
                               elevation: 0,
                               backgroundColor: Colors.transparent,
                             ),
-                            onPressed: (){
+                            onPressed: () {
                               Get.back();
                             },
                             child: Text(
                               "Xác nhận",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500
-                              ),
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500),
                             ),
                           ),
                         ],
@@ -332,20 +373,20 @@ class _ListDoctorState extends State<ListDoctor> {
       child: TextField(
         controller: TextEditingController(),
         decoration: InputDecoration(
-            hintText: "Tìm chuyên gia y tế",
-            prefixIcon: Icon(
-              Icons.search,
-              size: 24,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            filled: true,
-            fillColor: Theme.of(context).colorScheme.surfaceContainer,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(28),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: EdgeInsets.all(4),
+          hintText: "Tìm chuyên gia y tế",
+          prefixIcon: Icon(
+            Icons.search,
+            size: 24,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
+          filled: true,
+          fillColor: Theme.of(context).colorScheme.surfaceContainer,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(28),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: EdgeInsets.all(4),
+        ),
       ),
     );
   }

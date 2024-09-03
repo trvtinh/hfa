@@ -237,8 +237,8 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            const BoxShadow(
+          boxShadow: const [
+            BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
               blurRadius: 2,

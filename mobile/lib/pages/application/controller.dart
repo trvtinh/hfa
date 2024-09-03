@@ -8,6 +8,7 @@ import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
+import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'index.dart';
@@ -23,6 +24,7 @@ class ApplicationController extends GetxController {
   ApplicationController();
   final notificationController = Get.find<NotificationController>();
   final diagnosticController = Get.find<DiagnosticController>();
+  final AlarmController alarmController = Get.find<AlarmController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -118,8 +120,10 @@ class ApplicationController extends GetxController {
     await getProfile();
     notificationController.state.profile.value = state.profile.value;
     diagnosticController.state.profile.value = state.profile.value;
+    alarmController.state.profile.value = state.profile.value;
     notificationController.fetchNotificationCounts();
     diagnosticController.fetchDiagnosticNotifications();
+    alarmController.getAlarmCount();
     log('Dữ liệu diagnostic noti: ${diagnosticController.state.profile.value.toString()}');
 
     log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');

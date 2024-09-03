@@ -308,15 +308,17 @@ class Homepage extends StatelessWidget {
                       value1: '07'),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Get.to(AlarmPage());
-                  },
-                  child: const WhiteBoxnoW(
-                      title: 'Cảnh báo',
-                      iconpath: 'assets/images/warning_amber.png',
-                      text1: 'Số cảnh báo',
-                      value1: '07'),
-                ),
+                    onTap: () {
+                      Get.to(() => AlarmPage());
+                    },
+                    child: Obx(() => WhiteBoxnoW(
+                          title: 'Cảnh báo',
+                          iconpath: 'assets/images/warning_amber.png',
+                          text1: 'Số cảnh báo',
+                          value1: appController
+                              .alarmController.numberAlarm.value
+                              .toString(),
+                        ))),
               ],
             ),
             const SizedBox(
@@ -327,7 +329,7 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => NotiPage());
+                    Get.to(() => const NotiPage());
                   },
                   child: Obx(() => WhiteBox(
                       title: 'Thông báo',
