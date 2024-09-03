@@ -6,13 +6,17 @@ class InfoDoctor extends StatefulWidget {
   final String id;
   final String email;
   final String mobile;
+  final String degree;
+  final String department;
   const InfoDoctor(
       {super.key,
       required this.ten,
       required this.rate,
       required this.id,
       required this.email,
-      required this.mobile});
+      required this.mobile,
+      required this.degree,
+      required this.department});
 
   @override
   State<InfoDoctor> createState() => _InfoDoctorState();
@@ -99,37 +103,19 @@ class _InfoDoctorState extends State<InfoDoctor> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.rate.toString(),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.error,
-                            fontSize: 22,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        for (int i = 1; i <= 5; i++)
-                          Icon(
-                            Icons.star,
-                            color: Theme.of(context).colorScheme.secondary,
-                            size: 20,
-                          ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          "(10)",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
-                        ),
-                      ],
+                    Text(
+                      widget.degree,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      widget.department,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -289,6 +275,37 @@ class _InfoDoctorState extends State<InfoDoctor> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.rate.toString(),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.error,
+                  fontSize: 22,
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              for (int i = 1; i <= 5; i++)
+                Icon(
+                  Icons.star,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: 20,
+                ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                "(10)",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(

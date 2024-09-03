@@ -41,6 +41,18 @@ class _ListDoctorState extends State<ListDoctor> {
     "+84 123456789",
     "+84 123456789",
   ];
+  List<String> degree = [
+    "Bác sĩ"
+        "Cử nhân"
+        "Dược sĩ"
+        "Bác sĩ chuyên khoa I"
+  ];
+  List<String> department = [
+    "Khoa tim mạch"
+        "Khoa thần kinh trung ương"
+        "Khoa cấp cứu"
+        "Khoa nội tiết",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -209,11 +221,14 @@ class _ListDoctorState extends State<ListDoctor> {
                     GestureDetector(
                       onTap: () {
                         Get.to(() => InfoDoctor(
-                            ten: name[index],
-                            rate: rate[index],
-                            id: id[index],
-                            email: email[index],
-                            mobile: mobile[index]));
+                              ten: name[index],
+                              rate: rate[index],
+                              id: id[index],
+                              email: email[index],
+                              mobile: mobile[index],
+                              degree: degree[index],
+                              department: department[index],
+                            ));
                       },
                       child: Icon(
                         Icons.info_outline,
