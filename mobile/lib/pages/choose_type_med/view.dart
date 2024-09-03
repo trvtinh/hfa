@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
@@ -59,6 +62,35 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                         ),
                       ],
                     ),
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('medicineBases')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Text('Something went wrong');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      }
+                      final data = snapshot.data!.docs
+                          .map((doc) => MedicineBase.fromFirestore(
+                              doc as DocumentSnapshot<Map<String, dynamic>>))
+                          .toList();
+                      WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        medicineController.state.medicineCount.value =
+                            data.length;
+                      });
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          final doc = data[index];
+                          return type_med(index, doc);
+                        },
+                      );
+                    },
                   ),
                 ],
               ),
@@ -206,6 +238,9 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                           medicineController.state.selectedMedicine
                               .remove(index);
                         }
+                        log("hehe" +
+                            medicineController.state.selectedMedicine
+                                .toString());
                       }),
                 ),
                 const SizedBox(
