@@ -65,11 +65,13 @@ class _AddTypedMedState extends State<AddTypedMed> {
         vertical: 24,
       ),
       child: Column(children: [
-        _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc"),
+        _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc",
+            medicineController.nameMedicine),
         const SizedBox(
           height: 24,
         ),
         _buildDialogTextField("Mô tả", "Công dụng, cách dùng, liều lượng",
+            medicineController.description,
             maxLines: 3),
         const SizedBox(
           height: 24,
@@ -82,11 +84,13 @@ class _AddTypedMedState extends State<AddTypedMed> {
     );
   }
 
-  Widget _buildDialogTextField(String label, String hint, {int? maxLines}) {
+  Widget _buildDialogTextField(
+      String label, String hint, TextEditingController controller,
+      {int? maxLines}) {
     return SizedBox(
       width: MediaQuery.of(context).size.width - 20,
       child: TextField(
-        controller: TextEditingController(),
+        controller: controller,
         maxLines: maxLines ?? 1,
         decoration: InputDecoration(
           labelText: label,
@@ -122,8 +126,12 @@ class _AddTypedMedState extends State<AddTypedMed> {
         TextButton(
           onPressed: () async {
             try {
-              await medicineController.addImage();
               await medicineController.addMedicineBase();
+              Future.delayed(const Duration(seconds: 1), () {
+                medicineController.clearData();
+                Get.back();
+                Get.back();
+              });
             } catch (e) {
               log(e.toString());
               Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",

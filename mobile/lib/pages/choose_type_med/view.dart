@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/add_typed_med.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/edit_typed_med.dart';
 
+import 'controller.dart';
 
 class ChooseTypeMed extends StatefulWidget {
   const ChooseTypeMed({super.key});
@@ -13,6 +13,7 @@ class ChooseTypeMed extends StatefulWidget {
 }
 
 class _ChooseTypeMedState extends State<ChooseTypeMed> {
+  final medicineController = Get.find<ChooseTypeMedController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,13 +169,13 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
-              Text(
-                "Danh sách thuốc ($num_type)",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 14,
-                ),
-              )
+              Obx(() => Text(
+                    "Danh sách thuốc (${medicineController.state.medicineCount.value})",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 14,
+                    ),
+                  ))
             ],
           ),
         ),

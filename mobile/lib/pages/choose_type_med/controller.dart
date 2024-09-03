@@ -19,18 +19,19 @@ class ChooseTypeMedController extends GetxController {
     for (var value in selectedFiles) {
       final imageUrl = await FirebaseApi.uploadImage(value.path, 'medicine');
       selectedImagesURL.add(imageUrl!);
-      log(value.toString());
       log(selectedImagesURL.toString());
     }
   }
 
   Future addMedicineBase() async {
+    log("addMedicineBase");
     final name = nameMedicine.text;
     final desc = description.text;
     if (name.isEmpty) {
       Get.snackbar("Lỗi", "Điền đầy đủ thông tin", backgroundColor: Colors.red);
       return;
     }
+    await addImage();
     final medicine = MedicineBase(
       name: name,
       description: desc,
@@ -41,7 +42,6 @@ class ChooseTypeMedController extends GetxController {
       await FirebaseApi.addDocument("medicineBases", medicine.toJson());
       Get.snackbar("Thành công", "Thêm thuốc thành công",
           backgroundColor: Colors.green);
-      clearData();
     } catch (e) {
       log(e.toString());
       Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
