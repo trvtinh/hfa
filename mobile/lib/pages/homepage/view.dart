@@ -279,7 +279,7 @@ class Homepage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => const PrescriptionPage());
+                    Get.to(() => PrescriptionPage());
                   },
                   child: const WhiteBox(
                       title: 'Đơn thuốc',

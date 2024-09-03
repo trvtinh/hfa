@@ -69,10 +69,10 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
-                        return Text('Something went wrong');
+                        return const Text('Có lỗi xảy ra');
                       }
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return const CircularProgressIndicator();
                       }
                       final data = snapshot.data!.docs
                           .map((doc) => MedicineBase.fromFirestore(
@@ -104,7 +104,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                 width: MediaQuery.of(context).size.width - 81,
                 child: Center(
                   child: Text(
-                    "Xem thêm ${num_type - 4} loại thuốc",
+                    "Xem thêm 0 loại thuốc",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 14,
@@ -119,6 +119,8 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             children: [
               OutlinedButton(
                 onPressed: () {
+                  medicineController.state.selectedMedicineIndex.clear();
+                  medicineController.state.selectedMedicineBases.clear();
                   Get.back();
                 },
                 child: Container(
@@ -176,24 +178,6 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
     );
   }
 
-  int num_type = 4;
-
-  List<String> med = [
-    "Vitamin C 500mg",
-    "Paracetamol 500mg",
-    "Simvastatin 500mg",
-    "Omeprazole 500mg",
-    "Metformin 500mg",
-  ];
-
-  List<bool> choose = [
-    true,
-    false,
-    false,
-    false,
-    false,
-  ];
-
   Widget head_list() {
     return Column(
       children: [
@@ -229,18 +213,20 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               children: [
                 Obx(
                   () => Checkbox(
-                      value: medicineController.state.selectedMedicine
+                      value: medicineController.state.selectedMedicineIndex
                           .contains(index),
                       onChanged: (newBool) {
                         if (newBool!) {
-                          medicineController.state.selectedMedicine.add(index);
+                          medicineController.state.selectedMedicineIndex
+                              .add(index);
+                          medicineController.state.selectedMedicineBases
+                              .add(medicine);
                         } else {
-                          medicineController.state.selectedMedicine
+                          medicineController.state.selectedMedicineIndex
                               .remove(index);
+                          medicineController.state.selectedMedicineBases
+                              .remove(medicine);
                         }
-                        log("hehe" +
-                            medicineController.state.selectedMedicine
-                                .toString());
                       }),
                 ),
                 const SizedBox(

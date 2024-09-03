@@ -11,6 +11,7 @@ import 'package:health_for_all/common/store/user.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
+import 'package:health_for_all/pages/prescription/controller.dart';
 import 'index.dart';
 
 import 'package:get/get.dart';
@@ -24,6 +25,7 @@ class ApplicationController extends GetxController {
   ApplicationController();
   final notificationController = Get.find<NotificationController>();
   final diagnosticController = Get.find<DiagnosticController>();
+  final prescriptionController = Get.find<PrescriptionController>();
   final AlarmController alarmController = Get.find<AlarmController>();
   late final List<String> tabTitles;
   late final PageController pageController;
@@ -121,6 +123,7 @@ class ApplicationController extends GetxController {
     notificationController.state.profile.value = state.profile.value;
     diagnosticController.state.profile.value = state.profile.value;
     alarmController.state.profile.value = state.profile.value;
+    prescriptionController.state.profile.value = state.profile.value;
     notificationController.fetchNotificationCounts();
     diagnosticController.fetchDiagnosticNotifications();
     alarmController.getAlarmCount();

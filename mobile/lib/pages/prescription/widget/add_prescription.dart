@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
+import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/choose_type_med/view.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
+import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -15,6 +18,10 @@ class AddPrescription extends StatefulWidget {
 }
 
 class _AddPrescriptionState extends State<AddPrescription> {
+  final medicineController = Get.find<ChooseTypeMedController>();
+  final PrescriptionController precriptionController =
+      Get.put(PrescriptionController());
+
   List<XFile> selectedFiles = [];
   void updateFiles(List<XFile> newFiles) {
     setState(() {
@@ -39,7 +46,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           const SizedBox(
             height: 24,
           ),
-          name(),
+          name(precriptionController.nameController),
           const SizedBox(
             height: 24,
           ),
@@ -60,7 +67,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
           const SizedBox(
             height: 24,
           ),
-          _buildDialogTextField('Ghi chú', 'Ghi chú', TextEditingController()),
+          _buildDialogTextField(
+              'Ghi chú', 'Ghi chú', precriptionController.noteController),
           const SizedBox(
             height: 55,
           ),
@@ -92,11 +100,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
     );
   }
 
-  Widget name() {
+  Widget name(TextEditingController controller) {
     return SizedBox(
       width: MediaQuery.of(context).size.width - 32,
       child: TextField(
-        controller: TextEditingController(),
+        controller: controller,
         decoration: InputDecoration(
           label: const Text("Tên đơn thuốc"),
           border: OutlineInputBorder(
@@ -167,90 +175,97 @@ class _AddPrescriptionState extends State<AddPrescription> {
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              children: [
-                choose_med(),
-                const SizedBox(
-                  height: 12,
+              padding: const EdgeInsets.all(12),
+              child: Obx(
+                () => Column(
+                  children: [
+                    for (var i = 0;
+                        i <
+                            medicineController
+                                .state.selectedMedicineBases.length;
+                        i++)
+                      choose_med(
+                        medicineController.state.selectedMedicineBases[i],
+                        i,
+                      ),
+                  ],
                 ),
-                choose_med(),
-              ],
-            ),
-          )
+              ))
         ],
       ),
     );
   }
 
-  Widget choose_med() {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
-                child: TextField(
-                  readOnly: true,
-                  controller: TextEditingController(),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(
+  Widget choose_med(MedicineBase medicineBase, int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            SizedBox(
+              width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
+              child: TextField(
+                readOnly: true,
+                controller: TextEditingController(text: medicineBase.name),
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 1,
+                  )),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
                       color: Theme.of(context).colorScheme.outline,
                       width: 1,
-                    )),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
-                        width: 1,
-                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 12,
-              ),
-              SizedBox(
-                width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
-                child: TextField(
-                  controller: TextEditingController(),
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+            SizedBox(
+              width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
+              child: TextField(
+                controller: precriptionController.doseControllers[index],
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.outline,
+                    width: 1,
+                  )),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
                       color: Theme.of(context).colorScheme.outline,
                       width: 1,
-                    )),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.outline,
-                        width: 1,
-                      ),
                     ),
                   ),
                 ),
               ),
-              const SizedBox(
-                width: 12,
+            ),
+            const SizedBox(
+              width: 12,
+            ),
+          ],
+        ),
+        Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                precriptionController.doseControllers.removeAt(index);
+                medicineController.state.selectedMedicineBases.removeAt(index);
+                medicineController.state.selectedMedicineIndex.removeAt(index);
+              },
+              child: Icon(
+                Icons.clear,
+                size: 24,
+                color: Theme.of(context).colorScheme.error,
               ),
-            ],
-          ),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.clear,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
+            )
+          ],
+        ),
+      ],
     );
   }
 

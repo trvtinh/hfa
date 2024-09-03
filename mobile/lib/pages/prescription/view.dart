@@ -6,8 +6,7 @@ import 'package:health_for_all/pages/prescription/widget/filter_sheet.dart';
 import 'package:health_for_all/pages/prescription/widget/precription_box.dart';
 
 class PrescriptionPage extends GetView<PrescriptionController> {
-  const PrescriptionPage({super.key});
-
+  PrescriptionPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
