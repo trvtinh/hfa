@@ -59,7 +59,7 @@ class _InfoReminderState extends State<InfoReminder> {
           child: Row(
             children: [
               Text(
-                "Đo các loại dữ liệu y tế (3  )",
+                "Đo các loại dữ liệu y tế (3)",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontSize: 14,
