@@ -1,16 +1,21 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
-import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PrescriptionController extends GetxController {
   PrescriptionController();
+  final RxList<XFile> selectedFiles = <XFile>[].obs;
+  final RxList<String> selectedImagesURL = <String>[].obs;
 
   Future addMedicineBase(String name, String description) async {
-    final data = MedicineBase(name: name, description: description);
+    final data = MedicineBase(
+      name: name,
+      description: description,
+      imageURL: selectedImagesURL,
+    );
     log(data.toString());
     await FirebaseApi.addDocument("medicineBases", data.toJson());
   }

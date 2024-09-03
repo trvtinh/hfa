@@ -17,7 +17,7 @@ class _MoreDataState extends State<MoreData> {
     return GestureDetector(
       onTap: () => _showDialog(context),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainer,
         ),
@@ -28,7 +28,7 @@ class _MoreDataState extends State<MoreData> {
               Icons.add_circle_outline,
               color: Theme.of(context).colorScheme.onPrimaryContainer,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             Text(
@@ -53,7 +53,7 @@ class _MoreDataState extends State<MoreData> {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(mainAxisSize: MainAxisSize.min, children: [
                   Align(
                     alignment: Alignment.centerLeft,
@@ -97,7 +97,7 @@ class _MoreDataState extends State<MoreData> {
             fontSize: 16,
             color: Theme.of(context).colorScheme.outline,
           ),
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
         ),
       ),
     );

@@ -9,11 +9,6 @@ import 'package:health_for_all/pages/notification/state.dart';
 class NotificationController extends GetxController {
   final state = NotificationState();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   Future<void> fetchNotificationCounts() async {
     final uid = state.profile.value!.id;
 

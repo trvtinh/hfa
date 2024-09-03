@@ -16,11 +16,11 @@ class _StatusDeviceState extends State<StatusDevice> {
     return Column(
       children: [
         Container(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(18),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Color.fromRGBO(0, 0, 0, 0.3),
                   spreadRadius: 0.6,
@@ -40,10 +40,10 @@ class _StatusDeviceState extends State<StatusDevice> {
                             size: 32,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
-                          Text(
+                          const Text(
                             "Đang kết nối",
                             style: TextStyle(
                               color: Colors.green,
@@ -63,7 +63,7 @@ class _StatusDeviceState extends State<StatusDevice> {
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Icon(
@@ -85,7 +85,7 @@ class _StatusDeviceState extends State<StatusDevice> {
                             size: 32,
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Text(
@@ -106,7 +106,7 @@ class _StatusDeviceState extends State<StatusDevice> {
                               fontSize: 14,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 16,
                           ),
                           Icon(
@@ -119,7 +119,7 @@ class _StatusDeviceState extends State<StatusDevice> {
                       ),
                     ],
                   )),
-        SizedBox(
+        const SizedBox(
           height: 12,
         ),
       ],

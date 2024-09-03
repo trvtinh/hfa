@@ -7,7 +7,7 @@ import 'package:health_for_all/pages/alarm/widget/add_alarm.dart';
 import 'package:health_for_all/pages/alarm/widget/list_alarm.dart';
 
 class AlarmPage extends GetView<AlarmController> {
-  AlarmPage({super.key});
+  const AlarmPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class AlarmPage extends GetView<AlarmController> {
                       .map((doc) => AlarmEntity.fromFirestore(
                           doc as DocumentSnapshot<Map<String, dynamic>>))
                       .toList();
-                  WidgetsBinding.instance!.addPostFrameCallback((_) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
                     controller.numberAlarm.value = alarms.length;
                   });
                   return ListView.builder(

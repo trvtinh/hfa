@@ -35,11 +35,6 @@ class ChatbotController extends GetxController {
   }
 
   @override
-  void onReady() async {
-    super.onReady();
-  }
-
-  @override
   void dispose() {
     textController.dispose();
     scrollController.dispose();
@@ -95,8 +90,8 @@ class ChatbotController extends GetxController {
   }
 
   Future<void> pickImageFromGallery() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       state.image.value = image;
@@ -107,8 +102,8 @@ class ChatbotController extends GetxController {
   }
 
   Future<void> pickImageFromCamera() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.camera);
 
     if (image != null) {
       state.image.value = image;

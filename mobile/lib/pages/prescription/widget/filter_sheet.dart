@@ -294,7 +294,7 @@ class _FilterSheetState extends State<FilterSheet> {
       Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
-    return Container(
+    return SizedBox(
       width: width,
       child: TextField(
         controller: controller,

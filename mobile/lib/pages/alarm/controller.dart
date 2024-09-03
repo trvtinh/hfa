@@ -17,11 +17,6 @@ class AlarmController extends GetxController {
   final lowThresholdController = TextEditingController();
   RxInt numberAlarm = 0.obs;
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
   Future addAlarm(BuildContext context) async {
     final unit = unitController.text;
     final highThreshold = highThresholdController.text;

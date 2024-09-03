@@ -11,13 +11,13 @@ class AlertScreen extends StatelessWidget {
   final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
   Widget build(BuildContext context) {
-    int num_alert = 1;
+    int numAlert = 1;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-             Icon(
+            Icon(
               Icons.warning_amber,
               size: 24,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -26,7 +26,7 @@ class AlertScreen extends StatelessWidget {
               width: 10,
             ),
             Text(
-              "Cảnh báo (" + num_alert.toString() + ")",
+              "Cảnh báo (" + numAlert.toString() + ")",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 14,
@@ -92,7 +92,7 @@ class AlertScreen extends StatelessWidget {
                   size: 24,
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 Text(

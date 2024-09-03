@@ -14,7 +14,7 @@ class _EditTypedMedState extends State<EditTypedMed> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 12,
         ),
         header(),
@@ -32,7 +32,7 @@ class _EditTypedMedState extends State<EditTypedMed> {
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
         Text(
@@ -48,14 +48,18 @@ class _EditTypedMedState extends State<EditTypedMed> {
 
   Widget body() {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 24,
       ),
       child: Column(children: [
         _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc"),
-        SizedBox(height: 24,),
+        const SizedBox(
+          height: 24,
+        ),
         _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc"),
-        SizedBox(height: 24,),
+        const SizedBox(
+          height: 24,
+        ),
         AddFile(),
       ]),
     );
@@ -65,8 +69,8 @@ class _EditTypedMedState extends State<EditTypedMed> {
     String label,
     String hint,
   ) {
-    return Container(
-      width: MediaQuery.of(context).size.width-20,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 20,
       child: TextField(
         controller: TextEditingController(),
         decoration: InputDecoration(

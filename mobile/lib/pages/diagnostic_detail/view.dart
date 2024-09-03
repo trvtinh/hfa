@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:health_for_all/pages/diagnostic_detail/widget/patient_box.dart';
 
 class DetailView extends StatefulWidget {
   final int index;

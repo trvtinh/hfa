@@ -97,17 +97,17 @@ class _ListReminderState extends State<ListReminder> {
 
     return GestureDetector(
       onTap: () {
-        Get.to(InfoReminder(
-          name: remind_name[widget.index],
-          gio: time[widget.index],
-          ngay: expired[widget.index],
-          choosen_day: isRemind[widget.index],
-        ));
+        Get.to(() => InfoReminder(
+              name: remind_name[widget.index],
+              gio: time[widget.index],
+              ngay: expired[widget.index],
+              choosen_day: isRemind[widget.index],
+            ));
       },
       child: Column(
         children: [
           if (isSwitched[widget.index]) switched(check) else unswitched(check),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
         ],
@@ -118,7 +118,7 @@ class _ListReminderState extends State<ListReminder> {
   Widget switched(int check) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.3),
             spreadRadius: 0.6,
@@ -129,7 +129,7 @@ class _ListReminderState extends State<ListReminder> {
         color: Theme.of(context).colorScheme.surfaceContainer,
         borderRadius: BorderRadius.circular(18),
       ),
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Icon(
@@ -137,7 +137,7 @@ class _ListReminderState extends State<ListReminder> {
             size: 32,
             color: Theme.of(context).colorScheme.primary,
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
           Expanded(
@@ -161,7 +161,7 @@ class _ListReminderState extends State<ListReminder> {
                   )
                 else
                   Text(
-                    number_reminder[widget.index].toString() + " lời nhắc",
+                    "${number_reminder[widget.index]} lời nhắc",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.outline,
                       fontSize: 12,
@@ -207,7 +207,7 @@ class _ListReminderState extends State<ListReminder> {
                                     ),
                                   ),
                                   if (i != 6)
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 4,
                                     ),
                                 ],
@@ -224,7 +224,7 @@ class _ListReminderState extends State<ListReminder> {
                                     ),
                                   ),
                                   if (i != 6)
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 4,
                                     ),
                                 ],
@@ -265,7 +265,7 @@ class _ListReminderState extends State<ListReminder> {
   Widget unswitched(int check) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Color.fromRGBO(0, 0, 0, 0.3),
             spreadRadius: 0.6,
@@ -276,7 +276,7 @@ class _ListReminderState extends State<ListReminder> {
         color: Theme.of(context).colorScheme.outlineVariant,
         borderRadius: BorderRadius.circular(18),
       ),
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           Icon(
@@ -284,7 +284,7 @@ class _ListReminderState extends State<ListReminder> {
             size: 32,
             color: Theme.of(context).colorScheme.outline,
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
           Expanded(
@@ -308,7 +308,7 @@ class _ListReminderState extends State<ListReminder> {
                   )
                 else
                   Text(
-                    number_reminder[widget.index].toString() + " lời nhắc",
+                    "${number_reminder[widget.index]} lời nhắc",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.outline,
                       fontSize: 12,
@@ -354,7 +354,7 @@ class _ListReminderState extends State<ListReminder> {
                                     ),
                                   ),
                                   if (i != 6)
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 4,
                                     ),
                                 ],
@@ -371,7 +371,7 @@ class _ListReminderState extends State<ListReminder> {
                                     ),
                                   ),
                                   if (i != 6)
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 4,
                                     ),
                                 ],
@@ -417,8 +417,8 @@ class _ListReminderState extends State<ListReminder> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
-          content: SingleChildScrollView(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          content: const SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

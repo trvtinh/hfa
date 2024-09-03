@@ -208,7 +208,7 @@ class _ListDoctorState extends State<ListDoctor> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(InfoDoctor(
+                        Get.to(() => InfoDoctor(
                             ten: name[index],
                             rate: rate[index],
                             id: id[index],
@@ -246,7 +246,7 @@ class _ListDoctorState extends State<ListDoctor> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
                   child: Text(
                     "Thêm chuyên gia y tế",

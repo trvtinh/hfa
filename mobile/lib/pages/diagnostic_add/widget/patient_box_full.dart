@@ -30,7 +30,7 @@ class PatientBoxFullState extends State<PatientBoxFull> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: widget.boxcolor,
@@ -75,7 +75,7 @@ class PatientBoxFullState extends State<PatientBoxFull> {
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(width: 12),
+                    const SizedBox(width: 12),
                     Text(
                       widget.age,
                       style: TextStyle(
@@ -122,7 +122,7 @@ class PatientBoxFullState extends State<PatientBoxFull> {
                   borderRadius: BorderRadius.circular(16),
                   color: Theme.of(context).colorScheme.primaryFixedDim,
                 ),
-                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: SizedBox(
                   width: 88,
                   height: 16,
@@ -135,7 +135,7 @@ class PatientBoxFullState extends State<PatientBoxFull> {
                   ),
                 ),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Container(
                 width: 120,
                 height: 24,
@@ -143,7 +143,7 @@ class PatientBoxFullState extends State<PatientBoxFull> {
                   borderRadius: BorderRadius.circular(16),
                   color: Theme.of(context).colorScheme.primaryFixedDim,
                 ),
-                padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

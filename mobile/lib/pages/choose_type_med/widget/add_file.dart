@@ -28,7 +28,7 @@ class _AddFileState extends State<AddFile> {
   }
 
   void pickMultipleImages() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final List<XFile> images = await _picker.pickMultiImage();
     if (images != null) {
       setState(() {
         selectedFiles.addAll(images);
@@ -56,10 +56,8 @@ class _AddFileState extends State<AddFile> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(
-          width: 1,
-          color: Theme.of(context).colorScheme.outline
-        ),
+        border:
+            Border.all(width: 1, color: Theme.of(context).colorScheme.outline),
       ),
       child: Column(
         children: [
@@ -136,7 +134,7 @@ class _AddFileState extends State<AddFile> {
         child: Container(
           // width: 260,
           height: 32,
-          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
           alignment: Alignment.topLeft,
           child: Text(
             'Chưa có file đính kèm',

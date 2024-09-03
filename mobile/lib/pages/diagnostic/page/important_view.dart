@@ -79,7 +79,7 @@ class _ImportantPageState extends State<ImportantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -122,7 +122,7 @@ class NotificationContainer extends StatelessWidget {
   final VoidCallback onTapDetail;
 
   const NotificationContainer({
-    Key? key,
+    super.key,
     required this.doctor,
     required this.time,
     required this.title,
@@ -134,7 +134,7 @@ class NotificationContainer extends StatelessWidget {
     required this.isAttached,
     required this.onTapImportant,
     required this.onTapDetail,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

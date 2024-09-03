@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/diagnostic_add/widget/add_file.dart';
+import 'package:health_for_all/pages/choose_type_med/controller.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'add_file.dart';
 
 class AddTypedMed extends StatefulWidget {
   const AddTypedMed({super.key});
@@ -10,6 +15,14 @@ class AddTypedMed extends StatefulWidget {
 }
 
 class _AddTypedMedState extends State<AddTypedMed> {
+  final medicineController = Get.find<ChooseTypeMedController>();
+  void updateFiles(List<XFile> newFiles) {
+    medicineController.selectedFiles.assignAll(newFiles);
+    for (var file in medicineController.selectedFiles) {
+      log('combobox: ${file.path}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -61,13 +74,16 @@ class _AddTypedMedState extends State<AddTypedMed> {
         const SizedBox(
           height: 24,
         ),
-        AddFile(),
+        AddFile(
+          files: medicineController.selectedFiles,
+          onFilesChanged: updateFiles,
+        ),
       ]),
     );
   }
 
   Widget _buildDialogTextField(String label, String hint, {int? maxLines}) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width - 20,
       child: TextField(
         controller: TextEditingController(),
@@ -91,6 +107,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
       children: [
         TextButton(
           onPressed: () async {
+            medicineController.clearData();
             Get.back();
           },
           child: Text(
@@ -104,7 +121,14 @@ class _AddTypedMedState extends State<AddTypedMed> {
         const SizedBox(width: 16),
         TextButton(
           onPressed: () async {
-            Get.back();
+            try {
+              await medicineController.addImage();
+              await medicineController.addMedicineBase();
+            } catch (e) {
+              log(e.toString());
+              Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
+                  backgroundColor: Colors.red);
+            }
           },
           child: Text(
             'Xác nhận',

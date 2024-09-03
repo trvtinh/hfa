@@ -44,7 +44,7 @@ Future<void> main() async {
   } catch (e) {
     print("Error loading .env file: $e");
   }
-  final credentials = await StorageService.to.getUserCredentials();
+  final credentials = StorageService.to.getUserCredentials();
   if (credentials['userEmail'] != null && credentials['accessToken'] != null) {
     final userProfile = UserLoginResponseEntity()
       ..email = credentials['userEmail']!

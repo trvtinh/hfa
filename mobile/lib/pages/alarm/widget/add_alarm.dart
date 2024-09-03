@@ -16,7 +16,7 @@ class _AddAlarmState extends State<AddAlarm> {
   final alarmController = Get.find<AlarmController>();
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.sizeOf(context).width - 32,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -147,7 +147,7 @@ class _AddAlarmState extends State<AddAlarm> {
   }
 
   Widget drop() {
-    String? _mySelection;
+    String? mySelection;
     final List<Map> medData = getMedData();
     return DropdownButtonHideUnderline(
       child: ButtonTheme(
@@ -155,10 +155,10 @@ class _AddAlarmState extends State<AddAlarm> {
         child: DropdownButton<String>(
           isDense: true,
           hint: const Text("Chọn loại dữ liệu"),
-          value: _mySelection,
+          value: mySelection,
           onChanged: (newValue) {
             setState(() {
-              _mySelection = newValue;
+              mySelection = newValue;
             });
           },
           items: medData.map((Map map) {

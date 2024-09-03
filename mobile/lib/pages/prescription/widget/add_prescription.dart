@@ -153,7 +153,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(const ChooseTypeMed());
+                        Get.to(() => const ChooseTypeMed());
                       },
                       child: Icon(
                         Icons.add_circle_outline,

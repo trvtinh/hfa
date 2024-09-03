@@ -16,7 +16,7 @@ import 'package:health_for_all/pages/reminder/view.dart';
 import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
-  ApplicationPage({super.key});
+  const ApplicationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +194,7 @@ class NotiPage extends StatelessWidget {
         title: const Text('Thông báo'),
         centerTitle: true,
       ),
-      body: NotificationPage(),
+      body: const NotificationPage(),
     );
   }
 }
