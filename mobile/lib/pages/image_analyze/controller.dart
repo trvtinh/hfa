@@ -1,11 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 
 class ImageAnalyzeController extends GetxController {
@@ -79,13 +76,16 @@ class ImageAnalyzeController extends GetxController {
       RegExp systolicRegExp = RegExp(r'int systolic = (\d+);');
       RegExp diastolicRegExp = RegExp(r'int diastolic = (\d+);');
 
-      int? extractedSystolic = int.tryParse(systolicRegExp.firstMatch(resultText)?.group(1) ?? '');
-      int? extractedDiastolic = int.tryParse(diastolicRegExp.firstMatch(resultText)?.group(1) ?? '');
+      int? extractedSystolic =
+          int.tryParse(systolicRegExp.firstMatch(resultText)?.group(1) ?? '');
+      int? extractedDiastolic =
+          int.tryParse(diastolicRegExp.firstMatch(resultText)?.group(1) ?? '');
 
       if (extractedSystolic != null && extractedDiastolic != null) {
         state.systolic.value = extractedSystolic;
         state.diastolic.value = extractedDiastolic;
-        state.analysisResult.value = 'Số đo huyết áp là: $extractedSystolic/$extractedDiastolic mmHg';
+        state.analysisResult.value =
+            'Số đo huyết áp là: $extractedSystolic/$extractedDiastolic mmHg';
       } else {
         state.analysisResult.value = 'Không thể phân tích số đo huyết áp.';
       }

@@ -7,6 +7,7 @@ import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/following/controller.dart';
 import 'package:health_for_all/pages/following_medical_data/controller.dart';
+import 'package:health_for_all/pages/image_analyze/controller.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
@@ -35,6 +36,8 @@ class ApplicationBinding implements Bindings {
     Get.lazyPut(() => FollowingMedicalDataController(), fenix: true);
     Get.lazyPut(() => DiagnosticController(), fenix: true);
     Get.lazyPut(() => ChooseTypeMedController(), fenix: true);
+    Get.lazyPut(() => ImageAnalyzeController(), fenix: true);
+
     // Get.lazyPut(() => HomeController());
     // Get.lazyPut(() => PostController());
     // Get.lazyPut(()=> ProfileController());

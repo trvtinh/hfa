@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,15 +47,17 @@ class MedicalDataController extends GetxController {
   }
 
   List<ComboBox> get entries => List.generate(length, (index) {
+        log('index: $index');
+
         return ComboBox(
           time: formatTimeOfDay(),
           noteController: noteController,
-          unitController: unitController,
+          unitController: TextEditingController(text: Item.getUnit(index)),
           valueController: valueController,
           leadingiconpath: Item.getIconPath(index),
           title: Item.getTitle(index),
           value: valueController.text.obs,
-          unit: unitController.text.obs,
+          unit: Item.getUnit(index).obs,
         );
       });
 
