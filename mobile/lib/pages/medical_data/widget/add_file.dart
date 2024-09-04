@@ -28,7 +28,7 @@ class _AddFileState extends State<AddFile> {
   }
 
   void pickMultipleImages() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final List<XFile> images = await _picker.pickMultiImage();
     if (images != null) {
       setState(() {
         selectedFiles.addAll(images);
@@ -127,9 +127,9 @@ class _AddFileState extends State<AddFile> {
         dashPattern: const [2, 3],
         color: Theme.of(context).colorScheme.outline,
         child: Container(
-          width: MediaQuery.of(context).size.width-110,
-          height: 30,
-          alignment: Alignment.center,
+          height: 32,
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+          alignment: Alignment.topLeft,
           child: Text(
             'Chưa có file đính kèm',
             style: TextStyle(color: Theme.of(context).colorScheme.outline),
@@ -137,13 +137,17 @@ class _AddFileState extends State<AddFile> {
         ),
       );
     } else {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: selectedFiles.length,
-        itemBuilder: (context, index) {
-          final XFile file = selectedFiles[index];
-          return _buildFileItem(file);
-        },
+      return ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxHeight: 200, // Adjust this value based on your layout needs
+        ),
+        child: ListView.builder(
+          itemCount: selectedFiles.length,
+          itemBuilder: (context, index) {
+            final XFile file = selectedFiles[index];
+            return _buildFileItem(file);
+          },
+        ),
       );
     }
   }
@@ -152,7 +156,7 @@ class _AddFileState extends State<AddFile> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -168,6 +172,7 @@ class _AddFileState extends State<AddFile> {
               child: Text(
                 file.name,
                 style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                   fontWeight: FontWeight.w500,
                 ),

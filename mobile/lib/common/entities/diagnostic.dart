@@ -24,8 +24,8 @@ class Diagnostic {
   }
 
   factory Diagnostic.fromFirestore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+  ) {
     final data = snapshot.data();
     return Diagnostic(
       id: snapshot.id,

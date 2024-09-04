@@ -9,11 +9,6 @@ import 'package:health_for_all/pages/notification/state.dart';
 class NotificationController extends GetxController {
   final state = NotificationState();
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   Future<void> fetchNotificationCounts() async {
     final uid = state.profile.value!.id;
 
@@ -57,17 +52,19 @@ class NotificationController extends GetxController {
   }
 
   Future addNoti(String title, String body, String page, String type,
-      String uid, String status) async {
+      String uid, String status,
+      {String? diagnosticId, String? medicalId}) async {
     final noti = NotificationEntity(
-      title: title,
-      body: body,
-      page: page,
-      type: type,
-      time: Timestamp.now(),
-      toUId: uid,
-      fromUId: state.profile.value!.id,
-      status: status,
-    );
+        title: title,
+        body: body,
+        page: page,
+        type: type,
+        time: Timestamp.now(),
+        toUId: uid,
+        fromUId: state.profile.value!.id,
+        status: status,
+        diagnosticId: diagnosticId ?? "",
+        medicalId: medicalId ?? "");
     log(noti.toString());
     await FirebaseApi.addDocument(
       'notifications',

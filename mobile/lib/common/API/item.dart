@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-
 class Item {
   Item._();
   static String getIconPath(int index) {

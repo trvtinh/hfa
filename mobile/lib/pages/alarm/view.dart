@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/alarm_entity.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/alarm/widget/add_alarm.dart';
 import 'package:health_for_all/pages/alarm/widget/list_alarm.dart';
 
 class AlarmPage extends GetView<AlarmController> {
+  const AlarmPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,69 +26,97 @@ class AlarmPage extends GetView<AlarmController> {
             size: 24,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Divider(
-            height: 1,
-          ),
-          Container(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                add_alarm(context),
-                SizedBox(
-                  height: 16,
-                ),
-                list_alarm(context),
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Divider(
+              height: 1,
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  int number_alarm = 4;
-  Widget list_alarm(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Text(
-                "Danh sách cảnh báo (" + number_alarm.toString() + ")",
+            const SizedBox(
+              height: 16,
+            ),
+            add_alarm(context),
+            const SizedBox(
+              height: 16,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: Obx(
+                () => Text(
+                  "Danh sách cảnh báo (${controller.numberAlarm})",
+                ),
               ),
-            ],
-          ),
+            ),
+            const Divider(
+              height: 1,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('alarms')
+                    .where('userId',
+                        isEqualTo: controller.state.profile.value!.id)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No alarms found.'));
+                  }
+                  final alarms = snapshot.data!.docs
+                      .map((doc) => AlarmEntity.fromFirestore(
+                          doc as DocumentSnapshot<Map<String, dynamic>>))
+                      .toList();
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    controller.numberAlarm.value = alarms.length;
+                  });
+                  return ListView.builder(
+                    itemCount: alarms.length,
+                    itemBuilder: (context, index) {
+                      final alarm = alarms[index];
+                      return ListAlarm(
+                        id: alarm.id,
+                        index: int.parse(alarm.typeId!),
+                        highThreshold: alarm.highThreshold.toString(),
+                        lowThreshold: alarm.lowThreshold.toString(),
+                        enable: alarm.enable,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
-        Divider(
-          height: 1,
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        for (int i = 0; i < number_alarm; i++) ListAlarm(index: i),
-      ],
+      ),
     );
   }
 
   Widget add_alarm(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         _showAddDialog(context);
       },
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           color: Theme.of(context).colorScheme.errorContainer,
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
@@ -100,7 +132,7 @@ class AlarmPage extends GetView<AlarmController> {
               height: 32,
               width: 32,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(
@@ -115,7 +147,7 @@ class AlarmPage extends GetView<AlarmController> {
       ),
     );
   }
-  
+
   void _showAddDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -124,8 +156,8 @@ class AlarmPage extends GetView<AlarmController> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
-          content: SingleChildScrollView(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          content: const SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

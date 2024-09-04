@@ -197,7 +197,7 @@ class _DataBoxState extends State<DataBox> {
   }
 
   Widget _buildTextContainer(String name, String time) {
-    return Container(
+    return SizedBox(
       height: 76,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

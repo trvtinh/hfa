@@ -92,11 +92,12 @@ class FirebaseApi {
     }
   }
 
-  static Future<void> addDocument(
+  static Future addDocument(
       String collection, Map<String, dynamic> data) async {
     try {
-      await db.collection(collection).add(data);
+      final docRef = await db.collection(collection).add(data);
       print('Document added successfully to $collection.');
+      return docRef.id;
     } catch (e) {
       print('Error adding document: $e');
     }

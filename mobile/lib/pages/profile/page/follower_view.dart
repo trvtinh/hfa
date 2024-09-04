@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
+import 'package:health_for_all/pages/profile/page/add_doctor.dart';
 import 'package:health_for_all/pages/profile/widget/user_ListTile.dart';
 import 'search_view.dart';
 
@@ -26,6 +27,10 @@ class _FollowerPageState extends State<FollowerPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            const AddDoctor(),
+            const SizedBox(
+              height: 8,
+            ),
             SearchingBar(false),
             const SizedBox(height: 20),
             Text(

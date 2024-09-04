@@ -7,7 +7,7 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
   final controller = Get.find<OverallMedicalDataHistoryController>();
   @override
   Widget build(BuildContext context) {
-    Future<void> _selectDate() async {
+    Future<void> selectDate() async {
       await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -16,7 +16,7 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
       );
     }
 
-    Future<List<Widget>> _buildComboBoxes() async {
+    Future<List<Widget>> buildComboBoxes() async {
       final entries = await controller.getEntries(context);
       return entries
           .map((item) => Column(

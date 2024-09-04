@@ -8,7 +8,7 @@ class ComboBox extends StatefulWidget {
   final String unit;
   final IconButton? edit;
   final IconButton? upload;
-  ComboBox({
+  const ComboBox({
     super.key,
     required this.leadingiconpath,
     required this.title,
@@ -26,7 +26,7 @@ class ComboBox extends StatefulWidget {
 class IconWidget extends StatelessWidget {
   final Icon icon;
 
-  IconWidget({required this.icon});
+  const IconWidget({super.key, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class _ComboBoxState extends State<ComboBox> {
 
                 // Tên chỉ số và giờ
                 const SizedBox(width: 8),
-                Container(
+                SizedBox(
                   height: 63,
                   width: MediaQuery.of(context).size.width / 4,
                   child: Align(
@@ -176,7 +176,7 @@ class _ComboBoxState extends State<ComboBox> {
 class IconWidgetRound extends StatelessWidget {
   final Icon icon;
 
-  IconWidgetRound({required this.icon});
+  const IconWidgetRound({super.key, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +196,7 @@ class IconWidgetRound extends StatelessWidget {
 class ImageWidgetRound extends StatelessWidget {
   final String path;
 
-  ImageWidgetRound({required this.path});
+  const ImageWidgetRound({super.key, required this.path});
 
   @override
   Widget build(BuildContext context) {

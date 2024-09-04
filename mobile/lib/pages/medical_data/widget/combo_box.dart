@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/image_analyze/controller.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
 import 'package:image_picker/image_picker.dart';
@@ -37,8 +39,27 @@ class ComboBox extends StatefulWidget {
 class _ComboBoxState extends State<ComboBox> {
   final medicalController = Get.find<MedicalDataController>();
   final appController = Get.find<ApplicationController>();
+  final imageAnalyze = Get.find<ImageAnalyzeController>();
   List<XFile> selectedFiles = [];
-  void updateFiles(List<XFile> newFiles) {
+  Future updateFiles(List<XFile> newFiles) async {
+    if (newFiles.isEmpty) {
+      widget.valueController.clear();
+      selectedFiles.clear();
+      return;
+    }
+    imageAnalyze.state.image.value = File(newFiles[0].path);
+    log('image : ${imageAnalyze.state.image.value}');
+    await imageAnalyze.analyzeImage().then((_) {
+      widget.valueController.text =
+          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
+    });
+    if (widget.title == 'Huyết áp') {
+      medicalController.state.data[widget.title]?.value =
+          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
+      log('combobox : ${medicalController.state.data[widget.title]?.value}');
+      log('hehe' +
+          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}');
+    }
     setState(() {
       selectedFiles = newFiles;
       for (var i in selectedFiles) {
@@ -190,7 +211,7 @@ class _ComboBoxState extends State<ComboBox> {
   }
 
   Widget _buildTextContainer(String name, String time) {
-    return Container(
+    return SizedBox(
       height: 76,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -262,22 +283,27 @@ class _ComboBoxState extends State<ComboBox> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.0),
           ),
-          insetPadding: EdgeInsets.all(10),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildDialogHeader(),
-                const SizedBox(height: 24),
-                _buildDialogInputFields(),
-                const SizedBox(height: 4),
-                AddFile(
-                  files: selectedFiles,
-                  onFilesChanged: updateFiles,
-                ),
-                const SizedBox(height: 24),
-                _buildDialogActions(context),
-              ],
+          insetPadding: const EdgeInsets.all(10),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width - 70,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildDialogHeader(),
+                  const SizedBox(height: 24),
+                  _buildDialogInputFields(),
+                  const SizedBox(height: 4),
+                  Flexible(
+                    child: AddFile(
+                      files: selectedFiles,
+                      onFilesChanged: updateFiles,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  _buildDialogActions(context),
+                ],
+              ),
             ),
           ),
         );
@@ -289,14 +315,12 @@ class _ComboBoxState extends State<ComboBox> {
     return Row(
       children: [
         Image.asset(widget.leadingiconpath),
-        SizedBox(width: 10),
-        Text(
-          widget.title, 
-          style: TextStyle(
-            fontSize: 24,
-            color: Theme.of(context).colorScheme.onSurface,
-          )
-          ),
+        const SizedBox(width: 10),
+        Text(widget.title,
+            style: TextStyle(
+              fontSize: 24,
+              color: Theme.of(context).colorScheme.onSurface,
+            )),
       ],
     );
   }
@@ -312,7 +336,8 @@ class _ComboBoxState extends State<ComboBox> {
             ),
             const SizedBox(width: 20),
             Expanded(
-              child: _buildDialogTextField('Đơn vị', '', widget.unitController),
+              child: _buildDialogTextField('Đơn vị', '', widget.unitController,
+                  readOnly: true),
             ),
           ],
         ),
@@ -325,11 +350,12 @@ class _ComboBoxState extends State<ComboBox> {
 
   Widget _buildDialogTextField(
       String label, String hint, TextEditingController controller,
-      {IconData? icon}) {
+      {IconData? icon, bool? readOnly}) {
     return SizedBox(
       height: 78,
       child: TextField(
         controller: controller,
+        readOnly: readOnly ?? false,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,

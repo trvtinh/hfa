@@ -8,7 +8,10 @@ import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
+import 'package:health_for_all/pages/alarm/controller.dart';
+import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
+import 'package:health_for_all/pages/prescription/controller.dart';
 import 'index.dart';
 
 import 'package:get/get.dart';
@@ -21,6 +24,9 @@ class ApplicationController extends GetxController {
   ]);
   ApplicationController();
   final notificationController = Get.find<NotificationController>();
+  final diagnosticController = Get.find<DiagnosticController>();
+  final prescriptionController = Get.find<PrescriptionController>();
+  final AlarmController alarmController = Get.find<AlarmController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -115,8 +121,14 @@ class ApplicationController extends GetxController {
   void onReady() async {
     await getProfile();
     notificationController.state.profile.value = state.profile.value;
+    diagnosticController.state.profile.value = state.profile.value;
+    alarmController.state.profile.value = state.profile.value;
+    prescriptionController.state.profile.value = state.profile.value;
     notificationController.fetchNotificationCounts();
-    log('Dữ liệu profile: ${state.profile.value.toString()}');
+    diagnosticController.fetchDiagnosticNotifications();
+    alarmController.getAlarmCount();
+    log('Dữ liệu diagnostic noti: ${diagnosticController.state.profile.value.toString()}');
+
     log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');
     getUpdatedDataTime(); // Chuyển từ await sang chỉ gọi hàm để tạo stream lắng nghe
     for (int i = 0; i < 10; i++) {
@@ -212,8 +224,8 @@ class CustomIcon extends StatelessWidget {
     required this.icon,
     required this.size,
     required this.sizeIcon,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

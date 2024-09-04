@@ -1,7 +1,13 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/add_typed_med.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/edit_typed_med.dart';
+
+import 'controller.dart';
 
 class ChooseTypeMed extends StatefulWidget {
   const ChooseTypeMed({super.key});
@@ -11,6 +17,7 @@ class ChooseTypeMed extends StatefulWidget {
 }
 
 class _ChooseTypeMedState extends State<ChooseTypeMed> {
+  final medicineController = Get.find<ChooseTypeMedController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +34,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             size: 24,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
         ],
@@ -38,38 +45,63 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Divider(
+                  const Divider(
                     height: 1,
                   ),
                   Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
                         add_type_med(),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
                         head_list(),
-                        SizedBox(
-                          height: 12,
-                        ),
-                        for (int i = 0; i < num_type; i++) type_med(i),
                       ],
                     ),
+                  ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('medicineBases')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text('Có lỗi xảy ra');
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
+                      final data = snapshot.data!.docs
+                          .map((doc) => MedicineBase.fromFirestore(
+                              doc as DocumentSnapshot<Map<String, dynamic>>))
+                          .toList();
+                      WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        medicineController.state.medicineCount.value =
+                            data.length;
+                      });
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          final doc = data[index];
+                          return type_med(index, doc);
+                        },
+                      );
+                    },
                   ),
                 ],
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: OutlinedButton(
-              onPressed: (){},
-              child: Container(
-                width: MediaQuery.of(context).size.width-81,
+              onPressed: () {},
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width - 81,
                 child: Center(
                   child: Text(
-                    "Xem thêm " + (num_type - 4).toString() + " loại thuốc",
+                    "Xem thêm 0 loại thuốc",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 14,
@@ -83,12 +115,15 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               OutlinedButton(
-                onPressed: (){
+                onPressed: () {
+                  medicineController.state.selectedMedicineIndex.clear();
+                  medicineController.state.selectedMedicineBases.clear();
                   Get.back();
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width/2-75,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  width: MediaQuery.of(context).size.width / 2 - 75,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   child: Center(
                     child: Text(
                       "Hủy",
@@ -99,17 +134,26 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                     ),
                   ),
                 ),
-              ),  
-              SizedBox(width: 10,),
-              VerticalDivider(width: 1, thickness: 1, color: Colors.black,),
-              SizedBox(width: 10,),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              const VerticalDivider(
+                width: 1,
+                thickness: 1,
+                color: Colors.black,
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               OutlinedButton(
-                onPressed: (){
+                onPressed: () {
                   Get.back();
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width/2-75,
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  width: MediaQuery.of(context).size.width / 2 - 75,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   child: Center(
                     child: Text(
                       "Xác nhận",
@@ -123,85 +167,82 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               )
             ],
           ),
-          SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
         ],
       ),
     );
   }
 
-  int num_type = 4;
-
-  List<String> med = [
-    "Vitamin C 500mg",
-    "Paracetamol 500mg",
-    "Simvastatin 500mg",
-    "Omeprazole 500mg",
-    "Metformin 500mg",
-  ];
-
-  List<bool> choose = [
-    true,
-    false,
-    false,
-    false,
-    false,
-  ];
-
   Widget head_list() {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8),
           child: Row(
             children: [
-              Text(
-                "Danh sách thuốc (" + num_type.toString() + ")",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 14,
-                ),
-              )
+              Obx(() => Text(
+                    "Danh sách thuốc (${medicineController.state.medicineCount.value})",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 14,
+                    ),
+                  ))
             ],
           ),
         ),
-        Divider(
+        const Divider(
           height: 1,
         ),
       ],
     );
   }
 
-  Widget type_med(int index) {
+  Widget type_med(int index, MedicineBase medicine) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
             child: Row(
               children: [
-                Checkbox(
-                    value: choose[index],
-                    onChanged: (newBool) {
-                      setState(() {
-                        choose[index] = newBool!;
-                      });
-                    }),
-                SizedBox(width: 16,),
+                Obx(
+                  () => Checkbox(
+                      value: medicineController.state.selectedMedicineIndex
+                          .contains(index),
+                      onChanged: (newBool) {
+                        if (newBool!) {
+                          medicineController.state.selectedMedicineIndex
+                              .add(index);
+                          medicineController.state.selectedMedicineBases
+                              .add(medicine);
+                        } else {
+                          medicineController.state.selectedMedicineIndex
+                              .remove(index);
+                          medicineController.state.selectedMedicineBases
+                              .remove(medicine);
+                        }
+                      }),
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
                 Text(
-                  med[index],
+                  medicine.name ?? "",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
           ),
           GestureDetector(
-            onTap: (){
-              _showDialog(context, EditTypedMed());
+            onTap: () {
+              _showDialog(context, const EditTypedMed());
             },
             child: Icon(
               Icons.info,
@@ -216,14 +257,14 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
   Widget add_type_med() {
     return GestureDetector(
       onTap: () {
-        _showDialog(context, AddTypedMed());
+        _showDialog(context, const AddTypedMed());
       },
       child: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainer,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 0.6,
@@ -239,7 +280,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               size: 24,
               color: Theme.of(context).colorScheme.primary,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(
@@ -261,15 +302,18 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16.0),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 10),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                next,
-              ],
+          insetPadding: const EdgeInsets.all(10),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width - 70,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(child: next),
+                ],
+              ),
             ),
           ),
         );

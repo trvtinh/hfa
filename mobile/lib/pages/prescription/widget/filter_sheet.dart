@@ -16,24 +16,24 @@ class _FilterSheetState extends State<FilterSheet> {
     return FractionallySizedBox(
       heightFactor: 1.05,
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(18)),
           color: Colors.white,
         ),
         child: Column(
           children: [
-            SizedBox(height: 36),
+            const SizedBox(height: 36),
             Container(
-              padding: EdgeInsets.symmetric(vertical: 8),
+              padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
                 children: [
-                  SizedBox(width: 24),
+                  const SizedBox(width: 24),
                   Icon(
                     Icons.filter_list,
                     size: 24,
                     color: Theme.of(context).colorScheme.secondary,
                   ),
-                  SizedBox(width: 60),
+                  const SizedBox(width: 60),
                   Expanded(
                     child: Text(
                       "Lọc đơn thuốc",
@@ -51,13 +51,13 @@ class _FilterSheetState extends State<FilterSheet> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                 ],
               ),
             ),
-            Divider(height: 1),
+            const Divider(height: 1),
             Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
                   type_med(),
@@ -76,39 +76,37 @@ class _FilterSheetState extends State<FilterSheet> {
   List<String> list = <String>['Tất cả'];
 
   Widget type_med() {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                "Loại thuốc",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
-                ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              "Loại thuốc",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
               ),
-            ],
-          ),
-          SizedBox(height: 12),
-          DropdownMenu(
-            width: MediaQuery.sizeOf(context).width - 32,
-            initialSelection: dropdownValue,
-            onSelected: (String? value) {
-              setState(() {
-                dropdownValue = value!;
-              });
-            },
-            dropdownMenuEntries:
-                list.map<DropdownMenuEntry<String>>((String value) {
-              return DropdownMenuEntry<String>(value: value, label: value);
-            }).toList(),
-          ),
-          SizedBox(height: 16),
-        ],
-      ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        DropdownMenu(
+          width: MediaQuery.sizeOf(context).width - 32,
+          initialSelection: dropdownValue,
+          onSelected: (String? value) {
+            setState(() {
+              dropdownValue = value!;
+            });
+          },
+          dropdownMenuEntries:
+              list.map<DropdownMenuEntry<String>>((String value) {
+            return DropdownMenuEntry<String>(value: value, label: value);
+          }).toList(),
+        ),
+        const SizedBox(height: 16),
+      ],
     );
   }
 
@@ -128,7 +126,7 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Row(
@@ -141,7 +139,9 @@ class _FilterSheetState extends State<FilterSheet> {
                 TextEditingController(),
                 width: (MediaQuery.of(context).size.width - 44) / 2,
               ),
-              SizedBox(width: 12,),
+              const SizedBox(
+                width: 12,
+              ),
               _buildDateTimeField(
                 context,
                 'Kết thúc',
@@ -152,7 +152,9 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
             ],
           ),
-          SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
         ],
       ),
     );
@@ -174,7 +176,7 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Row(
@@ -187,7 +189,9 @@ class _FilterSheetState extends State<FilterSheet> {
                 TextEditingController(),
                 width: (MediaQuery.of(context).size.width - 44) / 2,
               ),
-              SizedBox(width: 12,),
+              const SizedBox(
+                width: 12,
+              ),
               _buildDateTimeField(
                 context,
                 'Kết thúc',
@@ -198,13 +202,15 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
             ],
           ),
-          SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
         ],
       ),
     );
   }
 
-  Widget status(){
+  Widget status() {
     return Container(
       child: Column(
         children: [
@@ -220,13 +226,15 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           Row(
             children: [
               choice("Đang uống"),
-              SizedBox(width: 24,),
+              const SizedBox(
+                width: 24,
+              ),
               choice("Hoàn thành"),
             ],
           ),
@@ -286,7 +294,7 @@ class _FilterSheetState extends State<FilterSheet> {
       Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
-    return Container(
+    return SizedBox(
       width: width,
       child: TextField(
         controller: controller,

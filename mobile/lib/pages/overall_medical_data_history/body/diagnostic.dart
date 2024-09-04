@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
@@ -17,14 +18,14 @@ class DiagnosticScreen extends StatelessWidget {
         Row(
           children: [
             const Icon(
-              Icons.health_and_safety,
+              Icons.health_and_safety_outlined,
               size: 20,
             ),
             const SizedBox(
               width: 10,
             ),
             Obx(() =>
-                Text('Chẩn đoán (${controller.state.diagnosticList.length})'))
+                Text('Chẩn đoán (${controller.state.diagnosticCount.value})'))
           ],
         ),
         const SizedBox(height: 10),
@@ -38,30 +39,54 @@ class DiagnosticScreen extends StatelessWidget {
                   ),
                   color: Theme.of(context).colorScheme.surfaceContainer),
               padding: const EdgeInsets.all(8),
-              child: ListView.builder(
-                itemCount: controller.state.diagnosticList.length,
-                itemBuilder: (context, index) {
-                  final diagnostic = controller.state.diagnosticList[index];
-                  return FutureBuilder<String>(
-                    future: controller.getUser(diagnostic.fromUId!),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const CircularProgressIndicator();
-                      } else if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      } else {
-                        final name = snapshot.data ?? 'Unknown';
-                        return Column(
-                          children: [
-                            buildDiagnosticBox(diagnostic, context, name),
-                            const SizedBox(
-                              height: 16,
-                            )
-                          ],
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('diagnostic')
+                    .where('medicalId',
+                        isEqualTo: controller.state.medicalId.value)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No diagnostics found'));
+                  } else {
+                    final diagnostics = snapshot.data!.docs
+                        .map((doc) => Diagnostic.fromFirestore(
+                            doc as QueryDocumentSnapshot<Map<String, dynamic>>))
+                        .toList();
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      controller.state.diagnosticCount.value =
+                          diagnostics.length;
+                    });
+                    return ListView.builder(
+                      itemCount: diagnostics.length,
+                      itemBuilder: (context, index) {
+                        final diagnostic = diagnostics[index];
+                        return FutureBuilder<String>(
+                          future: controller.getUser(diagnostic.fromUId!),
+                          builder: (context, userSnapshot) {
+                            if (userSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            } else if (userSnapshot.hasError) {
+                              return Text('Error: ${userSnapshot.error}');
+                            } else {
+                              final name = userSnapshot.data ?? 'Unknown';
+                              return Column(
+                                children: [
+                                  buildDiagnosticBox(diagnostic, context, name),
+                                  const SizedBox(height: 16),
+                                ],
+                              );
+                            }
+                          },
                         );
-                      }
-                    },
-                  );
+                      },
+                    );
+                  }
                 },
               ),
             ),
@@ -69,26 +94,34 @@ class DiagnosticScreen extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         GestureDetector(
-          onTap: () {
-            Get.to(() => DiagnosticAddView(
-                user: controller.state.selectedUser.value,
-                medicalData: controller.state.selectedData.value));
-          },
-          child: Container(
-            color: Colors.transparent,
-            width: double
-                .infinity, // Ensures the container takes the full width of its parent
-            child: const Row(
-              children: [
-                Icon(Icons.add_circle_outline),
-                SizedBox(
-                  width: 16,
-                ),
-                Text('Thêm chẩn đoán'),
-              ],
-            ),
-          ),
-        )
+            onTap: () {
+              Get.to(() => DiagnosticAddView(
+                  user: controller.state.selectedUser.value,
+                  medicalData: controller.state.selectedData.value));
+            },
+            child: Container(
+              color: Colors.transparent,
+              width: double
+                  .infinity, // Ensures the container takes the full width of its parent
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.add_circle_outline,
+                    size: 24,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Text(
+                    "Thêm chuẩn đoán",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                ],
+              ),
+            ))
       ],
     );
   }
@@ -143,7 +176,7 @@ class DiagnosticScreen extends StatelessWidget {
           ),
           const Row(
             children: [
-              Text('Đã bình luận'),
+              Text('Đã chẩn đoán'),
               SizedBox(
                 width: 6,
               ),

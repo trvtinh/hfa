@@ -4,7 +4,7 @@ import 'package:health_for_all/pages/chart/controller.dart';
 import 'package:health_for_all/pages/chart/widget/show.dart';
 
 class ChartPage extends GetView<ChartController> {
-  ChartPage({super.key});
+  const ChartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ChartPage extends GetView<ChartController> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Divider(height: 1),
+          const Divider(height: 1),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainer,
@@ -38,12 +38,12 @@ class ChartPage extends GetView<ChartController> {
             height: 58,
             child: Row(
               children: [
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Icon(
                   Icons.arrow_back_ios_new,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Text(
                   "28/07/2024",
                   style: TextStyle(
@@ -51,9 +51,9 @@ class ChartPage extends GetView<ChartController> {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                SizedBox(width: 8),
-                Text("-"),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
+                const Text("-"),
+                const SizedBox(width: 8),
                 Text(
                   "03/08/2024",
                   style: TextStyle(
@@ -61,16 +61,16 @@ class ChartPage extends GetView<ChartController> {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Icon(
                   Icons.arrow_forward_ios,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Container(
                   width: 26,
                   height: 26,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
@@ -80,11 +80,11 @@ class ChartPage extends GetView<ChartController> {
                     size: 18,
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Container(
                   width: 26,
                   height: 26,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
@@ -94,11 +94,11 @@ class ChartPage extends GetView<ChartController> {
                     size: 18,
                   ),
                 ),
-                SizedBox(width: 10),
+                const SizedBox(width: 10),
                 Container(
                   width: 26,
                   height: 26,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
@@ -111,12 +111,12 @@ class ChartPage extends GetView<ChartController> {
               ],
             ),
           ),
-          Divider(height: 1, thickness: 1, color: Colors.black),
-          Expanded(
+          const Divider(height: 1, thickness: 1, color: Colors.black),
+          const Expanded(
             // Wrap Show in Expanded
             child: Show(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 200,
           ),
         ],

@@ -18,31 +18,31 @@ class _EditPrescriptionState extends State<EditPrescription> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 12,
           ),
           header(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           name(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           med_list(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           choose_date(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           AddFile(),
-          SizedBox(
+          const SizedBox(
             height: 24,
           ),
           _buildDialogTextField('Ghi chú', 'Ghi chú', TextEditingController()),
-          SizedBox(
+          const SizedBox(
             height: 55,
           ),
           build_button(),
@@ -59,7 +59,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
         Text(
@@ -75,12 +75,12 @@ class _EditPrescriptionState extends State<EditPrescription> {
 
   final controller = TextEditingController();
   Widget name() {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width - 32,
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-          label: Text("Tên đơn thuốc"),
+          label: const Text("Tên đơn thuốc"),
           border: OutlineInputBorder(
               borderSide: BorderSide(
             color: Theme.of(context).colorScheme.outline,
@@ -100,7 +100,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
   Widget med_list() {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(4),
           topRight: Radius.circular(4),
         ),
@@ -109,9 +109,9 @@ class _EditPrescriptionState extends State<EditPrescription> {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(4),
                 topRight: Radius.circular(4),
               ),
@@ -144,11 +144,11 @@ class _EditPrescriptionState extends State<EditPrescription> {
             ),
           ),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 choose_med(),
-                SizedBox(
+                const SizedBox(
                   height: 12,
                 ),
                 choose_med(),
@@ -182,10 +182,10 @@ class _EditPrescriptionState extends State<EditPrescription> {
                   return DropdownMenuEntry<String>(value: value, label: value);
                 }).toList(),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
-              Container(
+              SizedBox(
                 width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
                 child: TextField(
                   controller: controller,
@@ -204,7 +204,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
             ],
@@ -236,9 +236,9 @@ class _EditPrescriptionState extends State<EditPrescription> {
           Icons.today,
           selectDate,
           TextEditingController(),
-          width: (MediaQuery.of(context).size.width - 70) / 2 - 5,
+          width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
-        SizedBox(
+        const SizedBox(
           width: 12,
         ),
         _buildDateTimeField(
@@ -247,7 +247,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
           Icons.today,
           selectDate,
           TextEditingController(),
-          width: (MediaQuery.of(context).size.width - 70) / 2 - 5,
+          width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
       ],
     );
@@ -279,7 +279,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
       Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
-    return Container(
+    return SizedBox(
       width: width,
       child: TextField(
         controller: controller,

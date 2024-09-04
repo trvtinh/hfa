@@ -15,8 +15,10 @@ Widget LeftChat(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CircleAvatar(child: Icon(Icons.person)),
-        SizedBox(width: 8,),
+        const CircleAvatar(child: Icon(Icons.person)),
+        const SizedBox(
+          width: 8,
+        ),
         ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 230.w, minHeight: 40.w),
             child: Container(
@@ -24,7 +26,7 @@ Widget LeftChat(
                 padding: EdgeInsets.only(top: 10.w, left: 10.w, right: 10.w),
                 decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surfaceContainer,
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Text(
                   "${item.content}",
                   style: TextStyle(

@@ -8,7 +8,7 @@ import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
 
 class MedicalDataPage extends GetView<MedicalDataController> {
-  MedicalDataPage({super.key});
+  const MedicalDataPage({super.key});
 
   @override
   Widget build(BuildContext context) {

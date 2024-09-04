@@ -29,7 +29,7 @@ class Homepage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(const ProfilePage());
+                Get.to(() => const ProfilePage());
               },
               child: Container(
                 height: 80,
@@ -252,7 +252,7 @@ class Homepage extends StatelessWidget {
                 val3: "10",
                 time: appController.state.updateTime.value == ""
                     ? "Chưa cập nhật dữ liệu lần nào"
-                    : "Cập nhật lúc ${appController.state.updateTime.value}")),
+                    : "Cập nhật lần cuối ${appController.state.updateTime.value}")),
             const SizedBox(
               height: 16,
             ),
@@ -261,19 +261,25 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(const DiagnosticPage());
+                    Get.to(() => const DiagnosticPage());
                   },
-                  child: const WhiteBox(
-                      title: 'Chẩn đoán',
-                      iconpath: 'assets/images/health_and_safety.png',
-                      text1: 'Chưa xem',
-                      text2: 'Đã xem',
-                      value1: '03',
-                      value2: '07'),
+                  child: Obx(
+                    () => WhiteBox(
+                        title: 'Chẩn đoán',
+                        iconpath: 'assets/images/health_and_safety.png',
+                        text1: 'Chưa xem',
+                        text2: 'Đã xem',
+                        value1: appController
+                            .diagnosticController.state.unread.value
+                            .toString(),
+                        value2: appController
+                            .diagnosticController.state.read.value
+                            .toString()),
+                  ),
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(PrescriptionPage());
+                    Get.to(() => PrescriptionPage());
                   },
                   child: const WhiteBox(
                       title: 'Đơn thuốc',
@@ -293,7 +299,7 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(ReminderPage());
+                    Get.to(() => ReminderPage());
                   },
                   child: const WhiteBoxnoW(
                       title: 'Nhắc nhở',
@@ -302,15 +308,17 @@ class Homepage extends StatelessWidget {
                       value1: '07'),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    Get.to(AlarmPage());
-                  },
-                  child: const WhiteBoxnoW(
-                      title: 'Cảnh báo',
-                      iconpath: 'assets/images/warning_amber.png',
-                      text1: 'Số cảnh báo',
-                      value1: '07'),
-                ),
+                    onTap: () {
+                      Get.to(() => const AlarmPage());
+                    },
+                    child: Obx(() => WhiteBoxnoW(
+                          title: 'Cảnh báo',
+                          iconpath: 'assets/images/warning_amber.png',
+                          text1: 'Số cảnh báo',
+                          value1: appController
+                              .alarmController.numberAlarm.value
+                              .toString(),
+                        ))),
               ],
             ),
             const SizedBox(
@@ -321,9 +329,9 @@ class Homepage extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(const NotificationPage());
+                    Get.to(() => const NotiPage());
                   },
-                  child: WhiteBox(
+                  child: Obx(() => WhiteBox(
                       title: 'Thông báo',
                       iconpath: 'assets/images/notifications.png',
                       text1: 'Chưa xem',
@@ -331,11 +339,11 @@ class Homepage extends StatelessWidget {
                       value1: appController.notificationController.state.unread
                           .toString(),
                       value2: appController.notificationController.state.read
-                          .toString()),
+                          .toString())),
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.to(ChatbotPage());
+                    Get.to(() => const ChatbotPage());
                   },
                   child: const WhiteBoxnoVal(
                       title: 'Trò chuyện với HFA',
@@ -350,7 +358,7 @@ class Homepage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Get.to(ConnectHardwarePage());
+                Get.to(() => ConnectHardwarePage());
               },
               child: Container(
                 height: 84,
@@ -437,5 +445,20 @@ class Homepage extends StatelessWidget {
     // return const Center(
     //   child: Text('Homepage'),
     // );
+  }
+}
+
+class NotiPage extends StatelessWidget {
+  const NotiPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Thông báo'),
+        centerTitle: true,
+      ),
+      body: const NotificationPage(),
+    );
   }
 }

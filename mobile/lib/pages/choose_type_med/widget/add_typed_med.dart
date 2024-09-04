@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/diagnostic_add/widget/add_file.dart';
+import 'package:health_for_all/pages/choose_type_med/controller.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'add_file.dart';
 
 class AddTypedMed extends StatefulWidget {
   const AddTypedMed({super.key});
@@ -10,11 +15,19 @@ class AddTypedMed extends StatefulWidget {
 }
 
 class _AddTypedMedState extends State<AddTypedMed> {
+  final medicineController = Get.find<ChooseTypeMedController>();
+  void updateFiles(List<XFile> newFiles) {
+    medicineController.selectedFiles.assignAll(newFiles);
+    for (var file in medicineController.selectedFiles) {
+      log('combobox: ${file.path}');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 12,
         ),
         header(),
@@ -32,7 +45,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
         Text(
@@ -48,27 +61,37 @@ class _AddTypedMedState extends State<AddTypedMed> {
 
   Widget body() {
     return Padding(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         vertical: 24,
       ),
       child: Column(children: [
-        _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc"),
-        SizedBox(height: 24,),
-        _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc"),
-        SizedBox(height: 24,),
-        AddFile(),
+        _buildDialogTextField("Tên loại thuốc", "Tên loại thuốc",
+            medicineController.nameMedicine),
+        const SizedBox(
+          height: 24,
+        ),
+        _buildDialogTextField("Mô tả", "Công dụng, cách dùng, liều lượng",
+            medicineController.description,
+            maxLines: 3),
+        const SizedBox(
+          height: 24,
+        ),
+        AddFile(
+          files: medicineController.selectedFiles,
+          onFilesChanged: updateFiles,
+        ),
       ]),
     );
   }
 
   Widget _buildDialogTextField(
-    String label,
-    String hint,
-  ) {
-    return Container(
-      width: MediaQuery.of(context).size.width-20,
+      String label, String hint, TextEditingController controller,
+      {int? maxLines}) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 20,
       child: TextField(
-        controller: TextEditingController(),
+        controller: controller,
+        maxLines: maxLines ?? 1,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
@@ -88,6 +111,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
       children: [
         TextButton(
           onPressed: () async {
+            medicineController.clearData();
             Get.back();
           },
           child: Text(
@@ -101,7 +125,18 @@ class _AddTypedMedState extends State<AddTypedMed> {
         const SizedBox(width: 16),
         TextButton(
           onPressed: () async {
-            Get.back();
+            try {
+              await medicineController.addMedicineBase();
+              Future.delayed(const Duration(seconds: 1), () {
+                medicineController.clearData();
+                Get.back();
+                Get.back();
+              });
+            } catch (e) {
+              log(e.toString());
+              Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
+                  backgroundColor: Colors.red);
+            }
           },
           child: Text(
             'Xác nhận',

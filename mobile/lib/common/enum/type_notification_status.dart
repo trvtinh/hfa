@@ -1,4 +1,4 @@
-enum TypeNotificationStatus { unread, warning, reminder, read }
+enum TypeNotificationStatus { unread, warning, reminder, read, importance }
 
 extension TypeNotificationStatusExtension on TypeNotificationStatus {
   String get value {
@@ -11,6 +11,8 @@ extension TypeNotificationStatusExtension on TypeNotificationStatus {
         return "unread";
       case TypeNotificationStatus.warning:
         return "warning";
+      case TypeNotificationStatus.importance:
+        return "importance";
     }
   }
 }

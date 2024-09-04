@@ -39,7 +39,7 @@ class GreyBoxState extends State<GreyBox> {
   Widget build(BuildContext context) {
     return Container(
       height: 112,
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
       // padding: Padding(
 
       // ),

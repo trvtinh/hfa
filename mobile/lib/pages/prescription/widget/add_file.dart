@@ -28,7 +28,7 @@ class _AddFileState extends State<AddFile> {
   }
 
   void pickMultipleImages() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
+    final List<XFile> images = await _picker.pickMultiImage();
     if (images != null) {
       setState(() {
         selectedFiles.addAll(images);
@@ -53,9 +53,10 @@ class _AddFileState extends State<AddFile> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         border: Border.all(color: Theme.of(context).colorScheme.outline),
+        borderRadius: BorderRadius.circular(4),
       ),
       child: Column(
         children: [
@@ -126,9 +127,9 @@ class _AddFileState extends State<AddFile> {
         dashPattern: const [2, 3],
         color: Theme.of(context).colorScheme.outline,
         child: Container(
-          width: 260,
-          height: 30,
-          alignment: Alignment.center,
+          height: 32,
+          padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+          alignment: Alignment.topLeft,
           child: Text(
             'Chưa có file đính kèm',
             style: TextStyle(color: Theme.of(context).colorScheme.outline),
@@ -136,13 +137,17 @@ class _AddFileState extends State<AddFile> {
         ),
       );
     } else {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: selectedFiles.length,
-        itemBuilder: (context, index) {
-          final XFile file = selectedFiles[index];
-          return _buildFileItem(file);
-        },
+      return ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxHeight: 200, // Adjust this value based on your layout needs
+        ),
+        child: ListView.builder(
+          itemCount: selectedFiles.length,
+          itemBuilder: (context, index) {
+            final XFile file = selectedFiles[index];
+            return _buildFileItem(file);
+          },
+        ),
       );
     }
   }

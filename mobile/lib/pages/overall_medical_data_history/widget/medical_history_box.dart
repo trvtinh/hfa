@@ -18,7 +18,7 @@ class MedicalHistoryBoxState extends State<MedicalHistoryBox> {
     return Container(
         height: 60,
         width: 372,
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             SizedBox(

@@ -31,7 +31,8 @@ class SearchingBar extends GetView<SearchingController> {
             prefixIcon: Obx(() => IconButton(
                   icon: Icon(controller.hasText.value
                       ? Icons.arrow_back
-                      : Icons.add_circle_outline),
+                      : Icons.add_circle_outline,
+                      color: Theme.of(context).colorScheme.primary,),
                   onPressed: () {
                     if (controller.hasText.value) {
                       _clearText();
@@ -252,25 +253,27 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                         controller.sendRequest(
                             widget.follower['id'], 'relative');
                         FirebaseMessagingApi.sendMessage(
-                            widget.follower['fcmtoken'],
-                            'Yêu cầu làm người nhà ',
-                            "${appController.state.profile.value!.name!} muốn trở thành người nhà của bạn",
-                            'unread',
-                            'follow',
-                            widget.follower['id'],
-                            'common');
+                          widget.follower['fcmtoken'],
+                          'Yêu cầu làm người nhà ',
+                          "${appController.state.profile.value!.name!} muốn trở thành người nhà của bạn",
+                          'unread',
+                          'follow',
+                          widget.follower['id'],
+                          'common',
+                        );
                       } else {
                         if (widget.following) {
                           controller.sendRequest(
                               widget.follower['id'], 'doctor');
                           FirebaseMessagingApi.sendMessage(
-                              widget.follower['fcmtoken'],
-                              'Yêu cầu làm bác sĩ ',
-                              "${appController.state.profile.value!.name!} muốn trở trành bác sĩ của bạn",
-                              "unread",
-                              "follow",
-                              widget.follower['id'],
-                              'common');
+                            widget.follower['fcmtoken'],
+                            'Yêu cầu làm bác sĩ ',
+                            "${appController.state.profile.value!.name!} muốn trở trành bác sĩ của bạn",
+                            "unread",
+                            "follow",
+                            widget.follower['id'],
+                            'common',
+                          );
                         } else {
                           controller.sendRequest(
                               widget.follower['id'], 'patient');

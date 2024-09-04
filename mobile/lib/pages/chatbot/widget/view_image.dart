@@ -10,7 +10,7 @@ class ViewImage extends StatelessWidget {
   final String imageUrl;
   final Random random = Random();
 
-  ViewImage({Key? key, required this.imageUrl}) : super(key: key);
+  ViewImage({super.key, required this.imageUrl});
 
   Future<void> _saveImage(BuildContext context) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);

@@ -9,7 +9,6 @@ import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/data_box.dart';
-import 'package:health_for_all/pages/diagnostic_add/widget/view_data_box.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -33,7 +32,8 @@ class DiagnosticAddController extends GetxController {
       medicalId: medicalId,
       imageURL: selectedImagesURL,
     );
-    await FirebaseApi.addDocument('diagnostic', data.toMap());
+    final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
+    return docId;
   }
 
   Future<void> addImage() async {

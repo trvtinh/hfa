@@ -26,11 +26,11 @@ class PatientBoxState extends State<PatientBox> {
     return Container(
       height: 80,
       width: 380,
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           border: Border.all(width: 1),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: Color.fromRGBO(0, 0, 0, 0.3),
               spreadRadius: 1,
@@ -91,7 +91,7 @@ class PatientBoxState extends State<PatientBox> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 12,
           ),
           SizedBox(
@@ -106,7 +106,7 @@ class PatientBoxState extends State<PatientBox> {
                     borderRadius: BorderRadius.circular(16),
                     color: Theme.of(context).colorScheme.primaryFixedDim,
                   ),
-                  padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                  padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
                   child: SizedBox(
                     width: 88,
                     height: 16,
