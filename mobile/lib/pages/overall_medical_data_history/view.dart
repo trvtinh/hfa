@@ -67,14 +67,14 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                         Icon(Icons.calendar_month,
                             color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 10),
-                        IconButton(
-                          icon: Icon(Icons.arrow_back_ios_new,
-                              color: Theme.of(context).colorScheme.secondary),
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: (){
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
                                 .subtract(const Duration(days: 1));
                           },
+                          child: Icon(Icons.arrow_back_ios_new,
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                         GestureDetector(
                             onTap: () => controller.selectDate(context),
@@ -88,14 +88,14 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                                         .secondary),
                               ),
                             )),
-                        IconButton(
-                          icon: Icon(Icons.arrow_forward_ios,
-                              color: Theme.of(context).colorScheme.secondary),
-                          onPressed: () {
+                        GestureDetector(
+                          onTap: (){
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
                                 .add(const Duration(days: 1));
                           },
+                          child: Icon(Icons.arrow_forward_ios,
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                       ],
                     ),

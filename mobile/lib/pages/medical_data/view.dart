@@ -98,7 +98,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
         child: TextField(
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
-            hintText: "Input Text",
+            hintText: "Tìm dữ liệu",
             border: InputBorder.none,
             prefixIcon: Icon(Icons.search,
                 color: Theme.of(context).colorScheme.onSurfaceVariant),
