@@ -57,9 +57,6 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                           height: 16,
                         ),
                         head_list(),
-                        const SizedBox(
-                          height: 12,
-                        ),
                       ],
                     ),
                   ),
@@ -204,7 +201,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
 
   Widget type_med(int index, MedicineBase medicine) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -237,7 +234,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurface,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],

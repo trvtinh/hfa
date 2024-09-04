@@ -58,7 +58,16 @@ class ImageAnalyzePage extends StatelessWidget {
                   border: Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(5),
                 ),
-                child: Text(controller.state.analysisResult.value),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(controller.state.analysisResult.value),
+                    if (controller.state.systolic.value != 0 && controller.state.diastolic.value != 0)
+                      Text('Systolic: ${controller.state.systolic.value} mmHg'),
+                    if (controller.state.systolic.value != 0 && controller.state.diastolic.value != 0)
+                      Text('Diastolic: ${controller.state.diastolic.value} mmHg'),
+                  ],
+                ),
               );
             }),
           ],

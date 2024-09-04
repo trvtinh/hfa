@@ -156,7 +156,7 @@ class _AddFileState extends State<AddFile> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).colorScheme.primaryContainer,
@@ -172,6 +172,7 @@ class _AddFileState extends State<AddFile> {
               child: Text(
                 file.name,
                 style: TextStyle(
+                  overflow: TextOverflow.ellipsis,
                   color: Theme.of(context).colorScheme.onPrimaryContainer,
                   fontWeight: FontWeight.w500,
                 ),

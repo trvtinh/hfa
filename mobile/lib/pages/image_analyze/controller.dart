@@ -17,10 +17,20 @@ class ImageAnalyzeController extends GetxController {
   final model = GenerativeModel(
     model: 'gemini-1.5-flash',
     apiKey: dotenv.env['GOOGLE_API_KEY']!,
-    systemInstruction: Content.system(
-        'Bạn là một người bác sĩ. Bạn tên là HFA. Bạn là sản phẩm AI của nhóm nghiên cứu khoa học trường Amsterdam.'
-        ' Bạn sẽ hỗ trợ mọi người thông qua các câu hỏi liên quan đến sức khoẻ và các chỉ số y tế, ngoài ra bạn có'
-        ' thể đọc hình ảnh là các chỉ số từ máy đo y tế và phân tích và trả về số liệu, từ đó bạn đưa ra đánh giá và lời khuyên cho họ'),
+    systemInstruction: Content.system('''
+    {
+      "goal": "Analyze blood pressure images and return the systolic and diastolic values as integer variables.",
+      "output_format": "Dart Code",
+      "example_output": "
+        int systolic = 120;
+        int diastolic = 80;
+      ",
+      "rules": [
+        "Return only the variable declarations.",
+        "Do not include any additional explanations or comments."
+      ]
+    }
+    '''),
   );
 
   @override
@@ -63,19 +73,19 @@ class ImageAnalyzeController extends GetxController {
         Content.multi([imagePart])
       ], generationConfig: GenerationConfig(maxOutputTokens: 250));
 
-      final resultText = result.text ??
-          ''; // Handle null case by defaulting to an empty string
+      final resultText = result.text ?? '';
 
-      // Giả sử mô hình trả về kết quả dưới dạng văn bản chứa số đo huyết áp.
-      // Ví dụ: "Số đo huyết áp là: 120/80 mmHg"
-      final regex = RegExp(r'(\d{2,3})/(\d{2,3}) mmHg');
-      final match = regex.firstMatch(resultText);
+      // Use regular expressions to extract systolic and diastolic values from the AI's response
+      RegExp systolicRegExp = RegExp(r'int systolic = (\d+);');
+      RegExp diastolicRegExp = RegExp(r'int diastolic = (\d+);');
 
-      if (match != null) {
-        final systolic = match.group(1); // Số đo huyết áp tâm thu
-        final diastolic = match.group(2); // Số đo huyết áp tâm trương
-        state.analysisResult.value =
-            'Số đo huyết áp là: $systolic/$diastolic mmHg';
+      int? extractedSystolic = int.tryParse(systolicRegExp.firstMatch(resultText)?.group(1) ?? '');
+      int? extractedDiastolic = int.tryParse(diastolicRegExp.firstMatch(resultText)?.group(1) ?? '');
+
+      if (extractedSystolic != null && extractedDiastolic != null) {
+        state.systolic.value = extractedSystolic;
+        state.diastolic.value = extractedDiastolic;
+        state.analysisResult.value = 'Số đo huyết áp là: $extractedSystolic/$extractedDiastolic mmHg';
       } else {
         state.analysisResult.value = 'Không thể phân tích số đo huyết áp.';
       }
@@ -87,5 +97,7 @@ class ImageAnalyzeController extends GetxController {
 
 class ImageAnalyzeState {
   Rx<File?> image = Rx<File?>(null);
+  Rx<int> systolic = Rx<int>(0);
+  Rx<int> diastolic = Rx<int>(0);
   Rx<String> analysisResult = Rx<String>('Chưa có kết quả phân tích');
 }
