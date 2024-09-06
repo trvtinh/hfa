@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
+import 'package:intl/intl.dart';
 
 class MedicalDataPage extends GetView<MedicalDataController> {
   const MedicalDataPage({super.key});
@@ -162,7 +163,12 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(); // Dismiss the dialog
+                          controller.dateController.text =
+                              DateFormat('dd/MM/yyyy').format(DateTime.now());
+                          controller.timeController.text =
+                              DateFormat('hh:mm a').format(DateTime.now());
+                          controller.state.data.clear();
+                          Get.back(); // Dismiss the dialog
                         },
                         child: const Text('OK'),
                       ),

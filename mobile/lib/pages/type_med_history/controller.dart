@@ -1,3 +1,106 @@
-import 'package:get/get.dart';
+import 'dart:developer';
 
-class TypeMedHistoryController extends GetxController {}
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
+import 'package:intl/intl.dart';
+
+class TypeMedHistoryController extends GetxController {
+  final medicalController = Get.find<OverallMedicalDataHistoryController>();
+
+  RxMap<String, List<MedicalEntity>> result =
+      <String, List<MedicalEntity>>{}.obs;
+  Rx<DateTime> rangeStart = DateTime.now().obs;
+  Rx<DateTime> rangeEnd = DateTime.now().obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchEventAmountTime('Huyết áp');
+  }
+
+  Future fetchEventsInDay(DateTime date, String value, int? limit) async {
+    final db = FirebaseFirestore.instance;
+    final List<MedicalEntity> data = [];
+    try {
+      // Xác định khoảng thời gian của ngày
+      final startOfDay = DateTime(date.year, date.month, date.day, 0, 0, 0);
+      final endOfDay =
+          DateTime(date.year, date.month, date.day, 23, 59, 59, 999);
+
+      // Chuyển đổi DateTime thành Timestamp
+      final startTimestamp = Timestamp.fromDate(startOfDay);
+      final endTimestamp = Timestamp.fromDate(endOfDay);
+
+      // Lấy typeId từ Firestore bằng giá trị trường 'name'
+      final query = await FirebaseApi.getQuerySnapshot(
+          'type_medical_data', 'name', value);
+      final docs = query.docs;
+
+      if (docs.isEmpty) {
+        // Không tìm thấy tài liệu với 'name' là specificValue
+        return null;
+      }
+
+      final typeId = docs.first.id;
+
+      // Tìm tài liệu từ collection 'medicalData' với typeId và userId
+      // Và lọc theo thời gian trong ngày
+      final querySnapshot = await db
+          .collection('medicalData')
+          .where('typeId', isEqualTo: typeId)
+          .where('userId',
+              isEqualTo: medicalController.state.selectedUserId.value != ""
+                  ? medicalController.state.selectedUserId.value
+                  : medicalController.appController.state.profile.value?.id)
+          .where('time',
+              isGreaterThanOrEqualTo:
+                  startTimestamp) // Lọc tài liệu với 'time' >= startOfDay
+          .where('time',
+              isLessThanOrEqualTo:
+                  endTimestamp) // Lọc tài liệu với 'time' <= endOfDay
+          .orderBy('time', descending: true) // Sắp xếp theo 'time' giảm dần
+          .limit(limit ??
+              1) // Giới hạn kết quả để lấy tài liệu muộn nhất trong ngày
+          .get();
+
+      final documents = querySnapshot.docs;
+
+      if (documents.isEmpty) {
+        // Không tìm thấy tài liệu phù hợp trong ngày
+        return null;
+      }
+
+      // Chuyển đổi dữ liệu tài liệu thành đối tượng MedicalEntity
+      for (final doc in documents) {
+        data.add(MedicalEntity.fromFirestore(doc, null));
+      }
+      result[DateFormat('dd/MM/yyyy').format(date)] = data;
+    } catch (e) {
+      // Xử lý lỗi
+      print('Error fetching event in day: $e');
+      return null;
+    }
+  }
+
+  Future fetchEventAmountTime(String value) async {
+    log('fetchEventAmountTime: $value');
+    log('rangeStart: ${rangeStart.value}');
+    log('rangeEnd: ${rangeEnd.value}');
+    log('Duration: ${DatetimeChange.getDuration(rangeEnd.value, rangeStart.value)}');
+    DateTime temp = rangeStart.value;
+    for (int i = 0;
+        i <= DatetimeChange.getDuration(rangeEnd.value, rangeStart.value);
+        i++) {
+      log('fetchEventAmountTime: $i');
+      log('fetchEventAmountTime: $temp');
+      await fetchEventsInDay(temp, value, 5);
+      temp = temp.add(const Duration(days: 1));
+
+      log(result.toString());
+    }
+  }
+}

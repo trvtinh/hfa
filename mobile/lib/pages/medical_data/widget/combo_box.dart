@@ -14,8 +14,8 @@ class ComboBox extends StatefulWidget {
   final String leadingiconpath;
   final String title;
   final String time;
-  final RxString? value; 
-  final RxString? unit; 
+  final RxString? value;
+  final RxString? unit;
   final TextEditingController valueController;
   final TextEditingController unitController;
   final TextEditingController noteController;

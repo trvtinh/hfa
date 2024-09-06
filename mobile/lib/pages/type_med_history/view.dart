@@ -1,51 +1,45 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/type_med_history/controller.dart';
 import 'package:health_for_all/pages/type_med_history/widget/data_day.dart';
 import 'package:health_for_all/pages/type_med_history/widget/line_chart_sample.dart';
 import 'package:intl/intl.dart';
 
-class TypeMedHistory extends StatefulWidget {
+class TypeMedHistory extends StatelessWidget {
   final String title;
-  const TypeMedHistory(this.title, {super.key});
+  final typeMedHistoryController = Get.find<TypeMedHistoryController>();
 
-  @override
-  _TypeMedHistoryState createState() => _TypeMedHistoryState();
-}
+  TypeMedHistory(this.title, {super.key});
 
-class _TypeMedHistoryState extends State<TypeMedHistory> {
-  // Use List<List<String>> for hour and index
-  List<String> day = [
-    "27/07/2024",
-    "26/07/2024",
-  ];
-
-  List<List<String>> hour = [
+  final List<List<String>> hour = [
     ["06:00"], // First entry has one time
     ["10:00", "14:00"], // Second entry has two times
   ];
 
-  List<List<String>> index = [
+  final List<List<String>> index = [
     ["120/80"], // First entry corresponds to one index value
     ["115/75", "125/85"], // Second entry corresponds to two index values
   ];
-  bool change_page = true;
-  bool show_comment = true;
-  bool show_diagnostic = false;
-  bool show_alarm = false;
+
+  final RxBool changePage = true.obs;
+  final RxBool showComment = true.obs;
+  final RxBool showDiagnostic = false.obs;
+  final RxBool showAlarm = false.obs;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title), // Use widget.title in StatefulWidget
+        title: Text(title),
         actions: [
-          GestureDetector(
+          Obx(
+            () => GestureDetector(
               onTap: () {
-                setState(() {
-                  change_page = !change_page;
-                });
+                changePage.value = !changePage.value;
               },
-              child: change_page
+              child: changePage.value
                   ? Icon(
                       Icons.list_outlined,
                       size: 24,
@@ -55,33 +49,42 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
                       Icons.assessment_outlined,
                       size: 24,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    )),
-          SizedBox(
-            width: 12,
+                    ),
+            ),
           ),
+          const SizedBox(width: 12),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Divider(
-              height: 1,
-            ),
+            const Divider(height: 1),
             navigate(context),
-            Divider(
-              height: 2,
-              color: Colors.black,
+            const Divider(height: 2, color: Colors.black),
+            Obx(
+              () => changePage.value
+                  ? Column(
+                      children: [
+                        for (var i in typeMedHistoryController.result.keys)
+                          DataDay(
+                            day: i,
+                            hour: typeMedHistoryController.result[i]!
+                                .map((medical) => DateFormat('HH:mm')
+                                    .format(medical.time!.toDate()))
+                                .toList(),
+                            index: typeMedHistoryController.result[i]!
+                                .map((medical) => medical.value!)
+                                .toList(),
+                          ),
+                      ],
+                    )
+                  : LineChartSample(
+                      show_comment: showComment.value,
+                      show_diagnostic: showDiagnostic.value,
+                      show_alarm: showAlarm.value,
+                      title: title,
+                    ),
             ),
-            if (change_page)
-              for (int i = 0; i < day.length; i++)
-                DataDay(day: day[i], hour: hour[i], index: index[i])
-            else
-              LineChartSample(
-                show_comment: show_comment,
-                show_diagnostic: show_diagnostic,
-                show_alarm: show_alarm, 
-                title: widget.title,
-              ),
           ],
         ),
       ),
@@ -90,80 +93,28 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
 
   Widget navigate(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: GestureDetector(
         child: Row(
           children: [
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
+                onTap: () async {
+                  DateTimeRange? picked = await showDateRangePicker(
                     context: context,
-                    builder: (BuildContext context) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(18)),
-                        ),
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Row(
-                              children: [
-                                _buildDateTimeField(
-                                  context,
-                                  'Từ ngày',
-                                  Icons.today,
-                                  selectDate,
-                                  TextEditingController(),
-                                  width:
-                                      (MediaQuery.of(context).size.width - 44) /
-                                          2,
-                                ),
-                                const SizedBox(
-                                  width: 12,
-                                ),
-                                _buildDateTimeField(
-                                  context,
-                                  'Tới ngày',
-                                  Icons.today,
-                                  selectDate,
-                                  TextEditingController(),
-                                  width:
-                                      (MediaQuery.of(context).size.width - 44) /
-                                          2,
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: CalendarDatePicker(
-                                firstDate: DateTime(2020),
-                                lastDate: DateTime(2100),
-                                initialDate: DateTime.now(),
-                                onDateChanged: (DateTime date) {
-                                  // Handle date selection
-                                },
-                              ),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: Colors.transparent,
-                              ),
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text("Chọn"),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime(2100),
+                    initialDateRange: DateTimeRange(
+                      start: typeMedHistoryController.rangeStart.value,
+                      end: typeMedHistoryController.rangeEnd.value,
+                    ),
                   );
+                  if (picked != null) {
+                    typeMedHistoryController.rangeStart.value = picked.start;
+                    typeMedHistoryController.rangeEnd.value = picked.end;
+                    typeMedHistoryController.result.clear();
+                    await typeMedHistoryController.fetchEventAmountTime(title);
+                  }
                 },
                 child: Row(
                   children: [
@@ -172,11 +123,14 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
                       size: 20,
                       color: Theme.of(context).colorScheme.secondary,
                     ),
-                    Text(
-                      "28/07/2024",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontSize: 16,
+                    Obx(
+                      () => Text(
+                        DateFormat('dd/MM/yyyy')
+                            .format(typeMedHistoryController.rangeStart.value),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     Text(
@@ -186,11 +140,14 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
                         fontSize: 16,
                       ),
                     ),
-                    Text(
-                      "03/08/2024",
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontSize: 16,
+                    Obx(
+                      () => Text(
+                        DateFormat('dd/MM/yyyy')
+                            .format(typeMedHistoryController.rangeEnd.value),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     Icon(
@@ -203,41 +160,34 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
               ),
             ),
             GestureDetector(
-                onTap: () {
-                  setState(() {
-                    show_comment = true;
-                    show_alarm = false;
-                    show_diagnostic = false;
-                  });
-                },
-                child: icon_round(context, show_comment,
-                    icon: Icons.comment_outlined)),
-            SizedBox(
-              width: 6,
+              onTap: () {
+                showComment.value = true;
+                showAlarm.value = false;
+                showDiagnostic.value = false;
+              },
+              child: icon_round(context, showComment.value,
+                  icon: Icons.comment_outlined),
             ),
+            const SizedBox(width: 6),
             GestureDetector(
-                onTap: () {
-                  setState(() {
-                    show_comment = false;
-                    show_alarm = false;
-                    show_diagnostic = true;
-                  });
-                },
-                child: image_round(
-                    context, show_diagnostic, "assets/images/result2.png")),
-            SizedBox(
-              width: 6,
+              onTap: () {
+                showComment.value = false;
+                showAlarm.value = false;
+                showDiagnostic.value = true;
+              },
+              child: image_round(
+                  context, showDiagnostic.value, "assets/images/result2.png"),
             ),
+            const SizedBox(width: 6),
             GestureDetector(
-                onTap: () {
-                  setState(() {
-                    show_comment = false;
-                    show_alarm = true;
-                    show_diagnostic = false;
-                  });
-                },
-                child: icon_round(context, show_alarm,
-                    icon: Icons.warning_amber_outlined)),
+              onTap: () {
+                showComment.value = false;
+                showAlarm.value = true;
+                showDiagnostic.value = false;
+              },
+              child: icon_round(context, showAlarm.value,
+                  icon: Icons.warning_amber_outlined),
+            ),
           ],
         ),
       ),
@@ -253,7 +203,7 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
         shape: BoxShape.circle,
         border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
       ),
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Icon(
         icon,
         color: Theme.of(context).colorScheme.primary,
@@ -271,7 +221,7 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
         shape: BoxShape.circle,
         border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
       ),
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4),
       child: Image.asset(
         path,
         height: 18,
@@ -280,30 +230,7 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
     );
   }
 
-  final dateController = TextEditingController();
-  DateTime datetime = DateTime.now();
-
-  // Replace this with your actual method to select date
-  Future<void> selectDate(BuildContext context) async {
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: datetime,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      datetime = selectedDate;
-      final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
-      dateController.text = formattedDate;
-    }
-  }
-
-  Widget _buildDateTimeField(
-      BuildContext context,
-      String label,
-      IconData icon,
-      Future<void> Function(BuildContext) onTap,
+  Widget _buildDateTimeField(BuildContext context, String label, IconData icon,
       TextEditingController controller,
       {required double width}) {
     return SizedBox(
@@ -317,7 +244,6 @@ class _TypeMedHistoryState extends State<TypeMedHistory> {
           labelText: label,
         ),
         readOnly: true,
-        onTap: () => onTap(context),
       ),
     );
   }

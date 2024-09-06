@@ -1,9 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
+import 'package:health_for_all/pages/type_med_history/controller.dart';
 import 'package:health_for_all/pages/type_med_history/widget/alarm_widget.dart';
 import 'package:health_for_all/pages/type_med_history/widget/comment_widget.dart';
 import 'package:health_for_all/pages/type_med_history/widget/diagnostic_widget.dart';
+import 'package:intl/intl.dart';
 
 class LineChartSample extends StatefulWidget {
   @override
@@ -21,30 +24,54 @@ class LineChartSample extends StatefulWidget {
 }
 
 class _LineChartSampleState extends State<LineChartSample> {
+  final controller = Get.find<TypeMedHistoryController>();
   // X-axis and Y-axis data based on random points generated earlier
-  final List<int> xAxisData = [21, 23, 25, 29, 30, 23, 29, 25];
-  final List<int> yAxisData = [125, 105, 115, 95, 105, 115, 125, 95];
+  List<String> xAxisData = [];
+  List<int> yAxisData = [];
+  List<int> yAxisData2 = [];
+
+  @override
+  void initState() {
+    super.initState();
+    xAxisData = controller.result.values
+        .expand((value) =>
+            value.map((e) => DateFormat('dd/MM').format(e.time!.toDate())))
+        .toList();
+    yAxisData = controller.result.values
+        .expand((value) {
+          return value.map((e) => e.value!.split('/')[0]);
+        })
+        .map((e) => int.parse(e))
+        .toList();
+    yAxisData2 = controller.result.values
+        .expand((value) {
+          return value.map((e) => e.value!.split('/')[1]);
+        })
+        .map((e) => int.parse(e))
+        .toList();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final minY = yAxisData.reduce((curr, next) => curr < next ? curr : next);
-    final maxY = yAxisData.reduce((curr, next) => curr > next ? curr : next);
-    final minX = 0;
+    const minY = 60;
+    const maxY = 170;
+    const minX = 0;
     final maxX = xAxisData.length - 1;
 
     // Calculate intervals for 4 lines on Y-axis and smaller intervals for X-axis
-    final yInterval = (maxY - minY) / 4;
-    final xInterval = (maxX - minX) /
-        6; // Decrease this value to show more frequent X-axis lines
+    const yInterval = 10.0;
+    final xInterval =
+        1.0; // Decrease this value to show more frequent X-axis lines
 
     return Column(
       children: [
         Container(
           height: 300, // Adjusted height to account for padding and text
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
           ),
-          padding: EdgeInsets.only(left: 12, right: 24, top: 26, bottom: 8),
+          padding:
+              const EdgeInsets.only(left: 12, right: 24, top: 26, bottom: 8),
           child: LineChart(
             LineChartData(
               // Limit the number of grid lines to 4 on the Y-axis and more frequent on X-axis
@@ -80,8 +107,8 @@ class _LineChartSampleState extends State<LineChartSample> {
                       if (index >= 0 && index < xAxisData.length) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 8.0),
-                          child: Text('${xAxisData[index]} / 07',
-                              style: TextStyle(fontSize: 10)),
+                          child: Text(xAxisData[index],
+                              style: const TextStyle(fontSize: 10)),
                         );
                       } else {
                         return const SizedBox.shrink();
@@ -95,18 +122,18 @@ class _LineChartSampleState extends State<LineChartSample> {
                     showTitles: true,
                     reservedSize: 40, // Adjust space for text
                     getTitlesWidget: (value, meta) {
-                      return Text('${value.toInt()}/80',
-                          style: TextStyle(fontSize: 10));
+                      return Text('${value.toInt()}',
+                          style: const TextStyle(fontSize: 10));
                     },
                     interval: yInterval, // Keep Y-axis labels showing 4 lines
                   ),
                 ),
-                topTitles: AxisTitles(
+                topTitles: const AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: false, // Hide titles on the top
                   ),
                 ),
-                rightTitles: AxisTitles(
+                rightTitles: const AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: false, // Hide titles on the right
                   ),
@@ -122,28 +149,93 @@ class _LineChartSampleState extends State<LineChartSample> {
                     xAxisData.length,
                     (index) => FlSpot(
                       index.toDouble(), // X coordinate
-                      yAxisData[index].toDouble(), // Y coordinate
+                      yAxisData2[index].toDouble(), // Y coordinate
                     ),
                   ),
                   isCurved: true,
                   color: Colors.red,
                   barWidth: 3,
                   isStrokeCapRound: true,
-                  dotData: FlDotData(show: true), // Display dots on the points
+                  dotData:
+                      const FlDotData(show: true), // Display dots on the points
                   belowBarData: BarAreaData(
-                    show: true,
+                    show: false,
+                    color: Colors.red.withOpacity(0.3),
+                  ),
+                ),
+                LineChartBarData(
+                  spots: List.generate(
+                    xAxisData.length,
+                    (index) => FlSpot(
+                      index.toDouble(), // X coordinate
+                      yAxisData[index].toDouble(), // Y coordinate
+                    ),
+                  ),
+                  isCurved: true,
+                  color: Colors.blue,
+                  barWidth: 3,
+                  isStrokeCapRound: true,
+                  dotData:
+                      const FlDotData(show: true), // Display dots on the points
+                  belowBarData: BarAreaData(
+                    show: false,
                     color: Colors.red.withOpacity(0.3),
                   ),
                 ),
               ],
+              betweenBarsData: [
+                BetweenBarsData(
+                  fromIndex: 0,
+                  toIndex: 1,
+                  color: Colors.purple.withOpacity(0.3),
+                ),
+              ],
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipColor: (spot) => Colors.blueAccent,
+                  getTooltipItems: (touchedSpots) {
+                    String y1 = touchedSpots[0].y.toInt().toString();
+                    String y2 = touchedSpots[1].y.toInt().toString();
+                    return [
+                      LineTooltipItem(
+                        'Ngày: ${xAxisData[touchedSpots[0].x.toInt()]}\nHuyết áp:\n$y1/$y2',
+                        const TextStyle(color: Colors.white),
+                      ),
+                      const LineTooltipItem(
+                        '',
+                        TextStyle(color: Colors.white),
+                      ),
+                    ];
+                    // return touchedSpots.map((touchedSpot) {
+                    //   return LineTooltipItem(
+                    //     'X: ${xAxisData[touchedSpot.x.toInt()]}\nY: ${touchedSpot.y}',
+                    //     const TextStyle(color: Colors.white),
+                    //   );
+                    // }).toList();
+                  },
+                ),
+                touchCallback:
+                    (FlTouchEvent event, LineTouchResponse? touchResponse) {
+                  if (!event.isInterestedForInteractions ||
+                      touchResponse == null) {
+                    return;
+                  }
+                  final touchedSpot = touchResponse.lineBarSpots?.first;
+                  if (touchedSpot != null) {
+                    // Handle touch interaction, if needed
+                  }
+                },
+                handleBuiltInTouches:
+                    true, // Allows built-in touch handling to show the tooltip
+              ),
             ),
           ),
         ),
-        Divider(
+        const Divider(
           height: 1,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
               if (widget.show_comment)
@@ -154,7 +246,7 @@ class _LineChartSampleState extends State<LineChartSample> {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       size: 24,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
                     Text(
@@ -174,7 +266,7 @@ class _LineChartSampleState extends State<LineChartSample> {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       size: 24,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
                     Text(
@@ -194,7 +286,7 @@ class _LineChartSampleState extends State<LineChartSample> {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       size: 24,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 6,
                     ),
                     Text(
@@ -209,11 +301,11 @@ class _LineChartSampleState extends State<LineChartSample> {
             ],
           ),
         ),
-        Divider(
+        const Divider(
           height: 1,
         ),
         Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
               if (widget.show_comment)
