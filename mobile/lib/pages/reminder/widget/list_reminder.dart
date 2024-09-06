@@ -367,7 +367,7 @@ class _ListReminderState extends State<ListReminder> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       color:
-                                          Theme.of(context).colorScheme.error,
+                                          Theme.of(context).colorScheme.tertiary,
                                     ),
                                   ),
                                   if (i != 6)

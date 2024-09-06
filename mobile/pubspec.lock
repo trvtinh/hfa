@@ -69,10 +69,10 @@ packages:
     dependency: "direct main"
     description:
       name: calendar_date_picker2
-      sha256: c7684d1a6bae19dc78c0b59101b272b47d78713d4aa0fcca55e55cf2dde9e3e4
+      sha256: d3f9695749226ad4376869f77b764d83833b2f5781edf41399753280ff217d80
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.6"
   characters:
     dependency: transitive
     description:
@@ -93,26 +93,26 @@ packages:
     dependency: "direct main"
     description:
       name: cloud_firestore
-      sha256: "77ac40d66a0fd585ca1e80ef3cbfd9df34462103bd4c1cf5950cb7d1f4c2e188"
+      sha256: "0af4f1e0b7f82a2082ad2c886b042595d85c7641616688609dd999d33aeef850"
       url: "https://pub.dev"
     source: hosted
-    version: "5.3.0"
+    version: "5.4.0"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
-      sha256: da0fa07284bc845b4a517449365eac0346a084676b3ed399f75a0ed25c3ec4c8
+      sha256: "6e82bcaf2b8e33f312dfc7c5e5855376fee538467dd6e58dc41bd13996ff5d64"
       url: "https://pub.dev"
     source: hosted
-    version: "6.3.2"
+    version: "6.4.0"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
-      sha256: "98dca6f864141cd3f79cf42a036f45233b8e2a3940b0011e6a370dd2283c45db"
+      sha256: "38aec6ed732980dea6eec192a25fb55665137edc5c356603d8dc26ff5971f4d8"
       url: "https://pub.dev"
     source: hosted
-    version: "4.1.2"
+    version: "4.2.0"
   collection:
     dependency: transitive
     description:
@@ -237,10 +237,10 @@ packages:
     dependency: "direct main"
     description:
       name: firebase_app_check
-      sha256: c4a49a32573aca1de6d0beee4f122a8389d5e02aa8dddfdbef249105fe12a430
+      sha256: a523507988614a0a73a171a151bde91ece403bc8bc061c18b0d09bf19866bb4c
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0+5"
+    version: "0.3.1"
   firebase_app_check_platform_interface:
     dependency: transitive
     description:
@@ -468,10 +468,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_generative_ai
-      sha256: eac2338da8f223af2930b83da11fc56dab5369653db172902031e4c54132a17a
+      sha256: "81dae159c89e4d9bdc46955b6f4ee5ae0a291f9e8f990d76f43944e0d6041d4f"
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.5"
+    version: "0.4.6"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -492,10 +492,10 @@ packages:
     dependency: transitive
     description:
       name: google_sign_in_android
-      sha256: "5a47ebec9af97daf0822e800e4f101c3340b5ebc3f6898cf860c1a71b53cf077"
+      sha256: "0608de03fc541ece4f91ba3e01a68b17cce7a6cf42bd59e40bbe5c55cc3a49d8"
       url: "https://pub.dev"
     source: hosted
-    version: "6.1.28"
+    version: "6.1.30"
   google_sign_in_ios:
     dependency: transitive
     description:
@@ -564,10 +564,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "8c5abf0dcc24fe6e8e0b4a5c0b51a5cf30cefdf6407a3213dae61edc75a70f56"
+      sha256: c0a6763d50b354793d0192afd0a12560b823147d3ded7c6b77daf658fa05cc85
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+12"
+    version: "0.8.12+13"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -905,10 +905,10 @@ packages:
     dependency: transitive
     description:
       name: sqflite_common
-      sha256: "3da423ce7baf868be70e2c0976c28a1bb2f73644268b7ffa7d2e08eab71f16a4"
+      sha256: "7b41b6c3507854a159e24ae90a8e3e9cc01eb26a477c118d6dca065b5f55453e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.4"
+    version: "2.5.4+2"
   stack_trace:
     dependency: transitive
     description:
@@ -937,10 +937,10 @@ packages:
     dependency: transitive
     description:
       name: synchronized
-      sha256: "539ef412b170d65ecdafd780f924e5be3f60032a1128df156adad6c5b373d558"
+      sha256: a824e842b8a054f91a728b783c177c1e4731f6b124f9192468457a8913371255
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.0+1"
+    version: "3.2.0"
   term_glyph:
     dependency: transitive
     description:
@@ -977,10 +977,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "83d37c7ad7aaf9aa8e275490669535c8080377cfa7a7004c24dfac53afffaa90"
+      sha256: f33d6bb662f0e4f79dcd7ada2e6170f3b3a2530c28fc41f49a411ddedd576a77
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.2"
+    version: "4.5.0"
   vector_math:
     dependency: transitive
     description:
@@ -1030,5 +1030,5 @@ packages:
     source: hosted
     version: "6.5.0"
 sdks:
-  dart: ">=3.4.3 <4.0.0"
-  flutter: ">=3.22.0"
+  dart: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
