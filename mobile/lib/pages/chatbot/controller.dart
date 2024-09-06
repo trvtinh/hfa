@@ -74,7 +74,7 @@ class ChatbotController extends GetxController {
     scrollToEnd();
     await model
         .generateContent(content,
-            generationConfig: GenerationConfig(maxOutputTokens: 200))
+            generationConfig: GenerationConfig())
         .then((value) {
       data.value = ChatbotEntity(
           role: 'HFA',
