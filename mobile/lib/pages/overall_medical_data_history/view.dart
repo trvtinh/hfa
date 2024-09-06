@@ -33,11 +33,11 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
         title: const Text('Lịch sử dữ liệu y tế'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.list),
+            icon: const Icon(Icons.list_outlined),
             onPressed: () {},
           ),
           IconButton(
-            icon: const Icon(Icons.more_vert),
+            icon: const Icon(Icons.more_vert_outlined),
             onPressed: () {},
           ),
         ],
@@ -48,7 +48,7 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
             const Divider(height: 1),
             Container(
               height: 60,
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 border: const Border(
@@ -65,7 +65,8 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(Icons.calendar_month,
-                            color: Theme.of(context).colorScheme.secondary),
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 24,),
                         const SizedBox(width: 10),
                         GestureDetector(
                           onTap: (){
@@ -73,19 +74,25 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                                 .dateTimeSelected.value
                                 .subtract(const Duration(days: 1));
                           },
-                          child: Icon(Icons.arrow_back_ios_new,
-                              color: Theme.of(context).colorScheme.secondary),
+                          child: Icon(Icons.arrow_back_ios_outlined,
+                              color: Theme.of(context).colorScheme.secondary,
+                              size: 20,),
                         ),
                         GestureDetector(
                             onTap: () => controller.selectDate(context),
                             child: Obx(
-                              () => Text(
-                                controller.dateSelected.value,
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary),
+                              () => Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    controller.dateSelected.value,
+                                    style: TextStyle(
+                                        fontSize: 22,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary),
+                                  ),
+                                ],
                               ),
                             )),
                         GestureDetector(
@@ -94,8 +101,9 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                                 .dateTimeSelected.value
                                 .add(const Duration(days: 1));
                           },
-                          child: Icon(Icons.arrow_forward_ios,
-                              color: Theme.of(context).colorScheme.secondary),
+                          child: Icon(Icons.arrow_forward_ios_outlined,
+                              color: Theme.of(context).colorScheme.secondary,
+                              size: 20,),
                         ),
                       ],
                     ),
@@ -103,7 +111,7 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: GestureDetector(
-                      child: Icon(Icons.filter_alt,
+                      child: Icon(Icons.filter_alt_outlined,
                           color: Theme.of(context).colorScheme.secondary),
                     ),
                   ),
