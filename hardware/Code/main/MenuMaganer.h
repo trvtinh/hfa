@@ -59,6 +59,7 @@ public:
     if (numChildren > 0) {
       return children[selectedItem];
     }
+    return NULL;
   }
   MenuItem* back() {
     return parent;
@@ -98,10 +99,12 @@ void goDownMenu() {
   currentMenu->selectedDown();
 }
 void goIntoMenu() {
-  currentMenu = currentMenu->select();
+  if(currentMenu->select() != NULL)
+    currentMenu = currentMenu->select();
 }
 void goOutMenu() {
-  currentMenu = currentMenu->back();
+  if(currentMenu->back() != NULL)
+    currentMenu = currentMenu->back();
 }
 void displayMenu() {
   currentMenu->display();
