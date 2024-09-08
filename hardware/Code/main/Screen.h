@@ -1,7 +1,7 @@
 #include <U8g2lib.h>
 #include "logo.h"
 #include "Heart_GIF.h"
-#include<qrcode.h>
+#include  <qrcode.h>
 
 U8G2_SSD1306_128X64_NONAME_1_HW_I2C u8g2(U8G2_R0, U8X8_PIN_NONE);
 
@@ -13,7 +13,6 @@ public:
   Screen(){}
   void init(){
     u8g2.begin();
-    u8g2.setFont(u8g2_font_helvR10_tr);
     u8g2.setFontPosTop();
   }
   Screen& setPos(int x, int y){
@@ -21,7 +20,7 @@ public:
     return*this;
   }
   template<class T>
-  Screen& SetFont(const T& font){
+  Screen& setFont(const T& font){
     u8g2.setFont(font);
     return*this;
   }
@@ -70,21 +69,22 @@ public:
     return*this;
   }
   template<class T>
-  Screen& Write(const T& val){
+  Screen& write(const T& val){
     u8g2.print(val);
     return*this;
   }  
   template<class T>
-  void Write(int x, int y, const T& val){
+  Screen& write(int x, int y, const T& val){
     setPos(x, y);
     u8g2.print(val);
+    return*this;
   }
   template<class T>
-  void WriteCenterScreen(const T& val){
+  void writeCenterScreen(const T& val){
     int w = SCREEN_WIDTH - getStrWidthPixel(val);
     int h = SCREEN_HEIGHT - getStrHeightPixel();
     setPos(w / 2, h / 2);
-    Write(val);
+    write(val);
   }
   void HFA_logo(){
     first();

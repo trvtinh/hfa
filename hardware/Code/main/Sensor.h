@@ -11,7 +11,7 @@ public:
   float ObjectTempC;
   float AmbientTempF;
   float ObjectTempF;
-
+  
   int32_t SPO2; //SPO2
   int8_t SPO2Valid; //Flag to display if SPO2 calculation is valid
   int32_t heartRate; //Heart-rate
@@ -27,7 +27,7 @@ public:
     }
     return mlx90614.begin() && max30102.begin();
   }
-  void sensorConfig(){
+  void sensorConfig(){    // gọi khi dùng cảm biến MAX30102 
     max30102.sensorConfiguration(
       /*ledBrightness=*/50, 
       /*sampleAverage=*/SAMPLEAVG_4, 
@@ -36,6 +36,10 @@ public:
       /*pulseWidth=*/PULSEWIDTH_411, 
       /*adcRange=*/ADCRANGE_16384
     );
+    // Đặt tốc độ lấy mẫu
+    max30102.setSampleRate(100);  // Ví dụ: 100 mẫu/giây
+    // Đặt kích thước LED Pulse Width (giảm để lấy dữ liệu nhanh hơn)
+    max30102.setPulseWidth(69);   // 69us để có tốc độ nhanh hơn
   }
   void getDataMlx90614(){
     AmbientTempC = mlx90614.readAmbientTempC();

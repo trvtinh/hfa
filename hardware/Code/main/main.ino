@@ -1,7 +1,7 @@
-// mỗi lần đo nhịp tim & SPO2 (MAX30102) mất khoảng 4s
+// mỗi lần đo nhịp tim & SPO2 (MAX30102) mất khoảng 4s. chỉnh được thời gian lấy mẫu và độ rộng xung để mỗi lần đo nhanh hơn
 // To do: thời gian đo nhiệt độ (MLX90614) -> trả về thời gian một lần đo -> 130ms
 // To do: thời gian cần để đo âm thanh (INMP441) ? 
-// To do: mất 500ms để hiển thị ảnh động trái tim 
+// To do: mất 600ms để hiển thị ảnh động trái tim 
 // To do: Tìm ảnh động lúc đo nhiệt độ, âm thanh ?
 
 // To do: logo -> QR Code kết nối app -> báo kết nối thành công trên màn QR Code -> chuyển về menu chính 
@@ -33,46 +33,77 @@ void initButton(){
 
 void setup() {
   Serial.begin(9600);
-  scr.init();
-  // Hiển thị logo
-  delay(1000);
+
+  initMenu();
   scr.HFA_logo();
+    // Hiển thị logo
+  delay(2000);
   // khởi tạo cảm biến
   if(!sensor.init()){
     Serial.print("Error init sensor");
   }
-  sensor.sensorConfig();
+  //sensor.sensorConfig();
   // Hiển thị menu
-  initMenu();
+
   initButton();
-  delay(2000);
-
-}
-void displayFrame(const unsigned char* frame_name){
-  scr.drawBmp(0, 0, 40, 40, frame_name);
+  delay(2000); 
 }
 
-void displayGIF(){
+void displayGIFHeart(){
+  sensor.sensorConfig();
+  sensor.getDataMax30102();
   for(int i = 0; i < 7; i++){
     scr.first();
     do{
-        scr.drawBmp(0, 0, 40, 40, frame_Array[i]);
-    } while(scr.next());
-    if(++i == 7) i = 0;
-    delay(50);
+      scr.drawBmp(52, 0, 24, 24, epd_bitmap_allArray[i]);
+      scr.setFont(u8g2_font_7x13_mr).write(0, 24, "   HR       SPO2   ");
+      if(sensor.heartRateValid == 0) scr.setFont(u8g2_font_6x10_mf).write(21, 45, "-");
+      else if(sensor.SPO2Valid == 0) scr.setFont(u8g2_font_6x10_mf).write(90, 45, "-");
+      else { scr.setFont(u8g2_font_6x10_mf).write(21, 45, sensor.heartRate).write(90, 45, sensor.SPO2); }
+      } while(scr.next());
+    delay(40);
   }
 }
+void displayECG(){
+  scr.first();
+  do{ 
+    scr.writeCenterScreen("ECG"); 
+  }while(scr.next());
+}
+void displayTemp(){
+  scr.first();
+  do{ 
+    scr.writeCenterScreen("Temp"); 
+  }while(scr.next());
+}
+void displayPCG(){
+  scr.first();
+  do{ 
+    scr.writeCenterScreen("PCG"); 
+  }while(scr.next());
+}
+void displayQRCodeConnect(){
+  displayQRCode("Connect to app");
+}
+void displayQRCodeAboutUs(){
+  displayQRCode("About us");
+}
+void display(void (*func)(), int address){
+  while(getAddressMenu() ==  address){
+    func();
+  }
+}
+
 void loop() {
   displayMenu();
-  switch(getAddressMenu()){
-    case 2: displayQRCode("KHOE MACH"); break; // connect app
-    case 3: displayQRCode("About us"); break;
-    case 4: displayGIF(); break;
-    case 5: scr.first();
-            do{scr.WriteCenterScreen("ECG");}while(scr.next()); break;
-    case 6: scr.first();
-            do{scr.WriteCenterScreen("Temp");}while(scr.next()); break;
-    case 7: scr.first();
-            do{scr.WriteCenterScreen("PCG");}while(scr.next()); break;
-  }
+  // display(displayQRCodeConnect, 2);
+  // display(displayQRCodeAboutUs, 3);
+  display(displayGIFHeart, 4);
+  // display(displayECG, 5);
+  // display(displayTemp, 6);
+  // display(displayPCG, 7);
+
+  // long start = millis();
+  // sensor.getDataMax30102();
+  // Serial.println(millis() - start);
 }

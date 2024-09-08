@@ -31,7 +31,7 @@ public:
       if (numChildren > 0) {
         for (int i = 0; i < numChildren; i++) {
           if (i == selectedItem) {
-            scr.SetFont(u8g2_font_helvR10_tr);
+            scr.setFont(u8g2_font_helvR10_tr);
             int8_t h = scr.getAscent() - scr.getDescent();
             int8_t w = scr.getStrWidthPixel(children[i]->name.c_str());
             if (selectedItem < 3) {
@@ -41,9 +41,9 @@ public:
             }
           }
           if (selectedItem < 3) {
-            scr.Write(5, i * 20 + 5, children[i]->name.c_str());
+            scr.write(5, i * 20 + 5, children[i]->name.c_str());
           } else {
-            scr.Write(5, (i - selectedItem + 2) * 20 + 5, children[i]->name.c_str());
+            scr.write(5, (i - selectedItem + 2) * 20 + 5, children[i]->name.c_str());
           }
         }
       }
@@ -81,14 +81,15 @@ MenuItem measureMenu("Measure", &root);
 MenuItem* currentMenu = &root;
 
 void initMenu() {
+    scr.init();
   // Xây dựng cây menu
   root.addChild(&measureMenu);
   root.addChild(new MenuItem("Connect App", &root));
   root.addChild(new MenuItem("About us", &root));
-  measureMenu.addChild(new MenuItem("HeartRate & SPO2", &measureMenu));
+  measureMenu.addChild(new MenuItem("HR & SPO2", &measureMenu));
   measureMenu.addChild(new MenuItem("ECG", &measureMenu));
-  measureMenu.addChild(new MenuItem("Ambient & Obj Temp", &measureMenu));
-  measureMenu.addChild(new MenuItem("PCG Sounds", &measureMenu));
+  measureMenu.addChild(new MenuItem("Body Temp", &measureMenu));
+  measureMenu.addChild(new MenuItem("PCG Sound", &measureMenu));
 }
 void goUpMenu() {
   currentMenu->selectedUp();
@@ -104,7 +105,7 @@ void goOutMenu() {
 }
 void displayMenu() {
   currentMenu->display();
-  //Serial.println(currentMenu->getAddress());
+  // Serial.println(currentMenu->getAddress());
 }
 int getAddressMenu(){
   return currentMenu->getAddress();

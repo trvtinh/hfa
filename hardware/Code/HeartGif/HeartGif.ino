@@ -141,18 +141,19 @@ void display_frame(const unsigned char* frame_name) {
 
 void setup() {
   scr.init();
+  Serial.begin(9600);
 }
 
-uint8_t i = 0;
 void loop() {
-  scr.first();
-  do {
-    display_frame(frame_Array[i]);
-  } while( scr.next() );
-  if (++i >= 7){
-    i=0;
+  long start = millis();
+  for(int i = 0; i < 7; i++){
+    scr.first();
+    do{
+      scr.drawBmp(0, 0, 40, 40, frame_Array[i]);
+      scr.Write(50, 50, "Start");
+    } while(scr.next());
+    delay(50);
   }
-  delay(50);
-
+  Serial.println(millis() - start);
 }
 
