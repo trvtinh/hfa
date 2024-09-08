@@ -18,7 +18,7 @@ class AlertScreen extends StatelessWidget {
         Row(
           children: [
             Icon(
-              Icons.warning_amber,
+              Icons.warning_amber_outlined,
               size: 24,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
@@ -123,7 +123,7 @@ class AlertScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(
-                Icons.health_and_safety,
+                Icons.health_and_safety_outlined,
                 size: 16,
               ),
               const SizedBox(

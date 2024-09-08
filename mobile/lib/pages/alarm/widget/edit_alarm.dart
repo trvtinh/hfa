@@ -44,10 +44,10 @@ class _EditAlarmState extends State<EditAlarm> {
           ),
           Row(
             children: [
-              Image.asset(
-                "assets/images/warning_amber.png",
-                width: 32,
-                height: 32,
+              Icon(
+                Icons.warning_amber_outlined,
+                size: 32,
+                color: Theme.of(context).colorScheme.primary,
               ),
               const SizedBox(
                 width: 16,

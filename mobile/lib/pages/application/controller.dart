@@ -108,8 +108,8 @@ class ApplicationController extends GetxController {
         label: '',
       ),
       const BottomNavigationBarItem(
-        icon: Icon(Icons.notifications, size: 28),
-        activeIcon: Icon(Icons.notifications, size: 28),
+        icon: Icon(Icons.notifications_outlined, size: 28),
+        activeIcon: Icon(Icons.notifications_outlined, size: 28),
         label: 'Thông báo',
       ),
       const BottomNavigationBarItem(

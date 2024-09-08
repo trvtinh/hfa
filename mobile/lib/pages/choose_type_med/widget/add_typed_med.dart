@@ -41,7 +41,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
     return Row(
       children: [
         Icon(
-          Icons.medication_liquid,
+          Icons.medication_liquid_sharp,
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),

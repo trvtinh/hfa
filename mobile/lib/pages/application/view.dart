@@ -4,6 +4,7 @@ import 'package:googleapis/admob/v1.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
 import 'package:health_for_all/pages/connect_hardware/view.dart';
+import 'package:health_for_all/pages/demo_ecg/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/image_analyze/view.dart';
@@ -76,17 +77,17 @@ class ApplicationPage extends GetView<ApplicationController> {
               Get.to(() => const DiagnosticPage());
             },
             child: const ListTile(
-              leading: Icon(Icons.health_and_safety),
+              leading: Icon(Icons.health_and_safety_outlined,),
               title: Text('Chẩn đoán'),
             ),
           ),
           ListTile(
             onTap: () => Get.to(() => PrescriptionPage()),
-            leading: const Icon(Icons.medication_liquid),
+            leading: const Icon(Icons.medication_liquid_sharp,),
             title: const Text('Đơn thuốc'),
           ),
           ListTile(
-            leading: const Icon(Icons.date_range),
+            leading: const Icon(Icons.date_range_outlined,),
             title: const Text('Nhắc nhở'),
             onTap: () => Get.to(() => ReminderPage()),
           ),
@@ -97,7 +98,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () => Get.to(() => AlarmPage()),
-            leading: const Icon(Icons.warning_amber),
+            leading: const Icon(Icons.warning_amber_outlined,),
             title: const Text('Cảnh báo'),
           ),
           ListTile(
@@ -107,7 +108,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () => Get.to(() => ChatbotPage()),
-            leading: const Icon(Icons.smart_toy),
+            leading: const Icon(Icons.smart_toy_outlined,),
             title: const Text('Trò chuyện với HFA-Bot'),
           ),
           ListTile(
@@ -124,8 +125,13 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () => Get.to(() => ImageAnalyzePage()),
-            leading: const Icon(Icons.memory),
+            leading: const Icon(Icons.memory_outlined),
             title: const Text('Phân tích hình ảnh'),
+          ),
+          ListTile(
+            onTap: () => Get.to(() => DemoECG()),
+            leading: const Icon(Icons.add_chart_outlined),
+            title: const Text('Demo ECG'),
           ),
         ],
       ));

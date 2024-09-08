@@ -210,14 +210,14 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
               children: [
                 WhiteBox(
                     title: 'Chẩn đoán',
-                    iconpath: 'assets/images/health_and_safety.png',
+                    iconbox: Icons.health_and_safety_outlined,
                     text1: 'Chưa xem',
                     text2: 'Đã xem',
                     value1: '03',
                     value2: '07'),
                 WhiteBox(
                     title: 'Đơn thuốc',
-                    iconpath: 'assets/images/medication_liquid.png',
+                    iconbox: Icons.medication_liquid_sharp,
                     text1: 'Đang uống',
                     text2: 'Hoàn thành',
                     value1: '03',
@@ -232,12 +232,12 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
               children: [
                 WhiteBoxnoW(
                     title: 'Nhắc nhở',
-                    iconpath: 'assets/images/date_range.png',
+                    iconbox: Icons.date_range_outlined,
                     text1: 'Số lời nhắc',
                     value1: '07'),
                 WhiteBoxnoW(
                     title: 'Cảnh báo',
-                    iconpath: 'assets/images/warning_amber.png',
+                    iconbox: Icons.warning_amber_outlined,
                     text1: 'Số cảnh báo',
                     value1: '07'),
               ],
@@ -250,7 +250,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
               children: [
                 WhiteBox(
                     title: 'Thông báo',
-                    iconpath: 'assets/images/notifications.png',
+                    iconbox: Icons.notifications_outlined,
                     text1: 'Chưa xem',
                     text2: 'Đã xem',
                     value1: '03',

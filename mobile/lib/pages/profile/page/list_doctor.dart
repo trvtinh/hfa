@@ -42,16 +42,22 @@ class _ListDoctorState extends State<ListDoctor> {
     "+84 123456789",
   ];
   List<String> degree = [
-    "Bác sĩ"
-        "Cử nhân"
-        "Dược sĩ"
-        "Bác sĩ chuyên khoa I"
+    "Bác sĩ",
+    "Cử nhân",
+    "Dược sĩ",
+    "Bác sĩ chuyên khoa I",
   ];
   List<String> department = [
-    "Khoa tim mạch"
-        "Khoa thần kinh trung ương"
-        "Khoa cấp cứu"
-        "Khoa nội tiết",
+    "Khoa tim mạch",
+    "Khoa thần kinh trung ương",
+    "Khoa cấp cứu",
+    "Khoa nội tiết",
+  ];
+  List<String> trunc = [
+    "BS",
+    "CN",
+    "DS",
+    "CK1",
   ];
 
   @override
@@ -60,6 +66,9 @@ class _ListDoctorState extends State<ListDoctor> {
       appBar: AppBar(
         title: const Text(
           "Danh sách chuyên gia y tế",
+          style: TextStyle(
+            fontSize: 17,
+          ),
         ),
         actions: [
           Icon(
@@ -131,7 +140,8 @@ class _ListDoctorState extends State<ListDoctor> {
       },
       child: Column(
         children: [
-          Padding(
+          Container(
+            width: MediaQuery.of(context).size.width-32,
             padding: const EdgeInsets.symmetric(
               vertical: 12,
               horizontal: 8,
@@ -186,36 +196,22 @@ class _ListDoctorState extends State<ListDoctor> {
                               ),
                             ),
                             const SizedBox(
-                              width: 30,
+                              width: 73,
                             ),
                             Text(
-                              rate[index].toString(),
+                              trunc[index].toString(),
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                                fontSize: 14,
-                              ),
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            Text(
-                              "(10)",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
+                                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                fontSize: 12,
                               ),
                             ),
                           ],
                         )
                       ],
                     ),
-                    const SizedBox(
-                      width: 16,
-                    ),
                   ],
                 ),
+                Spacer(),
                 Column(
                   children: [
                     GestureDetector(
