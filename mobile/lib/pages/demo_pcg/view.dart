@@ -16,6 +16,11 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
     _player.setAsset('assets/pcg_example.mp3');
   }
 
+  void _restart() async {
+    await _player.seek(Duration.zero); // Seek to the start
+    _player.play(); // Play from the start
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,10 +44,8 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
               child: Text('Pause'),
             ),
             ElevatedButton(
-              onPressed: () {
-                _player.stop();
-              },
-              child: Text('Stop'),
+              onPressed: _restart,
+              child: Text('Restart'),
             ),
           ],
         ),

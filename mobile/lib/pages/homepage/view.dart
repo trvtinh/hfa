@@ -150,6 +150,7 @@ class Homepage extends StatelessWidget {
                                             ),
                                           ],
                                         ),
+                                        SizedBox(height: 2,),
                                         Row(
                                           children: [
                                             const Text(
@@ -181,6 +182,7 @@ class Homepage extends StatelessWidget {
                                             ),
                                           ],
                                         ),
+                                        SizedBox(height: 2,),
                                         Row(
                                           children: [
                                             const Text(

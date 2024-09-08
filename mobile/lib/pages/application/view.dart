@@ -5,6 +5,7 @@ import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
 import 'package:health_for_all/pages/connect_hardware/view.dart';
 import 'package:health_for_all/pages/demo_ecg/view.dart';
+import 'package:health_for_all/pages/demo_pcg/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/image_analyze/view.dart';
@@ -132,6 +133,11 @@ class ApplicationPage extends GetView<ApplicationController> {
             onTap: () => Get.to(() => DemoECG()),
             leading: const Icon(Icons.add_chart_outlined),
             title: const Text('Demo ECG'),
+          ),
+          ListTile(
+            onTap: () => Get.to(() => AudioPlayerView()),
+            leading: const Icon(Icons.sos_rounded),
+            title: const Text('Demo PCG'),
           ),
         ],
       ));
