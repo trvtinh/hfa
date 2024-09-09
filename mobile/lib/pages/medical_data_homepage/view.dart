@@ -195,7 +195,7 @@ class MedicalDataHome extends StatelessWidget {
         Expanded(
           child: _buildButton(
             onTap: () {
-              Get.to(() => MedicalDataPage());
+              Get.to(() => const MedicalDataPage());
             },
             icon: Icons.add_circle_outline,
             label: "Thêm",
@@ -248,7 +248,7 @@ class MedicalDataHome extends StatelessWidget {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory("Nhịp tim"));
             },
             child: GreyBox(
@@ -266,7 +266,7 @@ class MedicalDataHome extends StatelessWidget {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('SPO2'));
             },
             child: GreyBox(
@@ -290,7 +290,7 @@ class MedicalDataHome extends StatelessWidget {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('Huyết áp'));
             },
             child: GreyBox(
@@ -308,7 +308,7 @@ class MedicalDataHome extends StatelessWidget {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('Đường huyết'));
             },
             child: GreyBox(
@@ -332,7 +332,7 @@ class MedicalDataHome extends StatelessWidget {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('HRV'));
             },
             child: GreyBox(
@@ -350,7 +350,7 @@ class MedicalDataHome extends StatelessWidget {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('ECG'));
             },
             child: GreyBox(
@@ -374,7 +374,7 @@ class MedicalDataHome extends StatelessWidget {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('Thân nhiệt'));
             },
             child: GreyBox(
@@ -392,7 +392,7 @@ class MedicalDataHome extends StatelessWidget {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('Axit Uric'));
             },
             child: GreyBox(
@@ -416,7 +416,7 @@ class MedicalDataHome extends StatelessWidget {
       children: [
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('Cân nặng'));
             },
             child: GreyBox(
@@ -434,12 +434,13 @@ class MedicalDataHome extends StatelessWidget {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: (){
+            onTap: () {
               Get.to(() => TypeMedHistory('Phiếu xét nghiệm máu'));
             },
             child: GreyBox(
               title: 'Phiếu xét nghiệm máu',
-              iconpath: 'assets/medical_data_Home_images/medical_information.png',
+              iconpath:
+                  'assets/medical_data_Home_images/medical_information.png',
               value: 'OK',
               unit: ' ',
               time: time2 == '' ? "Chưa cập nhật" : time2,

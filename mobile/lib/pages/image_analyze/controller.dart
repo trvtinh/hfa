@@ -30,11 +30,6 @@ class ImageAnalyzeController extends GetxController {
     '''),
   );
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   Future<void> pickImageFromGallery() async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);

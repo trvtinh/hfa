@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
-import 'package:health_for_all/pages/diagnostic_detail/view.dart';
 
 class ImportantPage extends StatefulWidget {
   const ImportantPage({super.key});

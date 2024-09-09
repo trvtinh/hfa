@@ -47,10 +47,10 @@ class MedicalDataPage extends GetView<MedicalDataController> {
               children: [
                 _buildDateTimeField(context, 'Ngày', Icons.event_note,
                     controller.selectDate, controller.dateController,
-                    width: MediaQuery.of(context).size.width / 5 * 3),
+                    width: MediaQuery.of(context).size.width / 5 * 3 - 2),
                 _buildDateTimeField(context, 'Thời gian', Icons.schedule,
                     controller.selectTime, controller.timeController,
-                    width: MediaQuery.of(context).size.width / 5 * 2),
+                    width: MediaQuery.of(context).size.width / 5 * 2 + 2),
               ],
             ),
             _buildSearchField(context),

@@ -75,7 +75,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                           .map((doc) => MedicineBase.fromFirestore(
                               doc as DocumentSnapshot<Map<String, dynamic>>))
                           .toList();
-                      WidgetsBinding.instance!.addPostFrameCallback((_) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
                         medicineController.state.medicineCount.value =
                             data.length;
                       });

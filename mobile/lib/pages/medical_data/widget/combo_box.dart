@@ -57,7 +57,7 @@ class _ComboBoxState extends State<ComboBox> {
       medicalController.state.data[widget.title]?.value =
           '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
       log('combobox : ${medicalController.state.data[widget.title]?.value}');
-      log('hehe' +
+      log('hehe'
           '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}');
     }
     setState(() {
@@ -82,7 +82,7 @@ class _ComboBoxState extends State<ComboBox> {
           Obx(
             () => Container(
               width: double.infinity,
-              height: 76,
+              height: 85,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
                 color: ischeck.value
@@ -242,37 +242,35 @@ class _ComboBoxState extends State<ComboBox> {
   }
 
   Widget _buildValueUnitColumn(BuildContext context) {
-    return SizedBox(
-        height: 55,
-        child: Obx(
-          () => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // Align text to the start
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  medicalController.state.data[widget.title]?.value ?? "",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
-                  ),
-                ),
+    return Obx(
+      () => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              medicalController.state.data[widget.title]?.value ?? "",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  medicalController.state.data[widget.title]?.unit ?? "",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ));
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              medicalController.state.data[widget.title]?.unit ?? "",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: 11,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showDialog(BuildContext context) {

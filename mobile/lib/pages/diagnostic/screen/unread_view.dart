@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/diagnostic/screen/important_view.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
 
 class UnreadPage extends StatefulWidget {

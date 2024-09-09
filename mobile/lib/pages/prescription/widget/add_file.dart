@@ -29,13 +29,10 @@ class _AddFileState extends State<AddFile> {
 
   void pickMultipleImages() async {
     final List<XFile> images = await _picker.pickMultiImage();
-    if (images != null) {
-      setState(() {
-        selectedFiles.addAll(images);
-        widget.onFilesChanged
-            ?.call(selectedFiles); // Notify parent about changes
-      });
-    }
+    setState(() {
+      selectedFiles.addAll(images);
+      widget.onFilesChanged?.call(selectedFiles); // Notify parent about changes
+    });
   }
 
   void capturePhoto() async {

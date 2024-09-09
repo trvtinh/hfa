@@ -8,7 +8,15 @@ class DiagnosticWidget extends StatefulWidget {
   final String medName;
   final String index;
   final String commend;
-  const DiagnosticWidget({super.key, required this.name, required this.time, required this.date, required this.state, required this.medName, required this.index, required this.commend});
+  const DiagnosticWidget(
+      {super.key,
+      required this.name,
+      required this.time,
+      required this.date,
+      required this.state,
+      required this.medName,
+      required this.index,
+      required this.commend});
 
   @override
   State<DiagnosticWidget> createState() => _DiagnosticWidgetState();
@@ -44,7 +52,7 @@ class _DiagnosticWidgetState extends State<DiagnosticWidget> {
                   ),
                   seperator(Colors.black),
                   Text(
-                    widget.time+ " , " + widget.date,
+                    "${widget.time} , ${widget.date}",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 12,

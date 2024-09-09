@@ -70,7 +70,7 @@ class ChatbotPage extends GetView<ChatbotController> {
                               borderRadius: BorderRadius.circular(28),
                               color: Theme.of(context).colorScheme.surfaceDim,
                             ),
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(4),
                             child: Column(
                               mainAxisSize: MainAxisSize
                                   .min, // Adjust height based on content
@@ -100,7 +100,7 @@ class ChatbotPage extends GetView<ChatbotController> {
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.all(4),
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 color: Colors.white,
                                                 shape: BoxShape.circle,
                                               ),

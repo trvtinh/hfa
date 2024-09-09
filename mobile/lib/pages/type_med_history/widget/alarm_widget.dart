@@ -8,7 +8,15 @@ class AlarmWidget extends StatefulWidget {
   final String medName;
   final String index;
   final String commend;
-  const AlarmWidget({super.key, required this.name, required this.time, required this.date, required this.state, required this.medName, required this.index, required this.commend});
+  const AlarmWidget(
+      {super.key,
+      required this.name,
+      required this.time,
+      required this.date,
+      required this.state,
+      required this.medName,
+      required this.index,
+      required this.commend});
 
   @override
   State<AlarmWidget> createState() => _AlarmWidgetState();
@@ -44,7 +52,7 @@ class _AlarmWidgetState extends State<AlarmWidget> {
                   ),
                   seperator(Colors.black),
                   Text(
-                    widget.time+ " , " + widget.date,
+                    "${widget.time} , ${widget.date}",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 12,

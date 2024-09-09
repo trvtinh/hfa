@@ -31,7 +31,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
         ),
         actions: [
           Icon(
-            Icons.medication_liquid,
+            Icons.medication_liquid_sharp,
             size: 48,
             color: Theme.of(context).colorScheme.primary,
           ),
@@ -93,7 +93,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
             child: Row(
               children: [
                 Icon(
-                  Icons.medication_liquid,
+                  Icons.medication_liquid_sharp,
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
                 const SizedBox(

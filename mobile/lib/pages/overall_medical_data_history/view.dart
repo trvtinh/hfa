@@ -48,7 +48,7 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
             const Divider(height: 1),
             Container(
               height: 60,
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainer,
                 border: const Border(
@@ -64,19 +64,23 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                   Expanded(
                     child: Row(
                       children: [
-                        Icon(Icons.calendar_month,
-                            color: Theme.of(context).colorScheme.secondary,
-                            size: 24,),
+                        Icon(
+                          Icons.calendar_month,
+                          color: Theme.of(context).colorScheme.secondary,
+                          size: 24,
+                        ),
                         const SizedBox(width: 10),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
                                 .subtract(const Duration(days: 1));
                           },
-                          child: Icon(Icons.arrow_back_ios_outlined,
-                              color: Theme.of(context).colorScheme.secondary,
-                              size: 20,),
+                          child: Icon(
+                            Icons.arrow_back_ios_outlined,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 20,
+                          ),
                         ),
                         GestureDetector(
                             onTap: () => controller.selectDate(context),
@@ -96,14 +100,16 @@ class OverallMedicalDataHistoryPage extends StatelessWidget {
                               ),
                             )),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             controller.dateTimeSelected.value = controller
                                 .dateTimeSelected.value
                                 .add(const Duration(days: 1));
                           },
-                          child: Icon(Icons.arrow_forward_ios_outlined,
-                              color: Theme.of(context).colorScheme.secondary,
-                              size: 20,),
+                          child: Icon(
+                            Icons.arrow_forward_ios_outlined,
+                            color: Theme.of(context).colorScheme.secondary,
+                            size: 20,
+                          ),
                         ),
                       ],
                     ),

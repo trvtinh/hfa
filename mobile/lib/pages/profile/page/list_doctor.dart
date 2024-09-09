@@ -18,17 +18,23 @@ class ListDoctor extends StatelessWidget {
     "+84 123456789",
     "+84 123456789",
   ];
-  final List<String> degree = [
+  List<String> degree = [
     "Bác sĩ",
     "Cử nhân",
     "Dược sĩ",
-    "Bác sĩ chuyên khoa I"
+    "Bác sĩ chuyên khoa I",
   ];
-  final List<String> department = [
+  List<String> department = [
     "Khoa tim mạch",
     "Khoa thần kinh trung ương",
     "Khoa cấp cứu",
     "Khoa nội tiết",
+  ];
+  List<String> trunc = [
+    "BS",
+    "CN",
+    "DS",
+    "CK1",
   ];
 
   @override
@@ -37,6 +43,9 @@ class ListDoctor extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           "Danh sách chuyên gia y tế",
+          style: TextStyle(
+            fontSize: 17,
+          ),
         ),
         actions: [
           Icon(
@@ -129,7 +138,8 @@ class ListDoctor extends StatelessWidget {
       },
       child: Column(
         children: [
-          Padding(
+          Container(
+            width: MediaQuery.of(context).size.width - 32,
             padding: const EdgeInsets.symmetric(
               vertical: 12,
               horizontal: 8,
@@ -184,36 +194,24 @@ class ListDoctor extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(
-                              width: 30,
+                              width: 73,
                             ),
                             Text(
-                              rate.toString(),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
-                                fontSize: 14,
-                              ),
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            Text(
-                              "(10)",
+                              trunc[index!].toString(),
                               style: TextStyle(
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurfaceVariant,
+                                fontSize: 12,
                               ),
                             ),
                           ],
                         )
                       ],
                     ),
-                    const SizedBox(
-                      width: 16,
-                    ),
                   ],
                 ),
+                const Spacer(),
                 Column(
                   children: [
                     GestureDetector(
@@ -224,7 +222,7 @@ class ListDoctor extends StatelessWidget {
                               id: id,
                               email: email,
                               mobile: mobile,
-                              degree: degree[index!],
+                              degree: degree[index],
                               department: department[index],
                             ));
                       },

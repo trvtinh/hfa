@@ -58,7 +58,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                 Row(
                   children: [
                     Icon(
-                      Icons.medication_liquid,
+                      Icons.medication_liquid_sharp,
                       color: Theme.of(context).colorScheme.primary,
                       size: 32,
                     ),

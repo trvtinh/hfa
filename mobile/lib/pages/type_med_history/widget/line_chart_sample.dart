@@ -20,6 +20,7 @@ class LineChartSample extends StatefulWidget {
       required this.show_diagnostic,
       required this.show_alarm,
       required this.title});
+  @override
   _LineChartSampleState createState() => _LineChartSampleState();
 }
 
@@ -60,7 +61,7 @@ class _LineChartSampleState extends State<LineChartSample> {
 
     // Calculate intervals for 4 lines on Y-axis and smaller intervals for X-axis
     const yInterval = 10.0;
-    final xInterval =
+    const xInterval =
         1.0; // Decrease this value to show more frequent X-axis lines
 
     return Column(
