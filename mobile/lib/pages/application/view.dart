@@ -72,7 +72,7 @@ class ApplicationPage extends GetView<ApplicationController> {
                 time: controller.state.updateTime.value == ""
                     ? "Chưa cập nhật dữ liệu lần nào"
                     : "Cập nhật lần cuối ${controller.state.updateTime.value}")),
-            leading: const Icon(Icons.monitor_heart),
+            leading: const Icon(Icons.monitor_heart_outlined),
             title: const Text('Dữ liệu sức khỏe'),
           ),
           InkWell(

@@ -63,12 +63,16 @@ class Homepage extends StatelessWidget {
                                       children: [
                                         Row(
                                           children: [
-                                            Text(
-                                              appController.state.profile.value
-                                                      ?.name ??
-                                                  "",
-                                              style:
-                                                  const TextStyle(fontSize: 16),
+                                            Wrap(
+                                              children: [
+                                                Text(
+                                                  appController.state.profile
+                                                          .value?.name ??
+                                                      "",
+                                                  style: const TextStyle(
+                                                      fontSize: 16),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
@@ -114,7 +118,7 @@ class Homepage extends StatelessWidget {
                                   const SizedBox(width: 12),
                                   SizedBox(
                                     width:
-                                        MediaQuery.of(context).size.width / 3,
+                                        MediaQuery.of(context).size.width / 3.7,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
