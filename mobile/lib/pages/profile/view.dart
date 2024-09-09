@@ -18,13 +18,13 @@ class ProfilePage extends GetView<ProfileController> {
           bottom: const TabBar(
             tabs: [
               Tab(
-                child: Text('Thông tin', style: TextStyle(fontSize: 12),),
+                child: Text('Thông tin', style: TextStyle(fontSize: 14),),
               ),
               Tab(
-                child: Text('Người theo dõi', style: TextStyle(fontSize: 12),),
+                child: Text('Người theo dõi', style: TextStyle(fontSize: 14),),
               ),
               Tab(
-                child: Text('Đang theo dõi', style: TextStyle(fontSize: 12),),
+                child: Text('Đang theo dõi', style: TextStyle(fontSize: 14),),
               ),
             ],
           ),
