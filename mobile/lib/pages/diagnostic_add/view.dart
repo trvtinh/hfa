@@ -181,7 +181,7 @@ class DiagnosticAddView extends StatelessWidget {
         return AlertDialog(
           title: const Text('Error'),
           content: const Text(
-              'An error occurred while saving data. Please try again.'),
+              'Lỗi khi lưu dữ liệu. Hãy thử lại!'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

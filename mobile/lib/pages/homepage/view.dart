@@ -81,34 +81,30 @@ class Homepage extends StatelessWidget {
                                         ),
                                         Row(
                                           children: [
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  appController.state.profile
-                                                          .value?.gender ??
-                                                      "",
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Color.fromRGBO(
-                                                        121, 116, 126, 1),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  width: 12,
-                                                ),
-                                                Text(
-                                                  appController.state.profile
-                                                              .value?.age !=
-                                                          0
-                                                      ? ("${appController.state.profile.value?.age} tuổi")
-                                                      : '',
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                    color: Color.fromRGBO(
-                                                        121, 116, 126, 1),
-                                                  ),
-                                                ),
-                                              ],
+                                            Text(
+                                              appController.state.profile
+                                                      .value?.gender ??
+                                                  "",
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Color.fromRGBO(
+                                                    121, 116, 126, 1),
+                                              ),
+                                            ),
+                                            // const SizedBox(
+                                            //   width: 12,
+                                            // ),
+                                            Text(
+                                              appController.state.profile
+                                                          .value?.age !=
+                                                      0
+                                                  ? ("${appController.state.profile.value?.age} tuổi")
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Color.fromRGBO(
+                                                    121, 116, 126, 1),
+                                              ),
                                             ),
                                           ],
                                         )
