@@ -40,6 +40,7 @@ class _ComboBoxState extends State<ComboBox> {
   final medicalController = Get.find<MedicalDataController>();
   final appController = Get.find<ApplicationController>();
   final imageAnalyze = Get.find<ImageAnalyzeController>();
+  RxBool isLoading = false.obs;
   List<XFile> selectedFiles = [];
   Future updateFiles(List<XFile> newFiles) async {
     if (newFiles.isEmpty) {
@@ -48,10 +49,17 @@ class _ComboBoxState extends State<ComboBox> {
       return;
     }
     imageAnalyze.state.image.value = File(newFiles[0].path);
+    isLoading.value = true;
+    if (isLoading.value) {
+      Get.dialog(const Center(child: CircularProgressIndicator()));
+    }
     log('image : ${imageAnalyze.state.image.value}');
     await imageAnalyze.analyzeImage().then((_) {
       widget.valueController.text =
           '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
+    }).whenComplete(() {
+      Get.back();
+      isLoading.value = false;
     });
     if (widget.title == 'Huyết áp') {
       medicalController.state.data[widget.title]?.value =
@@ -67,12 +75,15 @@ class _ComboBoxState extends State<ComboBox> {
       }
     });
   }
-
   RxBool ischeck = false.obs;
+  
   @override
   Widget build(BuildContext context) {
     RxBool haveFile = (selectedFiles.isNotEmpty).obs;
     RxBool haveNote = widget.noteController.text.isNotEmpty.obs;
+    ischeck.value = medicalController.state.data[widget.title] != null
+                              ? true
+                              : false;
     return GestureDetector(
       onTap: () {
         _showDialog(context);
@@ -173,18 +184,20 @@ class _ComboBoxState extends State<ComboBox> {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      selectedFiles.clear();
-                      widget.valueController.clear();
-                      medicalController.state.data[widget.title]!.value = '';
-                      medicalController.state.data[widget.title]!.note = '';
-                      medicalController.state.data[widget.title]!.imagePaths =
-                          [];
-                      medicalController.state.data[widget.title]!.imageUrls =
-                          [];
-                      medicalController.state.data[widget.title]!.unit = '';
-                      haveNote.value = false;
-                      haveFile.value = false;
-                      ischeck.value = false;
+                      if (ischeck.value) {
+                        selectedFiles.clear();
+                        widget.valueController.clear();
+                        medicalController.state.data[widget.title]!.value = '';
+                        medicalController.state.data[widget.title]!.note = '';
+                        medicalController.state.data[widget.title]!.imagePaths =
+                            [];
+                        medicalController.state.data[widget.title]!.imageUrls =
+                            [];
+                        medicalController.state.data[widget.title]!.unit = '';
+                        haveNote.value = false;
+                        haveFile.value = false;
+                        ischeck.value = false;
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
