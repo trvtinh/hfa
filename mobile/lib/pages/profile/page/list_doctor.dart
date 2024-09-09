@@ -210,7 +210,7 @@ class ListDoctor extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(
-                              width: 60,
+                              width: 30,
                             ),
                             Text(
                               trunc[index!].toString(),
