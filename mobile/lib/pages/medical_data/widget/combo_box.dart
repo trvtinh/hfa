@@ -71,8 +71,8 @@ class _ComboBoxState extends State<ComboBox> {
   RxBool ischeck = false.obs;
   @override
   Widget build(BuildContext context) {
-    bool haveFile = (selectedFiles.isNotEmpty);
-    bool haveNote = widget.noteController.text.isNotEmpty;
+    RxBool haveFile = (selectedFiles.isNotEmpty).obs;
+    RxBool haveNote = widget.noteController.text.isNotEmpty.obs;
     return GestureDetector(
       onTap: () {
         _showDialog(context);
@@ -108,7 +108,7 @@ class _ComboBoxState extends State<ComboBox> {
                     ),
                     child: Padding(
                         padding: const EdgeInsets.all(1.5),
-                        child: haveNote
+                        child: haveNote.value
                             ? Badge(
                                 child: Icon(
                                   Icons
@@ -146,7 +146,7 @@ class _ComboBoxState extends State<ComboBox> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(1.5),
-                        child: haveFile
+                        child: haveFile.value
                             ? Badge(
                                 child: Icon(
                                   Icons
@@ -182,6 +182,8 @@ class _ComboBoxState extends State<ComboBox> {
                       medicalController.state.data[widget.title]!.imageUrls =
                           [];
                       medicalController.state.data[widget.title]!.unit = '';
+                      haveNote.value = false;
+                      haveFile.value = false;
                       ischeck.value = false;
                     },
                     child: Container(
