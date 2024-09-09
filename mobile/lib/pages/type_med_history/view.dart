@@ -12,17 +12,6 @@ class TypeMedHistory extends StatelessWidget {
   final typeMedHistoryController = Get.find<TypeMedHistoryController>();
 
   TypeMedHistory(this.title, {super.key});
-
-  final List<List<String>> hour = [
-    ["06:00"], // First entry has one time
-    ["10:00", "14:00"], // Second entry has two times
-  ];
-
-  final List<List<String>> index = [
-    ["120/80"], // First entry corresponds to one index value
-    ["115/75", "125/85"], // Second entry corresponds to two index values
-  ];
-
   final RxBool changePage = true.obs;
   final RxBool showComment = true.obs;
   final RxBool showDiagnostic = false.obs;
@@ -113,7 +102,20 @@ class TypeMedHistory extends StatelessWidget {
                     typeMedHistoryController.rangeStart.value = picked.start;
                     typeMedHistoryController.rangeEnd.value = picked.end;
                     typeMedHistoryController.result.clear();
+                    typeMedHistoryController.state.commmentList.clear();
+                    typeMedHistoryController.state.diagnosticList.clear();
                     await typeMedHistoryController.fetchEventAmountTime(title);
+                    for (var value in typeMedHistoryController.result.values) {
+                      for (var medical in value) {
+                        if (medical.id != null) {
+                          await typeMedHistoryController
+                              .getAllCommentByMedicalType(medical.id!);
+                        }
+                        // if (medical.id != null) {
+                        //   typeMedHistoryController.state.diagnosticList.add(medical.diagnostic!);
+                        // }
+                      }
+                    }
                   }
                 },
                 child: Row(

@@ -15,6 +15,8 @@ class UserData {
   List<String>? patients;
   List<String>? relatives;
   String? dateOfBirth;
+  bool? isDoctor;
+  num? rate;
 
   UserData({
     this.id,
@@ -31,6 +33,8 @@ class UserData {
     this.patients,
     this.relatives,
     this.dateOfBirth,
+    this.isDoctor,
+    this.rate,
   });
 
   @override
@@ -50,6 +54,8 @@ class UserData {
         'gender: $gender, '
         'phoneNumber: $phoneNumber,'
         'dateOfBirth: $dateOfBirth'
+        'isDoctor: $isDoctor'
+        'rate: $rate'
         ')';
   }
 
@@ -73,6 +79,8 @@ class UserData {
       gender: data?['gender'],
       phoneNumber: data?['phoneNumber'],
       dateOfBirth: data?['dateOfBirth'],
+      isDoctor: data?['isDoctor'],
+      rate: data?['rating'],
     );
   }
 
@@ -92,6 +100,8 @@ class UserData {
       if (gender != null) "gender": gender,
       if (phoneNumber != null) "phoneNumber": phoneNumber,
       if (dateOfBirth != null) "dateOfBirth": dateOfBirth,
+      "isDoctor": isDoctor ?? false,
+      if (rate != null) "rating": rate,
     };
   }
 }

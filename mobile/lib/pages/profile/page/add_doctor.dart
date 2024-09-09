@@ -14,7 +14,7 @@ class _AddDoctorState extends State<AddDoctor> {
   Widget build(BuildContext context) {
     return TextField(
       onTap: () {
-        Get.to(() => const ListDoctor());
+        Get.to(() => ListDoctor());
       },
       readOnly: true,
       controller: TextEditingController(),

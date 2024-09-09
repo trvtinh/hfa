@@ -206,12 +206,6 @@ class _LineChartSampleState extends State<LineChartSample> {
                         TextStyle(color: Colors.white),
                       ),
                     ];
-                    // return touchedSpots.map((touchedSpot) {
-                    //   return LineTooltipItem(
-                    //     'X: ${xAxisData[touchedSpot.x.toInt()]}\nY: ${touchedSpot.y}',
-                    //     const TextStyle(color: Colors.white),
-                    //   );
-                    // }).toList();
                   },
                 ),
                 touchCallback:

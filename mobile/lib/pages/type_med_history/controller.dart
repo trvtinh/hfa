@@ -3,14 +3,17 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/comment.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
+import 'package:health_for_all/pages/type_med_history/state.dart';
 import 'package:intl/intl.dart';
 
 class TypeMedHistoryController extends GetxController {
   final medicalController = Get.find<OverallMedicalDataHistoryController>();
-
+  final state = TypeMedicalHistoryState();
   RxMap<String, List<MedicalEntity>> result =
       <String, List<MedicalEntity>>{}.obs;
   Rx<DateTime> rangeStart = DateTime.now().obs;
@@ -20,6 +23,29 @@ class TypeMedHistoryController extends GetxController {
   void onInit() {
     super.onInit();
     fetchEventAmountTime('Huyết áp');
+  }
+
+  Future getAllCommentByMedicalType(String medicalId) async {
+    final snapshot =
+        await FirebaseApi.getQuerySnapshot('comments', 'medicalId', medicalId);
+    if (snapshot.docs.isNotEmpty) {
+      for (var doc in snapshot.docs) {
+        final comment = Comment.fromFirestore(doc);
+        state.commmentList.add(comment);
+      }
+    }
+  }
+
+  Future<String> getUser(String userId) async {
+    final db = FirebaseFirestore.instance;
+    final querySnapshot =
+        await db.collection("users").where('id', isEqualTo: userId).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = await querySnapshot.docs.first.reference.get();
+      final userData = UserData.fromFirestore(docSnapshot, null);
+      return userData.name!;
+    }
+    return '';
   }
 
   Future fetchEventsInDay(DateTime date, String value, int? limit) async {
@@ -95,8 +121,6 @@ class TypeMedHistoryController extends GetxController {
     for (int i = 0;
         i <= DatetimeChange.getDuration(rangeEnd.value, rangeStart.value);
         i++) {
-      log('fetchEventAmountTime: $i');
-      log('fetchEventAmountTime: $temp');
       await fetchEventsInDay(temp, value, 5);
       temp = temp.add(const Duration(days: 1));
 
