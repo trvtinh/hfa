@@ -12,8 +12,12 @@ class ListDoctor extends StatelessWidget {
     "sample@gmail.com",
     "sample@gmail.com",
     "sample@gmail.com",
+    "sample@gmail.com",
+    "sample@gmail.com",
   ];
   final List<String> mobile = [
+    "+84 123456789",
+    "+84 123456789",
     "+84 123456789",
     "+84 123456789",
     "+84 123456789",
@@ -23,17 +27,23 @@ class ListDoctor extends StatelessWidget {
     "Cử nhân",
     "Dược sĩ",
     "Bác sĩ chuyên khoa I",
+    "Bác sĩ chuyên khoa I",
+    "Bác sĩ chuyên khoa I",
   ];
   List<String> department = [
     "Khoa tim mạch",
     "Khoa thần kinh trung ương",
     "Khoa cấp cứu",
     "Khoa nội tiết",
+    "Khoa nội tiết",
+    "Khoa nội tiết",
   ];
   List<String> trunc = [
     "BS",
     "CN",
     "DS",
+    "CK1",
+    "CK1",
     "CK1",
   ];
 
@@ -80,22 +90,24 @@ class ListDoctor extends StatelessWidget {
                             child: CircularProgressIndicator(),
                           );
                         }
-                        return Column(
-                          children: snapshot.data!.docs.map((doc) {
-                            return doctor(
-                                context,
-                                doc['photourl'],
-                                doc['name'],
-                                doc['id'],
-                                doc['rating'] == null
-                                    ? 0.0
-                                    : doc['rating'].toDouble(),
-                                doc['email'],
-                                doc['phoneNumber'],
-                                0
-                                // snapshot.data!.docs.indexOf(doc),
-                                );
-                          }).toList(),
+                        return SingleChildScrollView(
+                          child: Column(
+                            children: snapshot.data!.docs.map((doc) {
+                              return doctor(
+                                  context,
+                                  doc['photourl'],
+                                  doc['name'],
+                                  doc['id'],
+                                  doc['rating'] == null
+                                      ? 0.0
+                                      : doc['rating'].toDouble(),
+                                  doc['email'],
+                                  doc['phoneNumber'],
+                                  0
+                                  // snapshot.data!.docs.indexOf(doc),
+                                  );
+                            }).toList(),
+                          ),
                         );
                       },
                     )),
@@ -138,114 +150,112 @@ class ListDoctor extends StatelessWidget {
       onTap: () {
         // add(context, index);
       },
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width - 32,
-              padding: const EdgeInsets.symmetric(
-                vertical: 12,
-                horizontal: 8,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 30,
-                          vertical: 24,
+      child: Column(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width - 32,
+            padding: const EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 8,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 24,
+                      ),
+                      decoration: BoxDecoration(
+                          color:
+                              Theme.of(context).colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(16)),
+                      child: Text(
+                        "A",
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onPrimaryContainer,
+                          fontSize: 16,
                         ),
-                        decoration: BoxDecoration(
-                            color:
-                                Theme.of(context).colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(16)),
-                        child: Text(
-                          "A",
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 16,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          name,
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                            fontSize: 16,
-                          ),
+                              color: Theme.of(context).colorScheme.onSurface,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 16,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            name,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                id,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 73,
-                              ),
-                              Text(
-                                trunc[index!].toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(() => InfoDoctor(
-                                ten: name,
-                                rate: rate,
-                                id: id,
-                                email: email,
-                                mobile: mobile,
-                                degree: degree[index],
-                                department: department[index],
-                              ));
-                        },
-                        child: Icon(
-                          Icons.info_outline,
-                          color: Theme.of(context).colorScheme.secondary,
+                        const SizedBox(
+                          height: 8,
                         ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                        Row(
+                          children: [
+                            Text(
+                              id,
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 60,
+                            ),
+                            Text(
+                              trunc[index!].toString(),
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(() => InfoDoctor(
+                              ten: name,
+                              rate: rate,
+                              id: id,
+                              email: email,
+                              mobile: mobile,
+                              degree: degree[index],
+                              department: department[index],
+                            ));
+                      },
+                      child: Icon(
+                        Icons.info_outline,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
-            const Divider(
-              height: 1,
-            ),
-          ],
-        ),
+          ),
+          const Divider(
+            height: 1,
+          ),
+        ],
       ),
     );
   }
