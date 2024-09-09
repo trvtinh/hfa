@@ -174,6 +174,14 @@ class _ComboBoxState extends State<ComboBox> {
                   GestureDetector(
                     onTap: () {
                       selectedFiles.clear();
+                      widget.valueController.clear();
+                      medicalController.state.data[widget.title]!.value = '';
+                      medicalController.state.data[widget.title]!.note = '';
+                      medicalController.state.data[widget.title]!.imagePaths =
+                          [];
+                      medicalController.state.data[widget.title]!.imageUrls =
+                          [];
+                      medicalController.state.data[widget.title]!.unit = '';
                       ischeck.value = false;
                     },
                     child: Container(
