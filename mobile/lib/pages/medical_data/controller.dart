@@ -40,8 +40,6 @@ class MedicalDataController extends GetxController {
   }
 
   List get entries => List.generate(length, (index) {
-        log('index: $index');
-
         return Obx(() => ComboBox(
               time: DateFormat('HH:mm').format(DateTime(
                   0, 0, 0, timeOfDay.value.hour, timeOfDay.value.minute)),
