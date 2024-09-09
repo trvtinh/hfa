@@ -31,7 +31,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
         ),
         actions: [
           Icon(
-            Icons.add_to_photos,
+            Icons.add_to_photos_outlined,
             size: 24,
             color: Theme.of(context).colorScheme.primary,
           ),
