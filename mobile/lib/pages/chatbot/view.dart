@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/chatbot/controller.dart';
 import 'package:health_for_all/pages/chatbot/widget/chat_list.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ChatbotPage extends GetView<ChatbotController> {
   const ChatbotPage({super.key});

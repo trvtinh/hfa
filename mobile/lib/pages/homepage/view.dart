@@ -237,8 +237,8 @@ class Homepage extends StatelessWidget {
                     height: 16,
                   ),
                   Obx(() => Orangebox(
-                      val1: "03",
-                      val2: "07",
+                      val1: "00",
+                      val2: "10",
                       val3: "10",
                       time: appController.state.updateTime.value == ""
                           ? "Chưa cập nhật dữ liệu lần nào"
@@ -272,15 +272,15 @@ class Homepage extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => PrescriptionPage());
+                          Get.to(() => const PrescriptionPage());
                         },
                         child: const WhiteBox(
                             title: 'Đơn thuốc',
                             iconbox: Icons.medication_liquid_sharp,
                             text1: 'Đang uống',
                             text2: 'Hoàn thành',
-                            value1: '03',
-                            value2: '07'),
+                            value1: '00',
+                            value2: '00'),
                       ),
                     ],
                   ),
@@ -298,7 +298,7 @@ class Homepage extends StatelessWidget {
                             title: 'Nhắc nhở',
                             iconbox: Icons.date_range_outlined,
                             text1: 'Số lời nhắc',
-                            value1: '07'),
+                            value1: '00'),
                       ),
                       const SizedBox(
                         width: 10,

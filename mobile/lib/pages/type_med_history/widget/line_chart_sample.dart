@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/type_med_history/controller.dart';
 import 'package:health_for_all/pages/type_med_history/widget/alarm_widget.dart';
 import 'package:health_for_all/pages/type_med_history/widget/comment_widget.dart';

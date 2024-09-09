@@ -68,7 +68,10 @@ class ApplicationPage extends GetView<ApplicationController> {
         children: [
           buildDrawerHeader(),
           ListTile(
-            onTap: () => Get.to(() => MedicalDataHome()),
+            onTap: () => Get.to(() => MedicalDataHome(
+                time: controller.state.updateTime.value == ""
+                    ? "Chưa cập nhật dữ liệu lần nào"
+                    : "Cập nhật lần cuối ${controller.state.updateTime.value}")),
             leading: const Icon(Icons.monitor_heart),
             title: const Text('Dữ liệu sức khỏe'),
           ),
@@ -84,7 +87,7 @@ class ApplicationPage extends GetView<ApplicationController> {
             ),
           ),
           ListTile(
-            onTap: () => Get.to(() => PrescriptionPage()),
+            onTap: () => Get.to(() => const PrescriptionPage()),
             leading: const Icon(
               Icons.medication_liquid_sharp,
             ),
@@ -144,7 +147,7 @@ class ApplicationPage extends GetView<ApplicationController> {
             title: const Text('Demo ECG'),
           ),
           ListTile(
-            onTap: () => Get.to(() => AudioPlayerView()),
+            onTap: () => Get.to(() => const AudioPlayerView()),
             leading: const Icon(Icons.sos_rounded),
             title: const Text('Demo PCG'),
           ),
