@@ -40,6 +40,7 @@ class _ComboBoxState extends State<ComboBox> {
   final medicalController = Get.find<MedicalDataController>();
   final appController = Get.find<ApplicationController>();
   final imageAnalyze = Get.find<ImageAnalyzeController>();
+  RxBool isLoading = false.obs;
   List<XFile> selectedFiles = [];
   Future updateFiles(List<XFile> newFiles) async {
     if (newFiles.isEmpty) {
@@ -48,10 +49,17 @@ class _ComboBoxState extends State<ComboBox> {
       return;
     }
     imageAnalyze.state.image.value = File(newFiles[0].path);
+    isLoading.value = true;
+    if (isLoading.value) {
+      Get.dialog(const Center(child: CircularProgressIndicator()));
+    }
     log('image : ${imageAnalyze.state.image.value}');
     await imageAnalyze.analyzeImage().then((_) {
       widget.valueController.text =
           '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
+    }).whenComplete(() {
+      Get.back();
+      isLoading.value = false;
     });
     if (widget.title == 'Huyết áp') {
       medicalController.state.data[widget.title]?.value =
@@ -71,8 +79,8 @@ class _ComboBoxState extends State<ComboBox> {
   RxBool ischeck = false.obs;
   @override
   Widget build(BuildContext context) {
-    bool haveFile = (selectedFiles.isNotEmpty);
-    bool haveNote = widget.noteController.text.isNotEmpty;
+    RxBool haveFile = (selectedFiles.isNotEmpty).obs;
+    RxBool haveNote = widget.noteController.text.isNotEmpty.obs;
     return GestureDetector(
       onTap: () {
         _showDialog(context);
@@ -108,7 +116,7 @@ class _ComboBoxState extends State<ComboBox> {
                     ),
                     child: Padding(
                         padding: const EdgeInsets.all(1.5),
-                        child: haveNote
+                        child: haveNote.value
                             ? Badge(
                                 child: Icon(
                                   Icons
@@ -146,7 +154,7 @@ class _ComboBoxState extends State<ComboBox> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(1.5),
-                        child: haveFile
+                        child: haveFile.value
                             ? Badge(
                                 child: Icon(
                                   Icons
@@ -182,6 +190,8 @@ class _ComboBoxState extends State<ComboBox> {
                       medicalController.state.data[widget.title]!.imageUrls =
                           [];
                       medicalController.state.data[widget.title]!.unit = '';
+                      haveNote.value = false;
+                      haveFile.value = false;
                       ischeck.value = false;
                     },
                     child: Container(
