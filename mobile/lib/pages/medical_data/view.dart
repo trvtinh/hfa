@@ -158,7 +158,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
 
               // Clear the data after saving
               controller.state.data.clear();
-
+              log(controller.state.data.toString());
               // Show success dialog
               showDialog(
                 context: context,
@@ -174,6 +174,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                           controller.timeController.text =
                               DateFormat('hh:mm a').format(DateTime.now());
                           controller.state.data.clear();
+
                           Get.back(); // Dismiss the dialog
                         },
                         child: const Text('OK'),
