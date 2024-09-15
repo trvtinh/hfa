@@ -7,28 +7,27 @@ import 'package:health_for_all/pages/type_med_history/widget/comment_widget.dart
 import 'package:health_for_all/pages/type_med_history/widget/diagnostic_widget.dart';
 import 'package:intl/intl.dart';
 
-class LineChartSample extends StatefulWidget {
+class OneLineChart extends StatefulWidget {
   @override
   final bool show_comment;
   final bool show_diagnostic;
   final bool show_alarm;
   final String title;
-  const LineChartSample(
+  const OneLineChart(
       {super.key,
       required this.show_comment,
       required this.show_diagnostic,
       required this.show_alarm,
       required this.title});
   @override
-  _LineChartSampleState createState() => _LineChartSampleState();
+  _OneLineChartState createState() => _OneLineChartState();
 }
 
-class _LineChartSampleState extends State<LineChartSample> {
+class _OneLineChartState extends State<OneLineChart> {
   final controller = Get.find<TypeMedHistoryController>();
   // X-axis and Y-axis data based on random points generated earlier
   List<String> xAxisData = [];
   List<int> yAxisData = [];
-  List<int> yAxisData2 = [];
 
   @override
   void initState() {
@@ -39,13 +38,7 @@ class _LineChartSampleState extends State<LineChartSample> {
         .toList();
     yAxisData = controller.result.values
         .expand((value) {
-          return value.map((e) => e.value!.split('/')[0]);
-        })
-        .map((e) => int.parse(e))
-        .toList();
-    yAxisData2 = controller.result.values
-        .expand((value) {
-          return value.map((e) => e.value!.split('/')[1]);
+          return value.map((e) => e.value!);
         })
         .map((e) => int.parse(e))
         .toList();
@@ -53,13 +46,15 @@ class _LineChartSampleState extends State<LineChartSample> {
 
   @override
   Widget build(BuildContext context) {
-    const minY = 60;
-    const maxY = 170;
+    final minY =
+        yAxisData.isEmpty ? 0 : yAxisData.reduce((a, b) => a < b ? a : b);
+    final maxY =
+        yAxisData.isEmpty ? 0 : yAxisData.reduce((a, b) => a > b ? a : b);
     const minX = 0;
     final maxX = xAxisData.length - 1;
 
     // Calculate intervals for 4 lines on Y-axis and smaller intervals for X-axis
-    const yInterval = 10.0;
+    const yInterval = 5.0;
     const xInterval =
         1.0; // Decrease this value to show more frequent X-axis lines
 
@@ -122,7 +117,7 @@ class _LineChartSampleState extends State<LineChartSample> {
                     showTitles: true,
                     reservedSize: 40, // Adjust space for text
                     getTitlesWidget: (value, meta) {
-                      return Text('${value.toInt()}',
+                      return Text('$value',
                           style: const TextStyle(fontSize: 10));
                     },
                     interval: yInterval, // Keep Y-axis labels showing 4 lines
@@ -149,25 +144,6 @@ class _LineChartSampleState extends State<LineChartSample> {
                     xAxisData.length,
                     (index) => FlSpot(
                       index.toDouble(), // X coordinate
-                      yAxisData2[index].toDouble(), // Y coordinate
-                    ),
-                  ),
-                  isCurved: true,
-                  color: Colors.red,
-                  barWidth: 3,
-                  isStrokeCapRound: true,
-                  dotData:
-                      const FlDotData(show: true), // Display dots on the points
-                  belowBarData: BarAreaData(
-                    show: false,
-                    color: Colors.red.withOpacity(0.3),
-                  ),
-                ),
-                LineChartBarData(
-                  spots: List.generate(
-                    xAxisData.length,
-                    (index) => FlSpot(
-                      index.toDouble(), // X coordinate
                       yAxisData[index].toDouble(), // Y coordinate
                     ),
                   ),
@@ -183,45 +159,37 @@ class _LineChartSampleState extends State<LineChartSample> {
                   ),
                 ),
               ],
-              betweenBarsData: [
-                BetweenBarsData(
-                  fromIndex: 0,
-                  toIndex: 1,
-                  color: Colors.purple.withOpacity(0.3),
-                ),
-              ],
-              lineTouchData: LineTouchData(
-                touchTooltipData: LineTouchTooltipData(
-                  getTooltipColor: (spot) => Colors.blueAccent,
-                  getTooltipItems: (touchedSpots) {
-                    String y1 = touchedSpots[0].y.toInt().toString();
-                    String y2 = touchedSpots[1].y.toInt().toString();
-                    return [
-                      LineTooltipItem(
-                        'Ngày: ${xAxisData[touchedSpots[0].x.toInt()]}\nHuyết áp:\n$y1/$y2',
-                        const TextStyle(color: Colors.white),
-                      ),
-                      const LineTooltipItem(
-                        '',
-                        TextStyle(color: Colors.white),
-                      ),
-                    ];
-                  },
-                ),
-                touchCallback:
-                    (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                  if (!event.isInterestedForInteractions ||
-                      touchResponse == null) {
-                    return;
-                  }
-                  final touchedSpot = touchResponse.lineBarSpots?.first;
-                  if (touchedSpot != null) {
-                    // Handle touch interaction, if needed
-                  }
-                },
-                handleBuiltInTouches:
-                    true, // Allows built-in touch handling to show the tooltip
-              ),
+              // lineTouchData: LineTouchData(
+              //   touchTooltipData: LineTouchTooltipData(
+              //     getTooltipColor: (spot) => Colors.blueAccent,
+              //     getTooltipItems: (touchedSpots) {
+              //       String y1 = touchedSpots[0].y.toInt().toString();
+              //       return [
+              //         LineTooltipItem(
+              //           'Ngày: ${xAxisData[touchedSpots[0].x.toInt()]}\nHuyết áp:\n$y1',
+              //           const TextStyle(color: Colors.white),
+              //         ),
+              //         const LineTooltipItem(
+              //           '',
+              //           TextStyle(color: Colors.white),
+              //         ),
+              //       ];
+              //     },
+              //   ),
+              //   touchCallback:
+              //       (FlTouchEvent event, LineTouchResponse? touchResponse) {
+              //     if (!event.isInterestedForInteractions ||
+              //         touchResponse == null) {
+              //       return;
+              //     }
+              //     final touchedSpot = touchResponse.lineBarSpots?.first;
+              //     if (touchedSpot != null) {
+              //       // Handle touch interaction, if needed
+              //     }
+              //   },
+              //   handleBuiltInTouches:
+              //       true, // Allows built-in touch handling to show the tooltip
+              // ),
             ),
           ),
         ),

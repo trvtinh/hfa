@@ -31,7 +31,7 @@ class ApplicationPage extends GetView<ApplicationController> {
         children: [
           Homepage(),
           Following(),
-          const MedicalDataPage(),
+          MedicalDataPage(),
           const NotificationPage(),
           const ProfilePage()
         ],

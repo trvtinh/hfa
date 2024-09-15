@@ -75,12 +75,15 @@ class _ComboBoxState extends State<ComboBox> {
       }
     });
   }
-
   RxBool ischeck = false.obs;
+  
   @override
   Widget build(BuildContext context) {
     RxBool haveFile = (selectedFiles.isNotEmpty).obs;
     RxBool haveNote = widget.noteController.text.isNotEmpty.obs;
+    ischeck.value = medicalController.state.data[widget.title] != null
+                              ? true
+                              : false;
     return GestureDetector(
       onTap: () {
         _showDialog(context);
@@ -181,18 +184,20 @@ class _ComboBoxState extends State<ComboBox> {
                   const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () {
-                      selectedFiles.clear();
-                      widget.valueController.clear();
-                      medicalController.state.data[widget.title]!.value = '';
-                      medicalController.state.data[widget.title]!.note = '';
-                      medicalController.state.data[widget.title]!.imagePaths =
-                          [];
-                      medicalController.state.data[widget.title]!.imageUrls =
-                          [];
-                      medicalController.state.data[widget.title]!.unit = '';
-                      haveNote.value = false;
-                      haveFile.value = false;
-                      ischeck.value = false;
+                      if (ischeck.value) {
+                        selectedFiles.clear();
+                        widget.valueController.clear();
+                        medicalController.state.data[widget.title]!.value = '';
+                        medicalController.state.data[widget.title]!.note = '';
+                        medicalController.state.data[widget.title]!.imagePaths =
+                            [];
+                        medicalController.state.data[widget.title]!.imageUrls =
+                            [];
+                        medicalController.state.data[widget.title]!.unit = '';
+                        haveNote.value = false;
+                        haveFile.value = false;
+                        ischeck.value = false;
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(

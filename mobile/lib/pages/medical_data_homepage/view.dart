@@ -195,7 +195,7 @@ class MedicalDataHome extends StatelessWidget {
         Expanded(
           child: _buildButton(
             onTap: () {
-              Get.to(() => const MedicalDataPage());
+              Get.to(() => MedicalDataPage());
             },
             icon: Icons.add_circle_outline,
             label: "Thêm",

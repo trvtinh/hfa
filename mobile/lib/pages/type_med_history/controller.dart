@@ -22,7 +22,6 @@ class TypeMedHistoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchEventAmountTime('Huyết áp');
   }
 
   Future getAllCommentByMedicalType(String medicalId) async {

@@ -8,8 +8,8 @@ import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
 import 'package:intl/intl.dart';
 
 class MedicalDataPage extends GetView<MedicalDataController> {
-  const MedicalDataPage({super.key});
-
+  MedicalDataPage({super.key});
+  RxBool isLoading = false.obs;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,7 +135,9 @@ class MedicalDataPage extends GetView<MedicalDataController> {
       child: TextButton(
         onPressed: () async {
           if (label == 'Lưu') {
+            isLoading.value = true;
             try {
+              log(isLoading.value.toString());
               // Perform the saving operation
               for (var value in controller.state.data.values) {
                 if (value.imagePaths != null) {
@@ -148,11 +150,15 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                 log(value.toString());
                 await FirebaseApi.addDocument(
                     'medicalData', value.toFirestoreMap());
+                if (value == controller.state.data.values.last) {
+                  isLoading.value = false;
+                  Get.back();
+                }
               }
 
               // Clear the data after saving
               controller.state.data.clear();
-
+              log(controller.state.data.toString());
               // Show success dialog
               showDialog(
                 context: context,
@@ -168,6 +174,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                           controller.timeController.text =
                               DateFormat('hh:mm a').format(DateTime.now());
                           controller.state.data.clear();
+
                           Get.back(); // Dismiss the dialog
                         },
                         child: const Text('OK'),
@@ -184,8 +191,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('Lỗi'),
-                    content: const Text(
-                        'Lỗi khi lưu dữ liệu. Hãy thử lại!'),
+                    content: const Text('Lỗi khi lưu dữ liệu. Hãy thử lại!'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {

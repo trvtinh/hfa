@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/type_med_history/controller.dart';
 import 'package:health_for_all/pages/type_med_history/widget/data_day.dart';
-import 'package:health_for_all/pages/type_med_history/widget/line_chart_sample.dart';
+import 'package:health_for_all/pages/type_med_history/widget/one_line_chart.dart';
+import 'package:health_for_all/pages/type_med_history/widget/two_line_chart.dart';
 import 'package:intl/intl.dart';
 
 class TypeMedHistory extends StatelessWidget {
@@ -48,30 +49,35 @@ class TypeMedHistory extends StatelessWidget {
             const Divider(height: 1),
             navigate(context),
             const Divider(height: 2, color: Colors.black),
-            Obx(
-              () => changePage.value
-                  ? Column(
-                      children: [
-                        for (var i in typeMedHistoryController.result.keys)
-                          DataDay(
-                            day: i,
-                            hour: typeMedHistoryController.result[i]!
-                                .map((medical) => DateFormat('HH:mm')
-                                    .format(medical.time!.toDate()))
-                                .toList(),
-                            index: typeMedHistoryController.result[i]!
-                                .map((medical) => medical.value!)
-                                .toList(),
-                          ),
-                      ],
-                    )
-                  : LineChartSample(
-                      show_comment: showComment.value,
-                      show_diagnostic: showDiagnostic.value,
-                      show_alarm: showAlarm.value,
-                      title: title,
-                    ),
-            ),
+            Obx(() => changePage.value
+                ? Column(
+                    children: [
+                      for (var i in typeMedHistoryController.result.keys)
+                        DataDay(
+                          day: i,
+                          hour: typeMedHistoryController.result[i]!
+                              .map((medical) => DateFormat('HH:mm')
+                                  .format(medical.time!.toDate()))
+                              .toList(),
+                          index: typeMedHistoryController.result[i]!
+                              .map((medical) => medical.value!)
+                              .toList(),
+                        ),
+                    ],
+                  )
+                : title == "Huyết áp"
+                    ? TwoLineChart(
+                        show_comment: showComment.value,
+                        show_diagnostic: showDiagnostic.value,
+                        show_alarm: showAlarm.value,
+                        title: title,
+                      )
+                    : OneLineChart(
+                        show_comment: showComment.value,
+                        show_diagnostic: showDiagnostic.value,
+                        show_alarm: showAlarm.value,
+                        title: title,
+                      )),
           ],
         ),
       ),
