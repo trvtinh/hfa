@@ -144,7 +144,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ListTile(
             onTap: () => Get.to(() => const DemoECG()),
             leading: const Icon(Icons.add_chart_outlined),
-            title: const Text('ECG'),
+            title: const Text('ECG - Điện tâm đồ'),
           ),
           ListTile(
             onTap: () => Get.to(() => const AudioPlayerView()),

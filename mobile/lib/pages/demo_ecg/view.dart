@@ -44,7 +44,7 @@ class _DemoECGState extends State<DemoECG> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Sơ đồ ECG")),
+      appBar: AppBar(title: const Text("ECG - Điện tâm đồ")),
       body: spots.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : Padding(
