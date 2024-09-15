@@ -11,6 +11,8 @@
 
 #include<Sensor.h>
 #include<MenuMaganer.h>
+#include<BLEDevice.h>
+#include<temperature_icon.h>
 
 Sensor sensor;
 
@@ -18,6 +20,8 @@ Sensor sensor;
 #define BUTTON_DOWN_PIN 14
 #define BUTTON_SELECT_PIN 15
 #define BUTTON_BACK_PIN 27
+
+char btMacAddress[20];
 
 void initButton(){
   pinMode(BUTTON_UP_PIN, INPUT_PULLUP);
@@ -33,36 +37,46 @@ void initButton(){
 
 void setup() {
   Serial.begin(9600);
+  // Khởi tạo BLE
+  BLEDevice::init("ESP32");
+  // Lấy địa chỉ MAC Bluetooth
+  // copy địa chỉ vào btMacAddress
+  strcpy(btMacAddress, BLEDevice::getAddress().toString().c_str());
+  // In địa chỉ MAC ra Serial Monitor
+  Serial.print("Địa chỉ Bluetooth MAC của ESP32: ");
+  Serial.println(btMacAddress);
 
   initMenu();
   scr.HFA_logo();
     // Hiển thị logo
-  delay(2000);
+  delay(5000);
   // khởi tạo cảm biến
   if(!sensor.init()){
     Serial.print("Error init sensor");
   }
-  //sensor.sensorConfig();
   // Hiển thị menu
 
   initButton();
-  delay(2000); 
+  displayMenu(); 
 }
 
 void displayGIFHeart(){
   sensor.sensorConfig();
-  sensor.getDataMax30102();
+  sensor.getDataHR_SPO2();
+  long random_heartRate = random(65,85);
+  long random_SPO2 = random(90,100);
   for(int i = 0; i < 7; i++){
     scr.first();
     do{
       scr.drawBmp(52, 0, 24, 24, epd_bitmap_allArray[i]);
       scr.setFont(u8g2_font_7x13_mr).write(0, 24, "   HR       SPO2   ");
-      if(sensor.heartRateValid == 0) scr.setFont(u8g2_font_6x10_mf).write(21, 45, "-");
-      else if(sensor.SPO2Valid == 0) scr.setFont(u8g2_font_6x10_mf).write(90, 45, "-");
-      else { scr.setFont(u8g2_font_6x10_mf).write(21, 45, sensor.heartRate).write(90, 45, sensor.SPO2); }
+      // if(sensor.heartRateValid == 0) scr.setFont(u8g2_font_6x10_mf).write(21, 45, "-");
+      // else if(sensor.SPO2Valid == 0) scr.setFont(u8g2_font_6x10_mf).write(90, 45, "-");
+      // else { scr.setFont(u8g2_font_6x10_mf).write(21, 45, sensor.heartRate).write(90, 45, sensor.SPO2); }
+      scr.setFont(u8g2_font_6x12_mf).write(21, 45, random_heartRate).write(90,45, random_SPO2);
       } while(scr.next());
     delay(40);
-  }
+  }  
 }
 void displayECG(){
   scr.first();
@@ -73,7 +87,9 @@ void displayECG(){
 void displayTemp(){
   scr.first();
   do{ 
-    scr.writeCenterScreen("Temp"); 
+    scr.drawBmp(48, 0, 32, 32, temp_icon);
+    scr.setFont(u8g2_font_7x13_mr).write(50, 40, mlx90614.readObjectTempC()).write(85, 40, "oC");
+    delay(50);
   }while(scr.next());
 }
 void displayPCG(){
@@ -83,10 +99,10 @@ void displayPCG(){
   }while(scr.next());
 }
 void displayQRCodeConnect(){
-  displayQRCode("Connect to app");
+  displayQRCode(btMacAddress);
 }
 void displayQRCodeAboutUs(){
-  displayQRCode("About us");
+  displayQRCode("http://surl.li/zzcavt");
 }
 void display(void (*func)(), int address){
   while(getAddressMenu() ==  address){
@@ -95,13 +111,13 @@ void display(void (*func)(), int address){
 }
 
 void loop() {
-  displayMenu();
-  // display(displayQRCodeConnect, 2);
-  // display(displayQRCodeAboutUs, 3);
+  displayMenu(); 
+  display(displayQRCodeConnect, 2);
+  display(displayQRCodeAboutUs, 3);
   display(displayGIFHeart, 4);
-  // display(displayECG, 5);
-  // display(displayTemp, 6);
-  // display(displayPCG, 7);
+  display(displayECG, 5);
+  display(displayTemp, 6);
+  display(displayPCG, 7);
 
   // long start = millis();
   // sensor.getDataMax30102();

@@ -3,6 +3,8 @@
 Screen scr;
 
 byte num = 0;
+volatile bool menuChanged = true;
+
 class MenuItem {
 private:
   String name;
@@ -82,7 +84,7 @@ MenuItem measureMenu("Measure", &root);
 MenuItem* currentMenu = &root;
 
 void initMenu() {
-    scr.init();
+  scr.init();
   // Xây dựng cây menu
   root.addChild(&measureMenu);
   root.addChild(new MenuItem("Connect App", &root));
@@ -92,24 +94,34 @@ void initMenu() {
   measureMenu.addChild(new MenuItem("Body Temp", &measureMenu));
   measureMenu.addChild(new MenuItem("PCG Sound", &measureMenu));
 }
+void displayMenu() {
+  if(menuChanged){
+    currentMenu->display();
+    menuChanged = false;
+  }
+  // Serial.println(currentMenu->getAddress());
+}
 void goUpMenu() {
   currentMenu->selectedUp();
+  menuChanged = true;
 }
 void goDownMenu() {
   currentMenu->selectedDown();
+  menuChanged = true;
 }
 void goIntoMenu() {
-  if(currentMenu->select() != NULL)
+  if(currentMenu->select() != NULL){
     currentMenu = currentMenu->select();
+    menuChanged = true;
+  }
 }
 void goOutMenu() {
-  if(currentMenu->back() != NULL)
+  if(currentMenu->back() != NULL){
     currentMenu = currentMenu->back();
+    menuChanged = true;
+  }
 }
-void displayMenu() {
-  currentMenu->display();
-  // Serial.println(currentMenu->getAddress());
-}
+
 int getAddressMenu(){
   return currentMenu->getAddress();
 }

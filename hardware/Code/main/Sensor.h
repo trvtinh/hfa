@@ -1,5 +1,6 @@
 #include <Adafruit_MLX90614.h>
 #include <DFRobot_MAX30102.h>
+#include <AceSorting.h>
 
 Adafruit_MLX90614 mlx90614 = Adafruit_MLX90614();
 DFRobot_MAX30102 max30102;
@@ -11,7 +12,7 @@ public:
   float ObjectTempC;
   float AmbientTempF;
   float ObjectTempF;
-  
+
   int32_t SPO2; //SPO2
   int8_t SPO2Valid; //Flag to display if SPO2 calculation is valid
   int32_t heartRate; //Heart-rate
@@ -41,7 +42,8 @@ public:
     // Đặt kích thước LED Pulse Width (giảm để lấy dữ liệu nhanh hơn)
     max30102.setPulseWidth(69);   // 69us để có tốc độ nhanh hơn
   }
-  void getDataMlx90614(){
+
+  void getDataTemp(){
     AmbientTempC = mlx90614.readAmbientTempC();
     ObjectTempC = mlx90614.readObjectTempC();
     AmbientTempF = mlx90614.readAmbientTempF();
@@ -50,7 +52,7 @@ public:
     Serial.print("*C:\t"); Serial.print(AmbientTempC); Serial.print("\t");Serial.println(ObjectTempC);
     Serial.print("*F:\t"); Serial.print(AmbientTempF); Serial.print("\t");Serial.println(ObjectTempF);
   }
-  void getDataMax30102(){
+  void getDataHR_SPO2(){
     max30102.heartrateAndOxygenSaturation(/**SPO2=*/&SPO2, 
                                           /**SPO2Valid=*/&SPO2Valid, 
                                           /**heartRate=*/&heartRate, 
@@ -60,13 +62,7 @@ public:
     Serial.print("; SPO2=");   Serial.print(SPO2);
     Serial.print(", SPO2Valid=");    Serial.println(SPO2Valid);
   }
-  void getAlldataFromSensor(){
-    getDataMax30102();
-    getDataMlx90614();
-  }
 };
-
-
 
 
 
