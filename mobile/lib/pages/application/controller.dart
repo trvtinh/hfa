@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -30,6 +31,9 @@ class ApplicationController extends GetxController {
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
+  StreamSubscription<QuerySnapshot>? _updatedDataTimeSubscription;
+  final Map<String, StreamSubscription<QuerySnapshot>>
+      _medicalDataSubscriptions = {};
 
   void handPageChanged(int index) {
     state.page = index;
@@ -104,8 +108,8 @@ class ApplicationController extends GetxController {
         label: '',
       ),
       const BottomNavigationBarItem(
-        icon: Icon(Icons.notifications, size: 28),
-        activeIcon: Icon(Icons.notifications, size: 28),
+        icon: Icon(Icons.notifications_outlined, size: 28),
+        activeIcon: Icon(Icons.notifications_outlined, size: 28),
         label: 'Thông báo',
       ),
       const BottomNavigationBarItem(
@@ -153,7 +157,10 @@ class ApplicationController extends GetxController {
       final time = Timestamp.fromDate(DateTime.now());
 
       // Lắng nghe sự thay đổi của dữ liệu trong Firestore
-      db
+      _updatedDataTimeSubscription?.cancel();
+
+      // Lắng nghe sự thay đổi của dữ liệu trong Firestore
+      _updatedDataTimeSubscription = db
           .collection('medicalData')
           .where('userId', isEqualTo: state.profile.value!.id!)
           .where('time', isLessThanOrEqualTo: time)
@@ -183,7 +190,10 @@ class ApplicationController extends GetxController {
       final time = Timestamp.fromDate(DateTime.now());
 
       // Lắng nghe sự thay đổi của dữ liệu trong Firestore
-      db
+      _medicalDataSubscriptions[type]?.cancel();
+
+      // Lắng nghe sự thay đổi của dữ liệu trong Firestore
+      _medicalDataSubscriptions[type] = db
           .collection('medicalData')
           .where('userId', isEqualTo: state.profile.value!.id!)
           .where('typeId', isEqualTo: type)
@@ -211,6 +221,10 @@ class ApplicationController extends GetxController {
   @override
   void dispose() {
     pageController.dispose();
+    _updatedDataTimeSubscription?.cancel();
+    _medicalDataSubscriptions.forEach((key, subscription) {
+      subscription.cancel();
+    });
     super.dispose();
   }
 }

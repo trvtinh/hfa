@@ -1,11 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/chatbot.dart';
 import 'package:health_for_all/pages/chatbot/widget/view_image.dart';
-
-import '../../../../common/routes/names.dart';
 
 Widget RightChat(ChatbotEntity item, BuildContext context) {
   return Container(
@@ -20,7 +17,8 @@ Widget RightChat(ChatbotEntity item, BuildContext context) {
                 minHeight: 40.w),
             child: Container(
                 margin: EdgeInsets.only(right: 10.w, top: 0.w),
-                padding: EdgeInsets.only(top: 10.w, left: 10.w, right: 10.w),
+                padding: EdgeInsets.only(
+                    top: 10.w, left: 10.w, right: 10.w, bottom: 10.w),
                 decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.all(Radius.circular(10.w))),

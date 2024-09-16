@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:googleapis/admob/v1.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
 import 'package:health_for_all/pages/connect_hardware/view.dart';
+import 'package:health_for_all/pages/demo_ecg/view.dart';
+import 'package:health_for_all/pages/demo_pcg/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/image_analyze/view.dart';
@@ -67,8 +68,11 @@ class ApplicationPage extends GetView<ApplicationController> {
         children: [
           buildDrawerHeader(),
           ListTile(
-            onTap: () => Get.to(() => MedicalDataHome()),
-            leading: const Icon(Icons.monitor_heart),
+            onTap: () => Get.to(() => MedicalDataHome(
+                time: controller.state.updateTime.value == ""
+                    ? "Chưa cập nhật dữ liệu lần nào"
+                    : "Cập nhật lần cuối ${controller.state.updateTime.value}")),
+            leading: const Icon(Icons.monitor_heart_outlined),
             title: const Text('Dữ liệu sức khỏe'),
           ),
           InkWell(
@@ -76,17 +80,23 @@ class ApplicationPage extends GetView<ApplicationController> {
               Get.to(() => const DiagnosticPage());
             },
             child: const ListTile(
-              leading: Icon(Icons.health_and_safety),
+              leading: Icon(
+                Icons.health_and_safety_outlined,
+              ),
               title: Text('Chẩn đoán'),
             ),
           ),
           ListTile(
-            onTap: () => Get.to(() => PrescriptionPage()),
-            leading: const Icon(Icons.medication_liquid),
+            onTap: () => Get.to(() => const PrescriptionPage()),
+            leading: const Icon(
+              Icons.medication_liquid_sharp,
+            ),
             title: const Text('Đơn thuốc'),
           ),
           ListTile(
-            leading: const Icon(Icons.date_range),
+            leading: const Icon(
+              Icons.date_range_outlined,
+            ),
             title: const Text('Nhắc nhở'),
             onTap: () => Get.to(() => ReminderPage()),
           ),
@@ -96,8 +106,10 @@ class ApplicationPage extends GetView<ApplicationController> {
             onTap: () => Get.to(() => const NotiPage()),
           ),
           ListTile(
-            onTap: () => Get.to(() => AlarmPage()),
-            leading: const Icon(Icons.warning_amber),
+            onTap: () => Get.to(() => const AlarmPage()),
+            leading: const Icon(
+              Icons.warning_amber_outlined,
+            ),
             title: const Text('Cảnh báo'),
           ),
           ListTile(
@@ -106,8 +118,10 @@ class ApplicationPage extends GetView<ApplicationController> {
             title: const Text('Kết nối với thiết bị'),
           ),
           ListTile(
-            onTap: () => Get.to(() => ChatbotPage()),
-            leading: const Icon(Icons.smart_toy),
+            onTap: () => Get.to(() => const ChatbotPage()),
+            leading: const Icon(
+              Icons.smart_toy_outlined,
+            ),
             title: const Text('Trò chuyện với HFA-Bot'),
           ),
           ListTile(
@@ -124,8 +138,18 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () => Get.to(() => ImageAnalyzePage()),
-            leading: const Icon(Icons.memory),
+            leading: const Icon(Icons.memory_outlined),
             title: const Text('Phân tích hình ảnh'),
+          ),
+          ListTile(
+            onTap: () => Get.to(() => const DemoECG()),
+            leading: const Icon(Icons.add_chart_outlined),
+            title: const Text('Demo ECG'),
+          ),
+          ListTile(
+            onTap: () => Get.to(() => const AudioPlayerView()),
+            leading: const Icon(Icons.sos_rounded),
+            title: const Text('Demo PCG'),
           ),
         ],
       ));
@@ -206,7 +230,6 @@ class NotiPage extends StatelessWidget {
   }
 }
 
-
 class InfoPage extends StatelessWidget {
   const InfoPage({super.key});
 
@@ -214,7 +237,7 @@ class InfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thông tin tài khoản"),
+        title: const Text("Thông tin tài khoản"),
       ),
       body: const InformationPage(),
     );

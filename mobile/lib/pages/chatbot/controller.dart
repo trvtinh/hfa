@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -73,8 +71,7 @@ class ChatbotController extends GetxController {
     state.chatList.insert(0, data.value);
     scrollToEnd();
     await model
-        .generateContent(content,
-            generationConfig: GenerationConfig(maxOutputTokens: 200))
+        .generateContent(content, generationConfig: GenerationConfig())
         .then((value) {
       data.value = ChatbotEntity(
           role: 'HFA',

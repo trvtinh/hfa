@@ -14,7 +14,7 @@ class AppPages {
   static final List<GetPage> routes = [
     GetPage(
       name: AppRoutes.Application,
-      page: () => ApplicationPage(),
+      page: () => const ApplicationPage(),
       binding: ApplicationBinding(),
     ),
     GetPage(

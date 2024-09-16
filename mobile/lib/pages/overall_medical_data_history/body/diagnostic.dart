@@ -140,7 +140,7 @@ class DiagnosticScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Icon(
-                Icons.health_and_safety,
+                Icons.health_and_safety_outlined,
                 size: 16,
               ),
               const SizedBox(

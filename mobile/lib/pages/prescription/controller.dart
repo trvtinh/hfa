@@ -61,9 +61,9 @@ class PrescriptionController extends GetxController {
   void clearData() {
     nameController.clear();
     noteController.clear();
-    doseControllers.forEach((element) {
+    for (var element in doseControllers) {
       element.clear();
-    });
+    }
     selectedFiles.clear();
     selectedImagesURL.clear();
   }

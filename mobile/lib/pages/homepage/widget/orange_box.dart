@@ -18,15 +18,14 @@ class Orangebox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         Get.to(() => MedicalDataHome(
               time: time,
             ));
       },
       child: Container(
-        height: 124,
-        width: 380,
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           color: Theme.of(context).colorScheme.errorContainer,
@@ -41,124 +40,107 @@ class Orangebox extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Dữ liệu sức khỏe",
+                  style: TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+                Icon(
+                  Icons.open_in_new,
+                  size: 16,
+                ),
+              ],
+            ),
             const SizedBox(
-              width: 356,
-              height: 20,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Dữ liệu sức khỏe",
-                    style: TextStyle(
-                      fontSize: 14,
-                    ),
-                  ),
-                  Icon(
-                    Icons.open_in_new,
-                    size: 16,
-                  ),
-                ],
-              ),
+              height: 8,
             ),
-            SizedBox(
-              width: 356,
-              height: 48,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(
-                    Icons.monitor_heart_outlined,
-                    size: 48,
-                    color: Color.fromRGBO(101, 85, 143, 1),
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 100,
-                        height: 48,
-                        child: Column(
-                          children: [
-                            const Text(
-                              "Chưa cập nhật",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
-                            ),
-                            Text(
-                              val1,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                color: Color.fromRGBO(179, 38, 30, 1),
-                              ),
-                            ),
-                          ],
-                        ),
+            Row(
+              children: [
+                const Icon(
+                  Icons.monitor_heart_outlined,
+                  size: 48,
+                  color: Color.fromRGBO(101, 85, 143, 1),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Column(
+                  children: [
+                    const Text(
+                      "Chưa cập nhật",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color.fromRGBO(121, 116, 126, 1),
                       ),
-                      SizedBox(
-                        width: 100,
-                        height: 48,
-                        child: Column(
-                          children: [
-                            const Text(
-                              "Đã cập nhật",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
-                            ),
-                            Text(
-                              val2,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                color: Color.fromRGBO(52, 199, 89, 1),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 100,
-                        height: 48,
-                        child: Column(
-                          children: [
-                            const Text(
-                              "Tổng số",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(121, 116, 126, 1),
-                              ),
-                            ),
-                            Text(
-                              val3,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                color: Color.fromRGBO(29, 27, 32, 1),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 356,
-              height: 16,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    time,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color.fromRGBO(121, 116, 126, 1),
                     ),
+                    Text(
+                      val1,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        color: Color.fromRGBO(179, 38, 30, 1),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Column(
+                  children: [
+                    const Text(
+                      "Đã cập nhật",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color.fromRGBO(121, 116, 126, 1),
+                      ),
+                    ),
+                    Text(
+                      val2,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        color: Color.fromRGBO(52, 199, 89, 1),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Column(
+                  children: [
+                    const Text(
+                      "Tổng số",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color.fromRGBO(121, 116, 126, 1),
+                      ),
+                    ),
+                    Text(
+                      val3,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        color: Color.fromRGBO(29, 27, 32, 1),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  time,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    color: Color.fromRGBO(121, 116, 126, 1),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

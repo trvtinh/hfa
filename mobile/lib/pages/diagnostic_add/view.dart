@@ -179,9 +179,9 @@ class DiagnosticAddView extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Error'),
+          title: const Text('Lỗi'),
           content: const Text(
-              'An error occurred while saving data. Please try again.'),
+              'Lỗi khi lưu dữ liệu. Hãy thử lại!'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

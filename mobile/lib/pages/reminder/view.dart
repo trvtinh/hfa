@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
-import 'package:health_for_all/pages/alarm/widget/add_alarm.dart';
-import 'package:health_for_all/pages/alarm/widget/list_alarm.dart';
 import 'package:health_for_all/pages/reminder/widget/add_reminder.dart';
 import 'package:health_for_all/pages/reminder/widget/list_reminder.dart';
 

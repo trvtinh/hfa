@@ -55,7 +55,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
     return Row(
       children: [
         Icon(
-          Icons.medication_liquid,
+          Icons.medication_liquid_sharp,
           size: 32,
           color: Theme.of(context).colorScheme.primary,
         ),

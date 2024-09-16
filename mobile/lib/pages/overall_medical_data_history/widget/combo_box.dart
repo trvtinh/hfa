@@ -161,7 +161,7 @@ class _ComboBoxState extends State<ComboBox> {
             width: 8,
           ),
           // Đánh giá
-          ImageWidgetRound(
+          const ImageWidgetRound(
             path: 'assets/images/xet_nghiem_mau.png',
           ),
           const SizedBox(

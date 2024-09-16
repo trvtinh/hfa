@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/medical_data/index.dart';
 import 'package:health_for_all/pages/medical_data_homepage/widget/GreyBox.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
+import 'package:health_for_all/pages/type_med_history/view.dart';
 
 class MedicalDataHome extends StatelessWidget {
   MedicalDataHome({super.key, this.time, this.user});
@@ -192,7 +194,9 @@ class MedicalDataHome extends StatelessWidget {
         ),
         Expanded(
           child: _buildButton(
-            onTap: () {},
+            onTap: () {
+              Get.to(() => MedicalDataPage());
+            },
             icon: Icons.add_circle_outline,
             label: "Thêm",
           ),
@@ -243,26 +247,36 @@ class MedicalDataHome extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: GreyBox(
-            title: 'Nhịp tim',
-            iconpath: 'assets/medical_data_Home_images/heart-rate.png',
-            value: value1,
-            unit: 'lần/phút',
-            time: time1,
-            warning: false,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory("Nhịp tim"));
+            },
+            child: GreyBox(
+              title: 'Nhịp tim',
+              iconpath: 'assets/medical_data_Home_images/heart-rate.png',
+              value: value1,
+              unit: 'lần/phút',
+              time: time1,
+              warning: false,
+            ),
           ),
         ),
         const SizedBox(
           width: 15,
         ),
         Expanded(
-          child: GreyBox(
-            title: 'SPO2',
-            iconpath: 'assets/medical_data_Home_images/spo2.png',
-            value: value2,
-            unit: '%',
-            time: time2,
-            warning: false,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('SPO2'));
+            },
+            child: GreyBox(
+              title: 'SPO2',
+              iconpath: 'assets/medical_data_Home_images/spo2.png',
+              value: value2,
+              unit: '%',
+              time: time2,
+              warning: false,
+            ),
           ),
         ),
       ],
@@ -275,26 +289,36 @@ class MedicalDataHome extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: GreyBox(
-            title: 'Huyết áp',
-            iconpath: 'assets/medical_data_Home_images/blood-pressure.png',
-            value: value1 != "" ? value1 : "--",
-            unit: 'mmHg',
-            time: time1 == '' ? "Chưa cập nhật" : time1,
-            warning: false,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('Huyết áp'));
+            },
+            child: GreyBox(
+              title: 'Huyết áp',
+              iconpath: 'assets/medical_data_Home_images/blood-pressure.png',
+              value: value1 != "" ? value1 : "--",
+              unit: 'mmHg',
+              time: time1 == '' ? "Chưa cập nhật" : time1,
+              warning: false,
+            ),
           ),
         ),
         const SizedBox(
           width: 15,
         ),
         Expanded(
-          child: GreyBox(
-            title: 'Đường huyết',
-            iconpath: 'assets/medical_data_Home_images/blood sugar.png',
-            value: value2 != "" ? value2 : "--",
-            unit: 'mg/dL',
-            time: time2 == '' ? "Chưa cập nhật" : time2,
-            warning: false,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('Đường huyết'));
+            },
+            child: GreyBox(
+              title: 'Đường huyết',
+              iconpath: 'assets/medical_data_Home_images/blood sugar.png',
+              value: value2 != "" ? value2 : "--",
+              unit: 'mg/dL',
+              time: time2 == '' ? "Chưa cập nhật" : time2,
+              warning: false,
+            ),
           ),
         ),
       ],
@@ -307,26 +331,36 @@ class MedicalDataHome extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: GreyBox(
-            title: 'HRV',
-            iconpath: 'assets/medical_data_Home_images/favorite_border.png',
-            value: value1 != "" ? value1 : "--",
-            unit: 'ms',
-            time: time1 == '' ? "Chưa cập nhật" : time1,
-            warning: false,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('HRV'));
+            },
+            child: GreyBox(
+              title: 'HRV',
+              iconpath: 'assets/medical_data_Home_images/favorite_border.png',
+              value: value1 != "" ? value1 : "--",
+              unit: 'ms',
+              time: time1 == '' ? "Chưa cập nhật" : time1,
+              warning: false,
+            ),
           ),
         ),
         const SizedBox(
           width: 15,
         ),
         Expanded(
-          child: GreyBox(
-            title: 'ECG',
-            iconpath: 'assets/medical_data_Home_images/ecg-outline.png',
-            value: value2 != "" ? value2 : "--",
-            unit: ' ',
-            time: time2 == '' ? "Chưa cập nhật" : time2,
-            warning: false,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('ECG'));
+            },
+            child: GreyBox(
+              title: 'ECG',
+              iconpath: 'assets/medical_data_Home_images/ecg-outline.png',
+              value: value2 != "" ? value2 : "--",
+              unit: ' ',
+              time: time2 == '' ? "Chưa cập nhật" : time2,
+              warning: false,
+            ),
           ),
         ),
       ],
@@ -339,26 +373,36 @@ class MedicalDataHome extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: GreyBox(
-            title: 'Thân nhiệt',
-            iconpath: 'assets/medical_data_Home_images/thermometer.png',
-            value: value1 != "" ? value1 : "--",
-            unit: '°C',
-            time: time1 == '' ? "Chưa cập nhật" : time1,
-            warning: true,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('Thân nhiệt'));
+            },
+            child: GreyBox(
+              title: 'Thân nhiệt',
+              iconpath: 'assets/medical_data_Home_images/thermometer.png',
+              value: value1 != "" ? value1 : "--",
+              unit: '°C',
+              time: time1 == '' ? "Chưa cập nhật" : time1,
+              warning: true,
+            ),
           ),
         ),
         const SizedBox(
           width: 15,
         ),
         Expanded(
-          child: GreyBox(
-            title: 'Axit Uric',
-            iconpath: 'assets/medical_data_Home_images/Axit Uric.png',
-            value: value2 != "" ? value2 : "--",
-            unit: 'mg/dL',
-            time: time2 == '' ? "Chưa cập nhật" : time2,
-            warning: true,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('Axit Uric'));
+            },
+            child: GreyBox(
+              title: 'Axit Uric',
+              iconpath: 'assets/medical_data_Home_images/Axit Uric.png',
+              value: value2 != "" ? value2 : "--",
+              unit: 'mg/dL',
+              time: time2 == '' ? "Chưa cập nhật" : time2,
+              warning: true,
+            ),
           ),
         ),
       ],
@@ -371,26 +415,37 @@ class MedicalDataHome extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
-          child: GreyBox(
-            title: 'Cân nặng',
-            iconpath: 'assets/medical_data_Home_images/scale.png',
-            value: value1 != "" ? value1 : "--",
-            unit: 'Kg',
-            time: time1 == '' ? "Chưa cập nhật" : time1,
-            warning: false,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('Cân nặng'));
+            },
+            child: GreyBox(
+              title: 'Cân nặng',
+              iconpath: 'assets/medical_data_Home_images/scale.png',
+              value: value1 != "" ? value1 : "--",
+              unit: 'Kg',
+              time: time1 == '' ? "Chưa cập nhật" : time1,
+              warning: false,
+            ),
           ),
         ),
         const SizedBox(
           width: 15,
         ),
         Expanded(
-          child: GreyBox(
-            title: 'Phiếu xét nghiệm máu',
-            iconpath: 'assets/medical_data_Home_images/medical_information.png',
-            value: 'OK',
-            unit: ' ',
-            time: time2 == '' ? "Chưa cập nhật" : time2,
-            warning: true,
+          child: GestureDetector(
+            onTap: () {
+              Get.to(() => TypeMedHistory('Phiếu xét nghiệm máu'));
+            },
+            child: GreyBox(
+              title: 'Phiếu xét nghiệm máu',
+              iconpath:
+                  'assets/medical_data_Home_images/medical_information.png',
+              value: 'OK',
+              unit: ' ',
+              time: time2 == '' ? "Chưa cập nhật" : time2,
+              warning: true,
+            ),
           ),
         ),
       ],
