@@ -1,5 +1,5 @@
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -24,11 +24,11 @@ class FirebaseApi {
       if (querySnapshot.docs.isNotEmpty) {
         return querySnapshot.docs.first.id;
       } else {
-        print('No document found with $field: $value');
+        log('No document found with $field: $value');
         return null;
       }
     } catch (e) {
-      print('Error retrieving document ID: $e');
+      log('Error retrieving document ID: $e');
       return null;
     }
   }
@@ -38,9 +38,9 @@ class FirebaseApi {
     try {
       final docRef = db.collection(collection).doc(documentId);
       await docRef.delete();
-      print('Document $documentId deleted successfully from $collection.');
+      log('Document $documentId deleted successfully from $collection.');
     } catch (e) {
-      print('Error deleting document: $e');
+      log('Error deleting document: $e');
     }
   }
 
@@ -49,7 +49,7 @@ class FirebaseApi {
     try {
       final querySnapshot = await getQuerySnapshot(collection, 'id', id);
       if (querySnapshot.docs.isEmpty) {
-        print('No document found with id: $id');
+        log('No document found with id: $id');
         return false;
       }
 
@@ -60,10 +60,10 @@ class FirebaseApi {
         fieldName: FieldValue.arrayUnion([valueToAdd]),
       });
 
-      print('Value added to array field $fieldName in document $docId.');
+      log('Value added to array field $fieldName in document $docId.');
       return true;
     } catch (e) {
-      print('Error adding value to array field: $e');
+      log('Error adding value to array field: $e');
       return false;
     }
   }
@@ -73,7 +73,7 @@ class FirebaseApi {
     try {
       final querySnapshot = await getQuerySnapshot(collection, 'id', id);
       if (querySnapshot.docs.isEmpty) {
-        print('No document found with id: $id');
+        log('No document found with id: $id');
         return false;
       }
 
@@ -84,10 +84,10 @@ class FirebaseApi {
         fieldName: FieldValue.arrayRemove([valueToRemove]),
       });
 
-      print('Value removed from array field $fieldName in document $docId.');
+      log('Value removed from array field $fieldName in document $docId.');
       return true;
     } catch (e) {
-      print('Error removing value from array field: $e');
+      log('Error removing value from array field: $e');
       return false;
     }
   }
@@ -96,10 +96,10 @@ class FirebaseApi {
       String collection, Map<String, dynamic> data) async {
     try {
       final docRef = await db.collection(collection).add(data);
-      print('Document added successfully to $collection.');
+      log('Document added successfully to $collection.');
       return docRef.id;
     } catch (e) {
-      print('Error adding document: $e');
+      log('Error adding document: $e');
     }
   }
 
@@ -112,11 +112,22 @@ class FirebaseApi {
       UploadTask uploadTask = storageRef.putFile(file);
       TaskSnapshot snapshot = await uploadTask;
       String downloadURL = await snapshot.ref.getDownloadURL();
-      print('Image uploaded successfully: $downloadURL');
+      log('Image uploaded successfully: $downloadURL');
       return downloadURL;
     } catch (e) {
-      print('Error uploading image: $e');
+      log('Error uploading image: $e');
       return null;
+    }
+  }
+
+  static Future updateDocument(
+      String collection, String documentId, Map<String, dynamic> data) async {
+    try {
+      final docRef = db.collection(collection).doc(documentId);
+      await docRef.update(data);
+      log('Document $documentId updated successfully in $collection.');
+    } catch (e) {
+      log('Error updating document: $e');
     }
   }
 }
