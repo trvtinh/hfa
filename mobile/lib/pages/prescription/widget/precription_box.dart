@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/pages/prescription/widget/edit_prescription.dart';
 import 'package:health_for_all/pages/prescription/widget/prescription_detail.dart';
 
 class PrescriptionBox extends StatefulWidget {
   final String name;
   final String note;
-  final int num_type;
-  final int num_tablet;
+  final List<MedicineBase> med;
   final int order;
   final String start_date;
   final String end_date;
+  final List<String> dose;
 
   const PrescriptionBox(
       {super.key,
       required this.name,
-      required this.num_type,
-      required this.num_tablet, 
       required this.start_date,
       required this.end_date,
-      required this.order, required this.note});
+      required this.order, required this.note, required this.med, required this.dose});
 
   @override
   State<PrescriptionBox> createState() => _PrescriptionBoxState();
@@ -33,8 +32,8 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
         Get.to(() => PrescriptionDetail(
               name: widget.name,
               order: widget.order,
-              tablet: const ["Vitamin C", "Vitamin B1"],
-              sl_tablet: const [1, 1],
+              med: widget.med,
+              dose: widget.dose,
               note: widget.note,
               startDate: widget.start_date,
               endDate: widget.end_date,
@@ -80,7 +79,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                           ),
                         ),
                         Text(
-                          "${widget.num_type} loại thuốc, ${widget.num_tablet} viên",
+                          "${widget.med.length} loại thuốc",
                           style: TextStyle(
                             fontSize: 12,
                             color: Theme.of(context).colorScheme.outline,

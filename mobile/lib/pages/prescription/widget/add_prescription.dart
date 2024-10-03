@@ -19,7 +19,7 @@ class AddPrescription extends StatefulWidget {
 
 class _AddPrescriptionState extends State<AddPrescription> {
   final medicineController = Get.find<ChooseTypeMedController>();
-  final PrescriptionController precriptionController =
+  final PrescriptionController prescriptionController =
       Get.put(PrescriptionController());
 
   List<XFile> selectedFiles = [];
@@ -46,7 +46,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           const SizedBox(
             height: 24,
           ),
-          name(precriptionController.nameController),
+          name(prescriptionController.nameController),
           const SizedBox(
             height: 24,
           ),
@@ -68,7 +68,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
             height: 24,
           ),
           _buildDialogTextField(
-              'Ghi chú', 'Ghi chú', precriptionController.noteController),
+              'Ghi chú', 'Ghi chú', prescriptionController.noteController),
           const SizedBox(
             height: 55,
           ),
@@ -197,73 +197,82 @@ class _AddPrescriptionState extends State<AddPrescription> {
   }
 
   Widget choose_med(MedicineBase medicineBase, int index) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SizedBox(
-              width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
-              child: TextField(
-                readOnly: true,
-                controller: TextEditingController(text: medicineBase.name),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 1,
-                  )),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.outline,
-                      width: 1,
+            Row(
+              children: [
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 95) / 6 * 3.4,
+                  child: TextField(
+                    readOnly: true,
+                    controller: TextEditingController(text: medicineBase.name),
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 1,
+                      )),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 1,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(
-              width: 12,
-            ),
-            SizedBox(
-              width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
-              child: TextField(
-                controller: precriptionController.doseControllers[index],
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: 1,
-                  )),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.outline,
-                      width: 1,
+                const SizedBox(
+                  width: 12,
+                ),
+                SizedBox(
+                  width: (MediaQuery.of(context).size.width - 95) / 6 * 1.2,
+                  child: TextField(
+                    controller: prescriptionController.doseControllers[index],
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 1,
+                      )),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: 1,
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                const SizedBox(
+                  width: 12,
+                ),
+              ],
             ),
-            const SizedBox(
-              width: 12,
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    prescriptionController.doseControllers.removeAt(index);
+                    medicineController.state.selectedMedicineBases
+                        .removeAt(index);
+                    medicineController.state.selectedMedicineIndex
+                        .removeAt(index);
+                  },
+                  child: Icon(
+                    Icons.clear,
+                    size: 24,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                )
+              ],
             ),
           ],
         ),
-        Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                precriptionController.doseControllers.removeAt(index);
-                medicineController.state.selectedMedicineBases.removeAt(index);
-                medicineController.state.selectedMedicineIndex.removeAt(index);
-              },
-              child: Icon(
-                Icons.clear,
-                size: 24,
-                color: Theme.of(context).colorScheme.error,
-              ),
-            )
-          ],
+        SizedBox(
+          height: 6,
         ),
       ],
     );
@@ -277,7 +286,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           context,
           'Bắt đầu',
           Icons.today,
-          precriptionController.startDateController,
+          prescriptionController.startDateController,
           width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
         const SizedBox(
@@ -287,7 +296,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           context,
           'Kết thúc',
           Icons.today,
-          precriptionController.endDateController,
+          prescriptionController.endDateController,
           width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
       ],
@@ -297,7 +306,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
   DateTime datetime = DateTime.now();
 
   // Replace this with your actual method to select date
-  Future<void> selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> selectDate(
+      BuildContext context, TextEditingController controller) async {
     final selectedDate = await showDatePicker(
       context: context,
       initialDate: datetime,
@@ -310,14 +320,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
         datetime = selectedDate;
         final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
         controller.text = formattedDate; // Update the respective controller
-      }); 
+      });
     }
   }
 
-  Widget _buildDateTimeField(
-      BuildContext context,
-      String label,
-      IconData icon,
+  Widget _buildDateTimeField(BuildContext context, String label, IconData icon,
       TextEditingController controller,
       {required double width}) {
     return SizedBox(
@@ -331,7 +338,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
           labelText: label,
         ),
         readOnly: true,
-        onTap: () => selectDate(context, controller), // Pass the controller here
+        onTap: () =>
+            selectDate(context, controller), // Pass the controller here
       ),
     );
   }
@@ -362,6 +370,9 @@ class _AddPrescriptionState extends State<AddPrescription> {
       children: [
         TextButton(
           onPressed: () async {
+            medicineController.state.selectedMedicineBases.clear();
+            medicineController.state.selectedMedicineIndex.clear();
+            prescriptionController.clearData();
             Get.back();
           },
           child: Text(
@@ -375,12 +386,20 @@ class _AddPrescriptionState extends State<AddPrescription> {
         const SizedBox(width: 16),
         TextButton(
           onPressed: () async {
+            for (var i = 0;
+                i < medicineController.state.selectedMedicineBases.length;
+                i++)
+              prescriptionController.medId.add(medicineController
+                  .state.selectedMedicineBases[i].id
+                  .toString());
             try {
-              await precriptionController.addPrescription();
+              await prescriptionController.addPrescription();
               Get.snackbar("Thành công", "Thêm đơn thuốc thành công",
                   backgroundColor: Colors.green);
               Future.delayed(const Duration(seconds: 1), () {
-                precriptionController.clearData();
+                prescriptionController.clearData();
+                medicineController.state.selectedMedicineBases.clear();
+                medicineController.state.selectedMedicineIndex.clear();
                 Get.back();
               });
             } catch (e) {

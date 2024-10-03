@@ -3,7 +3,9 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:googleapis/customsearch/v1.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/choose_type_med/controller.dart';
@@ -11,6 +13,13 @@ import 'package:health_for_all/pages/prescription/state.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PrescriptionController extends GetxController {
+  PrescriptionController() {
+    // Khởi tạo danh sách với 10 phần tử ban đầu, mỗi phần tử là một TextEditingController mới
+    doseControllers = List<TextEditingController>.generate(
+      10,
+      (index) => TextEditingController(),
+    ).obs;
+  }
   final medicineController = Get.find<ChooseTypeMedController>();
   final state = PrescriptionState();
   final RxList<XFile> selectedFiles = <XFile>[].obs;
@@ -21,6 +30,7 @@ class PrescriptionController extends GetxController {
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
   RxList<String> medId = <String>[].obs;
+  List<String> doses = <String>[].obs;
 
   Future<void> addImage() async {
     for (var value in selectedFiles) {
@@ -41,12 +51,29 @@ class PrescriptionController extends GetxController {
   //   await FirebaseApi.addDocument("medicines", data.toJson());
   // }
 
-  Future addPrescription(
-  ) async {
+  Future addPrescription() async {
+    doses =
+        doseControllers.map((doseControllers) => doseControllers.text).toList();
     final data = Prescription(
+      name: nameController.text,
+      note: noteController.text,
+      startDate: startDateController.text,
+      endDate: endDateController.text,
+      medicalIDs: medId,
+      imageURL: selectedImagesURL,
+      medicineDose: doses,
     );
     log(data.toString());
     await FirebaseApi.addDocument("prescriptions", data.toJson());
+  }
+
+  Future getData(List<String> id) async {
+    List<MedicineBase> res = [];
+    for (var i in id) {
+      final kq = await FirebaseApi.getDocumentSnapshotById("medicineBases", i);
+      res.add(MedicineBase.fromFirestore(kq));
+    }
+    return res;
   }
 
   void clearData() {

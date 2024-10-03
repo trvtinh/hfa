@@ -7,8 +7,8 @@ class Prescription {
   String? patientId;
   String? name;
   String? note;
-  Timestamp? startDate;
-  Timestamp? endDate;
+  String? startDate;
+  String? endDate;
   List<String>? imageURL;
   List<String>? medicineDose;
   Prescription({
@@ -39,9 +39,12 @@ class Prescription {
       imageURL: (data?['imageURL'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
-      medicineDose: data?['medicineDose'] != null
-          ? List<String>.from(data?['medicineDose'])
-          : null,
+      medicalIDs: (data?['medicalIDs'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
+      medicineDose: (data?['medicineDose'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
     );
   }
 
@@ -55,12 +58,13 @@ class Prescription {
       'startDate': startDate,
       'endDate': endDate,
       'imageURL': imageURL,
-      'medicineDatas': medicineDose,
+      'medicineDose': medicineDose,
+      'medicalIDs': medicalIDs,
     };
   }
 
   @override
   String toString() {
-    return 'Prescription{id: $id, medicalIDs: $medicalIDs, assignId: $assignId, patientId: $patientId, name: $name, note: $note, startDate: $startDate, endDate: $endDate, imageURL: $imageURL, medicineDatas: $medicineDatas}';
+    return 'Prescription{id: $id, medicalIDs: $medicalIDs, assignId: $assignId, patientId: $patientId, name: $name, note: $note, startDate: $startDate, endDate: $endDate, imageURL: $imageURL, medicineDatas: $medicineDose}';
   }
 }

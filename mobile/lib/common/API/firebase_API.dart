@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -30,6 +31,20 @@ class FirebaseApi {
     } catch (e) {
       print('Error retrieving document ID: $e');
       return null;
+    }
+  }
+
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getDocumentSnapshotById(
+      String collection, String docId) async {
+    try {
+      final docSnapshot = await db.collection(collection).doc(docId).get();
+      if (docSnapshot.exists) {
+        return docSnapshot;
+      } else {
+        throw Exception('No document found with ID: $docId');
+      }
+    } catch (e) {
+      throw Exception('Error retrieving document snapshot: $e');
     }
   }
 

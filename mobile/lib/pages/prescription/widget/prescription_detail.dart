@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:intl/intl.dart';
 
 class PrescriptionDetail extends StatefulWidget {
   final String name;
   final int order;
-  final List<String> tablet;
-  final List<int> sl_tablet;
+  final List<MedicineBase> med;
+  final List<String> dose;
   final String note;
   final String startDate;
   final String endDate;
@@ -14,9 +15,7 @@ class PrescriptionDetail extends StatefulWidget {
       {super.key,
       required this.name,
       required this.order,
-      required this.tablet,
-      required this.sl_tablet, 
-      required this.note, required this.startDate, required this.endDate});
+      required this.note, required this.startDate, required this.endDate, required this.med, required this.dose});
 
   @override
   State<PrescriptionDetail> createState() => _PrescriptionDetailState();
@@ -132,7 +131,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
           Row(
             children: [
               Text(
-                "Danh sách thuốc (${widget.sl_tablet.length})",
+                "Danh sách thuốc (${widget.med.length})",
                 style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).colorScheme.secondary,
@@ -183,9 +182,9 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
                     ],
                   ),
                 ),
-                for (int i = 0; i < widget.tablet.length; i++)
-                  medicine(widget.tablet[i], widget.sl_tablet[i],
-                      (i != widget.tablet.length - 1)),
+                for (int i = 0; i < widget.med.length; i++)
+                  medicine(widget.med[i].name!, widget.dose[i],
+                      (i != widget.med.length - 1)),
               ],
             ),
           ),
@@ -197,7 +196,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
     );
   }
 
-  Widget medicine(String name, int number, bool ok) {
+  Widget medicine(String name, String number, bool ok) {
     return Column(
       children: [
         Container(

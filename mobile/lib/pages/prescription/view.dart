@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/prescription/index.dart';
@@ -94,7 +96,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
       ),
     );
   }
-
+  
   Widget filter_prescription(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -102,7 +104,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
         children: [
           Expanded(
             child: Text(
-              "Danh sách đơn thuốc (4)",
+              "Danh sách đơn thuốc",
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
                 fontSize: 14,
@@ -151,27 +153,57 @@ class PrescriptionPage extends GetView<PrescriptionController> {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
             }
+
             final data = snapshot.data!.docs
                 .map((doc) => Prescription.fromFirestore(
                     doc as DocumentSnapshot<Map<String, dynamic>>))
                 .toList();
+
             return ListView.builder(
               shrinkWrap: true,
               itemCount: data.length,
               itemBuilder: (context, index) {
                 final doc = data[index];
-                return PrescriptionBox(
-                    name: doc.name?.text ?? '',
-                    num_type: 3,
-                    num_tablet: 5,
-                    start_date: doc.startDate?.text ?? '',
-                    end_date: doc.endDate?.text ?? '',
-                    order: 1,
-                    note: doc.note?.text ?? '',);
+
+                return FutureBuilder(
+                  future: controller
+                      .getData(doc.medicalIDs!), // Fetching MedicineBase data
+                  builder: (context, medicineSnapshot) {
+                    if (medicineSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const CircularProgressIndicator(); // Show loader while fetching
+                    }
+                    if (medicineSnapshot.hasError) {
+                      return const Text(
+                          'Có lỗi xảy ra khi lấy dữ liệu thuốc'); // Handle error
+                    }
+                    if (!medicineSnapshot.hasData ||
+                        medicineSnapshot.data!.isEmpty) {
+                      return const Text(
+                          'Không có dữ liệu thuốc'); // Handle empty data
+                    }
+
+                    final medicineBases =
+                        medicineSnapshot.data!; // Get the MedicineBase data
+
+                    return PrescriptionBox(
+                      name: doc.name.toString(),
+                      start_date: doc.startDate.toString(),
+                      end_date: doc.endDate.toString(),
+                      med:
+                          medicineBases, // Assign the fetched MedicineBase data
+                      order: index,
+                      note: doc.note.toString(),
+                      dose: doc
+                          .medicineDose!, // Assuming medicineDose is a List<String>
+                    );
+                  },
+                );
               },
             );
           },
-        ),
+        )
+
         // PrescriptionBox(
         //   name: "Đơn thuốc 1",
         //   num_type: 3,
