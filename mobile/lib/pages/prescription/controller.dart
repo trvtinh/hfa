@@ -1,27 +1,26 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/prescription.dart';
+import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/prescription/state.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PrescriptionController extends GetxController {
-  PrescriptionController() {
-    // Khởi tạo danh sách với 10 phần tử ban đầu, mỗi phần tử là một TextEditingController mới
-    doseControllers = List<TextEditingController>.generate(
-      10,
-      (index) => TextEditingController(),
-    ).obs;
-  }
+  final medicineController = Get.find<ChooseTypeMedController>();
   final state = PrescriptionState();
   final RxList<XFile> selectedFiles = <XFile>[].obs;
   final RxList<String> selectedImagesURL = <String>[].obs;
   RxList<TextEditingController> doseControllers = <TextEditingController>[].obs;
   final nameController = TextEditingController();
   final noteController = TextEditingController();
-  Rx<DateTime> startDate = DateTime.now().obs;
-  Rx<DateTime> endDate = DateTime.now().obs;
+  final startDateController = TextEditingController();
+  final endDateController = TextEditingController();
+  RxList<String> medId = <String>[].obs;
 
   Future<void> addImage() async {
     for (var value in selectedFiles) {
@@ -43,24 +42,18 @@ class PrescriptionController extends GetxController {
   // }
 
   Future addPrescription(
-    String patientId,
-    String doctorId,
-    List<String> medicineIds,
-    DateTime date,
   ) async {
-    final data = {
-      'patientId': patientId,
-      'doctorId': doctorId,
-      'medicineIds': medicineIds,
-      'date': date.millisecondsSinceEpoch,
-    };
+    final data = Prescription(
+    );
     log(data.toString());
-    await FirebaseApi.addDocument("prescriptions", data);
+    await FirebaseApi.addDocument("prescriptions", data.toJson());
   }
 
   void clearData() {
     nameController.clear();
     noteController.clear();
+    startDateController.clear();
+    endDateController.clear();
     for (var element in doseControllers) {
       element.clear();
     }

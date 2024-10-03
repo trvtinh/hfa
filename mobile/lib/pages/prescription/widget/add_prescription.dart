@@ -277,8 +277,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           context,
           'Bắt đầu',
           Icons.today,
-          selectDate,
-          TextEditingController(),
+          precriptionController.startDateController,
           width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
         const SizedBox(
@@ -288,19 +287,17 @@ class _AddPrescriptionState extends State<AddPrescription> {
           context,
           'Kết thúc',
           Icons.today,
-          selectDate,
-          TextEditingController(),
+          precriptionController.endDateController,
           width: (MediaQuery.of(context).size.width - 70) / 2 - 6,
         ),
       ],
     );
   }
 
-  final dateController = TextEditingController();
   DateTime datetime = DateTime.now();
 
   // Replace this with your actual method to select date
-  Future<void> selectDate(BuildContext context) async {
+  Future<void> selectDate(BuildContext context, TextEditingController controller) async {
     final selectedDate = await showDatePicker(
       context: context,
       initialDate: datetime,
@@ -309,9 +306,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
     );
 
     if (selectedDate != null) {
-      datetime = selectedDate;
-      final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
-      dateController.text = formattedDate;
+      setState(() {
+        datetime = selectedDate;
+        final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
+        controller.text = formattedDate; // Update the respective controller
+      }); 
     }
   }
 
@@ -319,7 +318,6 @@ class _AddPrescriptionState extends State<AddPrescription> {
       BuildContext context,
       String label,
       IconData icon,
-      Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
       {required double width}) {
     return SizedBox(
@@ -333,7 +331,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
           labelText: label,
         ),
         readOnly: true,
-        onTap: () => onTap(context),
+        onTap: () => selectDate(context, controller), // Pass the controller here
       ),
     );
   }
@@ -377,6 +375,19 @@ class _AddPrescriptionState extends State<AddPrescription> {
         const SizedBox(width: 16),
         TextButton(
           onPressed: () async {
+            try {
+              await precriptionController.addPrescription();
+              Get.snackbar("Thành công", "Thêm đơn thuốc thành công",
+                  backgroundColor: Colors.green);
+              Future.delayed(const Duration(seconds: 1), () {
+                precriptionController.clearData();
+                Get.back();
+              });
+            } catch (e) {
+              log(e.toString());
+              Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm đơn thuốc",
+                  backgroundColor: Colors.red);
+            }
             Get.back();
           },
           child: Text(

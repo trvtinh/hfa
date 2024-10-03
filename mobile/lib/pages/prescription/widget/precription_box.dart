@@ -5,6 +5,7 @@ import 'package:health_for_all/pages/prescription/widget/prescription_detail.dar
 
 class PrescriptionBox extends StatefulWidget {
   final String name;
+  final String note;
   final int num_type;
   final int num_tablet;
   final int order;
@@ -15,10 +16,10 @@ class PrescriptionBox extends StatefulWidget {
       {super.key,
       required this.name,
       required this.num_type,
-      required this.num_tablet,
+      required this.num_tablet, 
       required this.start_date,
       required this.end_date,
-      required this.order});
+      required this.order, required this.note});
 
   @override
   State<PrescriptionBox> createState() => _PrescriptionBoxState();
@@ -34,6 +35,9 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
               order: widget.order,
               tablet: const ["Vitamin C", "Vitamin B1"],
               sl_tablet: const [1, 1],
+              note: widget.note,
+              startDate: widget.start_date,
+              endDate: widget.end_date,
             ));
       },
       child: Column(

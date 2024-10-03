@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
+import 'package:health_for_all/pages/prescription/index.dart';
 import 'package:health_for_all/pages/prescription/widget/add_prescription.dart';
 import 'package:health_for_all/pages/prescription/widget/filter_sheet.dart';
 import 'package:health_for_all/pages/prescription/widget/precription_box.dart';
@@ -135,40 +138,72 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   }
 
   Widget list_prescription() {
-    return const Column(
+    return Column(
       children: [
-        PrescriptionBox(
-          name: "Đơn thuốc 1",
-          num_type: 3,
-          num_tablet: 5,
-          start_date: "2024/08/11",
-          end_date: "2024/09/30",
-          order: 1,
+        StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection('prescriptions')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Có lỗi xảy ra');
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            }
+            final data = snapshot.data!.docs
+                .map((doc) => Prescription.fromFirestore(
+                    doc as DocumentSnapshot<Map<String, dynamic>>))
+                .toList();
+            return ListView.builder(
+              shrinkWrap: true,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                final doc = data[index];
+                return PrescriptionBox(
+                    name: doc.name?.text ?? '',
+                    num_type: 3,
+                    num_tablet: 5,
+                    start_date: doc.startDate?.text ?? '',
+                    end_date: doc.endDate?.text ?? '',
+                    order: 1,
+                    note: doc.note?.text ?? '',);
+              },
+            );
+          },
         ),
-        PrescriptionBox(
-          name: "ĐT Gout cấp tính",
-          num_type: 3,
-          num_tablet: 5,
-          start_date: "2024/08/11",
-          end_date: "2024/09/30",
-          order: 2,
-        ),
-        PrescriptionBox(
-          name: "Đơn thuốc 3",
-          num_type: 3,
-          num_tablet: 5,
-          start_date: "2024/08/11",
-          end_date: "2024/09/30",
-          order: 3,
-        ),
-        PrescriptionBox(
-          name: "Đơn thuốc 6",
-          num_type: 3,
-          num_tablet: 5,
-          start_date: "2024/08/11",
-          end_date: "2024/09/30",
-          order: 4,
-        ),
+        // PrescriptionBox(
+        //   name: "Đơn thuốc 1",
+        //   num_type: 3,
+        //   num_tablet: 5,
+        //   start_date: "2024/08/11",
+        //   end_date: "2024/09/30",
+        //   order: 1,
+        // ),
+        // PrescriptionBox(
+        //   name: "ĐT Gout cấp tính",
+        //   num_type: 3,
+        //   num_tablet: 5,
+        //   start_date: "2024/08/11",
+        //   end_date: "2024/09/30",
+        //   order: 2,
+        // ),
+        // PrescriptionBox(
+        //   name: "Đơn thuốc 3",
+        //   num_type: 3,
+        //   num_tablet: 5,
+        //   start_date: "2024/08/11",
+        //   end_date: "2024/09/30",
+        //   order: 3,
+        // ),
+        // PrescriptionBox(
+        //   name: "Đơn thuốc 6",
+        //   num_type: 3,
+        //   num_tablet: 5,
+        //   start_date: "2024/08/11",
+        //   end_date: "2024/09/30",
+        //   order: 4,
+        // ),
       ],
     );
   }

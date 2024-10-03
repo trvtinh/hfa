@@ -6,12 +6,17 @@ class PrescriptionDetail extends StatefulWidget {
   final int order;
   final List<String> tablet;
   final List<int> sl_tablet;
+  final String note;
+  final String startDate;
+  final String endDate;
+
   const PrescriptionDetail(
       {super.key,
       required this.name,
       required this.order,
       required this.tablet,
-      required this.sl_tablet});
+      required this.sl_tablet, 
+      required this.note, required this.startDate, required this.endDate});
 
   @override
   State<PrescriptionDetail> createState() => _PrescriptionDetailState();
@@ -32,7 +37,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
         actions: [
           Icon(
             Icons.medication_liquid_sharp,
-            size: 48,
+            size: 34,
             color: Theme.of(context).colorScheme.primary,
           ),
           const SizedBox(
@@ -262,66 +267,43 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
         const SizedBox(
           height: 4,
         ),
-        _buildDateTimeField(
-          context,
-          Icons.today,
-          selectDate,
-          TextEditingController(),
-          width: (MediaQuery.of(context).size.width - 32),
+        Container(
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Row(children: [
+            Icon(
+              Icons.today_outlined,
+              size: 24,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            SizedBox(width: 12,),
+            Column(
+              children: [
+                Text(
+                  "Từ ngày: " + widget.startDate,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+                Text(
+                  "Tới ngày: " + widget.endDate,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
+              ],
+            )
+          ],),
         ),
         const SizedBox(
           height: 16,
         ),
       ],
-    );
-  }
-
-  final dateController = TextEditingController();
-  DateTime datetime = DateTime.now();
-
-  Future<void> selectDate(BuildContext context) async {
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: datetime,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-    );
-
-    if (selectedDate != null) {
-      datetime = selectedDate;
-      final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
-      dateController.text = formattedDate;
-    }
-  }
-
-  Widget _buildDateTimeField(
-      BuildContext context,
-      IconData icon,
-      Future<void> Function(BuildContext) onTap,
-      TextEditingController controller,
-      {required double width}) {
-    return SizedBox(
-      width: width,
-      child: TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          prefixIcon:
-              Icon(icon, color: Theme.of(context).colorScheme.onSurfaceVariant),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.outlineVariant,
-            width: 1,
-          )),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.outlineVariant,
-              width: 1,
-            ),
-          ),
-        ),
-        readOnly: true,
-        onTap: () => onTap(context),
-      ),
     );
   }
 
@@ -385,13 +367,40 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
         const SizedBox(
           height: 4,
         ),
-        _buildNoteField(context, Icons.edit_note, noteController,
-            width: MediaQuery.of(context).size.width - 32),
+        Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            height: 56,
+            decoration: BoxDecoration(
+                border: Border.all(
+                    color: Theme.of(context).colorScheme.outlineVariant),
+                borderRadius: BorderRadius.circular(5)),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.edit_note_outlined,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Flexible(
+                  child: Text(
+                    widget.note,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        // _buildNoteField(context, Icons.edit_note, widget.noteController,
+        //     width: MediaQuery.of(context).size.width - 32),
       ],
     );
   }
 
-  final noteController = TextEditingController();
   Widget _buildNoteField(
       BuildContext context, IconData icon, TextEditingController controller,
       {required double width}) {

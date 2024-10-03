@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Precription {
+class Prescription {
   String? id;
   List<String>? medicalIDs;
   String? assignId;
@@ -10,8 +10,8 @@ class Precription {
   Timestamp? startDate;
   Timestamp? endDate;
   List<String>? imageURL;
-  List<Map<String, dynamic>>? medicineDatas;
-  Precription({
+  List<String>? medicineDose;
+  Prescription({
     this.id,
     this.medicalIDs,
     this.assignId,
@@ -21,15 +21,15 @@ class Precription {
     this.startDate,
     this.endDate,
     this.imageURL,
-    this.medicineDatas,
+    this.medicineDose,
   });
 
-  factory Precription.fromFirestore(
+  factory Prescription.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
   ) {
     final data = snapshot.data();
-    return Precription(
-      id: data?['id'],
+    return Prescription(
+      id: snapshot.id,
       patientId: data?['patientId'],
       assignId: data?['assignId'],
       name: data?['name'],
@@ -39,8 +39,8 @@ class Precription {
       imageURL: (data?['imageURL'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
-      medicineDatas: data?['medicineDatas'] != null
-          ? List<Map<String, dynamic>>.from(data?['medicineDatas'])
+      medicineDose: data?['medicineDose'] != null
+          ? List<String>.from(data?['medicineDose'])
           : null,
     );
   }
@@ -55,7 +55,7 @@ class Precription {
       'startDate': startDate,
       'endDate': endDate,
       'imageURL': imageURL,
-      'medicineDatas': medicineDatas,
+      'medicineDatas': medicineDose,
     };
   }
 

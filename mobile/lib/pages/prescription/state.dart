@@ -3,4 +3,5 @@ import 'package:health_for_all/common/entities/user.dart';
 
 class PrescriptionState {
   var profile = Rx<UserData?>(null);
+  var del = true.obs;
 }
