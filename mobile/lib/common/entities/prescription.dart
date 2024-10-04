@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart'; // Import this package
 
 class Prescription {
   String? id;
@@ -11,6 +12,9 @@ class Prescription {
   String? endDate;
   List<String>? imageURL;
   List<String>? medicineDose;
+  int? sumDose;
+  List<XFile>? files; // New field for List<XFile>
+
   Prescription({
     this.id,
     this.medicalIDs,
@@ -22,6 +26,8 @@ class Prescription {
     this.endDate,
     this.imageURL,
     this.medicineDose,
+    this.sumDose,
+    this.files, // Include in the constructor
   });
 
   factory Prescription.fromFirestore(
@@ -31,6 +37,7 @@ class Prescription {
     return Prescription(
       id: snapshot.id,
       patientId: data?['patientId'],
+      sumDose: data?['sumDose'],
       assignId: data?['assignId'],
       name: data?['name'],
       note: data?['note'],
@@ -45,6 +52,7 @@ class Prescription {
       medicineDose: (data?['medicineDose'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
+      files: (data?['files'] as List<dynamic>?)?.map((item) => XFile(item)).toList(), // Parse the new field
     );
   }
 
@@ -60,11 +68,13 @@ class Prescription {
       'imageURL': imageURL,
       'medicineDose': medicineDose,
       'medicalIDs': medicalIDs,
+      'sumDose': sumDose,
+      'files': files?.map((file) => file.path).toList(), // Convert files to JSON (store file paths)
     };
   }
 
   @override
   String toString() {
-    return 'Prescription{id: $id, medicalIDs: $medicalIDs, assignId: $assignId, patientId: $patientId, name: $name, note: $note, startDate: $startDate, endDate: $endDate, imageURL: $imageURL, medicineDatas: $medicineDose}';
+    return 'Prescription{id: $id, medicalIDs: $medicalIDs, assignId: $assignId, patientId: $patientId, name: $name, note: $note, startDate: $startDate, endDate: $endDate, imageURL: $imageURL, medicineDose: $medicineDose, sumDose: $sumDose, files: $files}'; // Include files in the string representation
   }
 }

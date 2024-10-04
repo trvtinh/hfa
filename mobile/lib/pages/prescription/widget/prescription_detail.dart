@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
+import 'package:health_for_all/common/entities/prescription.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class PrescriptionDetail extends StatefulWidget {
-  final String name;
-  final int order;
+  final Prescription detail;
   final List<MedicineBase> med;
-  final List<String> dose;
-  final String note;
-  final String startDate;
-  final String endDate;
+  final int order;
 
-  const PrescriptionDetail(
-      {super.key,
-      required this.name,
-      required this.order,
-      required this.note, required this.startDate, required this.endDate, required this.med, required this.dose});
+  const PrescriptionDetail({
+    super.key,
+    required this.detail,
+    required this.med,
+    required this.order,
+  });
 
   @override
   State<PrescriptionDetail> createState() => _PrescriptionDetailState();
@@ -104,7 +103,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
                   width: 12,
                 ),
                 Text(
-                  widget.name,
+                  widget.detail.name!,
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).colorScheme.onSurface,
@@ -183,7 +182,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
                   ),
                 ),
                 for (int i = 0; i < widget.med.length; i++)
-                  medicine(widget.med[i].name!, widget.dose[i],
+                  medicine(widget.med[i].name!, widget.detail.medicineDose![i],
                       (i != widget.med.length - 1)),
               ],
             ),
@@ -269,41 +268,65 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
         Container(
           padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+            border:
+                Border.all(color: Theme.of(context).colorScheme.outlineVariant),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Row(children: [
-            Icon(
-              Icons.today_outlined,
-              size: 24,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-            SizedBox(width: 12,),
-            Column(
-              children: [
-                Text(
-                  "Từ ngày: " + widget.startDate,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurface,
+          child: Row(
+            children: [
+              Icon(
+                Icons.today_outlined,
+                size: 24,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Column(
+                children: [
+                  Text(
+                    "Từ ngày: " + widget.detail.startDate!,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
-                ),
-                Text(
-                  "Tới ngày: " + widget.endDate,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurface,
+                  Text(
+                    "Tới ngày: " + widget.detail.endDate!,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],),
+                ],
+              )
+            ],
+          ),
         ),
         const SizedBox(
           height: 16,
         ),
       ],
     );
+  }
+
+  IconData _getFileIcon(XFile file) {
+    final String extension = file.name.split('.').last;
+    switch (extension.toLowerCase()) {
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+        return Icons.image;
+      case 'mp4':
+      case 'avi':
+      case 'mov':
+        return Icons.video_file;
+      case 'pdf':
+        return Icons.picture_as_pdf;
+      default:
+        return Icons.insert_drive_file;
+    }
   }
 
   Widget file() {
@@ -320,7 +343,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
                 fontSize: 14,
                 color: Theme.of(context).colorScheme.secondary,
               ),
-            )
+            ),
           ],
         ),
         const SizedBox(
@@ -330,14 +353,52 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
           width: MediaQuery.of(context).size.width - 32,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              border: Border.all(
-                  color: Theme.of(context).colorScheme.outlineVariant)),
-          child: const Column(
-            children: [
-              Text("..."),
-            ],
+            borderRadius: BorderRadius.circular(4),
+            border:
+                Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           ),
+          child: widget.detail.files != null && widget.detail.files!.isNotEmpty
+              ? Column(
+                  children: [
+                    // Iterate over the files and display their names
+                    for (var file in widget.detail.files!)
+                      ListTile(
+                        title: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                _getFileIcon(file),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                file.name
+                                    .split('/')
+                                    .last, // Show just the file name
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                      fontSize: 15
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        onTap: () {
+                          // Implement file opening logic here if needed
+                        },
+                      ),
+                  ],
+                )
+              : const Text(
+                  "Không có file nào đính kèm."), // Message for no files
         ),
         const SizedBox(
           height: 16,
@@ -367,33 +428,33 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
           height: 4,
         ),
         Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 56,
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: Theme.of(context).colorScheme.outlineVariant),
-                borderRadius: BorderRadius.circular(5)),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.edit_note_outlined,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Flexible(
-                  child: Text(
-                    widget.note,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          height: 56,
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(context).colorScheme.outlineVariant),
+              borderRadius: BorderRadius.circular(5)),
+          child: Row(
+            children: [
+              Icon(
+                Icons.edit_note_outlined,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              Flexible(
+                child: Text(
+                  widget.detail.note!,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
+        ),
         // _buildNoteField(context, Icons.edit_note, widget.noteController,
         //     width: MediaQuery.of(context).size.width - 32),
       ],

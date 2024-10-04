@@ -22,7 +22,7 @@ class PrescriptionController extends GetxController {
   }
   final medicineController = Get.find<ChooseTypeMedController>();
   final state = PrescriptionState();
-  final RxList<XFile> selectedFiles = <XFile>[].obs;
+  RxList<XFile> selectedFiles = <XFile>[].obs;
   final RxList<String> selectedImagesURL = <String>[].obs;
   RxList<TextEditingController> doseControllers = <TextEditingController>[].obs;
   final nameController = TextEditingController();
@@ -31,6 +31,7 @@ class PrescriptionController extends GetxController {
   final endDateController = TextEditingController();
   RxList<String> medId = <String>[].obs;
   List<String> doses = <String>[].obs;
+  int sumDose = 0;
 
   Future<void> addImage() async {
     for (var value in selectedFiles) {
@@ -52,8 +53,25 @@ class PrescriptionController extends GetxController {
   // }
 
   Future addPrescription() async {
-    doses =
-        doseControllers.map((doseControllers) => doseControllers.text).toList();
+    doses = doseControllers
+        .map((controller) => controller.text.trim())
+        .toList(); // Trim the text inputs
+    sumDose = 0;
+
+    for (var i in doses) {
+      // Ensure that the string is not empty and can be converted to an integer
+      if (i.isNotEmpty) {
+        try {
+          sumDose += int.parse(i); // Safely parse the integer
+        } catch (e) {
+          print(
+              'Error parsing dose: $i'); // Log the specific string causing an issue
+          continue; // Skip this value and move to the next one
+        }
+      }
+    }
+
+    // Create the Prescription object with valid data
     final data = Prescription(
       name: nameController.text,
       note: noteController.text,
@@ -62,9 +80,18 @@ class PrescriptionController extends GetxController {
       medicalIDs: medId,
       imageURL: selectedImagesURL,
       medicineDose: doses,
+      sumDose: sumDose,
+      files: selectedFiles,
     );
+
     log(data.toString());
     await FirebaseApi.addDocument("prescriptions", data.toJson());
+  }
+
+  Future delPrescription(
+    String documentId
+  ) async {
+    await FirebaseApi.deleteDocument("prescriptions", documentId);
   }
 
   Future getData(List<String> id) async {
@@ -86,5 +113,20 @@ class PrescriptionController extends GetxController {
     }
     selectedFiles.clear();
     selectedImagesURL.clear();
+    medId.clear();
+  }
+
+  Future<int> getPrescriptionLength() async {
+    // Fetch the collection 'prescriptions' from Firestore
+    QuerySnapshot snapshot =
+        await FirebaseFirestore.instance.collection('prescriptions').get();
+
+    // Return the number of documents
+    return snapshot.docs.length;
+  }
+
+  void updatePrescriptionCount() async {
+    int length = await getPrescriptionLength();
+    state.num_prescription.value = length;
   }
 }

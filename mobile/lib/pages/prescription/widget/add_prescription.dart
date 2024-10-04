@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/choose_type_med/view.dart';
-import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
+import 'package:health_for_all/pages/prescription/widget/add_file.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -392,6 +392,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
               prescriptionController.medId.add(medicineController
                   .state.selectedMedicineBases[i].id
                   .toString());
+            prescriptionController.selectedFiles = selectedFiles.obs;
             try {
               await prescriptionController.addPrescription();
               Get.snackbar("Thành công", "Thêm đơn thuốc thành công",
