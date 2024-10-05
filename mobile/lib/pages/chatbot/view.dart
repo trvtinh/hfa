@@ -121,6 +121,7 @@ class ChatbotPage extends GetView<ChatbotController> {
                                 }),
                                 Flexible(
                                   child: TextField(
+                                    maxLines: null,
                                     keyboardType: TextInputType.multiline,
                                     controller: controller.textController,
                                     autofocus: false,
