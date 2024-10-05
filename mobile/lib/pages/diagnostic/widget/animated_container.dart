@@ -136,7 +136,7 @@ class animatedcontainer extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '$value $Item.getUnit(int.parse(unit))',
+                      '$value ${Item.getUnit(int.parse(unit))}',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),

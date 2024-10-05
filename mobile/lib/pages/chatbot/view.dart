@@ -10,6 +10,7 @@ class ChatbotPage extends GetView<ChatbotController> {
   const ChatbotPage({super.key});
 
   @override
+  // RxBool tapped = false.obs;
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -167,29 +168,29 @@ class ChatbotPage extends GetView<ChatbotController> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 4),
-                        Container(
-                          margin: const EdgeInsets.only(left: 10, top: 5),
-                          height: 35,
-                          child: ElevatedButton(
-                            child: const Text("Gửi"),
-                            onPressed: () async {
-                              if (controller.textController.text.isNotEmpty) {
-                                if (controller.state.image.value != null) {
-                                  await controller.sendImageWithMessage();
-                                } else {
-                                  await controller.sendMessage();
-                                }
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Xin hãy nhập tin nhắn."),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                        ),
+                        // const SizedBox(width: 4),
+                        // Container(
+                        //   margin: const EdgeInsets.only(left: 10, top: 5),
+                        //   height: 35,
+                        //   child: ElevatedButton(
+                        //     child: const Text("Gửi"),
+                        //     onPressed: () async {
+                        //       if (controller.textController.text.isNotEmpty) {
+                        //         if (controller.state.image.value != null) {
+                        //           await controller.sendImageWithMessage();
+                        //         } else {
+                        //           await controller.sendMessage();
+                        //         }
+                        //       } else {
+                        //         ScaffoldMessenger.of(context).showSnackBar(
+                        //           const SnackBar(
+                        //             content: Text("Xin hãy nhập tin nhắn."),
+                        //           ),
+                        //         );
+                        //       }
+                        //     },
+                        //   ),
+                        // ),
                         const SizedBox(width: 8),
                       ],
                     ),
