@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
@@ -19,9 +20,6 @@ class _AddReminderState extends State<AddReminder> {
 
   @override
   Widget build(BuildContext context) {
-    reminderController.initPrescriptions();
-    reminderController.fetchPrescriptions();
-    reminderController.fetchMedicalData();
     return SizedBox(
       width: MediaQuery.sizeOf(context).width - 32,
       child: Column(
@@ -109,7 +107,7 @@ class _AddReminderState extends State<AddReminder> {
             height: 24,
           ),
           _buildDialogTextField(
-              "Mô tả", "Mô tả", reminderController.noteController),
+              "Ghi chú", "Ghi chú", reminderController.noteController),
           const SizedBox(
             height: 50,
           ),
@@ -139,6 +137,8 @@ class _AddReminderState extends State<AddReminder> {
                   backgroundColor: Colors.transparent,
                 ),
                 onPressed: () {
+                  reminderController.addReminder();
+                  reminderController.clearData();
                   Get.back();
                 },
                 child: Text(
@@ -181,7 +181,7 @@ class _AddReminderState extends State<AddReminder> {
 
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 4,
         ),
         SizedBox(
@@ -208,29 +208,41 @@ class _AddReminderState extends State<AddReminder> {
   }
 
   Widget date_time() {
-    return Container(
-      child: Row(
-        children: [
-          _buildDateTimeField(
-            context,
-            'Thời gian',
-            Icons.today,
-            reminderController.timeController,
-            width: (MediaQuery.of(context).size.width - 80) / 2,
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          _buildDateTimeField(
-            context,
-            'Ngày hết hạn',
-            Icons.today,
-            reminderController.dueDateController,
-            width: (MediaQuery.of(context).size.width - 80) / 2,
-          ),
-        ],
-      ),
+    return Row(
+      children: [
+        _buildDateTimeField(
+          context,
+          'Thời gian',
+          Icons.access_time,
+          reminderController.timeController,
+          isTimeField: true, // This is for the time picker
+          width: (MediaQuery.of(context).size.width - 80) / 2,
+        ),
+        const SizedBox(
+          width: 12,
+        ),
+        _buildDateTimeField(
+          context,
+          'Ngày hết hạn',
+          Icons.today,
+          reminderController.dueDateController,
+          width: (MediaQuery.of(context).size.width - 80) / 2,
+        ),
+      ],
     );
+  }
+
+  Future<void> selectTime(
+      BuildContext context, TextEditingController controller) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (picked != null) {
+      final formattedTime = picked.format(context);
+      controller.text = formattedTime;
+    }
   }
 
   DateTime datetime = DateTime.now();
@@ -256,7 +268,7 @@ class _AddReminderState extends State<AddReminder> {
 
   Widget _buildDateTimeField(BuildContext context, String label, IconData icon,
       TextEditingController controller,
-      {required double width}) {
+      {required double width, bool isTimeField = false}) {
     return SizedBox(
       width: width,
       child: TextField(
@@ -268,79 +280,94 @@ class _AddReminderState extends State<AddReminder> {
           labelText: label,
         ),
         readOnly: true,
-        onTap: () =>
-            selectDate(context, controller), // Pass the controller here
+        onTap: () {
+          if (isTimeField) {
+            selectTime(context, controller); // Show time picker
+          } else {
+            selectDate(context, controller); // Show date picker
+          }
+        },
       ),
     );
   }
 
   Widget drop_alt1() {
-    return Obx(() => reminderController.prescriptionList.isEmpty
-        ? Center(
-            child:
-                CircularProgressIndicator()) // Loading indicator while fetching
-        : Column(
-            children: [
-              MultiSelectDialogField(
-                items: reminderController.prescriptionList
-                    .map((prescription) => MultiSelectItem<Prescription>(
-                        prescription,
-                        prescription.name ?? 'Đơn thuốc không tên'))
-                    .toList(),
-                title: Text("Chọn đơn thuốc"),
-                selectedColor: Colors.blue,
-                buttonText: Text(
-                  reminderController.selectedPrescriptions.isEmpty
-                      ? "Chưa có đơn thuốc nào được chọn"
-                      : "${reminderController.selectedPrescriptions.length} đơn thuốc đã được chọn",
-                ),
-                onConfirm: (values) {
-                  reminderController.selectedPrescriptions
-                      .assignAll(values.cast<Prescription>());
-                  // No need to use setState or .obs here
-                },
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+    return StreamBuilder<QuerySnapshot>(
+      stream:
+          FirebaseFirestore.instance.collection('prescriptions').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(
+              child:
+                  CircularProgressIndicator()); // Show loading indicator while fetching
+        }
+
+        final prescriptions = snapshot.data!.docs
+            .map((doc) => Prescription.fromFirestore(
+                doc as DocumentSnapshot<Map<String, dynamic>>))
+            .toList();
+
+        reminderController.prescriptionList.value = prescriptions;
+
+        return Obx(() => Column(
+          children: [
+            MultiSelectDialogField(
+              items: prescriptions
+                  .map((prescription) => MultiSelectItem<Prescription>(
+                      prescription, prescription.name!))
+                  .toList(),
+              title: const Text("Chọn đơn thuốc"),
+              selectedColor: Colors.blue,
+              buttonText: Text(
+                reminderController.selectedPrescriptions.isEmpty
+                    ? "Chưa có đơn thuốc nào được chọn"
+                    : "${reminderController.selectedPrescriptions.length} đơn thuốc đã được chọn",
+              ),
+              onConfirm: (values) {
+                reminderController.selectedPrescriptions.value =
+                    values.cast<Prescription>();
+              },
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.outline,
                 ),
               ),
-            ],
-          ));
+            ),
+          ],
+        ));
+      },
+    );
   }
 
   Widget drop_alt2() {
-    return Obx(() => reminderController.medDataList.isEmpty
-        ? Center(
-            child:
-                CircularProgressIndicator()) // Loading indicator while fetching
-        : Column(
-            children: [
-              MultiSelectDialogField(
-                items: reminderController.medDataList
-                    .map((med) => MultiSelectItem<int>(med, Item.getTitle(med)))
-                    .toList(),
-                title: Text("Chọn loại dữ liệu y tế"),
-                selectedColor: Colors.blue,
-                buttonText: Text(
-                  reminderController.selectedPrescriptions.isEmpty
-                      ? "Chưa có dữ liệu y tế nào được chọn"
-                      : "${reminderController.selectedMedData.length} dữ liệu y tế đã được chọn",
-                ),
-                onConfirm: (values) {
-                  setState(() {
-                    reminderController.selectedMedData = values.cast<int>().obs;
-                  });
-                },
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(4)),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              ),
-            ],
-          ));
+    reminderController.fetchMedicalData();
+    return Column(
+      children: [
+        MultiSelectDialogField(
+          items: reminderController.medDataList
+              .map((med) => MultiSelectItem<int>(med, Item.getTitle(med)))
+              .toList(),
+          title: const Text("Chọn loại dữ liệu y tế"),
+          selectedColor: Colors.blue,
+          buttonText: Text(
+            reminderController.selectedMedData.isEmpty
+                ? "Chưa có dữ liệu y tế nào được chọn"
+                : "${reminderController.selectedMedData.length} dữ liệu y tế đã được chọn",
+          ),
+          onConfirm: (values) {
+            setState(() {
+              reminderController.selectedMedData = values.cast<int>();
+            });
+          },
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
+            border: Border.all(
+              color: Theme.of(context).colorScheme.outline,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

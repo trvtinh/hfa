@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
-import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/choose_type_med/view.dart';
 import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
@@ -264,7 +263,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 6,
         ),
       ],

@@ -28,7 +28,7 @@ class Homepage extends StatelessWidget {
 
   DateTime getYesterdayTimestamp() {
     DateTime now = DateTime.now(); // Get the current date and time
-    DateTime yesterday = now.subtract(Duration(days: 1)); // Subtract one day
+    DateTime yesterday = now.subtract(const Duration(days: 1)); // Subtract one day
     return yesterday; // This returns the DateTime object for yesterday
   }
 
@@ -314,8 +314,11 @@ class Homepage extends StatelessWidget {
                             int finished = 0;
                             int drinking = 0;
                             for (var i in data){
-                              if (compareTimestamps(convertStringtoTime(i.endDate!), getYesterdayTimestamp())) drinking ++;
-                              else finished ++;
+                              if (compareTimestamps(convertStringtoTime(i.endDate!), getYesterdayTimestamp())) {
+                                drinking ++;
+                              } else {
+                                finished ++;
+                              }
                             }
                             return WhiteBox(
                                 title: 'Đơn thuốc',
@@ -337,7 +340,7 @@ class Homepage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => ReminderPage());
+                          Get.to(() => const ReminderPage());
                         },
                         child: const WhiteBoxnoW(
                             title: 'Nhắc nhở',

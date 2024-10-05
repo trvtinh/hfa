@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/API/firebase_API.dart';
-import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/prescription/index.dart';

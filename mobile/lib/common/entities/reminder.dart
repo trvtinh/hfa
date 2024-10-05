@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:health_for_all/common/entities/prescription.dart';
 
 class Reminder {
   String? id;
   List<bool>? onDay;
   String? name;
   String? note;
-  List<String>? measureMedId; // Assuming MedicalEntity is defined elsewhere
-  List<String>? prescriptionId; // Assuming Prescription is defined as per your existing class
+  List<int>? measureMedId; // Changed from List<String> to List<int>
+  List<String>? prescriptionId;
   String? time;
   String? date;
+  int? numDate; // New field for numDate
 
   Reminder({
     this.id,
@@ -20,6 +20,7 @@ class Reminder {
     this.prescriptionId,
     this.time,
     this.date,
+    this.numDate, // Include in constructor
   });
 
   factory Reminder.fromFirestore(
@@ -36,11 +37,12 @@ class Reminder {
       time: data?['time'],
       date: data?['date'],
       measureMedId: (data?['measureMedId'] as List<dynamic>?)
-          ?.map((item) => item as String)
+          ?.map((item) => item as int) // Map to List<int>
           .toList(),
       prescriptionId: (data?['prescriptionId'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
+      numDate: data?['numDate'] as int?, // Map numDate from Firestore
     );
   }
 
@@ -52,13 +54,14 @@ class Reminder {
       'note': note,
       'time': time,
       'date': date,
-      'measureMedId': measureMedId,
+      'measureMedId': measureMedId, // Now a List<int>
       'prescriptionId': prescriptionId,
+      'numDate': numDate, // Include numDate in JSON map
     };
   }
 
   @override
   String toString() {
-    return 'Reminder{id: $id, onDay: $onDay, name: $name, note: $note, measureMedId: $measureMedId, prescriptionId: $prescriptionId, time: $time, date: $date}';
+    return 'Reminder{id: $id, onDay: $onDay, name: $name, note: $note, measureMedId: $measureMedId, prescriptionId: $prescriptionId, time: $time, date: $date, numDate: $numDate}'; // Include numDate in toString
   }
 }

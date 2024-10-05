@@ -31,7 +31,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
 
   DateTime getYesterdayTimestamp() {
     DateTime now = DateTime.now(); // Get the current date and time
-    DateTime yesterday = now.subtract(Duration(days: 1)); // Subtract one day
+    DateTime yesterday = now.subtract(const Duration(days: 1)); // Subtract one day
     return yesterday; // This returns the DateTime object for yesterday
   }
 

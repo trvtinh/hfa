@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 class PrescriptionDetail extends StatefulWidget {
   final Prescription detail;
@@ -266,7 +265,7 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
           height: 4,
         ),
         Container(
-          padding: EdgeInsets.all(12),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             border:
                 Border.all(color: Theme.of(context).colorScheme.outlineVariant),
@@ -279,20 +278,20 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
                 size: 24,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
               Column(
                 children: [
                   Text(
-                    "Từ ngày: " + widget.detail.startDate!,
+                    "Từ ngày: ${widget.detail.startDate!}",
                     style: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   Text(
-                    "Tới ngày: " + widget.detail.endDate!,
+                    "Tới ngày: ${widget.detail.endDate!}",
                     style: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).colorScheme.onSurface,

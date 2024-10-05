@@ -142,7 +142,7 @@ class CommentScreen extends StatelessWidget {
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onPrimaryContainer),
                 ),
-                SizedBox(width: 12,),
+                const SizedBox(width: 12,),
                 GestureDetector(
                   onTap: (){
                     controller.delComment(comment.id!);

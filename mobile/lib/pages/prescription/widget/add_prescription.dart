@@ -271,7 +271,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 6,
         ),
       ],
@@ -388,10 +388,11 @@ class _AddPrescriptionState extends State<AddPrescription> {
           onPressed: () async {
             for (var i = 0;
                 i < medicineController.state.selectedMedicineBases.length;
-                i++)
+                i++) {
               prescriptionController.medId.add(medicineController
                   .state.selectedMedicineBases[i].id
                   .toString());
+            }
             prescriptionController.selectedFiles = selectedFiles.obs;
             try {
               await prescriptionController.addPrescription();
