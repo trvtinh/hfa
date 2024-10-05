@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
+import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
@@ -342,11 +343,30 @@ class Homepage extends StatelessWidget {
                         onTap: () {
                           Get.to(() => const ReminderPage());
                         },
-                        child: const WhiteBoxnoW(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('reminders')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Có lỗi xảy ra');
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            final data = snapshot.data!.docs
+                                .map((doc) => Reminder.fromFirestore(doc
+                                    as DocumentSnapshot<Map<String, dynamic>>))
+                                .toList();
+                            return WhiteBoxnoW(
                             title: 'Nhắc nhở',
                             iconbox: Icons.date_range_outlined,
                             text1: 'Số lời nhắc',
-                            value1: '00'),
+                            value1: data.length.toString());
+                          },
+                        ),
                       ),
                       const SizedBox(
                         width: 10,

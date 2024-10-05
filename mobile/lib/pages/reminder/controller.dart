@@ -63,6 +63,12 @@ class ReminderController extends GetxController {
     await FirebaseApi.addDocument("reminders", data.toJson());
   }
 
+  Future<void> delReminder(
+    String documentId
+  ) async {
+    await FirebaseApi.deleteDocument("reminders", documentId);
+  }
+
   bool checkDate(String saveDate) {
     try {
       // Parse the saveDate string in the format 'dd/mm/yyyy'
@@ -91,10 +97,10 @@ class ReminderController extends GetxController {
   }
 
   Future getData(List<String> id) async {
-    List<Reminder> res = [];
+    List<Prescription> res = [];
     for (var i in id) {
       final kq = await FirebaseApi.getDocumentSnapshotById("prescriptions", i);
-      res.add(Reminder.fromFirestore(kq));
+      res.add(Prescription.fromFirestore(kq));
     }
     return res;
   }

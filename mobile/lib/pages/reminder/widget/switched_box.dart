@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
 import 'package:health_for_all/pages/reminder/widget/edit_reminder.dart';
 
@@ -9,19 +10,21 @@ class SwitchedBox extends StatefulWidget {
       required this.numReminder,
       required this.time,
       required this.numDate,
-      required this.onDate, required this.date});
+      required this.onDate, required this.date, required this.reminderId});
   final String name;
   final int numReminder;
   final String time;
   final int numDate;
   final List<bool> onDate;
   final String date;
+  final String reminderId;
 
   @override
   State<SwitchedBox> createState() => _SwitchedBoxState();
 }
 
 class _SwitchedBoxState extends State<SwitchedBox> {
+  final ReminderController reminderController = Get.put(ReminderController());
   bool isSwitched = false; // Initialize the switch state
 
   @override
@@ -167,12 +170,12 @@ class _SwitchedBoxState extends State<SwitchedBox> {
           ),
           GestureDetector(
             onTap: () {
-              _showAddDialog(context);
+              reminderController.delReminder(widget.reminderId);
             },
             child: Icon(
-              Icons.border_color_outlined,
+              Icons.clear_outlined,
               size: 20,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.error,
             ),
           ),
           Transform.scale(
@@ -187,28 +190,6 @@ class _SwitchedBoxState extends State<SwitchedBox> {
           ),
         ],
       ),
-    );
-  }
-
-  void _showAddDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          content: const SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                EditReminder(),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

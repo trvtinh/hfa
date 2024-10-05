@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
+import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/prescription/widget/edit_prescription.dart';
 import 'package:health_for_all/pages/prescription/widget/prescription_detail.dart';
 import 'package:intl/intl.dart';
@@ -23,6 +24,8 @@ class PrescriptionBox extends StatefulWidget {
 }
 
 class _PrescriptionBoxState extends State<PrescriptionBox> {
+  final PrescriptionController prescriptionController =
+      Get.put(PrescriptionController());
   DateTime convertStringtoTime(String date) {
     DateFormat format = DateFormat('dd/MM/yyyy');
     DateTime dateTime = format.parse(date);
@@ -136,11 +139,11 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {
-                        _showDialog(context);
+                        prescriptionController.delPrescription(widget.detail.id!);
                       },
-                      child: Icon(Icons.border_color_outlined,
+                      child: Icon(Icons.clear_outlined,
                           size: 20,
-                          color: Theme.of(context).colorScheme.primary),
+                          color: Theme.of(context).colorScheme.error),
                     ),
                   ],
                 ),
@@ -152,33 +155,6 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
           ),
         ],
       ),
-    );
-  }
-
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0),
-          ),
-          insetPadding: const EdgeInsets.all(10),
-          content: SizedBox(
-            width: MediaQuery.of(context).size.width - 70,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                      child: EditPrescription(
-                          detail: widget.detail, med: widget.med)),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }

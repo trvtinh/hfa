@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
+import 'package:health_for_all/pages/reminder/widget/info_reminder.dart';
 import 'package:health_for_all/pages/reminder/widget/switched_box.dart';
 
 class ListReminder extends StatefulWidget {
@@ -49,16 +51,18 @@ class _ListReminderState extends State<ListReminder> {
                   }
 
                   final prescriptions = medicineSnapshot.data!;
-                  return GestureDetector(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        SwitchedBox(name: doc.name!, numReminder: doc.measureMedId!.length + doc.prescriptionId!.length, time: doc.time!, numDate: doc.numDate!, onDate: doc.onDay!, date: doc.date!,),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                      ],
-                    ),
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Get.to(() => InfoReminder(detail: doc, pre: prescriptions,));
+                        },
+                        child: SwitchedBox(name: doc.name!, numReminder: doc.measureMedId!.length + doc.prescriptionId!.length, time: doc.time!, numDate: doc.numDate!, onDate: doc.onDay!, date: doc.date!, reminderId: doc.id!,)
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                    ],
                   );
                 },
               );
