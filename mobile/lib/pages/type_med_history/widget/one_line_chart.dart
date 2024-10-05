@@ -74,7 +74,7 @@ class _OneLineChartState extends State<OneLineChart> {
                 show: true,
                 drawVerticalLine: true,
                 verticalInterval: xInterval, // More frequent grid columns
-                horizontalInterval: yInterval, // 4 grid rows
+                horizontalInterval: yInterval, // 4 grid row
                 getDrawingHorizontalLine: (value) {
                   return FlLine(
                     color: Colors.grey.withOpacity(0.5),
