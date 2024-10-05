@@ -127,10 +127,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
           onPressed: () async {
             try {
               await medicineController.addMedicineBase();
-              Future.delayed(const Duration(seconds: 1), () {
-                medicineController.clearData();
-                Get.back();
-              });
+              medicineController.clearData();
             } catch (e) {
               log(e.toString());
               Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",

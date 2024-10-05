@@ -23,7 +23,7 @@ class CommentScreen extends StatelessWidget {
               width: 10,
             ),
             Obx(() =>
-                Text('Bình luận (${controller.state.commmentList.length})'))
+                Text('Bình luận (${controller.state.commentList.length})'))
           ],
         ),
         const SizedBox(height: 10),
@@ -38,11 +38,11 @@ class CommentScreen extends StatelessWidget {
                   color: Theme.of(context).colorScheme.surfaceContainer),
               padding: const EdgeInsets.all(8),
               child: ListView.builder(
-                itemCount: controller.state.commmentList.length,
+                itemCount: controller.state.commentList.length,
                 itemBuilder: (context, index) {
-                  final comment = controller.state.commmentList[index];
+                  final comment = controller.state.commentList[index];
                   return FutureBuilder<String>(
-                    future: controller.getUser(comment.uid),
+                    future: controller.getUser(comment.uid!),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator();
@@ -137,10 +137,21 @@ class CommentScreen extends StatelessWidget {
                   width: 6,
                 ),
                 Text(
-                  '${DatetimeChange.getHourString(comment.time.toDate())}, ${DatetimeChange.getDatetimeString(comment.time.toDate())}',
+                  '${DatetimeChange.getHourString(comment.time!.toDate())}, ${DatetimeChange.getDatetimeString(comment.time!.toDate())}',
                   style: TextStyle(
                       fontSize: 12,
                       color: Theme.of(context).colorScheme.onPrimaryContainer),
+                ),
+                SizedBox(width: 12,),
+                GestureDetector(
+                  onTap: (){
+                    controller.delComment(comment.id!);
+                  },
+                  child: Icon(
+                    Icons.clear,
+                      color: Theme.of(context).colorScheme.error,
+                      size: 18,
+                  ),
                 ),
                 // Spacer(),
                 // Obx(() => IconButton(
@@ -164,7 +175,7 @@ class CommentScreen extends StatelessWidget {
                 // ),
               ],
             ),
-            Text(comment.content)
+            Text(comment.content!)
           ],
         ),
       );

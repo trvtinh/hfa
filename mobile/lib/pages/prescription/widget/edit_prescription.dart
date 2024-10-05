@@ -61,7 +61,7 @@ class _EditPrescriptionState extends State<EditPrescription> {
           ),
           Flexible(
             child: AddFile(
-              files: selectedFiles,
+              files: widget.detail.files,
               onFilesChanged: updateFiles,
             ),
           ),
