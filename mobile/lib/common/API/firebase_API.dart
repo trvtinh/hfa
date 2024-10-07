@@ -47,6 +47,17 @@ class FirebaseApi {
     }
   }
 
+  static Future updateDocument(
+      String collection, String documentId, Map<String, dynamic> data) async {
+    try {
+      final docRef = db.collection(collection).doc(documentId);
+      await docRef.update(data);
+      print('Document $documentId updated successfully in $collection.');
+    } catch (e) {
+      print('Error updating document: $e');
+    }
+  }
+
   static Future<void> deleteDocument(
       String collection, String documentId) async {
     try {
@@ -134,14 +145,14 @@ class FirebaseApi {
     }
   }
 
-  static Future updateDocument(
-      String collection, String documentId, Map<String, dynamic> data) async {
-    try {
-      final docRef = db.collection(collection).doc(documentId);
-      await docRef.update(data);
-      log('Document $documentId updated successfully in $collection.');
-    } catch (e) {
-      log('Error updating document: $e');
-    }
-  }
+  // static Future updateDocument(
+  //     String collection, String documentId, Map<String, dynamic> data) async {
+  //   try {
+  //     final docRef = db.collection(collection).doc(documentId);
+  //     await docRef.update(data);
+  //     log('Document $documentId updated successfully in $collection.');
+  //   } catch (e) {
+  //     log('Error updating document: $e');
+  //   }
+  // }
 }

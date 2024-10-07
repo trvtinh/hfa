@@ -98,7 +98,7 @@ class ApplicationPage extends GetView<ApplicationController> {
               Icons.date_range_outlined,
             ),
             title: const Text('Nhắc nhở'),
-            onTap: () => Get.to(() => ReminderPage()),
+            onTap: () => Get.to(() => const ReminderPage()),
           ),
           ListTile(
             leading: const Icon(Icons.notifications_none),

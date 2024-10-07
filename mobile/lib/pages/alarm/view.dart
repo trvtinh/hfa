@@ -48,10 +48,30 @@ class AlarmPage extends GetView<AlarmController> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Obx(
-                () => Text(
-                  "Danh sách cảnh báo (${controller.numberAlarm})",
-                ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('alarms')
+                    .where('userId',
+                        isEqualTo: controller.state.profile.value!.id)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return const Center(child: Text('No alarms found.'));
+                  }
+                  final alarms = snapshot.data!.docs
+                      .map((doc) => AlarmEntity.fromFirestore(
+                          doc as DocumentSnapshot<Map<String, dynamic>>))
+                      .toList();
+                  return Text(
+                    "Danh sách cảnh báo (${alarms.length})",
+                  );
+                },
               ),
             ),
             const Divider(
