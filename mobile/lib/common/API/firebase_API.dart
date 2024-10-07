@@ -33,6 +33,20 @@ class FirebaseApi {
     }
   }
 
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getDocumentSnapshotById(
+      String collection, String docId) async {
+    try {
+      final docSnapshot = await db.collection(collection).doc(docId).get();
+      if (docSnapshot.exists) {
+        return docSnapshot;
+      } else {
+        throw Exception('No document found with ID: $docId');
+      }
+    } catch (e) {
+      throw Exception('Error retrieving document snapshot: $e');
+    }
+  }
+
   static Future<void> deleteDocument(
       String collection, String documentId) async {
     try {

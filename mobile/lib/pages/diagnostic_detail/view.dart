@@ -258,31 +258,6 @@ class DetailViewState extends State<DetailView> {
               noteController: TextEditingController(),
               time: time[i],
             ),
-
-          //   ViewDataBox(
-          //     leadingiconpath: Item.getIconPath(int.parse(title[0])),
-          //     title: Item.getTitle(int.parse(title[0])),
-          //     value: value[0],
-          //     unit: Item.getUnit(int.parse(title[0])),
-          //     noteController: TextEditingController(),
-          //     time: time[0],
-          //   ),
-          // ViewDataBox(
-          //   leadingiconpath: Item.getIconPath(int.parse(title[1])),
-          //   title: Item.getTitle(int.parse(title[1])),
-          //   value: value[1],
-          //   unit: Item.getUnit(int.parse(title[1])),
-          //   noteController: TextEditingController(),
-          //   time: time[1],
-          // ),
-          // ViewDataBox(
-          //   leadingiconpath: Item.getIconPath(int.parse(title[2])),
-          //   title: Item.getTitle(int.parse(title[2])),
-          //   value: value[2],
-          //   unit: Item.getUnit(int.parse(title[2])),
-          //   noteController: TextEditingController(),
-          //   time: time[2],
-          // ),
         ],
       ),
     );
