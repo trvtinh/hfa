@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/prescription/state.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +19,6 @@ class PrescriptionController extends GetxController {
     ).obs;
   }
   final medicineController = Get.find<ChooseTypeMedController>();
-  final appController = Get.find<ApplicationController>();
   final state = PrescriptionState();
   RxList<XFile> selectedFiles = <XFile>[].obs;
   final RxList<String> selectedImagesURL = <String>[].obs;
@@ -82,7 +80,6 @@ class PrescriptionController extends GetxController {
       medicineDose: doses,
       sumDose: sumDose,
       files: selectedFiles,
-      patientId: appController.state.profile.value!.id,
     );
 
     log(data.toString());
@@ -120,7 +117,7 @@ class PrescriptionController extends GetxController {
   Future<int> getPrescriptionLength() async {
     // Fetch the collection 'prescriptions' from Firestore
     QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: appController.state.profile.value!.id).get();
+        await FirebaseFirestore.instance.collection('prescriptions').get();
 
     // Return the number of documents
     return snapshot.docs.length;
