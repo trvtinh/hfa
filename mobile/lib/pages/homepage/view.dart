@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/alarm_entity.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
@@ -375,14 +376,31 @@ class Homepage extends StatelessWidget {
                           onTap: () {
                             Get.to(() => const AlarmPage());
                           },
-                          child: Obx(() => WhiteBoxnoW(
+                          child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('alarms')
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Có lỗi xảy ra');
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            final data = snapshot.data!.docs
+                                .map((doc) => AlarmEntity.fromFirestore(doc
+                                    as DocumentSnapshot<Map<String, dynamic>>))
+                                .toList();
+                            return WhiteBoxnoW(
                                 title: 'Cảnh báo',
                                 iconbox: Icons.warning_amber_outlined,
                                 text1: 'Số cảnh báo',
-                                value1: appController
-                                    .alarmController.numberAlarm.value
-                                    .toString(),
-                              ))),
+                                value1: data.length.toString(),
+                              );
+                          },
+                        )),
                     ],
                   ),
                   const SizedBox(

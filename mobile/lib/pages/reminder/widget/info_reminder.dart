@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
+import 'package:health_for_all/pages/prescription/widget/prescription_detail.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
 
 class InfoReminder extends StatefulWidget {
   final Reminder detail;
   final List<Prescription> pre;
-  const InfoReminder(
-      {super.key,
-      required this.detail, required this.pre});
+  const InfoReminder({super.key, required this.detail, required this.pre});
 
   @override
   State<InfoReminder> createState() => _InfoReminderState();
 }
 
 class _InfoReminderState extends State<InfoReminder> {
+  final ReminderController controller = Get.put(ReminderController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +80,13 @@ class _InfoReminderState extends State<InfoReminder> {
                     color: Theme.of(context).colorScheme.outlineVariant)),
             child: Column(
               children: [
-                for (int i=0;i<widget.detail.measureMedId!.length;i++)
-                  data(Item.getTitle(widget.detail.measureMedId![i]), Item.getUnit(widget.detail.measureMedId![i]), Item.getIconPath(widget.detail.measureMedId![i]), "--", (i == widget.detail.measureMedId!.length - 1)),
+                for (int i = 0; i < widget.detail.measureMedId!.length; i++)
+                  data(
+                      Item.getTitle(widget.detail.measureMedId![i]),
+                      Item.getUnit(widget.detail.measureMedId![i]),
+                      Item.getIconPath(widget.detail.measureMedId![i]),
+                      "--",
+                      (i == widget.detail.measureMedId!.length - 1)),
               ],
             )),
       ],
@@ -151,7 +157,10 @@ class _InfoReminderState extends State<InfoReminder> {
             ],
           ),
         ),
-        if (!last) Divider(height: 1,),
+        if (!last)
+          Divider(
+            height: 1,
+          ),
       ],
     );
   }
@@ -194,12 +203,14 @@ class _InfoReminderState extends State<InfoReminder> {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+            border:
+                Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           ),
           child: Column(
             children: [
-              for (int i=0;i<widget.pre.length;i++)
-                prescriptionData(widget.pre[i], (i==widget.pre.length-1)),
+              for (int i = 0; i < widget.pre.length; i++)
+                prescriptionData(
+                    widget.pre[i], (i == widget.pre.length - 1), i + 1),
             ],
           ),
         ),
@@ -210,41 +221,84 @@ class _InfoReminderState extends State<InfoReminder> {
     );
   }
 
-  Widget prescriptionData(Prescription data, bool last){
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8,),
-          child: Row(children: [
-            Icon(
-              Icons.medication_liquid_sharp,
-              size: 24,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            SizedBox(width: 10,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data.name!,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onSurface,
+  Widget prescriptionData(Prescription data, bool last, int index) {
+    return FutureBuilder(
+      future: controller.getMed(data.medicalIDs!),
+      builder: (context, medicineSnapshot) {
+        if (medicineSnapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        }
+        if (medicineSnapshot.hasError) {
+          return const Text('Có lỗi xảy ra khi lấy dữ liệu thuốc');
+        }
+        if (!medicineSnapshot.hasData || medicineSnapshot.data!.isEmpty) {
+          return const Text('Không có dữ liệu thuốc');
+        }
+
+        final medicineBases = medicineSnapshot.data!;
+        return Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 8,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.medication_liquid_sharp,
+                          size: 24,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data.name!,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                            Text(
+                              "${data.medicalIDs!.length} loại thuốc, ${data.sumDose} viên",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Text(
-                  "${data.medicalIDs!.length} loại thuốc, ${data.sumDose} viên",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => PrescriptionDetail(
+                          detail: data, med: medicineBases, order: index));
+                    },
+                    child: Icon(
+                      Icons.open_in_new_outlined,
+                      color: Theme.of(context).colorScheme.secondary,
+                      size: 18.5,
+                    ),
+                  )
+                ],
+              ),
             ),
-          ],),
-        ),
-        if (!last) Divider(height: 1,),
-      ],
+            if (!last)
+              Divider(
+                height: 1,
+              ),
+          ],
+        );
+      },
     );
   }
 
@@ -270,7 +324,8 @@ class _InfoReminderState extends State<InfoReminder> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(4),
           ),
-          child: _buildDialogTextField(TextEditingController(text: widget.detail.note),
+          child: _buildDialogTextField(
+              TextEditingController(text: widget.detail.note),
               icon1: Icons.edit_note),
         ),
         const SizedBox(
@@ -379,12 +434,12 @@ class _InfoReminderState extends State<InfoReminder> {
                   children: [
                     Row(
                       children: [
-                        for (int i = 0; i < 4 ; i ++) choice(i),
+                        for (int i = 0; i < 4; i++) choice(i),
                       ],
                     ),
                     Row(
                       children: [
-                        for (int i = 4; i < 7 ; i ++) choice(i),
+                        for (int i = 4; i < 7; i++) choice(i),
                       ],
                     ),
                   ],
@@ -405,7 +460,9 @@ class _InfoReminderState extends State<InfoReminder> {
 
     return Row(
       children: [
-        SizedBox(width: 4,),
+        SizedBox(
+          width: 4,
+        ),
         SizedBox(
           width: (MediaQuery.sizeOf(context).width - 3) / 5,
           child: ChoiceChip(
@@ -417,9 +474,7 @@ class _InfoReminderState extends State<InfoReminder> {
             ),
             selected: isSelected,
             selectedColor: Theme.of(context).colorScheme.secondaryContainer,
-            onSelected: (bool selected){
-
-            },
+            onSelected: (bool selected) {},
           ),
         ),
       ],

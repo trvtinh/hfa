@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:intl/intl.dart';
@@ -36,6 +37,15 @@ class ReminderController extends GetxController {
   List<String> selectedPrescriptionsId = [];
   List<int> medDataList = [];
   List<int> selectedMedData = [];
+
+  Future getMed(List<String> id) async {
+    List<MedicineBase> res = [];
+    for (var i in id) {
+      final kq = await FirebaseApi.getDocumentSnapshotById("medicineBases", i);
+      res.add(MedicineBase.fromFirestore(kq));
+    }
+    return res;
+  }
 
   Future<void> addReminder() async {
     selectedPrescriptionsId.clear();
