@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/prescription/index.dart';
 import 'package:health_for_all/pages/prescription/widget/add_prescription.dart';
@@ -88,9 +89,10 @@ class PrescriptionPage extends GetView<PrescriptionController> {
 
   // This function listens for changes and updates num_prescription automatically
   Widget filter_prescription(BuildContext context) {
+    final appController = Get.find<ApplicationController>();
     return StreamBuilder<QuerySnapshot>(
       stream:
-          FirebaseFirestore.instance.collection('prescriptions').snapshots(),
+          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: appController.state.profile.value!.id).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -134,11 +136,13 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   }
 
   Widget list_prescription() {
+    final appController = Get.find<ApplicationController>();
     return Column(
       children: [
         StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('prescriptions')
+              .where('patientId', isEqualTo: appController.state.profile.value!.id)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {

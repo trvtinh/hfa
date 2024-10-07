@@ -7,6 +7,7 @@ import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:intl/intl.dart';
 
 class ReminderController extends GetxController {
@@ -30,6 +31,7 @@ class ReminderController extends GetxController {
     "T7",
     "CN",
   ];
+  final appController = Get.find<ApplicationController>();
   final nameController = TextEditingController();
   final noteController = TextEditingController();
   RxList<Prescription> prescriptionList = <Prescription>[].obs;
@@ -67,6 +69,7 @@ class ReminderController extends GetxController {
       time: timeController.text,
       date: dueDateController.text,
       numDate: tmp,
+      userId: appController.state.profile.value!.id,
     );
 
     log(data.toString());
@@ -98,7 +101,7 @@ class ReminderController extends GetxController {
   Future<void> fetchPrescriptions() async {
     try {
       QuerySnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection('prescriptions').get();
+          await FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: appController.state.profile.value!.id).get();
       prescriptionList.value =
           snapshot.docs.map((doc) => Prescription.fromFirestore(doc)).toList();
     } catch (e) {

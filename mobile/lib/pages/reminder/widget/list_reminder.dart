@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
 import 'package:health_for_all/pages/reminder/widget/info_reminder.dart';
 import 'package:health_for_all/pages/reminder/widget/switched_box.dart';
@@ -14,10 +15,11 @@ class ListReminder extends StatefulWidget {
 }
 
 class _ListReminderState extends State<ListReminder> {
+  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('reminders').snapshots(),
+        stream: FirebaseFirestore.instance.collection('reminders').where('userId', isEqualTo: appController.state.profile.value!.id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -292,9 +293,10 @@ class _AddReminderState extends State<AddReminder> {
   }
 
   Widget drop_alt1() {
+    final appController = Get.find<ApplicationController>();
     return StreamBuilder<QuerySnapshot>(
       stream:
-          FirebaseFirestore.instance.collection('prescriptions').snapshots(),
+          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: appController.state.profile.value!.id).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(

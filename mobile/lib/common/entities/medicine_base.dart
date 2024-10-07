@@ -5,12 +5,14 @@ class MedicineBase {
   String? name;
   String? description;
   List<String>? imageURL;
+  String? userId; // Added userId field
 
   MedicineBase({
     this.id,
     this.name,
     this.description,
     this.imageURL,
+    this.userId, // Add userId to the constructor
   });
 
   factory MedicineBase.fromFirestore(
@@ -24,6 +26,7 @@ class MedicineBase {
       imageURL: (data?['imageURL'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
+      userId: data?['userId'], // Fetch userId from Firestore
     );
   }
 
@@ -33,11 +36,12 @@ class MedicineBase {
       'name': name,
       'description': description,
       'imageURL': imageURL,
+      'userId': userId, // Add userId to the JSON map
     };
   }
 
   @override
   String toString() {
-    return 'MedicineBase{id: $id, name: $name, description: $description, imageURL: $imageURL}';
+    return 'MedicineBase{id: $id, name: $name, description: $description, imageURL: $imageURL, userId: $userId}';
   }
 }

@@ -9,7 +9,8 @@ class Reminder {
   List<String>? prescriptionId;
   String? time;
   String? date;
-  int? numDate; // New field for numDate
+  int? numDate; // Field for numDate
+  String? userId; // Changed from userID to userId
 
   Reminder({
     this.id,
@@ -21,6 +22,7 @@ class Reminder {
     this.time,
     this.date,
     this.numDate, // Include in constructor
+    this.userId, // Changed to userId in constructor
   });
 
   factory Reminder.fromFirestore(
@@ -43,6 +45,7 @@ class Reminder {
           ?.map((item) => item as String)
           .toList(),
       numDate: data?['numDate'] as int?, // Map numDate from Firestore
+      userId: data?['userId'], // Changed to userId from Firestore
     );
   }
 
@@ -57,11 +60,12 @@ class Reminder {
       'measureMedId': measureMedId, // Now a List<int>
       'prescriptionId': prescriptionId,
       'numDate': numDate, // Include numDate in JSON map
+      'userId': userId, // Changed to userId in JSON map
     };
   }
 
   @override
   String toString() {
-    return 'Reminder{id: $id, onDay: $onDay, name: $name, note: $note, measureMedId: $measureMedId, prescriptionId: $prescriptionId, time: $time, date: $date, numDate: $numDate}'; // Include numDate in toString
+    return 'Reminder{id: $id, onDay: $onDay, name: $name, note: $note, measureMedId: $measureMedId, prescriptionId: $prescriptionId, time: $time, date: $date, numDate: $numDate, userId: $userId}'; // Changed to userId in toString
   }
 }
