@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/add_typed_med.dart';
 import 'package:health_for_all/pages/choose_type_med/widget/edit_typed_med.dart';
 
@@ -18,7 +17,6 @@ class ChooseTypeMed extends StatefulWidget {
 
 class _ChooseTypeMedState extends State<ChooseTypeMed> {
   final medicineController = Get.find<ChooseTypeMedController>();
-  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +62,6 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('medicineBases')
-                        .where('userId', isEqualTo: appController.state.profile.value!.id)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
@@ -251,16 +248,6 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
-          // SizedBox(width: 6,),
-          // GestureDetector(
-          //   onTap: () {
-          //     medicineController.delMedicineBase(medicine.id!);
-          //   },
-          //   child: Icon(
-          //     Icons.clear_outlined,
-          //     color: Theme.of(context).colorScheme.error,
-          //   ),
-          // ),
         ],
       ),
     );

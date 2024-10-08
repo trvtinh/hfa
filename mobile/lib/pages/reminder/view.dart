@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
@@ -6,7 +5,7 @@ import 'package:health_for_all/pages/reminder/widget/add_reminder.dart';
 import 'package:health_for_all/pages/reminder/widget/list_reminder.dart';
 
 class ReminderPage extends GetView<AlarmController> {
-  const ReminderPage({super.key});
+  ReminderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,39 +51,29 @@ class ReminderPage extends GetView<AlarmController> {
     );
   }
 
+  int number_reminder = 4;
   Widget list_reminder(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('reminders').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-                child:
-                    CircularProgressIndicator()); // Show loading indicator while fetching
-          }
-
-          final len = snapshot.data!.docs.length;
-          return Column(
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          child: Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  children: [
-                    Text(
-                      "Danh sách nhắc nhở ($len)",
-                    ),
-                  ],
-                ),
+              Text(
+                "Danh sách nhắc nhở ($number_reminder)",
               ),
-              const Divider(
-                height: 1,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const ListReminder(),
             ],
-          );
-        });
+          ),
+        ),
+        const Divider(
+          height: 1,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        for (int i = 0; i < number_reminder; i++) ListReminder(index: i),
+      ],
+    );
   }
 
   Widget add_reminder(BuildContext context) {

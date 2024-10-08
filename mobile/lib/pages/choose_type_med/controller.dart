@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'state.dart';
@@ -13,7 +12,6 @@ class ChooseTypeMedController extends GetxController {
   final state = ChooseTypeMedState();
   final nameMedicine = TextEditingController();
   final description = TextEditingController();
-  final appController = Get.find<ApplicationController>();
   final RxList<XFile> selectedFiles = <XFile>[].obs;
   final RxList<String> selectedImagesURL = <String>[].obs;
 
@@ -38,12 +36,10 @@ class ChooseTypeMedController extends GetxController {
       name: name,
       description: desc,
       imageURL: selectedImagesURL,
-      userId: appController.state.profile.value!.id,
     );
     log(medicine.toString());
     try {
       await FirebaseApi.addDocument("medicineBases", medicine.toJson());
-      Get.back();
       Get.snackbar("Thành công", "Thêm thuốc thành công",
           backgroundColor: Colors.green);
     } catch (e) {
@@ -51,12 +47,6 @@ class ChooseTypeMedController extends GetxController {
       Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
           backgroundColor: Colors.red);
     }
-  }
-
-  Future delMedicineBase(
-    String documentId
-  ) async {
-    await FirebaseApi.deleteDocument("medicineBases", documentId);
   }
 
   void clearData() {

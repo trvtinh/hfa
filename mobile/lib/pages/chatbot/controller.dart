@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -144,20 +142,15 @@ class ChatbotController extends GetxController {
           content: value.text);
       state.chatList.insert(0, data.value);
     });
-    await FirebaseApi.addDocument('chatbots', data.value.toMap());
     scrollToEnd();
+    await FirebaseApi.addDocument('chatbots', data.value.toMap());
   }
 
   void scrollToEnd() {
-    if (scrollController.hasClients) {
-      final position = scrollController.position;
-      if (position.pixels >= position.maxScrollExtent - 50) {
-        scrollController.animateTo(
-          position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      }
-    }
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 }

@@ -1,21 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:image_picker/image_picker.dart'; // Import this package
 
-class Prescription {
+class Precription {
   String? id;
   List<String>? medicalIDs;
   String? assignId;
   String? patientId;
   String? name;
   String? note;
-  String? startDate;
-  String? endDate;
+  Timestamp? startDate;
+  Timestamp? endDate;
   List<String>? imageURL;
-  List<String>? medicineDose;
-  int? sumDose;
-  List<XFile>? files; // New field for List<XFile>
-
-  Prescription({
+  List<Map<String, dynamic>>? medicineDatas;
+  Precription({
     this.id,
     this.medicalIDs,
     this.assignId,
@@ -25,19 +21,16 @@ class Prescription {
     this.startDate,
     this.endDate,
     this.imageURL,
-    this.medicineDose,
-    this.sumDose,
-    this.files, // Include in the constructor
+    this.medicineDatas,
   });
 
-  factory Prescription.fromFirestore(
+  factory Precription.fromFirestore(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
   ) {
     final data = snapshot.data();
-    return Prescription(
-      id: snapshot.id,
+    return Precription(
+      id: data?['id'],
       patientId: data?['patientId'],
-      sumDose: data?['sumDose'],
       assignId: data?['assignId'],
       name: data?['name'],
       note: data?['note'],
@@ -46,13 +39,9 @@ class Prescription {
       imageURL: (data?['imageURL'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
-      medicalIDs: (data?['medicalIDs'] as List<dynamic>?)
-          ?.map((item) => item as String)
-          .toList(),
-      medicineDose: (data?['medicineDose'] as List<dynamic>?)
-          ?.map((item) => item as String)
-          .toList(),
-      files: (data?['files'] as List<dynamic>?)?.map((item) => XFile(item)).toList(), // Parse the new field
+      medicineDatas: data?['medicineDatas'] != null
+          ? List<Map<String, dynamic>>.from(data?['medicineDatas'])
+          : null,
     );
   }
 
@@ -66,15 +55,12 @@ class Prescription {
       'startDate': startDate,
       'endDate': endDate,
       'imageURL': imageURL,
-      'medicineDose': medicineDose,
-      'medicalIDs': medicalIDs,
-      'sumDose': sumDose,
-      'files': files?.map((file) => file.path).toList(), // Convert files to JSON (store file paths)
+      'medicineDatas': medicineDatas,
     };
   }
 
   @override
   String toString() {
-    return 'Prescription{id: $id, medicalIDs: $medicalIDs, assignId: $assignId, patientId: $patientId, name: $name, note: $note, startDate: $startDate, endDate: $endDate, imageURL: $imageURL, medicineDose: $medicineDose, sumDose: $sumDose, files: $files}'; // Include files in the string representation
+    return 'Prescription{id: $id, medicalIDs: $medicalIDs, assignId: $assignId, patientId: $patientId, name: $name, note: $note, startDate: $startDate, endDate: $endDate, imageURL: $imageURL, medicineDatas: $medicineDatas}';
   }
 }

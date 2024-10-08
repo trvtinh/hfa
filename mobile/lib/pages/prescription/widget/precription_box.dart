@@ -1,58 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/entities/medicine_base.dart';
-import 'package:health_for_all/common/entities/prescription.dart';
-import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/prescription/widget/edit_prescription.dart';
 import 'package:health_for_all/pages/prescription/widget/prescription_detail.dart';
-import 'package:intl/intl.dart';
 
 class PrescriptionBox extends StatefulWidget {
-  final Prescription detail;
-  final List<MedicineBase> med;
+  final String name;
+  final int num_type;
+  final int num_tablet;
   final int order;
+  final String start_date;
+  final String end_date;
 
-  const PrescriptionBox({
-    super.key,
-    required this.detail,
-    required this.med,
-    required this.order,
-  });
+  const PrescriptionBox(
+      {super.key,
+      required this.name,
+      required this.num_type,
+      required this.num_tablet,
+      required this.start_date,
+      required this.end_date,
+      required this.order});
 
   @override
   State<PrescriptionBox> createState() => _PrescriptionBoxState();
 }
 
 class _PrescriptionBoxState extends State<PrescriptionBox> {
-  final PrescriptionController prescriptionController =
-      Get.put(PrescriptionController());
-  DateTime convertStringtoTime(String date) {
-    DateFormat format = DateFormat('dd/MM/yyyy');
-    DateTime dateTime = format.parse(date);
-    return dateTime;
-  }
-
-  DateTime getYesterdayTimestamp() {
-    DateTime now = DateTime.now(); // Get the current date and time
-    DateTime yesterday = now.subtract(const Duration(days: 1)); // Subtract one day
-    return yesterday; // This returns the DateTime object for yesterday
-  }
-
-  bool compareTimestamps(DateTime timestamp1, DateTime timestamp2) {
-    return timestamp1
-        .isAfter(timestamp2); // true if timestamp1 is before timestamp2
-  }
-
   @override
   Widget build(BuildContext context) {
-    bool check = compareTimestamps(
-        convertStringtoTime(widget.detail.endDate!), getYesterdayTimestamp());
     return GestureDetector(
       onTap: () {
         Get.to(() => PrescriptionDetail(
-              detail: widget.detail,
-              med: widget.med,
+              name: widget.name,
               order: widget.order,
+              tablet: const ["Vitamin C", "Vitamin B1"],
+              sl_tablet: const [1, 1],
             ));
       },
       child: Column(
@@ -60,9 +41,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: check
-                  ? Theme.of(context).colorScheme.surfaceContainer
-                  : Theme.of(context).colorScheme.surfaceContainerHighest,
+              color: Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(18),
               boxShadow: const [
                 BoxShadow(
@@ -80,9 +59,7 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                   children: [
                     Icon(
                       Icons.medication_liquid_sharp,
-                      color: check
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.outline,
+                      color: Theme.of(context).colorScheme.primary,
                       size: 32,
                     ),
                     const SizedBox(
@@ -92,16 +69,14 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.detail.name!,
+                          widget.name,
                           style: TextStyle(
                             fontSize: 14,
-                            color: check
-                                ? Theme.of(context).colorScheme.onSurface
-                                : Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         Text(
-                          "${widget.med.length} loại thuốc, ${widget.detail.sumDose} viên",
+                          "${widget.num_type} loại thuốc, ${widget.num_tablet} viên",
                           style: TextStyle(
                             fontSize: 12,
                             color: Theme.of(context).colorScheme.outline,
@@ -117,20 +92,16 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Từ ngày:  ${widget.detail.startDate}",
+                          "Từ ngày:  ${widget.start_date}",
                           style: TextStyle(
-                            color: check
-                                ? Theme.of(context).colorScheme.onSurface
-                                : Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 12,
                           ),
                         ),
                         Text(
-                          "Tới ngày: ${widget.detail.endDate}",
+                          "Tới ngày: ${widget.end_date}",
                           style: TextStyle(
-                            color: check
-                                ? Theme.of(context).colorScheme.onSurface
-                                : Theme.of(context).colorScheme.outline,
+                            color: Theme.of(context).colorScheme.onSurface,
                             fontSize: 12,
                           ),
                         ),
@@ -139,11 +110,11 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {
-                        prescriptionController.delPrescription(widget.detail.id!);
+                        _showDialog(context);
                       },
-                      child: Icon(Icons.clear_outlined,
+                      child: Icon(Icons.border_color,
                           size: 20,
-                          color: Theme.of(context).colorScheme.error),
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                   ],
                 ),
@@ -155,6 +126,31 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
           ),
         ],
       ),
+    );
+  }
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          insetPadding: const EdgeInsets.all(10),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width - 70,
+            child: const SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(child: EditPrescription()),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

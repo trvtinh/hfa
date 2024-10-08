@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:health_for_all/common/API/item.dart';
-import 'package:health_for_all/common/entities/prescription.dart';
-import 'package:health_for_all/common/entities/reminder.dart';
-import 'package:health_for_all/pages/prescription/widget/prescription_detail.dart';
-import 'package:health_for_all/pages/reminder/controller.dart';
 
 class InfoReminder extends StatefulWidget {
-  final Reminder detail;
-  final List<Prescription> pre;
-  const InfoReminder({super.key, required this.detail, required this.pre});
+  final String name;
+  final String gio;
+  final String ngay;
+  final List<bool> choosen_day;
+  const InfoReminder(
+      {super.key,
+      required this.name,
+      required this.gio,
+      required this.ngay,
+      required this.choosen_day});
 
   @override
   State<InfoReminder> createState() => _InfoReminderState();
 }
 
 class _InfoReminderState extends State<InfoReminder> {
-  final ReminderController controller = Get.put(ReminderController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.detail.name!,
+          widget.name,
           style: TextStyle(
             fontSize: 22,
             color: Theme.of(context).colorScheme.onSurface,
@@ -63,7 +63,7 @@ class _InfoReminderState extends State<InfoReminder> {
           child: Row(
             children: [
               Text(
-                "Đo các loại dữ liệu y tế (${widget.detail.measureMedId!.length})",
+                "Đo các loại dữ liệu y tế (3)",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontSize: 14,
@@ -80,88 +80,85 @@ class _InfoReminderState extends State<InfoReminder> {
                     color: Theme.of(context).colorScheme.outlineVariant)),
             child: Column(
               children: [
-                for (int i = 0; i < widget.detail.measureMedId!.length; i++)
-                  data(
-                      Item.getTitle(widget.detail.measureMedId![i]),
-                      Item.getUnit(widget.detail.measureMedId![i]),
-                      Item.getIconPath(widget.detail.measureMedId![i]),
-                      "--",
-                      (i == widget.detail.measureMedId!.length - 1)),
+                data("Huyết áp", "mmHg",
+                    "assets/medical_data_Home_images/blood-pressure.png", "--"),
+                const Divider(
+                  height: 1,
+                ),
+                data("Nhịp tim", "lần/phút",
+                    "assets/medical_data_Home_images/heart-rate.png", "--"),
+                const Divider(
+                  height: 1,
+                ),
+                data("Đường huyết", "mg/dL",
+                    "assets/medical_data_Home_images/blood sugar.png", "--"),
               ],
             )),
       ],
     );
   }
 
-  Widget data(String name, String unit, String path, String index, bool last) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            children: [
-              Image.asset(
-                path,
-                height: 22,
-                width: 22,
+  Widget data(String name, String unit, String path, String index) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          Image.asset(
+            path,
+            height: 24,
+            width: 24,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Text(
+              name,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 16,
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Text(
-                  name,
+            ),
+          ),
+          SizedBox(
+            width: 45,
+            child: Column(
+              children: [
+                Text(
+                  index,
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 16,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontSize: 22,
                   ),
                 ),
-              ),
-              SizedBox(
-                width: 45,
-                child: Column(
-                  children: [
-                    Text(
-                      index,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        fontSize: 22,
-                      ),
-                    ),
-                    Text(
-                      unit,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
+                Text(
+                  unit,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: 11,
+                  ),
                 ),
-              ),
+              ],
+            ),
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          Row(
+            children: [
+              roundIcon(icon: Icons.edit_note_outlined),
               const SizedBox(
-                width: 40,
+                width: 8,
               ),
-              Row(
-                children: [
-                  roundIcon(icon: Icons.edit_note_outlined),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  roundIcon(icon: Icons.attach_file_outlined),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  roundIcon(icon: Icons.clear_outlined),
-                ],
+              roundIcon(icon: Icons.attach_file_outlined),
+              const SizedBox(
+                width: 8,
               ),
+              roundIcon(icon: Icons.clear_outlined),
             ],
           ),
-        ),
-        if (!last)
-          Divider(
-            height: 1,
-          ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -190,7 +187,7 @@ class _InfoReminderState extends State<InfoReminder> {
           child: Row(
             children: [
               Text(
-                "Uống thuốc (${widget.detail.prescriptionId!.length})",
+                "Uống thuốc (1)",
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontSize: 14,
@@ -203,102 +200,14 @@ class _InfoReminderState extends State<InfoReminder> {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(4),
-            border:
-                Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           ),
-          child: Column(
-            children: [
-              for (int i = 0; i < widget.pre.length; i++)
-                prescriptionData(
-                    widget.pre[i], (i == widget.pre.length - 1), i + 1),
-            ],
-          ),
+          child: _buildDialogTextField(TextEditingController(),
+              icon1: Icons.medication_liquid_sharp, icon2: Icons.open_in_new),
         ),
         const SizedBox(
           height: 8,
         ),
       ],
-    );
-  }
-
-  Widget prescriptionData(Prescription data, bool last, int index) {
-    return FutureBuilder(
-      future: controller.getMed(data.medicalIDs!),
-      builder: (context, medicineSnapshot) {
-        if (medicineSnapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        }
-        if (medicineSnapshot.hasError) {
-          return const Text('Có lỗi xảy ra khi lấy dữ liệu thuốc');
-        }
-        if (!medicineSnapshot.hasData || medicineSnapshot.data!.isEmpty) {
-          return const Text('Không có dữ liệu thuốc');
-        }
-
-        final medicineBases = medicineSnapshot.data!;
-        return Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.medication_liquid_sharp,
-                          size: 24,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data.name!,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                            ),
-                            Text(
-                              "${data.medicalIDs!.length} loại thuốc, ${data.sumDose} viên",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Theme.of(context).colorScheme.outline,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(() => PrescriptionDetail(
-                          detail: data, med: medicineBases, order: index));
-                    },
-                    child: Icon(
-                      Icons.open_in_new_outlined,
-                      color: Theme.of(context).colorScheme.secondary,
-                      size: 18.5,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            if (!last)
-              Divider(
-                height: 1,
-              ),
-          ],
-        );
-      },
     );
   }
 
@@ -324,8 +233,7 @@ class _InfoReminderState extends State<InfoReminder> {
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(4),
           ),
-          child: _buildDialogTextField(
-              TextEditingController(text: widget.detail.note),
+          child: _buildDialogTextField(TextEditingController(),
               icon1: Icons.edit_note),
         ),
         const SizedBox(
@@ -412,7 +320,7 @@ class _InfoReminderState extends State<InfoReminder> {
                   ),
                   Expanded(
                     child: Text(
-                      widget.detail.time!,
+                      widget.gio,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 22,
@@ -420,7 +328,7 @@ class _InfoReminderState extends State<InfoReminder> {
                     ),
                   ),
                   Text(
-                    "Hết hạn: ${widget.detail.date}",
+                    "Hết hạn: ${widget.ngay}",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurface,
                       fontSize: 14,
@@ -434,12 +342,38 @@ class _InfoReminderState extends State<InfoReminder> {
                   children: [
                     Row(
                       children: [
-                        for (int i = 0; i < 4; i++) choice(i),
+                        choice("T2"),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        choice("T3"),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        choice("T4"),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        choice("T5"),
+                        const SizedBox(
+                          width: 4,
+                        ),
                       ],
                     ),
                     Row(
                       children: [
-                        for (int i = 4; i < 7; i++) choice(i),
+                        choice("T6"),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        choice("T7"),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        choice("CN"),
+                        const SizedBox(
+                          width: 4,
+                        ),
                       ],
                     ),
                   ],
@@ -455,29 +389,31 @@ class _InfoReminderState extends State<InfoReminder> {
     );
   }
 
-  Widget choice(int index) {
-    bool isSelected = widget.detail.onDay![index];
+  final List<String> _selectedChoices = [];
+  Widget choice(String name) {
+    bool isSelected = _selectedChoices.contains(name);
 
-    return Row(
-      children: [
-        SizedBox(
-          width: 4,
-        ),
-        SizedBox(
-          width: (MediaQuery.sizeOf(context).width - 3) / 5,
-          child: ChoiceChip(
-            label: Text(
-              ReminderController().nameDate[index],
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
-            ),
-            selected: isSelected,
-            selectedColor: Theme.of(context).colorScheme.secondaryContainer,
-            onSelected: (bool selected) {},
+    return SizedBox(
+      width: (MediaQuery.sizeOf(context).width - 3) / 5,
+      child: ChoiceChip(
+        label: Text(
+          name,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ),
-      ],
+        selected: isSelected,
+        selectedColor: Theme.of(context).colorScheme.secondaryContainer,
+        onSelected: (bool selected) {
+          setState(() {
+            if (selected) {
+              _selectedChoices.add(name);
+            } else {
+              _selectedChoices.remove(name);
+            }
+          });
+        },
+      ),
     );
   }
 }

@@ -94,7 +94,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
         maxLines: maxLines ?? 1,
         decoration: InputDecoration(
           labelText: label,
-          hintText: hint, 
+          hintText: hint,
           hintStyle: TextStyle(
             color: Theme.of(context).colorScheme.outline,
             fontSize: 16,
@@ -127,7 +127,11 @@ class _AddTypedMedState extends State<AddTypedMed> {
           onPressed: () async {
             try {
               await medicineController.addMedicineBase();
-              medicineController.clearData();
+              Future.delayed(const Duration(seconds: 1), () {
+                medicineController.clearData();
+                Get.back();
+                Get.back();
+              });
             } catch (e) {
               log(e.toString());
               Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",

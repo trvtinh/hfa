@@ -69,7 +69,7 @@ class OverallMedicalDataHistoryController extends GetxController {
           time: Timestamp.fromDate(DateTime.now()),
           medicalId: state.medicalId.value);
       log(comment.toString());
-      await FirebaseApi.addDocument('comments', comment.toJson());
+      await FirebaseApi.addDocument('comments', comment.toFirestore());
     } catch (e) {
       showDialog(
         context: context,
@@ -92,13 +92,13 @@ class OverallMedicalDataHistoryController extends GetxController {
   }
 
   Future getAllCommentByMedicalType() async {
-    state.commentList.clear();
+    state.commmentList.clear();
     final snapshot = await FirebaseApi.getQuerySnapshot(
         'comments', 'medicalId', state.medicalId.value);
     if (snapshot.docs.isNotEmpty) {
       for (var doc in snapshot.docs) {
         final comment = Comment.fromFirestore(doc);
-        state.commentList.add(comment);
+        state.commmentList.add(comment);
       }
     }
   }
@@ -422,12 +422,6 @@ class OverallMedicalDataHistoryController extends GetxController {
       print('Error fetching latest event in day $date: $e');
       return null;
     }
-  }
-
-  Future delComment(
-    String documentId
-  ) async {
-    await FirebaseApi.deleteDocument("comments", documentId);
   }
 
   Future fetchEventsInDay(DateTime date, String value, int? limit) async {

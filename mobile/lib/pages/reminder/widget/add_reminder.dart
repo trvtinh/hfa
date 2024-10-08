@@ -1,13 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/API/item.dart';
-import 'package:health_for_all/common/entities/prescription.dart';
-import 'package:health_for_all/pages/application/controller.dart';
-import 'package:health_for_all/pages/reminder/controller.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
-import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 class AddReminder extends StatefulWidget {
   const AddReminder({super.key});
@@ -17,8 +10,6 @@ class AddReminder extends StatefulWidget {
 }
 
 class _AddReminderState extends State<AddReminder> {
-  final ReminderController reminderController = Get.put(ReminderController());
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -81,21 +72,43 @@ class _AddReminderState extends State<AddReminder> {
           const SizedBox(
             height: 24,
           ),
-          Row(
+          Wrap(
             children: [
-              for (int i = 0; i < 4; i++) choice(i),
-            ],
-          ),
-          Row(
-            children: [
-              for (int i = 4; i < 7; i++) choice(i),
+              choice("T2"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T3"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T4"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T5"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T6"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("T7"),
+              const SizedBox(
+                width: 4,
+              ),
+              choice("CN"),
+              const SizedBox(
+                width: 4,
+              ),
             ],
           ),
           const SizedBox(
             height: 24,
           ),
-          _buildDialogTextField("Tên nhắc nhở", "Tên nhăc nhở",
-              reminderController.nameController),
+          _buildDialogTextField(
+              "Tên nhắc nhở", "Tên nhăc nhở", TextEditingController()),
           const SizedBox(
             height: 24,
           ),
@@ -107,8 +120,7 @@ class _AddReminderState extends State<AddReminder> {
           const SizedBox(
             height: 24,
           ),
-          _buildDialogTextField(
-              "Ghi chú", "Ghi chú", reminderController.noteController),
+          _buildDialogTextField("Mô tả", "Mô tả", TextEditingController()),
           const SizedBox(
             height: 50,
           ),
@@ -121,7 +133,6 @@ class _AddReminderState extends State<AddReminder> {
                   backgroundColor: Colors.transparent,
                 ),
                 onPressed: () {
-                  reminderController.clearData();
                   Get.back();
                 },
                 child: Text(
@@ -138,8 +149,6 @@ class _AddReminderState extends State<AddReminder> {
                   backgroundColor: Colors.transparent,
                 ),
                 onPressed: () {
-                  reminderController.addReminder();
-                  reminderController.clearData();
                   Get.back();
                 },
                 child: Text(
@@ -177,80 +186,67 @@ class _AddReminderState extends State<AddReminder> {
     );
   }
 
-  Widget choice(int index) {
-    bool isSelected = reminderController.onDate[index];
+  final List<String> _selectedChoices = [];
+  Widget choice(String name) {
+    bool isSelected = _selectedChoices.contains(name);
 
-    return Row(
-      children: [
-        const SizedBox(
-          width: 4,
-        ),
-        SizedBox(
-          width: (MediaQuery.sizeOf(context).width - 3) / 5,
-          child: ChoiceChip(
-            label: Text(
-              reminderController.nameDate[index],
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
-            ),
-            selected: isSelected,
-            selectedColor: Theme.of(context).colorScheme.secondaryContainer,
-            onSelected: (bool selected) {
-              setState(() {
-                reminderController.onDate[index] =
-                    !reminderController.onDate[index];
-              });
-            },
+    return SizedBox(
+      width: (MediaQuery.sizeOf(context).width - 3) / 5,
+      child: ChoiceChip(
+        label: Text(
+          name,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
         ),
-      ],
+        selected: isSelected,
+        selectedColor: Theme.of(context).colorScheme.secondaryContainer,
+        onSelected: (bool selected) {
+          setState(() {
+            if (selected) {
+              _selectedChoices.add(name);
+            } else {
+              _selectedChoices.remove(name);
+            }
+          });
+        },
+      ),
     );
   }
 
   Widget date_time() {
-    return Row(
-      children: [
-        _buildDateTimeField(
-          context,
-          'Thời gian',
-          Icons.access_time,
-          reminderController.timeController,
-          isTimeField: true, // This is for the time picker
-          width: (MediaQuery.of(context).size.width - 80) / 2,
-        ),
-        const SizedBox(
-          width: 12,
-        ),
-        _buildDateTimeField(
-          context,
-          'Ngày hết hạn',
-          Icons.today,
-          reminderController.dueDateController,
-          width: (MediaQuery.of(context).size.width - 80) / 2,
-        ),
-      ],
+    return Container(
+      child: Row(
+        children: [
+          _buildDateTimeField(
+            context,
+            'Thời gian',
+            Icons.today,
+            selectDate,
+            TextEditingController(),
+            width: (MediaQuery.of(context).size.width - 80) / 2,
+          ),
+          const SizedBox(
+            width: 12,
+          ),
+          _buildDateTimeField(
+            context,
+            'Ngày hết hạn',
+            Icons.today,
+            selectDate,
+            TextEditingController(),
+            width: (MediaQuery.of(context).size.width - 80) / 2,
+          ),
+        ],
+      ),
     );
   }
 
-  Future<void> selectTime(
-      BuildContext context, TextEditingController controller) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (picked != null) {
-      final formattedTime = picked.format(context);
-      controller.text = formattedTime;
-    }
-  }
-
+  final dateController = TextEditingController();
   DateTime datetime = DateTime.now();
 
   // Replace this with your actual method to select date
-  Future<void> selectDate(
-      BuildContext context, TextEditingController controller) async {
+  Future<void> selectDate(BuildContext context) async {
     final selectedDate = await showDatePicker(
       context: context,
       initialDate: datetime,
@@ -259,17 +255,19 @@ class _AddReminderState extends State<AddReminder> {
     );
 
     if (selectedDate != null) {
-      setState(() {
-        datetime = selectedDate;
-        final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
-        controller.text = formattedDate; // Update the respective controller
-      });
+      datetime = selectedDate;
+      final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
+      dateController.text = formattedDate;
     }
   }
 
-  Widget _buildDateTimeField(BuildContext context, String label, IconData icon,
+  Widget _buildDateTimeField(
+      BuildContext context,
+      String label,
+      IconData icon,
+      Future<void> Function(BuildContext) onTap,
       TextEditingController controller,
-      {required double width, bool isTimeField = false}) {
+      {required double width}) {
     return SizedBox(
       width: width,
       child: TextField(
@@ -281,95 +279,72 @@ class _AddReminderState extends State<AddReminder> {
           labelText: label,
         ),
         readOnly: true,
-        onTap: () {
-          if (isTimeField) {
-            selectTime(context, controller); // Show time picker
-          } else {
-            selectDate(context, controller); // Show date picker
-          }
-        },
+        onTap: () => onTap(context),
       ),
     );
   }
 
+  String dropdownValue = 'Loại dữ liệu';
+
+  List<String> list1 = <String>[
+    "Loại dữ liệu",
+    "1 loại dữ liệu",
+    "2 loại dữ liệu",
+    "3 loại dữ liệu",
+    "4 loại dữ liệu",
+    "5 loại dữ liệu",
+    "6 loại dữ liệu",
+    "7 loại dữ liệu",
+  ];
+
   Widget drop_alt1() {
-    final appController = Get.find<ApplicationController>();
-    return StreamBuilder<QuerySnapshot>(
-      stream:
-          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: appController.state.profile.value!.id).snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(
-              child:
-                  CircularProgressIndicator()); // Show loading indicator while fetching
-        }
-
-        final prescriptions = snapshot.data!.docs
-            .map((doc) => Prescription.fromFirestore(
-                doc as DocumentSnapshot<Map<String, dynamic>>))
-            .toList();
-
-        reminderController.prescriptionList.value = prescriptions;
-
-        return Obx(() => Column(
-          children: [
-            MultiSelectDialogField(
-              items: prescriptions
-                  .map((prescription) => MultiSelectItem<Prescription>(
-                      prescription, prescription.name!))
-                  .toList(),
-              title: const Text("Chọn đơn thuốc"),
-              selectedColor: Colors.blue,
-              buttonText: Text(
-                reminderController.selectedPrescriptions.isEmpty
-                    ? "Chưa có đơn thuốc nào được chọn"
-                    : "${reminderController.selectedPrescriptions.length} đơn thuốc đã được chọn",
-              ),
-              onConfirm: (values) {
-                reminderController.selectedPrescriptions.value =
-                    values.cast<Prescription>();
-              },
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
-              ),
-            ),
-          ],
-        ));
-      },
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width - 32,
+      child: DropdownMenu(
+        width: MediaQuery.sizeOf(context).width - 32,
+        label: const Text("Nhắc nhở các loại dữ liệu y tế"),
+        initialSelection: dropdownValue,
+        onSelected: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        dropdownMenuEntries:
+            list1.map<DropdownMenuEntry<String>>((String value) {
+          return DropdownMenuEntry<String>(value: value, label: value);
+        }).toList(),
+      ),
     );
   }
 
+  List<String> list2 = <String>[
+    "Loại dữ liệu",
+    "1 đơn thuốc",
+    "2 đơn thuốc",
+    "3 đơn thuốc",
+    "4 đơn thuốc",
+    "5 đơn thuốc",
+    "6 đơn thuốc",
+    "7 đơn thuốc",
+  ];
+
   Widget drop_alt2() {
-    reminderController.fetchMedicalData();
-    return Column(
-      children: [
-        MultiSelectDialogField(
-          items: reminderController.medDataList
-              .map((med) => MultiSelectItem<int>(med, Item.getTitle(med)))
-              .toList(),
-          title: const Text("Chọn loại dữ liệu y tế"),
-          selectedColor: Colors.blue,
-          buttonText: Text(
-            reminderController.selectedMedData.isEmpty
-                ? "Chưa có dữ liệu y tế nào được chọn"
-                : "${reminderController.selectedMedData.length} dữ liệu y tế đã được chọn",
-          ),
-          onConfirm: (values) {
-            setState(() {
-              reminderController.selectedMedData = values.cast<int>();
-            });
-          },
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            border: Border.all(
-              color: Theme.of(context).colorScheme.outline,
-            ),
-          ),
-        ),
-      ],
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width - 32,
+      child: DropdownMenu(
+        label: const Text("Nhắc nhở các đơn thuốc"),
+        width: MediaQuery.sizeOf(context).width - 32,
+        initialSelection: dropdownValue,
+        onSelected: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+          });
+        },
+        dropdownMenuEntries:
+            list2.map<DropdownMenuEntry<String>>((String value) {
+          return DropdownMenuEntry<String>(value: value, label: value);
+        }).toList(),
+      ),
     );
   }
 }
