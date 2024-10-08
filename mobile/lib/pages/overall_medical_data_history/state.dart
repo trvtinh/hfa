@@ -9,7 +9,7 @@ class OverrallMedicalDataHistoryState {
   RxMap<DateTime, List<MedicalEntity>> history =
       <DateTime, List<MedicalEntity>>{}.obs;
   List<String> dataType = [];
-  RxList<Comment> commmentList = <Comment>[].obs;
+  RxList<Comment> commentList = <Comment>[].obs;
   RxList<Diagnostic> diagnosticList = <Diagnostic>[].obs;
   RxInt diagnosticCount = 0.obs;
   RxString medicalId = ''.obs;

@@ -135,7 +135,7 @@ class _AddFileState extends State<AddFile> {
     } else {
       return ConstrainedBox(
         constraints: const BoxConstraints(
-          maxHeight: 200, // Adjust this value based on your layout needs
+          maxHeight: 50, // Adjust this value based on your layout needs
         ),
         child: ListView.builder(
           itemCount: selectedFiles.length,
@@ -149,44 +149,40 @@ class _AddFileState extends State<AddFile> {
   }
 
   Widget _buildFileItem(XFile file) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.primaryContainer,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              _getFileIcon(file),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                file.name,
-                style: TextStyle(
-                  overflow: TextOverflow.ellipsis,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.w500,
-                ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Theme.of(context).colorScheme.primaryContainer,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            _getFileIcon(file),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              file.name,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
-              onPressed: () {
-                setState(() {
-                  selectedFiles.remove(file);
-                  widget.onFilesChanged
-                      ?.call(selectedFiles); // Notify parent about changes
-                });
-              },
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close),
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
+            onPressed: () {
+              setState(() {
+                selectedFiles.remove(file);
+                widget.onFilesChanged
+                    ?.call(selectedFiles); // Notify parent about changes
+              });
+            },
+          ),
+        ],
       ),
     );
   }
