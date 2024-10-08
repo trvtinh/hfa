@@ -27,7 +27,7 @@ class _SeenPageState extends State<SeenPage> {
               unit: Seen.titles[index][0],
               notification: Seen.notifications[index],
               isImportant: Seen.isImportant[index],
-              attachments: Seen.attachments[index],
+              attachments: 1,
               isAttached: Seen.isAttached[index],
               isExpanded: false.obs,
               index: index,

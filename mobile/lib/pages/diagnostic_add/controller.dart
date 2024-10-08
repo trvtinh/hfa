@@ -37,6 +37,7 @@ class DiagnosticAddController extends GetxController {
       toUId: toUId,
       medicalId: medicalId,
       imageURL: selectedImagesURL,
+      tap: 'unread',
     );
     final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
     return docId;
