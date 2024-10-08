@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:health_for_all/common/entities/comment.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/alert_screen.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/comment_screen.dart';
@@ -31,6 +32,35 @@ class OverallMedicalDataHistoryController extends GetxController {
     length++;
   }
 
+  RxList<UserData> listFollower = <UserData>[].obs;
+
+  void fetchData(List<String> id) async {
+    listFollower.clear();
+    try {
+      // Call getData and await the result
+      listFollower = await getData(id);
+      print(listFollower.length);
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
+  Future<RxList<UserData>> getData(List<String> id) async {
+    RxList<UserData> users = <UserData>[].obs;
+    final db = FirebaseFirestore.instance;
+
+    for (String userId in id) {
+      final querySnapshot =
+          await db.collection("users").where('id', isEqualTo: userId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        final docSnapshot = await querySnapshot.docs.first.reference.get();
+        final userData = UserData.fromFirestore(docSnapshot, null);
+        users.add(userData);
+      }
+    }
+    return users;
+  }
+
   Future addComment(BuildContext context) async {
     try {
       final comment = Comment(
@@ -39,7 +69,7 @@ class OverallMedicalDataHistoryController extends GetxController {
           time: Timestamp.fromDate(DateTime.now()),
           medicalId: state.medicalId.value);
       log(comment.toString());
-      await FirebaseApi.addDocument('comments', comment.toJson());
+      await FirebaseApi.addDocument('comments', comment.toFirestore());
     } catch (e) {
       showDialog(
         context: context,
@@ -62,13 +92,13 @@ class OverallMedicalDataHistoryController extends GetxController {
   }
 
   Future getAllCommentByMedicalType() async {
-    state.commentList.clear();
+    state.commmentList.clear();
     final snapshot = await FirebaseApi.getQuerySnapshot(
         'comments', 'medicalId', state.medicalId.value);
     if (snapshot.docs.isNotEmpty) {
       for (var doc in snapshot.docs) {
         final comment = Comment.fromFirestore(doc);
-        state.commentList.add(comment);
+        state.commmentList.add(comment);
       }
     }
   }
@@ -173,7 +203,7 @@ class OverallMedicalDataHistoryController extends GetxController {
                             tabs: [
                               Tab(text: 'Chi tiết'),
                               Tab(text: 'Bình luận'),
-                              Tab(text: 'Chuẩn đoán'),
+                              Tab(text: 'Chẩn đoán'),
                               Tab(text: 'Cảnh báo'),
                             ],
                             labelStyle: TextStyle(
@@ -392,12 +422,6 @@ class OverallMedicalDataHistoryController extends GetxController {
       print('Error fetching latest event in day $date: $e');
       return null;
     }
-  }
-
-  Future delComment(
-    String documentId
-  ) async {
-    await FirebaseApi.deleteDocument("comments", documentId);
   }
 
   Future fetchEventsInDay(DateTime date, String value, int? limit) async {

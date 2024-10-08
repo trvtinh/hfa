@@ -19,6 +19,10 @@ class TypeMedHistoryController extends GetxController {
   Rx<DateTime> rangeStart = DateTime.now().obs;
   Rx<DateTime> rangeEnd = DateTime.now().obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
   Future getAllCommentByMedicalType(String medicalId) async {
     final snapshot =

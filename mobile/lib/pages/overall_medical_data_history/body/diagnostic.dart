@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 
@@ -10,6 +12,7 @@ class DiagnosticScreen extends StatelessWidget {
   DiagnosticScreen({super.key});
 
   final controller = Get.find<OverallMedicalDataHistoryController>();
+  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -95,9 +98,11 @@ class DiagnosticScreen extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
             onTap: () {
-              Get.to(() => DiagnosticAddView(
-                  user: controller.state.selectedUser.value,
-                  medicalData: controller.state.selectedData.value));
+              controller
+                  .fetchData(appController.state.profile.value!.relatives!);
+              Get.to(() => Obx(() => DiagnosticAddView(
+                  listUser: controller.listFollower,
+                  medicalData: controller.state.selectedData.value)));
             },
             child: Container(
               color: Colors.transparent,
@@ -114,7 +119,7 @@ class DiagnosticScreen extends StatelessWidget {
                     width: 16,
                   ),
                   Text(
-                    "Thêm chuẩn đoán",
+                    "Thêm chẩn đoán",
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),

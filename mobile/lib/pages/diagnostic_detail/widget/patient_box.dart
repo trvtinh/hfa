@@ -28,15 +28,17 @@ class PatientBoxState extends State<PatientBox> {
       width: 380,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(width: 1),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.3),
-              spreadRadius: 1,
-              blurRadius: 2,
-            )
-          ]),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+            color: Theme.of(context).colorScheme.outlineVariant, width: 1),
+        // boxShadow: const [
+        //   BoxShadow(
+        //     color: Color.fromRGBO(0, 0, 0, 0.3),
+        //     spreadRadius: 1,
+        //     blurRadius: 2,
+        //   )
+        // ],
+      ),
       child: Row(
         children: [
           CircleAvatar(
@@ -92,15 +94,15 @@ class PatientBoxState extends State<PatientBox> {
             ),
           ),
           const SizedBox(
-            width: 12,
+            width: 10,
           ),
           SizedBox(
-            width: 146,
+            width: 125,
             height: 52,
             child: Column(
               children: [
                 Container(
-                  width: 120,
+                  width: 100,
                   height: 24,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),

@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/data_box.dart';
@@ -22,6 +24,10 @@ class DiagnosticAddController extends GetxController {
   final RxList<XFile> selectedFiles = <XFile>[].obs;
   final RxList<String> selectedImagesURL = <String>[].obs;
   static int length = 5;
+  Rxn<UserData> chosenuser = Rxn<UserData>();
+  Rxn<List<MedicalEntity>> chosenmedical = Rxn<List<MedicalEntity>>();
+  // Dữ liệu fix cứng do chưa thể tạo List medical Data
+  final List<bool> checkboxStates = List.filled(10, false);
 
   Future addDiagnostic(String medicalId, String toUId) async {
     final data = Diagnostic(
@@ -31,6 +37,7 @@ class DiagnosticAddController extends GetxController {
       toUId: toUId,
       medicalId: medicalId,
       imageURL: selectedImagesURL,
+      tap: 'unread',
     );
     final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
     return docId;
@@ -103,6 +110,10 @@ class DiagnosticAddController extends GetxController {
       updateTimestamp(); // Cập nhật timestamp
     }
   }
+
+  // Future<void> updatechosenuser(UserData x) async {
+  //   chosenuser = x;
+  // }
 
   Timestamp updateTimestamp() {
     final updatedDateTime = DateTime(
