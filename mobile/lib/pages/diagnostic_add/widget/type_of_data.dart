@@ -88,39 +88,39 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                         ),
                       ),
                     ),
-                    diagnosticAddController.chosenmedical.value!.isEmpty == true
-                        ? SizedBox(
-                            height: 40,
-                            child: Text(
-                              "chưa chọn",
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondaryFixedDim,
-                              ),
-                            ),
-                          )
-                        : Column(
-                            children: [
-                              for (int i = 0;
-                                  i <
-                                      diagnosticAddController
-                                          .chosenmedical.value!.length;
-                                  i++)
-                                ViewDataBox(
-                                    leadingiconpath: Item.getIconPath(int.parse(
-                                        diagnosticAddController
-                                            .chosenmedical.value![i].typeId!)),
-                                    title: Item.getTitle(int.parse(
-                                        diagnosticAddController
-                                            .chosenmedical.value![i].typeId!)),
-                                    value: diagnosticAddController
-                                        .chosenmedical.value![i].value!,
-                                    unit: Item.getUnit(int.parse(diagnosticAddController.chosenmedical.value![i].typeId!)),
-                                    noteController: controller.noteController,
-                                    time: DatetimeChange.getHourString(diagnosticAddController.chosenmedical.value![i].time!.toDate())),
-                            ],
-                          ),
+                    // diagnosticAddController.chosenmedical.value!.isEmpty == true
+                    //     ? SizedBox(
+                    //         height: 40,
+                    //         child: Text(
+                    //           "chưa chọn",
+                    //           style: TextStyle(
+                    //             color: Theme.of(context)
+                    //                 .colorScheme
+                    //                 .secondaryFixedDim,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : Column(
+                    //         children: [
+                    //           for (int i = 0;
+                    //               i <
+                    //                   diagnosticAddController
+                    //                       .chosenmedical.value!.length;
+                    //               i++)
+                    //             ViewDataBox(
+                    //                 leadingiconpath: Item.getIconPath(int.parse(
+                    //                     diagnosticAddController
+                    //                         .chosenmedical.value![i].typeId!)),
+                    //                 title: Item.getTitle(int.parse(
+                    //                     diagnosticAddController
+                    //                         .chosenmedical.value![i].typeId!)),
+                    //                 value: diagnosticAddController
+                    //                     .chosenmedical.value![i].value!,
+                    //                 unit: Item.getUnit(int.parse(diagnosticAddController.chosenmedical.value![i].typeId!)),
+                    //                 noteController: controller.noteController,
+                    //                 time: DatetimeChange.getHourString(diagnosticAddController.chosenmedical.value![i].time!.toDate())),
+                    //         ],
+                    //       ),
 
                     // for(int i=0; i<tapped.length; i++){
                     //   if(tapped[i].value == true){
