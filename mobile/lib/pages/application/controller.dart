@@ -10,9 +10,12 @@ import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
+import 'package:health_for_all/pages/chatbot/controller.dart';
+import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
+import 'package:health_for_all/pages/reminder/controller.dart';
 import 'index.dart';
 
 import 'package:get/get.dart';
@@ -27,7 +30,10 @@ class ApplicationController extends GetxController {
   final notificationController = Get.find<NotificationController>();
   final diagnosticController = Get.find<DiagnosticController>();
   final prescriptionController = Get.find<PrescriptionController>();
-  final AlarmController alarmController = Get.find<AlarmController>();
+  final chatBotController  = Get.find<ChatbotController>();
+  final alarmController = Get.find<AlarmController>();
+  final chooseMedController = Get.find<ChooseTypeMedController>();
+  final reminderController = Get.find<ReminderController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -128,6 +134,9 @@ class ApplicationController extends GetxController {
     diagnosticController.state.profile.value = state.profile.value;
     alarmController.state.profile.value = state.profile.value;
     prescriptionController.state.profile.value = state.profile.value;
+    chatBotController.state.profile.value = state.profile.value;
+    chooseMedController.state.profile.value = state.profile.value;
+    reminderController.state.profile.value = state.profile.value;
     notificationController.fetchNotificationCounts();
     diagnosticController.fetchDiagnosticNotifications();
     alarmController.getAlarmCount();

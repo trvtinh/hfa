@@ -299,6 +299,7 @@ class Homepage extends StatelessWidget {
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('prescriptions')
+                              .where('patientId', isEqualTo: appController.state.profile.value?.id)
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
@@ -347,6 +348,7 @@ class Homepage extends StatelessWidget {
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('reminders')
+                              .where('userId', isEqualTo: appController.state.profile.value?.id)
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
@@ -379,6 +381,7 @@ class Homepage extends StatelessWidget {
                           child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('alarms')
+                              .where('userId', isEqualTo: appController.state.profile.value?.id)
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {

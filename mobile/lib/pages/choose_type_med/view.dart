@@ -62,6 +62,7 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
                   StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection('medicineBases')
+                        .where('userId', isEqualTo: medicineController.state.profile.value?.id)
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {

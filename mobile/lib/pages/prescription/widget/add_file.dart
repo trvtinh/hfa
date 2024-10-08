@@ -135,7 +135,7 @@ class _AddFileState extends State<AddFile> {
     } else {
       return ConstrainedBox(
         constraints: const BoxConstraints(
-          maxHeight: 200, // Adjust this value based on your layout needs
+          maxHeight: 70,
         ),
         child: ListView.builder(
           itemCount: selectedFiles.length,

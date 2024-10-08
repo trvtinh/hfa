@@ -33,23 +33,25 @@ class _InfoReminderState extends State<InfoReminder> {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceContainer,
         ),
-        child: Column(
-          children: [
-            const Divider(
-              height: 1,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  timeDate(),
-                  detail(),
-                  drink(),
-                  measure(),
-                ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Divider(
+                height: 1,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    timeDate(),
+                    detail(),
+                    drink(),
+                    measure(),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

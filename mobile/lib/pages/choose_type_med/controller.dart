@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'state.dart';
@@ -14,6 +15,7 @@ class ChooseTypeMedController extends GetxController {
   final description = TextEditingController();
   final RxList<XFile> selectedFiles = <XFile>[].obs;
   final RxList<String> selectedImagesURL = <String>[].obs;
+  // final appController = Get.find<ApplicationController>();
 
   Future<void> addImage() async {
     for (var value in selectedFiles) {
@@ -27,6 +29,7 @@ class ChooseTypeMedController extends GetxController {
     log("addMedicineBase");
     final name = nameMedicine.text;
     final desc = description.text;
+    print(state.profile.value?.id);
     if (name.isEmpty) {
       Get.snackbar("Lỗi", "Điền đầy đủ thông tin", backgroundColor: Colors.red);
       return;
@@ -36,6 +39,8 @@ class ChooseTypeMedController extends GetxController {
       name: name,
       description: desc,
       imageURL: selectedImagesURL,
+      userId: state.profile.value?.id,
+      // userId: appController.state.profile.value!.id,
     );
     log(medicine.toString());
     try {

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
+import 'package:health_for_all/pages/reminder/controller.dart';
 import 'package:health_for_all/pages/reminder/widget/add_reminder.dart';
 import 'package:health_for_all/pages/reminder/widget/list_reminder.dart';
 
@@ -53,8 +54,9 @@ class ReminderPage extends GetView<AlarmController> {
   }
 
   Widget list_reminder(BuildContext context) {
+    final reminderController = Get.find<ReminderController>();
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('reminders').snapshots(),
+        stream: FirebaseFirestore.instance.collection('reminders').where('userId', isEqualTo: reminderController.state.profile.value?.id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(

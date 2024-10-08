@@ -80,6 +80,7 @@ class PrescriptionController extends GetxController {
       medicineDose: doses,
       sumDose: sumDose,
       files: selectedFiles,
+      patientId: state.profile.value?.id,
     );
 
     log(data.toString());
@@ -117,7 +118,7 @@ class PrescriptionController extends GetxController {
   Future<int> getPrescriptionLength() async {
     // Fetch the collection 'prescriptions' from Firestore
     QuerySnapshot snapshot =
-        await FirebaseFirestore.instance.collection('prescriptions').get();
+        await FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: state.profile.value?.id).get();
 
     // Return the number of documents
     return snapshot.docs.length;

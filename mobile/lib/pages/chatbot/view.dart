@@ -171,21 +171,9 @@ class ChatbotPage extends GetView<ChatbotController> {
                           margin: const EdgeInsets.only(left: 10, top: 5),
                           height: 35,
                           child: ElevatedButton(
-                            child: const Text("Gửi"),
+                            child: const Text("Xóa"),
                             onPressed: () async {
-                              if (controller.textController.text.isNotEmpty) {
-                                if (controller.state.image.value != null) {
-                                  await controller.sendImageWithMessage();
-                                } else {
-                                  await controller.sendMessage();
-                                }
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Xin hãy nhập tin nhắn."),
-                                  ),
-                                );
-                              }
+                              controller.deleteChatHistoryFromFirestore();
                             },
                           ),
                         ),

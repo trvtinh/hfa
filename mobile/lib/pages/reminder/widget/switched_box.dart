@@ -124,7 +124,7 @@ class _SwitchedBoxState extends State<SwitchedBox> {
                       Row(
                         children: [
                           for (int i = 0; i < 7; i++)
-                            if (widget.onDate[i])
+                            if (!widget.onDate[i])
                               Row(
                                 children: [
                                   Text(

@@ -42,24 +42,26 @@ class _PrescriptionDetailState extends State<PrescriptionDetail> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          const Divider(
-            height: 1,
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                name_prescription(),
-                list_tablet(),
-                time(),
-                file(),
-                note(),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Divider(
+              height: 1,
             ),
-          ),
-        ],
+            Container(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  name_prescription(),
+                  list_tablet(),
+                  time(),
+                  file(),
+                  note(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
