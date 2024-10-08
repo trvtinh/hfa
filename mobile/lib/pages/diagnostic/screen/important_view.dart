@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/diagnostic/information.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
 
 class ImportantPage extends StatefulWidget {
@@ -10,72 +11,6 @@ class ImportantPage extends StatefulWidget {
 }
 
 class _ImportantPageState extends State<ImportantPage> {
-  final List<String> notifications = [
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
-  ];
-
-  final List<String> doctors = [
-    'Nguyễn Văn A',
-    'Nguyễn Thị B',
-    'Trần Văn C',
-    'Lê Thị D',
-    'Đặng Văn E'
-  ];
-
-  final List<String> timeDate = [
-    '06:00, 29/07/2024',
-    '06:00, 29/07/2024',
-    '06:00, 29/07/2024',
-    '06:00, 29/07/2024',
-    '06:00, 29/07/2024',
-  ];
-
-  final List<String> attachments = ['1', '2', '0', '0', '3'];
-  final List<bool> isAttached = [true, true, false, false, true];
-  final List<RxBool> isImportant = [
-    true.obs,
-    true.obs,
-    true.obs,
-    true.obs,
-    true.obs,
-  ].obs;
-
-  final List<List<String>> titles = [
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-  ];
-
-  final List<List<String>> times = [
-    ['09:00', '09:00', '09:00'],
-    ['09:00', '09:00', '09:00'],
-    ['09:00', '09:00', '09:00'],
-    ['09:00', '09:00', '09:00'],
-    ['09:00', '09:00', '09:00'],
-  ];
-
-  final List<List<String>> values = [
-    ['120/80', '36', 'XN'],
-    ['120/80', '36', 'XN'],
-    ['120/80', '36', 'XN'],
-    ['120/80', '36', 'XN'],
-    ['120/80', '36', 'XN'],
-  ];
-
-  final List<List<String>> units = [
-    ['mmHg', '°C', '--'],
-    ['mmHg', '°C', '--'],
-    ['mmHg', '°C', '--'],
-    ['mmHg', '°C', '--'],
-    ['mmHg', '°C', '--'],
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,19 +18,21 @@ class _ImportantPageState extends State<ImportantPage> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          children: List.generate(doctors.length, (index) {
+          children: List.generate(Important.doctors.length, (index) {
             return animatedcontainer(
-                doctor: doctors[index],
-                time: timeDate[index],
-                title: titles[index][0],
-                value: values[index][0],
-                unit: units[index][0],
-                notification: notifications[index],
-                isImportant: isImportant[index],
-                attachments: attachments[index],
-                isAttached: isAttached[index],
-                isExpanded: false.obs,
-                index: index);
+              doctor: Important.doctors[index],
+              time: Important.timeDate[index],
+              title: Important.titles[index][0],
+              value: Important.values[index][0],
+              unit: Important.titles[index][0],
+              notification: Important.notifications[index],
+              isImportant: Important.isImportant[index],
+              attachments: Important.attachments[index],
+              isAttached: Important.isAttached[index],
+              isExpanded: false.obs,
+              index: index,
+              page: 2,
+            );
           }),
         ),
       ),
