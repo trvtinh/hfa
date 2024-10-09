@@ -18,7 +18,7 @@ class MedicineBase {
   ) {
     final data = snapshot.data();
     return MedicineBase(
-      id: data?['id'],
+      id: snapshot.id,
       name: data?['name'],
       description: data?['description'],
       imageURL: (data?['imageURL'] as List<dynamic>?)

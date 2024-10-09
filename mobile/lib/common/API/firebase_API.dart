@@ -33,6 +33,31 @@ class FirebaseApi {
     }
   }
 
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getDocumentSnapshotById(
+      String collection, String docId) async {
+    try {
+      final docSnapshot = await db.collection(collection).doc(docId).get();
+      if (docSnapshot.exists) {
+        return docSnapshot;
+      } else {
+        throw Exception('No document found with ID: $docId');
+      }
+    } catch (e) {
+      throw Exception('Error retrieving document snapshot: $e');
+    }
+  }
+
+  static Future updateDocument(
+      String collection, String documentId, Map<String, dynamic> data) async {
+    try {
+      final docRef = db.collection(collection).doc(documentId);
+      await docRef.update(data);
+      print('Document $documentId updated successfully in $collection.');
+    } catch (e) {
+      print('Error updating document: $e');
+    }
+  }
+
   static Future<void> deleteDocument(
       String collection, String documentId) async {
     try {
@@ -119,4 +144,15 @@ class FirebaseApi {
       return null;
     }
   }
+
+  // static Future updateDocument(
+  //     String collection, String documentId, Map<String, dynamic> data) async {
+  //   try {
+  //     final docRef = db.collection(collection).doc(documentId);
+  //     await docRef.update(data);
+  //     log('Document $documentId updated successfully in $collection.');
+  //   } catch (e) {
+  //     log('Error updating document: $e');
+  //   }
+  // }
 }

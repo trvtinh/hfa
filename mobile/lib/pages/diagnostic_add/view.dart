@@ -16,12 +16,12 @@ import 'package:image_picker/image_picker.dart';
 class DiagnosticAddView extends StatelessWidget {
   DiagnosticAddView({
     super.key,
-    required this.user,
+    required this.listUser,
     required this.medicalData,
   });
   final notiController = Get.find<NotificationController>();
   final MedicalEntity medicalData;
-  final UserData user;
+  final RxList<UserData> listUser;
   final diagnosticController = Get.find<DiagnosticAddController>();
 
   void updateFiles(List<XFile> newFiles) {
@@ -47,7 +47,7 @@ class DiagnosticAddView extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SendDiagnostic(user: user),
+                    SendDiagnostic(listuser: listUser),
                     const SizedBox(height: 16),
                     TypeOfData(medicalData: medicalData),
                     const SizedBox(height: 16),
@@ -99,6 +99,7 @@ class DiagnosticAddView extends StatelessWidget {
         onPressed: () async {
           FocusScope.of(context).unfocus();
           if (label == 'Lưu') {
+            print(listUser[0]);
             await _handleSave(context);
           } else {
             Get.back();
@@ -126,15 +127,15 @@ class DiagnosticAddView extends StatelessWidget {
       await diagnosticController.addImage();
       final docId = await diagnosticController.addDiagnostic(
         medicalData.id!,
-        user.id!,
+        listUser[0].id!,
       );
       FirebaseMessagingApi.sendMessage(
-          user.fcmtoken!,
+          listUser[0].fcmtoken!,
           'Chẩn đoán',
-          "${diagnosticController.appController.state.profile.value!.name!} đã gửi chuẩn đoán đến bạn",
+          "${diagnosticController.appController.state.profile.value!.name!} đã gửi chẩn đoán đến bạn",
           'diagnostic',
           '/diagnotic',
-          user.id!,
+          listUser[0].id!,
           'unread',
           diagnosticId: docId,
           medicalId: medicalData.id!);
@@ -148,7 +149,7 @@ class DiagnosticAddView extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Thành công'),
                 content: Text(
-                    'Thành công thêm chẩn đoán cho bệnh nhân ${user.name!}'),
+                    'Thành công thêm chẩn đoán cho bệnh nhân ${listUser[0].name!}'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
@@ -180,8 +181,7 @@ class DiagnosticAddView extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Lỗi'),
-          content: const Text(
-              'Lỗi khi lưu dữ liệu. Hãy thử lại!'),
+          content: const Text('Lỗi khi lưu dữ liệu. Hãy thử lại!'),
           actions: <Widget>[
             TextButton(
               onPressed: () {

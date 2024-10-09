@@ -256,11 +256,11 @@ class _InfoDoctorState extends State<InfoDoctor> {
             child: Column(
               children: [
                 message("Nguyễn Văn B", "06:00", "29/07/2024", 5.0, "Rất tốt",
-                    "Bác sỹ tư vấn và chuẩn đoán rất tốt"),
+                    "Bác sỹ tư vấn và chẩn đoán rất tốt"),
                 message("Nguyễn Văn B", "06:00", "29/07/2024", 5.0, "Rất tốt",
-                    "Bác sỹ tư vấn và chuẩn đoán rất tốt"),
+                    "Bác sỹ tư vấn và chẩn đoán rất tốt"),
                 message("Nguyễn Văn B", "06:00", "29/07/2024", 5.0, "Rất tốt",
-                    "Bác sỹ tư vấn và chuẩn đoán rất tốt"),
+                    "Bác sỹ tư vấn và chẩn đoán rất tốt"),
               ],
             ),
           ),

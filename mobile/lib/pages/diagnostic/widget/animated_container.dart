@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/pages/diagnostic/screen/unread_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic_detail/view.dart';
@@ -12,10 +14,11 @@ class animatedcontainer extends StatelessWidget {
   final String unit;
   final String notification;
   late RxBool isImportant;
-  final String attachments;
+  final int attachments;
   final bool isAttached;
   late RxBool isExpanded;
   final int index;
+  final int page;
   // final VoidCallback onTapImportant;
   // final VoidCallback onTapDetail;
 
@@ -32,6 +35,7 @@ class animatedcontainer extends StatelessWidget {
     required this.isAttached,
     required this.isExpanded,
     required this.index,
+    required this.page,
     // required this.onTapImportant,
     // required this.onTapDetail,
   });
@@ -178,7 +182,10 @@ class animatedcontainer extends StatelessWidget {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    Get.to(() => DetailView(index: index));
+                                    Get.to(() => DetailView(
+                                          index: index,
+                                          page: page,
+                                        ));
                                   },
                                   child: SizedBox(
                                     height: 40,

@@ -264,7 +264,7 @@ class _TwoLineChartState extends State<TwoLineChart> {
                       width: 6,
                     ),
                     Text(
-                      "Chuẩn đoán (1)",
+                      "Chẩn đoán (1)",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 14,
