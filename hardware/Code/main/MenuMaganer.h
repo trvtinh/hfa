@@ -2,7 +2,6 @@
 
 Screen scr;
 
-byte num = 0;
 volatile bool menuChanged = true;
 
 class MenuItem {
@@ -13,13 +12,11 @@ public:
   int selectedItem;
   int numChildren;
   MenuItem* parent;
-  byte address;
   MenuItem(String itemName, MenuItem* itemParent) {
     name = itemName;
     parent = itemParent;
     numChildren = 0;
     selectedItem = 0;
-    address = num++;
   }
 
   void addChild(MenuItem* child) {
@@ -54,8 +51,8 @@ public:
   int getnumChildren() {
     return numChildren;
   }
-  byte getAddress() {
-    return address;
+  String getNameItem(){
+    return name;
   }
   MenuItem* select() {
     if (numChildren > 0) {
@@ -99,7 +96,7 @@ void displayMenu() {
     currentMenu->display();
     menuChanged = false;
   }
-  // Serial.println(currentMenu->getAddress());
+  Serial.println(currentMenu->getNameItem());
 }
 void goUpMenu() {
   currentMenu->selectedUp();
@@ -121,7 +118,6 @@ void goOutMenu() {
     menuChanged = true;
   }
 }
-
-int getAddressMenu(){
-  return currentMenu->getAddress();
+String getNameItemMenu(){
+  return currentMenu->getNameItem();
 }
