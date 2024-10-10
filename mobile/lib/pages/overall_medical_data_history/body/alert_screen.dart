@@ -77,9 +77,9 @@ class AlertScreen extends StatelessWidget {
         const SizedBox(height: 10),
         GestureDetector(
           onTap: () {
-            Get.to(() => DiagnosticAddView(
-                user: controller.state.selectedUser.value,
-                medicalData: controller.state.selectedData.value));
+            // Get.to(() => DiagnosticAddView(
+            //     user: controller.state.selectedUser.value,
+            //     medicalData: controller.state.selectedData.value));
           },
           child: Container(
             color: Colors.transparent,

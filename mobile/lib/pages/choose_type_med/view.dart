@@ -248,6 +248,16 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
+          // SizedBox(width: 6,),
+          // GestureDetector(
+          //   onTap: () {
+          //     medicineController.delMedicineBase(medicine.id!);
+          //   },
+          //   child: Icon(
+          //     Icons.clear_outlined,
+          //     color: Theme.of(context).colorScheme.error,
+          //   ),
+          // ),
         ],
       ),
     );

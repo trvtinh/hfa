@@ -109,12 +109,12 @@ class ListAlarm extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  _showAddDialog(context);
+                  alarmController.deleteAlarm(id!);
                 },
                 child: Icon(
-                  Icons.border_color_outlined,
+                  Icons.clear_outlined,
                   size: 20,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.error,
                 ),
               ),
               // SizedBox(width: 16,),
@@ -137,29 +137,29 @@ class ListAlarm extends StatelessWidget {
     );
   }
 
-  void _showAddDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                EditAlarm(
-                    index: index,
-                    highThreshold: highThreshold,
-                    lowThreshold: lowThreshold,
-                    id: id),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void _showAddDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         shape: RoundedRectangleBorder(
+  //           borderRadius: BorderRadius.circular(20),
+  //         ),
+  //         insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+  //         content: SingleChildScrollView(
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               EditAlarm(
+  //                   index: index,
+  //                   highThreshold: highThreshold,
+  //                   lowThreshold: lowThreshold,
+  //                   id: id),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 }

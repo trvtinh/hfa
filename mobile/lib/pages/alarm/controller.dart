@@ -95,7 +95,6 @@ class AlarmController extends GetxController {
   Future deleteAlarm(String id) async {
     try {
       await FirebaseFirestore.instance.collection('alarms').doc(id).delete();
-      Get.back();
       clearData();
     } catch (e) {
       log(e.toString());

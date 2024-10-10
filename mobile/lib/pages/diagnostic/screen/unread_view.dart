@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
+import 'package:health_for_all/pages/diagnostic/information.dart';
 
 class UnreadPage extends StatefulWidget {
   const UnreadPage({super.key});
@@ -10,48 +15,7 @@ class UnreadPage extends StatefulWidget {
 }
 
 class _UnreadPageState extends State<UnreadPage> {
-  final List<String> notifications = [
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại',
-    'Với chỉ số như hiện tại có nguy cơ nhồi máu cơ tim. Đề nghị tới bệnh viện khám lại'
-  ];
-
-  final List<String> doctors = ['Nguyễn Văn A', 'Nguyễn Văn B', 'Trần Văn C'];
-
-  final List<String> timeDate = [
-    '06:00, 29/07/2024',
-    '06:00, 29/07/2024',
-    '06:00, 29/07/2024',
-  ];
-
-  final List<String> attachments = ['1', '2', '0'];
-  final List<bool> isAttached = [true, true, false];
-  final List<RxBool> isImportant = [true.obs, true.obs, true.obs].obs;
-
-  final List<List<String>> titles = [
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-    ['Huyết áp', 'Thân nhiệt', 'XN Máu'],
-  ];
-
-  final List<List<String>> times = [
-    ['09:00', '09:00', '09:00'],
-    ['09:00', '09:00', '09:00'],
-    ['09:00', '09:00', '09:00'],
-  ];
-
-  final List<List<String>> values = [
-    ['120/80', '36', 'XN'],
-    ['120/80', '36', 'XN'],
-    ['120/80', '36', 'XN'],
-  ];
-
-  final List<List<String>> units = [
-    ['mmHg', '°C', '--'],
-    ['mmHg', '°C', '--'],
-    ['mmHg', '°C', '--'],
-  ];
-
+  final controller = Get.find<DiagnosticController>();
   // void _setImportant(int index) {
   //   setState(() {
   //     isImportant[index] = !isImportant[index];
@@ -71,20 +35,77 @@ class _UnreadPageState extends State<UnreadPage> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
-          children: List.generate(doctors.length, (index) {
-            return animatedcontainer(
-                doctor: doctors[index],
-                time: timeDate[index],
-                title: titles[index][0],
-                value: values[index][0],
-                unit: units[index][0],
-                notification: notifications[index],
-                isImportant: isImportant[index],
-                attachments: attachments[index],
-                isAttached: isAttached[index],
-                isExpanded: false.obs,
-                index: index);
-          }),
+          // children: List.generate(Unread.doctors.length, (index) {
+          //   return animatedcontainer(
+          //     doctor: Unread.doctors[index],
+          //     time: Unread.timeDate[index],
+          //     title: Unread.titles[index][0],
+          //     value: Unread.values[index][0],
+          //     unit: Unread.titles[index][0],
+          //     notification: Unread.notifications[index],
+          //     isImportant: Unread.isImportant[index],
+          //     attachments: Unread.attachments[index],
+          //     isAttached: Unread.isAttached[index],
+          //     isExpanded: false.obs,
+          //     index: index,
+          //     page: 1,
+          //   );
+          // }),
+          children: [
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('diagnostic')
+                  .where('toUId', isEqualTo: controller.state.profile.value!.id)
+                  // .where('tap', isEqualTo: 'unread')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text('No diagnostics found.'));
+                }
+                final diagnostics = snapshot.data!.docs
+                    .map((doc) => Diagnostic.fromFirestore(
+                        doc as DocumentSnapshot<Map<String, dynamic>>))
+                    .toList();
+                return ListView.builder(
+                    itemCount: diagnostics.length,
+                    itemBuilder: (context, index) {
+                      final diagnostic = diagnostics[index];
+                      return FutureBuilder<String>(
+                          future: controller.getNameByUId(diagnostic.fromUId!),
+                          builder: (context, nameSnapshot) {
+                            if (nameSnapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+
+                            final doctor = nameSnapshot.data ?? 'Unknown';
+
+                            return animatedcontainer(
+                                doctor: doctor,
+                                time: DatetimeChange.timestamptoHHMMDDMMYYYY(
+                                    diagnostic.timestamp!),
+                                title: 'clgt',
+                                value: 'clgt',
+                                unit: 'clgt',
+                                notification: diagnostic.content!,
+                                isImportant: false.obs,
+                                attachments: diagnostic.imageURL!.length,
+                                isAttached: diagnostic.imageURL!.isNotEmpty,
+                                isExpanded: false.obs,
+                                index: index,
+                                page: 1);
+                          });
+                    });
+              },
+            )
+          ],
         ),
       ),
     );

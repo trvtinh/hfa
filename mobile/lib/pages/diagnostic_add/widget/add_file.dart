@@ -51,9 +51,8 @@ class _AddFileState extends State<AddFile> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).colorScheme.outline),
         borderRadius: BorderRadius.circular(4),
-        border:
-            Border.all(width: 1, color: Theme.of(context).colorScheme.outline),
       ),
       child: Column(
         children: [
@@ -73,13 +72,11 @@ class _AddFileState extends State<AddFile> {
                 icon: Icon(
                   Icons.attach_file,
                   color: Theme.of(context).colorScheme.primary,
-                  size: 18,
                 ),
                 onPressed: pickMultipleImages,
                 label: Text(
                   'Thêm file',
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -97,15 +94,13 @@ class _AddFileState extends State<AddFile> {
                   ),
                 ),
                 icon: Icon(
-                  Icons.camera_alt_outlined,
+                  Icons.camera_alt,
                   color: Theme.of(context).colorScheme.primary,
-                  size: 18,
                 ),
                 onPressed: capturePhoto,
                 label: Text(
                   'Camera',
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
                     fontSize: 14,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -128,7 +123,6 @@ class _AddFileState extends State<AddFile> {
         dashPattern: const [2, 3],
         color: Theme.of(context).colorScheme.outline,
         child: Container(
-          // width: 260,
           height: 32,
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
           alignment: Alignment.topLeft,
@@ -139,55 +133,56 @@ class _AddFileState extends State<AddFile> {
         ),
       );
     } else {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: selectedFiles.length,
-        itemBuilder: (context, index) {
-          final XFile file = selectedFiles[index];
-          return _buildFileItem(file);
-        },
+      return ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxHeight: 50, // Adjust this value based on your layout needs
+        ),
+        child: ListView.builder(
+          itemCount: selectedFiles.length,
+          itemBuilder: (context, index) {
+            final XFile file = selectedFiles[index];
+            return _buildFileItem(file);
+          },
+        ),
       );
     }
   }
 
   Widget _buildFileItem(XFile file) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.primaryContainer,
-        ),
-        child: Row(
-          children: [
-            Icon(
-              _getFileIcon(file),
-              color: Theme.of(context).colorScheme.primary,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                file.name,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.w500,
-                ),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Theme.of(context).colorScheme.primaryContainer,
+      ),
+      child: Row(
+        children: [
+          Icon(
+            _getFileIcon(file),
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              file.name,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimaryContainer,
+                fontWeight: FontWeight.w500,
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              color: Theme.of(context).colorScheme.onSecondaryContainer,
-              onPressed: () {
-                setState(() {
-                  selectedFiles.remove(file);
-                  widget.onFilesChanged
-                      ?.call(selectedFiles); // Notify parent about changes
-                });
-              },
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close),
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
+            onPressed: () {
+              setState(() {
+                selectedFiles.remove(file);
+                widget.onFilesChanged
+                    ?.call(selectedFiles); // Notify parent about changes
+              });
+            },
+          ),
+        ],
       ),
     );
   }

@@ -40,6 +40,7 @@ class ChooseTypeMedController extends GetxController {
     log(medicine.toString());
     try {
       await FirebaseApi.addDocument("medicineBases", medicine.toJson());
+      Get.back();
       Get.snackbar("Thành công", "Thêm thuốc thành công",
           backgroundColor: Colors.green);
     } catch (e) {
@@ -47,6 +48,12 @@ class ChooseTypeMedController extends GetxController {
       Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
           backgroundColor: Colors.red);
     }
+  }
+
+  Future delMedicineBase(
+    String documentId
+  ) async {
+    await FirebaseApi.deleteDocument("medicineBases", documentId);
   }
 
   void clearData() {

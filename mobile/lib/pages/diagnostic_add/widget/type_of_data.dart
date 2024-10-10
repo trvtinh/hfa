@@ -13,14 +13,12 @@ class TypeOfData extends GetView<DiagnosticAddController> {
   const TypeOfData({super.key, required this.medicalData});
   @override
   Widget build(BuildContext context) {
+    final DiagnosticAddController diagnosticAddController =
+        Get.put(DiagnosticAddController());
     return IntrinsicHeight(
       child: GestureDetector(
         onTap: () {
-          view.clear();
-          for (int i = 0; i < tapped.length; i++) {
-            tapped[i].value = false;
-          }
-          // showPopup(context);
+          showPopup(context);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -90,15 +88,39 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                         ),
                       ),
                     ),
-                    ViewDataBox(
-                        leadingiconpath:
-                            Item.getIconPath(int.parse(medicalData.typeId!)),
-                        title: Item.getTitle(int.parse(medicalData.typeId!)),
-                        value: medicalData.value!,
-                        unit: Item.getUnit(int.parse(medicalData.typeId!)),
-                        noteController: controller.noteController,
-                        time: DatetimeChange.getHourString(
-                            medicalData.time!.toDate())),
+                    // diagnosticAddController.chosenmedical.value!.isEmpty == true
+                    //     ? SizedBox(
+                    //         height: 40,
+                    //         child: Text(
+                    //           "chưa chọn",
+                    //           style: TextStyle(
+                    //             color: Theme.of(context)
+                    //                 .colorScheme
+                    //                 .secondaryFixedDim,
+                    //           ),
+                    //         ),
+                    //       )
+                    //     : Column(
+                    //         children: [
+                    //           for (int i = 0;
+                    //               i <
+                    //                   diagnosticAddController
+                    //                       .chosenmedical.value!.length;
+                    //               i++)
+                    //             ViewDataBox(
+                    //                 leadingiconpath: Item.getIconPath(int.parse(
+                    //                     diagnosticAddController
+                    //                         .chosenmedical.value![i].typeId!)),
+                    //                 title: Item.getTitle(int.parse(
+                    //                     diagnosticAddController
+                    //                         .chosenmedical.value![i].typeId!)),
+                    //                 value: diagnosticAddController
+                    //                     .chosenmedical.value![i].value!,
+                    //                 unit: Item.getUnit(int.parse(diagnosticAddController.chosenmedical.value![i].typeId!)),
+                    //                 noteController: controller.noteController,
+                    //                 time: DatetimeChange.getHourString(diagnosticAddController.chosenmedical.value![i].time!.toDate())),
+                    //         ],
+                    //       ),
 
                     // for(int i=0; i<tapped.length; i++){
                     //   if(tapped[i].value == true){
@@ -129,102 +151,110 @@ class TypeOfData extends GetView<DiagnosticAddController> {
     );
   }
 
-  // void showPopup(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       return Dialog(
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(28),
-  //         ),
-  //         child: SingleChildScrollView(
-  //           child: Padding(
-  //             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 buildpopupHeader(context),
-  //                 const SizedBox(height: 24),
-  //                 buildpopupCenter(context),
-  //                 const SizedBox(height: 24),
-  //                 buildpopupActions(context),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  Future<void> showPopup(BuildContext context) async {
+    final result = await showDialog<List<MedicalEntity>>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            title: buildpopupHeader(context),
+            content: buildpopupCenter(context),
+          );
+        });
+        // Dialog(
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.circular(28),
+        //   ),
+        //   child: SingleChildScrollView(
+        //     child: Padding(
+        //       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 0),
+        //       child: Column(
+        //         mainAxisSize: MainAxisSize.min,
+        //         children: [
+        //           buildpopupHeader(context),
+        //           const SizedBox(height: 24),
+        //           buildpopupCenter(context),
+        //           const SizedBox(height: 24),
+        //           buildpopupActions(context),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // );
+      },
+    );
+  }
 
-  // Row buildpopupHeader(BuildContext context) {
-  //   return Row(
-  //     children: [
-  //       Icon(
-  //         Icons.tune,
-  //         size: 32,
-  //         color: Theme.of(context).colorScheme.primary,
-  //       ),
-  //       const SizedBox(
-  //         width: 16,
-  //       ),
-  //       Text(
-  //         'Chọn loại dữ liệu',
-  //         style: TextStyle(
-  //           fontSize: 24,
-  //           color: Theme.of(context).colorScheme.onSurface,
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
+  Row buildpopupHeader(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          Icons.tune,
+          size: 32,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        const SizedBox(
+          width: 16,
+        ),
+        Text(
+          'Chọn loại dữ liệu',
+          style: TextStyle(
+            fontSize: 24,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
+        )
+      ],
+    );
+  }
 
-  // Row buildpopupActions(BuildContext context) {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.end,
-  //     children: [
-  //       TextButton(
-  //         onPressed: () async {
-  //           view.clear();
-  //           for (int i = 0; i < tapped.length; i++) {
-  //             tapped[i].value = false;
-  //           } // showpatient = -1;
-  //           Get.back();
-  //         },
-  //         child: Text(
-  //           'Hủy',
-  //           style: TextStyle(
-  //             fontSize: 14,
-  //             color: Theme.of(context).colorScheme.error,
-  //           ),
-  //         ),
-  //       ),
-  //       const SizedBox(width: 16),
-  //       TextButton(
-  //         onPressed: () async {
-  //           // List<String> imageUrl = [];
+  Row buildpopupActions(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          onPressed: () async {
+            view.clear();
+            for (int i = 0; i < tapped.length; i++) {
+              tapped[i].value = false;
+            } // showpatient = -1;
+            Get.back();
+          },
+          child: Text(
+            'Hủy',
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        ),
+        const SizedBox(width: 16),
+        TextButton(
+          onPressed: () async {
+            // List<String> imageUrl = [];
 
-  //           // for (var i in selectedFiles) {
-  //           //   String? url =
-  //           //       await FirebaseApi.uploadImage(i.path, 'medicalData');
-  //           //   imageUrl.add(url!);
-  //           // }
-  //           // Create MedicalEntity with the obtained typeId
-  //           Get.back();
-  //         },
-  //         child: Text(
-  //           'Xác nhận',
-  //           style: TextStyle(
-  //             fontSize: 14,
-  //             color: Theme.of(context).colorScheme.primary,
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+            // for (var i in selectedFiles) {
+            //   String? url =
+            //       await FirebaseApi.uploadImage(i.path, 'medicalData');
+            //   imageUrl.add(url!);
+            // }
+            // Create MedicalEntity with the obtained typeId
+            Get.back();
+          },
+          child: Text(
+            'Xác nhận',
+            style: TextStyle(
+              fontSize: 14,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   SingleChildScrollView buildpopupCenter(BuildContext context) {
+    final DiagnosticAddController diagnosticAddController =
+        Get.put(DiagnosticAddController());
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -240,7 +270,35 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                   controller.selectTime, controller.timeController),
             ),
           ]),
-          ...controller.entries,
+          Column(
+            // Dữ liệu fix cứng do chưa thể tạo List medical Data
+            children: List.generate(10, (i) {
+              // Assuming you are tracking the checkbox states in a list of booleans
+              return CheckboxListTile(
+                title: ViewDataBox(
+                  leadingiconpath: Item.getIconPath(int.parse(
+                      diagnosticAddController.chosenmedical.value![i].typeId!)),
+                  title: Item.getTitle(int.parse(
+                      diagnosticAddController.chosenmedical.value![i].typeId!)),
+                  value: diagnosticAddController.chosenmedical.value![i].value!,
+                  unit: Item.getUnit(int.parse(
+                      diagnosticAddController.chosenmedical.value![i].typeId!)),
+                  noteController: controller.noteController,
+                  time: DatetimeChange.getHourString(diagnosticAddController
+                      .chosenmedical.value![i].time!
+                      .toDate()),
+                ),
+                value:
+                    diagnosticAddController.checkboxStates[i], // checkbox state
+                onChanged: (bool? newValue) {
+                  // Update the state of the checkbox when it's clicked
+                  diagnosticAddController.checkboxStates[i] = newValue!;
+                  // Call setState or update using GetX depending on how your state is managed
+                  diagnosticAddController.update(); // if using GetX
+                },
+              );
+            }),
+          )
         ],
       ),
     );

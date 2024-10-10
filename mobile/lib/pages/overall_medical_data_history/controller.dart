@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:health_for_all/common/entities/comment.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/alert_screen.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/body/comment_screen.dart';
@@ -29,6 +30,35 @@ class OverallMedicalDataHistoryController extends GetxController {
   static int length = 10;
   void updateLength() {
     length++;
+  }
+
+  RxList<UserData> listFollower = <UserData>[].obs;
+
+  void fetchData(List<String> id) async {
+    listFollower.clear();
+    try {
+      // Call getData and await the result
+      listFollower = await getData(id);
+      print(listFollower.length);
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
+
+  Future<RxList<UserData>> getData(List<String> id) async {
+    RxList<UserData> users = <UserData>[].obs;
+    final db = FirebaseFirestore.instance;
+
+    for (String userId in id) {
+      final querySnapshot =
+          await db.collection("users").where('id', isEqualTo: userId).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        final docSnapshot = await querySnapshot.docs.first.reference.get();
+        final userData = UserData.fromFirestore(docSnapshot, null);
+        users.add(userData);
+      }
+    }
+    return users;
   }
 
   Future addComment(BuildContext context) async {
@@ -173,7 +203,7 @@ class OverallMedicalDataHistoryController extends GetxController {
                             tabs: [
                               Tab(text: 'Chi tiết'),
                               Tab(text: 'Bình luận'),
-                              Tab(text: 'Chuẩn đoán'),
+                              Tab(text: 'Chẩn đoán'),
                               Tab(text: 'Cảnh báo'),
                             ],
                             labelStyle: TextStyle(
