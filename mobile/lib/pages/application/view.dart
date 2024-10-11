@@ -208,7 +208,7 @@ class About_HFA extends StatelessWidget {
               children: [
                 SizedBox(height: 30,),
                 Text(
-                  "Link QR đến project",
+                  "Video về project",
                   style: TextStyle(
                     fontSize: 30,
                   ),

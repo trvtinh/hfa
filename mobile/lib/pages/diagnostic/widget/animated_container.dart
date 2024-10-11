@@ -14,7 +14,7 @@ class animatedcontainer extends StatelessWidget {
   final String unit;
   final String notification;
   late RxBool isImportant;
-  final String attachments;
+  final int attachments;
   final bool isAttached;
   late RxBool isExpanded;
   final int index;
@@ -129,14 +129,14 @@ class animatedcontainer extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      Item.getTitle(int.parse(title)),
+                      title,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '$value ${Item.getUnit(int.parse(unit))}',
+                      '$value $unit',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),

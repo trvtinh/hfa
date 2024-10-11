@@ -27,7 +27,7 @@ class _ImportantPageState extends State<ImportantPage> {
               unit: Important.titles[index][0],
               notification: Important.notifications[index],
               isImportant: Important.isImportant[index],
-              attachments: Important.attachments[index],
+              attachments: 1,
               isAttached: Important.isAttached[index],
               isExpanded: false.obs,
               index: index,
