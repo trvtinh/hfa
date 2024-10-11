@@ -47,6 +47,34 @@ class DiagnosticAddController extends GetxController {
     return docId;
   }
 
+  Future moveDiagnosticimportant(String medicalId, String toUId) async {
+    final data = Diagnostic(
+      content: noteController.text,
+      timestamp: Timestamp.fromDate(DateTime.now()),
+      fromUId: appController.state.profile.value!.id!,
+      toUId: toUId,
+      medicalId: medicalId,
+      imageURL: selectedImagesURL,
+      tap: 'important',
+    );
+    final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
+    return docId;
+  }
+
+  Future moveDiagnosticseen(String medicalId, String toUId) async {
+    final data = Diagnostic(
+      content: noteController.text,
+      timestamp: Timestamp.fromDate(DateTime.now()),
+      fromUId: appController.state.profile.value!.id!,
+      toUId: toUId,
+      medicalId: medicalId,
+      imageURL: selectedImagesURL,
+      tap: 'seen',
+    );
+    final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
+    return docId;
+  }
+
   Future<void> addImage() async {
     for (var value in selectedFiles) {
       final imageUrl = await FirebaseApi.uploadImage(value.path, 'diagnostic');

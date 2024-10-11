@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
-import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/view_data_box.dart';
 
@@ -13,8 +12,6 @@ class TypeOfData extends GetView<DiagnosticAddController> {
   const TypeOfData({super.key, required this.medicalData});
   @override
   Widget build(BuildContext context) {
-    final DiagnosticAddController diagnosticAddController =
-        Get.put(DiagnosticAddController());
     return IntrinsicHeight(
       child: Container(
         decoration: BoxDecoration(
@@ -64,6 +61,7 @@ class TypeOfData extends GetView<DiagnosticAddController> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(width: 1),
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
               child: Column(
                 children: [

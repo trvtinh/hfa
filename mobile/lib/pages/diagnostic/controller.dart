@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/pages/diagnostic/state.dart';
 
 class DiagnosticController extends GetxController {
@@ -45,5 +46,12 @@ class DiagnosticController extends GetxController {
     } else {
       return 'Unknown';
     }
+  }
+
+  Future getData(String id) async {
+    MedicalEntity res;
+    final kq = await FirebaseApi.getDocumentSnapshotById('medicalData', id);
+    res = MedicalEntity.fromFirestore(kq, null);
+    return res;
   }
 }
