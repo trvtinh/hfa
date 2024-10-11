@@ -35,10 +35,11 @@ class Diagnostic {
       timestamp: data?['timestamp'] as Timestamp?,
       fromUId: data?['fromUId'] as String?,
       toUId: data?['toUId'] as String?,
-      tap: data?['toUId'] as String?,
+      tap: data?['tap'] as String?,
       imageURL: (data?['imageURL'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
+      medicalId: data?['medicalId'] as String?,
     );
   }
 

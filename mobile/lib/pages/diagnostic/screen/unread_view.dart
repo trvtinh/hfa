@@ -74,6 +74,7 @@ class _UnreadPageState extends State<UnreadPage> {
                         doc as DocumentSnapshot<Map<String, dynamic>>))
                     .toList();
                 return ListView.builder(
+                  shrinkWrap: true,
                   itemCount: diagnostics.length,
                   itemBuilder: (context, index) {
                     final diagnostic = diagnostics[index];
@@ -87,7 +88,8 @@ class _UnreadPageState extends State<UnreadPage> {
                         }
 
                         final doctor = nameSnapshot.data ?? 'Unknown';
-
+                        print(index);
+                        print(diagnostic);
                         return FutureBuilder<DocumentSnapshot>(
                           future: FirebaseApi.getDocumentSnapshotById(
                               'medicalData', diagnostic.medicalId!),
