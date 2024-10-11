@@ -1,7 +1,11 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/API/item.dart';
@@ -13,6 +17,7 @@ import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/data_box.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 class DiagnosticAddController extends GetxController {
   final dateController = TextEditingController();
@@ -24,8 +29,7 @@ class DiagnosticAddController extends GetxController {
   final RxList<XFile> selectedFiles = <XFile>[].obs;
   final RxList<String> selectedImagesURL = <String>[].obs;
   static int length = 5;
-  Rxn<UserData> chosenuser = Rxn<UserData>();
-  Rxn<List<MedicalEntity>> chosenmedical = Rxn<List<MedicalEntity>>();
+  XFile? xfile;
   // Dữ liệu fix cứng do chưa thể tạo List medical Data
   final List<bool> checkboxStates = List.filled(10, false);
 
@@ -133,16 +137,28 @@ class DiagnosticAddController extends GetxController {
     // In ra hoặc làm gì đó với formattedDateTime
     return dateTimestamp;
   }
+
+  Future<XFile?> urlToFile(String imageUrl) async {
+    try {
+      // Step 1: Download the image data from the URL
+      final response = await http.get(Uri.parse(imageUrl));
+      if (response.statusCode == 200) {
+        // Step 2: Get the temporary directory to save the image
+        final tempDir = await getTemporaryDirectory();
+        final filePath = '${tempDir.path}/image.jpg';
+
+        // Step 3: Write the downloaded bytes to a file
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        // Step 4: Convert the file path to XFile
+        return XFile(file.path);
+      } else {
+        throw Exception('Failed to download image');
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
 }
-
-
- // List<ViewDataBox> get listview => List.generate(view.length, (index) {
-  //       return ViewDataBox(
-  //         time: formatTimeOfDay(),
-  //         noteController: noteController,
-  //         leadingiconpath: Item.getIconPath(view[index]),
-  //         title: Item.getTitle(view[index]),
-  //         value: Item.getUnit(view[index]),
-  //         unit: Item.getUnit(view[index]),
-  //       );
-  //     });

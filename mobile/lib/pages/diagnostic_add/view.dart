@@ -16,12 +16,12 @@ import 'package:image_picker/image_picker.dart';
 class DiagnosticAddView extends StatelessWidget {
   DiagnosticAddView({
     super.key,
-    required this.listUser,
+    required this.user,
     required this.medicalData,
   });
   final notiController = Get.find<NotificationController>();
   final MedicalEntity medicalData;
-  final RxList<UserData> listUser;
+  final UserData user;
   final diagnosticController = Get.find<DiagnosticAddController>();
 
   void updateFiles(List<XFile> newFiles) {
@@ -47,7 +47,7 @@ class DiagnosticAddView extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SendDiagnostic(listuser: listUser),
+                    SendDiagnostic(user: user),
                     const SizedBox(height: 16),
                     TypeOfData(medicalData: medicalData),
                     const SizedBox(height: 16),
@@ -99,7 +99,6 @@ class DiagnosticAddView extends StatelessWidget {
         onPressed: () async {
           FocusScope.of(context).unfocus();
           if (label == 'Lưu') {
-            print(listUser[0]);
             await _handleSave(context);
           } else {
             Get.back();
@@ -127,15 +126,15 @@ class DiagnosticAddView extends StatelessWidget {
       await diagnosticController.addImage();
       final docId = await diagnosticController.addDiagnostic(
         medicalData.id!,
-        listUser[0].id!,
+        user.id!,
       );
       FirebaseMessagingApi.sendMessage(
-          listUser[0].fcmtoken!,
+          user.fcmtoken!,
           'Chẩn đoán',
           "${diagnosticController.appController.state.profile.value!.name!} đã gửi chẩn đoán đến bạn",
           'diagnostic',
           '/diagnotic',
-          listUser[0].id!,
+          user.id!,
           'unread',
           diagnosticId: docId,
           medicalId: medicalData.id!);
@@ -149,7 +148,7 @@ class DiagnosticAddView extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Thành công'),
                 content: Text(
-                    'Thành công thêm chẩn đoán cho bệnh nhân ${listUser[0].name!}'),
+                    'Thành công thêm chẩn đoán cho bệnh nhân ${user.name!}'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {

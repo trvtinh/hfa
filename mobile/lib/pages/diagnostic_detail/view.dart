@@ -249,15 +249,15 @@ class DetailViewState extends State<DetailView> {
           //     );
           //   },
           // ),
-          for (int i = 0; i < title.length; i++)
-            ViewDataBox(
-              leadingiconpath: Item.getIconPath(int.parse(title[i])),
-              title: Item.getTitle(int.parse(title[i])),
-              value: value[i],
-              unit: Item.getUnit(int.parse(title[i])),
-              noteController: TextEditingController(),
-              time: time[i],
-            ),
+          // for (int i = 0; i < title.length; i++)
+          //   ViewDataBox(
+          //     leadingiconpath: Item.getIconPath(int.parse(title[i])),
+          //     title: Item.getTitle(int.parse(title[i])),
+          //     value: value[i],
+          //     unit: Item.getUnit(int.parse(title[i])),
+          //     noteController: TextEditingController(),
+          //     time: time[i],
+          //   ),
         ],
       ),
     );

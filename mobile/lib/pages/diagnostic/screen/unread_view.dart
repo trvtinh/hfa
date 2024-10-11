@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
@@ -73,36 +74,60 @@ class _UnreadPageState extends State<UnreadPage> {
                         doc as DocumentSnapshot<Map<String, dynamic>>))
                     .toList();
                 return ListView.builder(
-                    itemCount: diagnostics.length,
-                    itemBuilder: (context, index) {
-                      final diagnostic = diagnostics[index];
-                      return FutureBuilder<String>(
-                          future: controller.getNameByUId(diagnostic.fromUId!),
-                          builder: (context, nameSnapshot) {
-                            if (nameSnapshot.connectionState ==
+                  itemCount: diagnostics.length,
+                  itemBuilder: (context, index) {
+                    final diagnostic = diagnostics[index];
+                    return FutureBuilder<String>(
+                      future: controller.getNameByUId(diagnostic.fromUId!),
+                      builder: (context, nameSnapshot) {
+                        if (nameSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        final doctor = nameSnapshot.data ?? 'Unknown';
+
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseApi.getDocumentSnapshotById(
+                              'medicalData', diagnostic.medicalId!),
+                          builder: (context, medicalSnapshot) {
+                            if (medicalSnapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return const Center(
                                   child: CircularProgressIndicator());
                             }
 
-                            final doctor = nameSnapshot.data ?? 'Unknown';
+                            if (!medicalSnapshot.hasData ||
+                                medicalSnapshot.hasError) {
+                              return const Text('Error loading medical data');
+                            }
 
+                            final medicaldata = medicalSnapshot.data;
                             return animatedcontainer(
-                                doctor: doctor,
-                                time: DatetimeChange.timestamptoHHMMDDMMYYYY(
-                                    diagnostic.timestamp!),
-                                title: 'clgt',
-                                value: 'clgt',
-                                unit: 'clgt',
-                                notification: diagnostic.content!,
-                                isImportant: false.obs,
-                                attachments: diagnostic.imageURL!.length,
-                                isAttached: diagnostic.imageURL!.isNotEmpty,
-                                isExpanded: false.obs,
-                                index: index,
-                                page: 1);
-                          });
-                    });
+                              doctor: doctor,
+                              time: DatetimeChange.timestamptoHHMMDDMMYYYY(
+                                  diagnostic.timestamp!),
+                              title:
+                                  'clgt', // Replace with actual data from `medicaldata`
+                              value:
+                                  'clgt', // Replace with actual data from `medicaldata`
+                              unit:
+                                  'clgt', // Replace with actual data from `medicaldata`
+                              notification: diagnostic.content!,
+                              isImportant: false.obs,
+                              attachments: diagnostic.imageURL!.length,
+                              isAttached: diagnostic.imageURL!.isNotEmpty,
+                              isExpanded: false.obs,
+                              index: index,
+                              page: 1,
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                );
               },
             )
           ],
