@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/medical_data_homepage/view.dart';
 
 class Orangebox extends StatelessWidget {
   final String val1;
-  final String val2;
   final String val3;
   final String time;
 
   const Orangebox({
     super.key,
     required this.val1,
-    required this.val2,
     required this.val3,
     required this.time,
   });
 
   @override
   Widget build(BuildContext context) {
+    int val2 = 10-int.parse(val1);
     return GestureDetector(
       onTap: () {
         Get.to(() => MedicalDataHome(
@@ -99,7 +99,7 @@ class Orangebox extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      val2,
+                      val2.toString(),
                       style: const TextStyle(
                         fontSize: 22,
                         color: Color.fromRGBO(52, 199, 89, 1),

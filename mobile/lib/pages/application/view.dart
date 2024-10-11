@@ -199,17 +199,34 @@ class About_HFA extends StatelessWidget {
           child: const Icon(Icons.arrow_back),
         ),
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Về HFA project'),
-            SizedBox(
-              height: 20,
+      body: Column(
+        children: [
+          Divider(height: 1,),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                SizedBox(height: 30,),
+                Text(
+                  "Link QR đến project",
+                  style: TextStyle(
+                    fontSize: 30,
+                  ),
+                ),
+                SizedBox(height: 30,),
+                Container(
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Image.asset("assets/qr_to_project.png")
+                ),
+              ],
             ),
-            Text('Về NK Solution'),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
