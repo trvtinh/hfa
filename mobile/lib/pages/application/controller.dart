@@ -248,7 +248,8 @@ class ApplicationController extends GetxController {
           final data = querySnapshot.docs.first.data();
           log(data.toString());
           state.medicalData[type] = data;
-          if (isEqualToToday(timestampToDate(state.medicalData[type]['time']))){
+          if (isEqualToToday(
+              timestampToDate(state.medicalData[type]['time']))) {
             state.updateMedData++;
             print(type);
           }

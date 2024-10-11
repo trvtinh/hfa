@@ -17,8 +17,14 @@ class DoctorDiagnostic extends StatelessWidget {
       readOnly: true,
       maxLines: 3,
       decoration: InputDecoration(
-        // prefixText: note,
-        border: const OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.outlineVariant, width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: Theme.of(context).colorScheme.outlineVariant, width: 1),
+        ),
         prefixIcon: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

@@ -1,47 +1,58 @@
 import 'dart:developer';
 
+import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/diagnostic/screen/unread_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/diagnostic_detail/view.dart';
 
 class animatedcontainer extends StatelessWidget {
   final String doctor;
   final String time;
-  final String title;
-  final String value;
-  final String unit;
+  final MedicalEntity med;
   final String notification;
   late RxBool isImportant;
-  final int attachments;
-  final bool isAttached;
+  final List<String> attachments;
+  final UserData user;
   late RxBool isExpanded;
-  final int index;
-  final int page;
-  // final VoidCallback onTapImportant;
-  // final VoidCallback onTapDetail;
+  final String documentId;
+  final String tap;
+  final diagnosticController = Get.find<DiagnosticAddController>();
 
   animatedcontainer({
     super.key,
     required this.doctor,
     required this.time,
-    required this.title,
-    required this.value,
-    required this.unit,
     required this.notification,
     required this.isImportant,
     required this.attachments,
-    required this.isAttached,
     required this.isExpanded,
-    required this.index,
-    required this.page,
+    required this.med,
+    required this.user,
+    required this.documentId,
+    required this.tap,
     // required this.onTapImportant,
     // required this.onTapDetail,
   });
 
-  void _setImportant() {
-    isImportant.value = !isImportant.value;
+  void _setImportant(BuildContext context) {
+    if (tap != 'important') {
+      isImportant.value = !isImportant.value;
+      _handleDelete(context);
+      _handlemoveimportant(context);
+    }
+  }
+
+  void setseen(BuildContext context) {
+    if (tap != 'seen') {
+      _handleDelete(context);
+      _handlemoveseen(context);
+    }
   }
 
   void _toggleContainer() {
@@ -51,6 +62,7 @@ class animatedcontainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isAttached = attachments.isNotEmpty;
     return Obx(
       () => GestureDetector(
         onTap: () {
@@ -129,14 +141,30 @@ class animatedcontainer extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      title,
+                      '•',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      Item.getTitle(int.parse(med.typeId!)),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      '$value $unit',
+                      '•',
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${med.value} ${Item.getUnit(int.parse(med.typeId!))}',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -171,7 +199,7 @@ class animatedcontainer extends StatelessWidget {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      'Đính kèm ($attachments)',
+                                      'Đính kèm (${attachments.length})',
                                       style: const TextStyle(fontSize: 12),
                                     ),
                                   ],
@@ -183,9 +211,12 @@ class animatedcontainer extends StatelessWidget {
                                 GestureDetector(
                                   onTap: () {
                                     Get.to(() => DetailView(
-                                          index: index,
-                                          page: page,
-                                        ));
+                                        user: user,
+                                        notification: notification,
+                                        doctor: doctor,
+                                        time: time,
+                                        medicalData: med,
+                                        attachments: attachments));
                                   },
                                   child: SizedBox(
                                     height: 40,
@@ -210,7 +241,7 @@ class animatedcontainer extends StatelessWidget {
                                 InkWell(
                                   onTap: () {
                                     log('ontap');
-                                    _setImportant();
+                                    _setImportant(context);
                                   },
                                   child: SizedBox(
                                     height: 40,
@@ -246,7 +277,9 @@ class animatedcontainer extends StatelessWidget {
                                   ),
                                 ),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    setseen(context);
+                                  },
                                   child: SizedBox(
                                     height: 40,
                                     width: (MediaQuery.of(context).size.width -
@@ -289,6 +322,183 @@ class animatedcontainer extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _handlemoveimportant(BuildContext context) async {
+    try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      // Perform the saving operation
+      await diagnosticController.addImage();
+      await diagnosticController.moveDiagnosticimportant(
+        med.id!,
+        user.id!,
+      );
+      // FirebaseMessagingApi.sendMessage(
+      //     user.fcmtoken!,
+      //     'Chẩn đoán',
+      //     "${diagnosticController.appController.state.profile.value!.name!} đã gửi chẩn đoán đến bạn",
+      //     'diagnostic',
+      //     '/diagnotic',
+      //     user.id!,
+      //     'unread',
+      //     diagnosticId: docId,
+      //     medicalId: medicalId);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        if (Get.isDialogOpen ?? false) {
+          Get.back(); // Close loading dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Thành công'),
+                content: const Text('Thành công chuyển chẩn đoán'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      // Get.back(); // Close success dialog
+                      Get.back(); // Navigate back
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      });
+
+      // Clear the data after saving
+      diagnosticController.selectedFiles.clear();
+      diagnosticController.selectedImagesURL.clear();
+    } catch (e) {
+      // Handle any errors
+      log('Error saving data: $e');
+      _showErrorDialog(context);
+    }
+  }
+
+  Future<void> _handlemoveseen(BuildContext context) async {
+    try {
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      // Perform the saving operation
+      await diagnosticController.addImage();
+      await diagnosticController.moveDiagnosticseen(
+        med.id!,
+        user.id!,
+      );
+      // FirebaseMessagingApi.sendMessage(
+      //     user.fcmtoken!,
+      //     'Chẩn đoán',
+      //     "${diagnosticController.appController.state.profile.value!.name!} đã gửi chẩn đoán đến bạn",
+      //     'diagnostic',
+      //     '/diagnotic',
+      //     user.id!,
+      //     'unread',
+      //     diagnosticId: docId,
+      //     medicalId: medicalId);
+
+      Future.delayed(const Duration(seconds: 1), () {
+        if (Get.isDialogOpen ?? false) {
+          Get.back(); // Close loading dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Thành công'),
+                content: const Text('Thành công chuyển chẩn đoán'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      // Get.back(); // Close success dialog
+                      Get.back(); // Navigate back
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      });
+
+      // Clear the data after saving
+      diagnosticController.selectedFiles.clear();
+      diagnosticController.selectedImagesURL.clear();
+    } catch (e) {
+      // Handle any errors
+      log('Error saving data: $e');
+      _showErrorDialog(context);
+    }
+  }
+
+  Future<void> _handleDelete(BuildContext context) async {
+    try {
+      // Show loading dialog
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      // Perform the delete operation
+      FirebaseApi.deleteDocument('diagnostic', documentId);
+
+      // Hide loading dialog and show success dialog after a short delay
+      Future.delayed(const Duration(seconds: 1), () {
+        if (Get.isDialogOpen ?? false) {
+          Get.back(); // Close loading dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Thành công'),
+                content: const Text('Xóa chẩn đoán thành công'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Get.back(); // Close success dialog
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      });
+    } catch (e) {
+      // Handle any errors
+      log('Error deleting data: $e');
+      _showErrorDialog(context);
+    }
+  }
+
+  void _showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Lỗi'),
+          content: const Text('Lỗi khi chuyển dữ liệu. Hãy thử lại!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
