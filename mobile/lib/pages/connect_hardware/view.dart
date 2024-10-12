@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/widget/find_device.dart';
 import 'package:health_for_all/pages/connect_hardware/widget/status_device.dart';
+import 'package:health_for_all/pages/samsung_connect/view.dart';
 
 class ConnectHardwarePage extends GetView<ConnectHardwareController> {
   ConnectHardwarePage({super.key});
@@ -99,11 +100,13 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
 
   Widget connect_samsung(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.to(() => SamsungConnect());
+      },
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainer,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(18),
           boxShadow: const [
             BoxShadow(
@@ -115,10 +118,10 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
         ),
         child: Row(
           children: [
-            Icon(
-              Icons.add_circle_outline,
-              color: Theme.of(context).colorScheme.primary,
-              size: 32,
+            Image.asset(
+              'assets/images/samsung_health.png',
+              height: 30,
+              width: 30,
             ),
             const SizedBox(
               width: 8,
