@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/pages/application/index.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +11,7 @@ import 'package:intl/intl.dart';
 class MedicalDataPage extends GetView<MedicalDataController> {
   MedicalDataPage({super.key});
   RxBool isLoading = false.obs;
+  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +55,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                     width: MediaQuery.of(context).size.width / 5 * 2 + 2),
               ],
             ),
-            _buildSearchField(context),
+            // _buildSearchField(context),
             const Divider(height: 2),
             ...controller.entries,
             const MoreData(),
@@ -137,6 +139,9 @@ class MedicalDataPage extends GetView<MedicalDataController> {
           if (label == 'Lưu') {
             isLoading.value = true;
             try {
+              if (isLoading.value) {
+                Get.dialog(const Center(child: CircularProgressIndicator()));
+              }
               log(isLoading.value.toString());
               // Perform the saving operation
               for (var value in controller.state.data.values) {
@@ -154,6 +159,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                   isLoading.value = false;
                   Get.back();
                 }
+                appController.getUpdatedLatestMedical();
               }
 
               // Clear the data after saving

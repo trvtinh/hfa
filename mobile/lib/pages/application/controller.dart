@@ -10,9 +10,13 @@ import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/store/user.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
+import 'package:health_for_all/pages/chatbot/controller.dart';
+import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
+import 'package:health_for_all/pages/reminder/controller.dart';
+import 'package:intl/intl.dart';
 import 'index.dart';
 
 import 'package:get/get.dart';
@@ -27,7 +31,10 @@ class ApplicationController extends GetxController {
   final notificationController = Get.find<NotificationController>();
   final diagnosticController = Get.find<DiagnosticController>();
   final prescriptionController = Get.find<PrescriptionController>();
-  final AlarmController alarmController = Get.find<AlarmController>();
+  final chatBotController = Get.find<ChatbotController>();
+  final alarmController = Get.find<AlarmController>();
+  final chooseMedController = Get.find<ChooseTypeMedController>();
+  final reminderController = Get.find<ReminderController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -121,6 +128,31 @@ class ApplicationController extends GetxController {
     pageController = PageController(initialPage: state.page);
   }
 
+  bool isEqualToToday(String date) {
+    // Define the input date format
+    final format = DateFormat('dd/MM/yyyy');
+
+    // Parse the input string into a DateTime object
+    DateTime inputDate = format.parse(date);
+
+    // Get the current date (only year, month, and day)
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+
+    // Compare if the input date is equal to today's date
+    return inputDate == today;
+  }
+
+  String timestampToDate(Timestamp timestamp) {
+    // Convert the Firebase Timestamp to a DateTime object
+    DateTime dateTime = timestamp.toDate();
+
+    // Format the DateTime object as dd/MM/yyyy
+    String formattedDate = DateFormat('dd/MM/yyyy').format(dateTime);
+
+    return formattedDate;
+  }
+
   @override
   void onReady() async {
     await getProfile();
@@ -128,6 +160,9 @@ class ApplicationController extends GetxController {
     diagnosticController.state.profile.value = state.profile.value;
     alarmController.state.profile.value = state.profile.value;
     prescriptionController.state.profile.value = state.profile.value;
+    chatBotController.state.profile.value = state.profile.value;
+    chooseMedController.state.profile.value = state.profile.value;
+    reminderController.state.profile.value = state.profile.value;
     notificationController.fetchNotificationCounts();
     diagnosticController.fetchDiagnosticNotifications();
     alarmController.getAlarmCount();
@@ -135,9 +170,7 @@ class ApplicationController extends GetxController {
 
     log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');
     getUpdatedDataTime(); // Chuyển từ await sang chỉ gọi hàm để tạo stream lắng nghe
-    for (int i = 0; i < 10; i++) {
-      getUpdatedLatestMedical(i.toString());
-    }
+    getUpdatedLatestMedical();
 
     state.medicalData.forEach((key, value) {
       log('Dữ liệu y tế: $key - $value');
@@ -184,7 +217,14 @@ class ApplicationController extends GetxController {
     }
   }
 
-  void getUpdatedLatestMedical(String type) {
+  void getUpdatedLatestMedical() {
+    state.updateMedData = 0.obs;
+    for (int i = 0; i < 10; i++) {
+      getUpdatedLatestTypeMedical(i.toString());
+    }
+  }
+
+  void getUpdatedLatestTypeMedical(String type) {
     final db = FirebaseFirestore.instance;
     try {
       final time = Timestamp.fromDate(DateTime.now());
@@ -208,6 +248,11 @@ class ApplicationController extends GetxController {
           final data = querySnapshot.docs.first.data();
           log(data.toString());
           state.medicalData[type] = data;
+          if (isEqualToToday(
+              timestampToDate(state.medicalData[type]['time']))) {
+            state.updateMedData++;
+            print(type);
+          }
           // '${DatetimeChange.getHourString(data['time'].toDate())} ${DatetimeChange.getDatetimeString(data['time'].toDate())}';
         }
       }, onError: (error) {

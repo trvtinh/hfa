@@ -16,7 +16,7 @@ class AddReminder extends StatefulWidget {
 }
 
 class _AddReminderState extends State<AddReminder> {
-  final ReminderController reminderController = Get.put(ReminderController());
+  final reminderController = Get.put(ReminderController());
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +294,7 @@ class _AddReminderState extends State<AddReminder> {
   Widget drop_alt1() {
     return StreamBuilder<QuerySnapshot>(
       stream:
-          FirebaseFirestore.instance.collection('prescriptions').snapshots(),
+          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: reminderController.state.profile.value?.id).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(

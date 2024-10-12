@@ -48,25 +48,27 @@ class _ComboBoxState extends State<ComboBox> {
       selectedFiles.clear();
       return;
     }
-    imageAnalyze.state.image.value = File(newFiles[0].path);
-    isLoading.value = true;
-    if (isLoading.value) {
-      Get.dialog(const Center(child: CircularProgressIndicator()));
-    }
-    log('image : ${imageAnalyze.state.image.value}');
-    await imageAnalyze.analyzeImage().then((_) {
-      widget.valueController.text =
-          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
-    }).whenComplete(() {
-      Get.back();
-      isLoading.value = false;
-    });
-    if (widget.title == 'Huyết áp') {
-      medicalController.state.data[widget.title]?.value =
-          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
-      log('combobox : ${medicalController.state.data[widget.title]?.value}');
-      log('hehe'
-          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}');
+    if (widget.valueController.text.isEmpty) {
+      imageAnalyze.state.image.value = File(newFiles[0].path);
+      isLoading.value = true;
+      if (isLoading.value) {
+        Get.dialog(const Center(child: CircularProgressIndicator()));
+      }
+      log('image : ${imageAnalyze.state.image.value}');
+      await imageAnalyze.analyzeImage().then((_) {
+        widget.valueController.text =
+            '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
+      }).whenComplete(() {
+        Get.back();
+        isLoading.value = false;
+      });
+      if (widget.title == 'Huyết áp') {
+        medicalController.state.data[widget.title]?.value =
+            '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
+        log('combobox : ${medicalController.state.data[widget.title]?.value}');
+        log('hehe'
+            '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}');
+      }
     }
     setState(() {
       selectedFiles = newFiles;
@@ -75,23 +77,27 @@ class _ComboBoxState extends State<ComboBox> {
       }
     });
   }
+
   RxBool ischeck = false.obs;
-  
+
   @override
   Widget build(BuildContext context) {
-    RxBool haveFile = (selectedFiles.isNotEmpty).obs;
-    RxBool haveNote = widget.noteController.text.isNotEmpty.obs;
-    ischeck.value = medicalController.state.data[widget.title] != null
-                              ? true
-                              : false;
     return GestureDetector(
       onTap: () {
         _showDialog(context);
       },
       child: Column(
         children: [
-          Obx(
-            () => Container(
+          Obx(() {
+            RxBool haveFile = (selectedFiles.isNotEmpty).obs;
+            RxBool haveNote = widget.noteController.text.isNotEmpty.obs;
+            ischeck.value =
+                medicalController.state.data[widget.title]?.value != null;
+            if (ischeck.value == false) {
+              haveFile = false.obs;
+              haveNote = false.obs;
+            }
+            return Container(
               width: double.infinity,
               height: 85,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -225,8 +231,8 @@ class _ComboBoxState extends State<ComboBox> {
                   ),
                 ],
               ),
-            ),
-          ),
+            );
+          }),
           const Divider(height: 1),
         ],
       ),

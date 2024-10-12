@@ -1,26 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/common/entities/user.dart';
 
-class PatientBox extends StatefulWidget {
-  final String avapath;
-  final String name;
-  final String gender;
-  final String age;
-  final String person;
+class PatientBox extends StatelessWidget {
+  final UserData user;
 
-  const PatientBox({
-    super.key,
-    required this.avapath,
-    required this.name,
-    required this.gender,
-    required this.age,
-    required this.person,
-  });
+  const PatientBox({super.key, required this.user});
 
-  @override
-  State<PatientBox> createState() => PatientBoxState();
-}
-
-class PatientBoxState extends State<PatientBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,7 +28,7 @@ class PatientBoxState extends State<PatientBox> {
         children: [
           CircleAvatar(
             radius: 28,
-            backgroundImage: NetworkImage(widget.avapath),
+            backgroundImage: NetworkImage(user.photourl!),
           ),
           const SizedBox(
             width: 12,
@@ -56,7 +41,7 @@ class PatientBoxState extends State<PatientBox> {
                 Row(
                   children: [
                     Text(
-                      widget.name,
+                      user.name!,
                       style: TextStyle(
                         fontSize: 16,
                         color: Theme.of(context).colorScheme.onSurface,
@@ -67,7 +52,7 @@ class PatientBoxState extends State<PatientBox> {
                 Row(
                   children: [
                     Text(
-                      widget.gender,
+                      user.gender!,
                       style: TextStyle(
                         fontSize: 14,
                         color: Theme.of(context).colorScheme.outline,
@@ -75,7 +60,7 @@ class PatientBoxState extends State<PatientBox> {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      widget.age,
+                      '${user.age}',
                       style: TextStyle(
                         fontSize: 14,
                         color: Theme.of(context).colorScheme.outline,
@@ -113,7 +98,7 @@ class PatientBoxState extends State<PatientBox> {
                     width: 88,
                     height: 16,
                     child: Text(
-                      widget.person,
+                      'bản thân',
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,

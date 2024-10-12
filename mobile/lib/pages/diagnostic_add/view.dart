@@ -16,12 +16,12 @@ import 'package:image_picker/image_picker.dart';
 class DiagnosticAddView extends StatelessWidget {
   DiagnosticAddView({
     super.key,
-    required this.listUser,
+    required this.user,
     required this.medicalData,
   });
   final notiController = Get.find<NotificationController>();
   final MedicalEntity medicalData;
-  final RxList<UserData> listUser;
+  final UserData user;
   final diagnosticController = Get.find<DiagnosticAddController>();
 
   void updateFiles(List<XFile> newFiles) {
@@ -39,35 +39,38 @@ class DiagnosticAddView extends StatelessWidget {
         title: const Text('Thêm chẩn đoán'),
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SendDiagnostic(listuser: listUser),
-                    const SizedBox(height: 16),
-                    TypeOfData(medicalData: medicalData),
-                    const SizedBox(height: 16),
-                    DiagnosticText(),
-                    const SizedBox(height: 16),
-                    AddFile(
-                      files: diagnosticController.selectedFiles,
-                      onFilesChanged: updateFiles,
-                    ),
-                  ],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SendDiagnostic(user: user),
+                      const SizedBox(height: 16),
+                      TypeOfData(medicalData: medicalData),
+                      const SizedBox(height: 16),
+                      DiagnosticText(),
+                      const SizedBox(height: 16),
+                      AddFile(
+                        files: diagnosticController.selectedFiles,
+                        onFilesChanged: updateFiles,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            FromDoctor(
-              doctorname: diagnosticController
-                      .appController.state.profile.value?.name ??
-                  "",
-            ),
-            _buildActionButtons(context),
-          ],
+              FromDoctor(
+                doctorname: diagnosticController
+                        .appController.state.profile.value?.name ??
+                    "",
+              ),
+              _buildActionButtons(context),
+            ],
+          ),
         ),
       ),
     );
@@ -84,7 +87,7 @@ class DiagnosticAddView extends StatelessWidget {
             const SizedBox(width: 15),
             const VerticalDivider(width: 1, indent: 5, endIndent: 5),
             const SizedBox(width: 15),
-            _buildActionButton(context, "Lưu"),
+            _buildActionButton(context, "Gửi"),
           ],
         ),
       ),
@@ -98,8 +101,7 @@ class DiagnosticAddView extends StatelessWidget {
       child: TextButton(
         onPressed: () async {
           FocusScope.of(context).unfocus();
-          if (label == 'Lưu') {
-            print(listUser[0]);
+          if (label == 'Gửi') {
             await _handleSave(context);
           } else {
             Get.back();
@@ -127,15 +129,15 @@ class DiagnosticAddView extends StatelessWidget {
       await diagnosticController.addImage();
       final docId = await diagnosticController.addDiagnostic(
         medicalData.id!,
-        listUser[0].id!,
+        user.id!,
       );
       FirebaseMessagingApi.sendMessage(
-          listUser[0].fcmtoken!,
+          user.fcmtoken!,
           'Chẩn đoán',
           "${diagnosticController.appController.state.profile.value!.name!} đã gửi chẩn đoán đến bạn",
           'diagnostic',
           '/diagnotic',
-          listUser[0].id!,
+          user.id!,
           'unread',
           diagnosticId: docId,
           medicalId: medicalData.id!);
@@ -149,7 +151,7 @@ class DiagnosticAddView extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Thành công'),
                 content: Text(
-                    'Thành công thêm chẩn đoán cho bệnh nhân ${listUser[0].name!}'),
+                    'Thành công thêm chẩn đoán cho bệnh nhân ${user.name!}'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {

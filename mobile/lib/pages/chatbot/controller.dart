@@ -15,7 +15,7 @@ class ChatbotController extends GetxController {
   final FocusNode textNode = FocusNode();
   final ScrollController scrollController = ScrollController();
   final state = ChatbotState();
-  final appController = Get.find<ApplicationController>();
+  // final appController = Get.find<ApplicationController>();
   Rx<ChatbotEntity> data = ChatbotEntity().obs;
   final model = GenerativeModel(
     model: 'gemini-1.5-flash',
@@ -40,7 +40,7 @@ class ChatbotController extends GetxController {
   }
 
   Future getHistory() async {
-    final uid = appController.state.profile.value!.id!;
+    final uid = state.profile.value?.id!;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('chatbots')
         .where('uid', isEqualTo: uid)
@@ -63,7 +63,7 @@ class ChatbotController extends GetxController {
     final content = [Content.text(query)];
     data.value = ChatbotEntity(
         role: 'User',
-        uid: appController.state.profile.value!.id!,
+        uid: state.profile.value?.id!,
         timestamp: Timestamp.fromDate(DateTime.now()),
         content: query,
         image: "");
@@ -75,7 +75,7 @@ class ChatbotController extends GetxController {
         .then((value) {
       data.value = ChatbotEntity(
           role: 'HFA',
-          uid: appController.state.profile.value!.id!,
+          uid: state.profile.value?.id!,
           timestamp: Timestamp.fromDate(DateTime.now()),
           image: '',
           content: value.text);
@@ -117,7 +117,7 @@ class ChatbotController extends GetxController {
         await FirebaseApi.uploadImage(state.image.value!.path, 'chatbots');
     data.value = ChatbotEntity(
         role: 'User',
-        uid: appController.state.profile.value!.id!,
+        uid: state.profile.value?.id!,
         timestamp: Timestamp.fromDate(DateTime.now()),
         content: query,
         image: image ?? "");
@@ -136,21 +136,44 @@ class ChatbotController extends GetxController {
     ], generationConfig: GenerationConfig(maxOutputTokens: 250)).then((value) {
       data.value = ChatbotEntity(
           role: 'HFA',
-          uid: appController.state.profile.value!.id!,
+          uid: state.profile.value?.id!,
           timestamp: Timestamp.fromDate(DateTime.now()),
           image: '',
           content: value.text);
       state.chatList.insert(0, data.value);
     });
-    scrollToEnd();
     await FirebaseApi.addDocument('chatbots', data.value.toMap());
+    scrollToEnd();
   }
 
   void scrollToEnd() {
-    scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        scrollController.position
+            .minScrollExtent, // In reverse mode, this is typically the "end"
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  void clearChatHistory() {
+    state.chatList.clear(); // Clears the local chat list
+    update(); // Notifies the UI to update if necessary
+  }
+
+  Future<void> deleteChatHistoryFromFirestore() async {
+    final uid = state.profile.value?.id!;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('chatbots')
+        .where('uid', isEqualTo: uid)
+        .get();
+
+    for (var doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+
+    // Clear the local chat list
+    clearChatHistory();
   }
 }

@@ -90,7 +90,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   Widget filter_prescription(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream:
-          FirebaseFirestore.instance.collection('prescriptions').snapshots(),
+          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: controller.state.profile.value?.id).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -139,6 +139,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
         StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('prescriptions')
+              .where('patientId', isEqualTo: controller.state.profile.value?.id)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {

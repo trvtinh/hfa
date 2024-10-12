@@ -7,6 +7,7 @@ import 'package:health_for_all/pages/medical_data/index.dart';
 import 'package:health_for_all/pages/medical_data_homepage/widget/GreyBox.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/type_med_history/view.dart';
+import 'package:intl/intl.dart';
 
 class MedicalDataHome extends StatelessWidget {
   MedicalDataHome({super.key, this.time, this.user});
@@ -40,18 +41,18 @@ class MedicalDataHome extends StatelessWidget {
                   _buildGreyBoxRow1(
                     appController.state.medicalData['3'] != ""
                         ? appController.state.medicalData['3']['value']
-                        : "--",
+                        : "",
                     appController.state.medicalData['3'] != ""
                         ? DatetimeChange.timestamptoHHMMDDMMYYYY(
                             appController.state.medicalData['3']['time'])
-                        : "Chưa cập nhật",
+                        : "",
                     appController.state.medicalData['4'] != ""
                         ? appController.state.medicalData['4']['value']
-                        : "--",
+                        : "",
                     appController.state.medicalData['4'] != ""
                         ? DatetimeChange.timestamptoHHMMDDMMYYYY(
                             appController.state.medicalData['4']['time'])
-                        : "Chưa cập nhật",
+                        : "",
                   ),
                   const SizedBox(height: 16),
                   _buildGreyBoxRow2(
@@ -243,21 +244,23 @@ class MedicalDataHome extends StatelessWidget {
 
   Widget _buildGreyBoxRow1(
       String value1, String time1, String value2, String time2) {
+    print(time1);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Expanded(
           child: GestureDetector(
             onTap: () {
+              print(time1);
               Get.to(() => TypeMedHistory("Nhịp tim"));
             },
             child: GreyBox(
               title: 'Nhịp tim',
               iconpath: 'assets/medical_data_Home_images/heart-rate.png',
-              value: value1,
+              value: value1 != "" ? value1 : "--",
               unit: 'lần/phút',
-              time: time1,
-              warning: false,
+              time: time1 == '' ? "Chưa cập nhật" : time1,
+              warning: time1 == '' ? true : false,
             ),
           ),
         ),
@@ -272,10 +275,10 @@ class MedicalDataHome extends StatelessWidget {
             child: GreyBox(
               title: 'SPO2',
               iconpath: 'assets/medical_data_Home_images/spo2.png',
-              value: value2,
+              value: value2 != "" ? value2 : "--",
               unit: '%',
-              time: time2,
-              warning: false,
+              time: time2 == '' ? "Chưa cập nhật" : time2,
+              warning: time2 == '' ? true : false,
             ),
           ),
         ),

@@ -18,6 +18,7 @@ class TypeMedHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    typeMedHistoryController.fetchEventAmountTime(title);
     return Scaffold(
       appBar: AppBar(
         title: Text(title),

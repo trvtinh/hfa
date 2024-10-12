@@ -16,8 +16,9 @@ class ListReminder extends StatefulWidget {
 class _ListReminderState extends State<ListReminder> {
   @override
   Widget build(BuildContext context) {
+    final reminderController = Get.find<ReminderController>();
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('reminders').snapshots(),
+        stream: FirebaseFirestore.instance.collection('reminders').where('userId', isEqualTo: reminderController.state.profile.value?.id).snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(

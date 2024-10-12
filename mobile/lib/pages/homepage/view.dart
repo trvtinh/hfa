@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/alarm_entity.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
+import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
@@ -30,7 +31,8 @@ class Homepage extends StatelessWidget {
 
   DateTime getYesterdayTimestamp() {
     DateTime now = DateTime.now(); // Get the current date and time
-    DateTime yesterday = now.subtract(const Duration(days: 1)); // Subtract one day
+    DateTime yesterday =
+        now.subtract(const Duration(days: 1)); // Subtract one day
     return yesterday; // This returns the DateTime object for yesterday
   }
 
@@ -136,7 +138,7 @@ class Homepage extends StatelessWidget {
                                   const SizedBox(width: 12),
                                   SizedBox(
                                     width:
-                                        MediaQuery.of(context).size.width / 3.7,
+                                        MediaQuery.of(context).size.width / 3,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -258,13 +260,15 @@ class Homepage extends StatelessWidget {
                   const SizedBox(
                     height: 16,
                   ),
-                  Obx(() => Orangebox(
-                      val1: "00",
-                      val2: "10",
-                      val3: "10",
-                      time: appController.state.updateTime.value == ""
-                          ? "Chưa cập nhật dữ liệu lần nào"
-                          : "Cập nhật lần cuối ${appController.state.updateTime.value}")),
+                  Obx(() {
+                    RxInt update = appController.state.updateMedData;
+                    return Orangebox(
+                        val1: update.toString(),
+                        val3: "10",
+                        time: appController.state.updateTime.value == ""
+                            ? "Chưa cập nhật dữ liệu lần nào"
+                            : "Cập nhật lần cuối ${appController.state.updateTime.value}");
+                  }),
                   const SizedBox(
                     height: 16,
                   ),
@@ -275,8 +279,8 @@ class Homepage extends StatelessWidget {
                         onTap: () {
                           Get.to(() => const DiagnosticPage());
                         },
-                        child: Obx(
-                          () => WhiteBox(
+                        child: Obx(() {
+                          return WhiteBox(
                               title: 'Chẩn đoán',
                               iconbox: Icons.health_and_safety_outlined,
                               text1: 'Chưa xem',
@@ -286,8 +290,8 @@ class Homepage extends StatelessWidget {
                                   .toString(),
                               value2: appController
                                   .diagnosticController.state.read.value
-                                  .toString()),
-                        ),
+                                  .toString());
+                        }),
                       ),
                       const SizedBox(
                         width: 10,
@@ -299,6 +303,9 @@ class Homepage extends StatelessWidget {
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('prescriptions')
+                              .where('patientId',
+                                  isEqualTo:
+                                      appController.state.profile.value?.id)
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
@@ -315,11 +322,13 @@ class Homepage extends StatelessWidget {
                                 .toList();
                             int finished = 0;
                             int drinking = 0;
-                            for (var i in data){
-                              if (compareTimestamps(convertStringtoTime(i.endDate!), getYesterdayTimestamp())) {
-                                drinking ++;
+                            for (var i in data) {
+                              if (compareTimestamps(
+                                  convertStringtoTime(i.endDate!),
+                                  getYesterdayTimestamp())) {
+                                drinking++;
                               } else {
-                                finished ++;
+                                finished++;
                               }
                             }
                             return WhiteBox(
@@ -347,6 +356,9 @@ class Homepage extends StatelessWidget {
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('reminders')
+                              .where('userId',
+                                  isEqualTo:
+                                      appController.state.profile.value?.id)
                               .snapshots(),
                           builder: (context, snapshot) {
                             if (snapshot.hasError) {
@@ -362,10 +374,10 @@ class Homepage extends StatelessWidget {
                                     as DocumentSnapshot<Map<String, dynamic>>))
                                 .toList();
                             return WhiteBoxnoW(
-                            title: 'Nhắc nhở',
-                            iconbox: Icons.date_range_outlined,
-                            text1: 'Số lời nhắc',
-                            value1: data.length.toString());
+                                title: 'Nhắc nhở',
+                                iconbox: Icons.date_range_outlined,
+                                text1: 'Số lời nhắc',
+                                value1: data.length.toString());
                           },
                         ),
                       ),
@@ -377,30 +389,34 @@ class Homepage extends StatelessWidget {
                             Get.to(() => const AlarmPage());
                           },
                           child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('alarms')
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return const Text('Có lỗi xảy ra');
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
+                            stream: FirebaseFirestore.instance
+                                .collection('alarms')
+                                .where('userId',
+                                    isEqualTo:
+                                        appController.state.profile.value?.id)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Có lỗi xảy ra');
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
 
-                            final data = snapshot.data!.docs
-                                .map((doc) => AlarmEntity.fromFirestore(doc
-                                    as DocumentSnapshot<Map<String, dynamic>>))
-                                .toList();
-                            return WhiteBoxnoW(
+                              final data = snapshot.data!.docs
+                                  .map((doc) => AlarmEntity.fromFirestore(doc
+                                      as DocumentSnapshot<
+                                          Map<String, dynamic>>))
+                                  .toList();
+                              return WhiteBoxnoW(
                                 title: 'Cảnh báo',
                                 iconbox: Icons.warning_amber_outlined,
                                 text1: 'Số cảnh báo',
                                 value1: data.length.toString(),
                               );
-                          },
-                        )),
+                            },
+                          )),
                     ],
                   ),
                   const SizedBox(
