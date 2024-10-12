@@ -101,7 +101,7 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
   Widget connect_samsung(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => SamsungConnect());
+        Get.to(() => HealthConnect());
       },
       child: Container(
         padding: const EdgeInsets.all(12),

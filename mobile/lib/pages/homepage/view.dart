@@ -138,7 +138,7 @@ class Homepage extends StatelessWidget {
                                   const SizedBox(width: 12),
                                   SizedBox(
                                     width:
-                                        MediaQuery.of(context).size.width / 3.7,
+                                        MediaQuery.of(context).size.width / 3,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
