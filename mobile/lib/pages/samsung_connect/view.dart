@@ -847,10 +847,11 @@ class _HealthConnectState extends State<HealthConnect> {
 
   Widget _contentNotFetched =
       const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-    const Text("Press 'Auth' to get permissions to access health data."),
-    const Text("Press 'Fetch Dat' to get health data."),
-    const Text("Press 'Add Data' to add some random health data."),
-    const Text("Press 'Delete Data' to remove some random health data."),
+    const Text("Bấm vào 'Tải Health Connect' nếu bạn chưa có để bắt đầu đồng bộ hóa", style: TextStyle(fontSize: 20),),
+    SizedBox(height: 10,),
+    const Text("Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health", style: TextStyle(fontSize: 20),),
+    // const Text("Press 'Add Data' to add some random health data."),
+    // const Text("Press 'Delete Data' to remove some random health data."),
   ]);
 
   Widget _authorized = const Text('Authorization granted!');

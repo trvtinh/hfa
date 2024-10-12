@@ -52,10 +52,8 @@ class SamsungConnectController extends GetxController {
 
   Future syncMedData(DateTime time, String typeId, String value, String unit,
       BuildContext context) async {
-    isLoading = true.obs;
-    if (isLoading.value) {
-      Get.dialog(const Center(child: CircularProgressIndicator()));
-    }
+    // isLoading = true.obs;
+    Get.dialog(const Center(child: CircularProgressIndicator()));
 
     var check = await FirebaseApi.checkExistDocumentForMed(
         'medicalData',
@@ -76,6 +74,7 @@ class SamsungConnectController extends GetxController {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
+                  Get.back();
                   Get.back(); // Dismiss the dialog
                 },
                 child: const Text('Xác nhận'),
@@ -101,7 +100,8 @@ class SamsungConnectController extends GetxController {
 
     log(data.toString());
     await FirebaseApi.addDocument("medicalData", data.toFirestoreMap());
-    isLoading = false.obs;
+    // isLoading = false.obs;
+    Get.back();
     showDialog(
         context: context,
         builder: (BuildContext context) {
