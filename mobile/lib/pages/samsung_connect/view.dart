@@ -41,23 +41,24 @@ class _HealthConnectState extends State<HealthConnect> {
   final healthConnectController = Get.put(SamsungConnectController());
 
   // All types available depending on platform (iOS ot Android).
-  List<HealthDataType> get types => (Platform.isAndroid)
-      ? healthConnectController.state.dataTypesAndroid
-      : (Platform.isIOS)
-          ? healthConnectController.state.dataTypesIOS
-          : [];
+  // List<HealthDataType> get types => (Platform.isAndroid)
+  //     ? healthConnectController.state.dataTypesAndroid
+  //     : (Platform.isIOS)
+  //         ? healthConnectController.state.dataTypesIOS
+  //         : [];
 // // Or specify specific types
-  // static final types = [
-  //   HealthDataType.WEIGHT,
-  //   HealthDataType.STEPS,
-  //   HealthDataType.HEIGHT,
-  //   HealthDataType.BLOOD_GLUCOSE,
-  //   HealthDataType.WORKOUT,
-  //   HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-  //   HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-  //   // Uncomment this line on iOS - only available on iOS
-  //   // HealthDataType.AUDIOGRAM
-  // ];
+  static final types = [
+    HealthDataType.WEIGHT,
+    // HealthDataType.STEPS,
+    // HealthDataType.HEIGHT,
+    HealthDataType.BLOOD_OXYGEN,
+    HealthDataType.HEART_RATE,
+    // HealthDataType.WORKOUT,
+    // HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+    // HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+    // Uncomment this line on iOS - only available on iOS
+    // HealthDataType.AUDIOGRAM
+  ];
 
   // Set up corresponding permissions
 
@@ -140,13 +141,70 @@ class _HealthConnectState extends State<HealthConnect> {
     });
   }
 
+  Widget _buildDateTimeField(
+      BuildContext context,
+      String label,
+      IconData icon,
+      Future<void> Function(BuildContext) onTap,
+      TextEditingController controller,
+      {required double width}) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      width: width,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
+          border: const OutlineInputBorder(),
+          labelText: label,
+        ),
+        readOnly: true,
+        onTap: () => onTap(context),
+      ),
+    );
+  }
+
+  void chooseDate(){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Chọn khoảng thời gian lấy dữ liệu',
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+            _buildDateTimeField(context, 'Ngày bắt đầu', Icons.event_note,
+                    healthConnectController.selectDateStart, healthConnectController.startDateController,
+                    width: MediaQuery.of(context).size.width *0.8 ),
+            _buildDateTimeField(context, 'Ngày kết thúc', Icons.event_note,
+                    healthConnectController.selectDateEnd, healthConnectController.endDateController,
+                    width: MediaQuery.of(context).size.width *0.8 ),
+          ],),
+          actions: <Widget>[
+              TextButton(
+                child: const Text('Xác nhận'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+        );
+      },
+    );
+  }
+
   /// Fetch data points from the health plugin and show them in the app.
   Future<void> fetchData() async {
     setState(() => _state = AppState.FETCHING_DATA);
 
     // get data within the last 24 hours
-    final now = DateTime.now();
-    final yesterday = now.subtract(const Duration(hours: 24));
+    // final now = DateTime.now();
+    // final yesterday = now.subtract(const Duration(hours: 24));
 
     // Clear old data points
     _healthDataList.clear();
@@ -155,8 +213,8 @@ class _HealthConnectState extends State<HealthConnect> {
       // fetch health data
       List<HealthDataPoint> healthData = await Health().getHealthDataFromTypes(
         types: types,
-        startTime: yesterday,
-        endTime: now,
+        startTime: healthConnectController.start,
+        endTime: healthConnectController.end.add(Duration(hours: 24)),
         recordingMethodsToFilter: recordingMethodsToFilter,
       );
 
@@ -472,10 +530,11 @@ class _HealthConnectState extends State<HealthConnect> {
         ],
       ),
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(height: 1,),
+          Divider(
+            height: 1,
+          ),
           if (Platform.isAndroid)
             TextButton(
                 onPressed: getHealthConnectSdkStatus,
@@ -483,9 +542,11 @@ class _HealthConnectState extends State<HealthConnect> {
                     backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                 child: const Text("Kiểm tra kết nối Health Connect",
                     style: TextStyle(color: Colors.white))),
-          if (Platform.isAndroid /*&&
+          if (Platform
+                  .isAndroid /*&&
               Health().healthConnectSdkStatus !=
-                  HealthConnectSdkStatus.sdkAvailable*/)
+                  HealthConnectSdkStatus.sdkAvailable*/
+              )
             TextButton(
                 onPressed: installHealthConnect,
                 style: const ButtonStyle(
@@ -496,8 +557,7 @@ class _HealthConnectState extends State<HealthConnect> {
               Platform.isAndroid &&
                   Health().healthConnectSdkStatus ==
                       HealthConnectSdkStatus.sdkAvailable)
-            Row(
-              children: [
+            Row(children: [
               // TextButton(
               //     onPressed: authorize,
               //     style: const ButtonStyle(
@@ -511,6 +571,15 @@ class _HealthConnectState extends State<HealthConnect> {
                       backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                   child: const Text("Lấy dữ liệu",
                       style: TextStyle(color: Colors.white))),
+              SizedBox(
+                width: 12,
+              ),
+              TextButton(
+                  onPressed: chooseDate,
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blue)),
+                  child: const Text("Chọn ngày lấy dữ liệu",
+                      style: TextStyle(color: Colors.white))),
               // TextButton(
               //     onPressed: addData,
               //     style: const ButtonStyle(
@@ -518,13 +587,6 @@ class _HealthConnectState extends State<HealthConnect> {
               //             WidgetStatePropertyAll(Colors.blue)),
               //     child: const Text("Add Data",
               //         style: TextStyle(color: Colors.white))),
-              SizedBox(width: 12,),
-              TextButton(
-                  onPressed: deleteData,
-                  style: const ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.blue)),
-                  child: const Text("Xóa dữ liệu",
-                      style: TextStyle(color: Colors.white))),
               // TextButton(
               //     onPressed: fetchStepData,
               //     style: const ButtonStyle(
@@ -540,8 +602,14 @@ class _HealthConnectState extends State<HealthConnect> {
               //     child: const Text("Revoke Access",
               //         style: TextStyle(color: Colors.white))),
             ]),
+          TextButton(
+                  onPressed: deleteData,
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blue)),
+                  child: const Text("Xóa dữ liệu",
+                      style: TextStyle(color: Colors.white))),
           const Divider(thickness: 3),
-          if (_state == AppState.DATA_READY) _dataFiltration,
+          // if (_state == AppState.DATA_READY) _dataFiltration,
           // if (_state == AppState.STEPS_READY) _stepsFiltration,
           Expanded(child: Center(child: _content))
         ],
@@ -656,46 +724,68 @@ class _HealthConnectState extends State<HealthConnect> {
         ],
       );
 
+  String convert(String val){
+    String res = "";
+    for (int i=val.length-1;i>=0;i--){
+      if (RegExp(r'^[0-9]$').hasMatch(val[i])) res = val[i]+res;
+      continue;
+    }
+    return res;
+  }
+
   Widget get _contentDataReady => ListView.builder(
       itemCount: _healthDataList.length,
       itemBuilder: (_, index) {
         // filter out manual entires if not wanted
-        if (recordingMethodsToFilter
-            .contains(_healthDataList[index].recordingMethod)) {
-          return Container();
-        }
-
+        // if (recordingMethodsToFilter
+        //     .contains(_healthDataList[index].recordingMethod)) {
+        //   return Container();
+        // }
+        print("dakmim");
         HealthDataPoint p = _healthDataList[index];
-        if (p.value is AudiogramHealthValue) {
-          return ListTile(
-            title: Text("${p.typeString}: ${p.value}"),
-            trailing: Text('${p.unitString}'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
-          );
-        }
-        if (p.value is WorkoutHealthValue) {
-          return ListTile(
-            title: Text(
-                "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.name}"),
-            trailing: Text(
-                '${(p.value as WorkoutHealthValue).workoutActivityType.name}'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
-          );
-        }
-        if (p.value is NutritionHealthValue) {
-          return ListTile(
-            title: Text(
-                "${p.typeString} ${(p.value as NutritionHealthValue).mealType}: ${(p.value as NutritionHealthValue).name}"),
-            trailing:
-                Text('${(p.value as NutritionHealthValue).calories} kcal'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
-          );
-        }
-        return ListTile(
-          title: Text("${p.typeString}: ${p.value}"),
-          trailing: Text('${p.unitString}'),
-          subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        // if (p.value is AudiogramHealthValue) {
+        //   return ListTile(
+        //     title: Text("${p.typeString}: ${p.value}"),
+        //     trailing: Text('${p.unitString}'),
+        //     subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        //   );
+        // }
+        // if (p.value is WorkoutHealthValue) {
+        //   return ListTile(
+        //     title: Text(
+        //         "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.name}"),
+        //     trailing: Text(
+        //         '${(p.value as WorkoutHealthValue).workoutActivityType.name}'),
+        //     subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        //   );
+        // }
+        // if (p.value is NutritionHealthValue) {
+        //   return ListTile(
+        //     title: Text(
+        //         "${p.typeString} ${(p.value as NutritionHealthValue).mealType}: ${(p.value as NutritionHealthValue).name}"),
+        //     trailing:
+        //         Text('${(p.value as NutritionHealthValue).calories} kcal'),
+        //     subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        //   );
+        // }
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all()
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              Text(convert(p.value.toString())),
+              Text('${p.unitString}'),
+              Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+            ],
+          ),
         );
+        // return ListTile(
+        //   title: Text("${p.typeString}: ${p.value}"),
+        //   trailing: Text('${p.unitString}'),
+        //   subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        // );
       });
 
   Widget _contentNoData = const Text('No Data to show');
