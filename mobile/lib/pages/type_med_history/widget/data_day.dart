@@ -13,10 +13,10 @@ class DataDay extends StatefulWidget {
 }
 
 class _DataDayState extends State<DataDay> {
-  bool have_file1 = false;
-  bool have_file2 = false;
-  bool have_file3 = false;
-  bool have_file4 = false;
+  // bool have_file1 = false;
+  // bool have_file2 = false;
+  // bool have_file3 = false;
+  // bool have_file4 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -76,17 +76,17 @@ class _DataDayState extends State<DataDay> {
                 ),
           
                 // Icons for additional actions in the same row
-                const SizedBox(width: 16),
-                icon_round(have_file1, icon: Icons.edit_note_outlined),
-                const SizedBox(width: 6),
-                icon_round(have_file2, icon: Icons.attach_file_outlined),
-                const SizedBox(width: 6),
-                icon_round(have_file3, icon: Icons.comment_outlined),
-                const SizedBox(width: 6),
-                if (have_file4)
-                  image_round("assets/images/result2.png")
-                else
-                  image_round("assets/images/result1.png"),
+                // const SizedBox(width: 16),
+                // icon_round(have_file1, icon: Icons.edit_note_outlined),
+                // const SizedBox(width: 6),
+                // icon_round(have_file2, icon: Icons.attach_file_outlined),
+                // const SizedBox(width: 6),
+                // icon_round(have_file3, icon: Icons.comment_outlined),
+                // const SizedBox(width: 6),
+                // if (have_file4)
+                //   image_round("assets/images/result2.png")
+                // else
+                //   image_round("assets/images/result1.png"),
               ],
             ),
           ),

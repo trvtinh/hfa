@@ -33,6 +33,23 @@ class FirebaseApi {
     }
   }
 
+  static Future<bool?> checkExistDocumentForMed(
+      String collection, String field1, String value1, String field2, String value2, String field3, Timestamp value3) async {
+    try {
+      final querySnapshot =
+          await db.collection(collection).where(field1, isEqualTo: value1).where(field2, isEqualTo: value2).where(field3, isEqualTo: value3).get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return true;
+      } else {
+        print('No document found with $field1: $value1');
+        return false;
+      }
+    } catch (e) {
+      print('Error retrieving document ID: $e');
+      return false;
+    }
+  }
+
   static Future<DocumentSnapshot<Map<String, dynamic>>> getDocumentSnapshotById(
       String collection, String docId) async {
     try {

@@ -16,6 +16,7 @@ import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
+import 'package:health_for_all/pages/samsung_connect/controller.dart';
 import 'package:intl/intl.dart';
 import 'index.dart';
 
@@ -35,6 +36,7 @@ class ApplicationController extends GetxController {
   final alarmController = Get.find<AlarmController>();
   final chooseMedController = Get.find<ChooseTypeMedController>();
   final reminderController = Get.find<ReminderController>();
+  final samsungController = Get.find<SamsungConnectController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -163,6 +165,7 @@ class ApplicationController extends GetxController {
     chatBotController.state.profile.value = state.profile.value;
     chooseMedController.state.profile.value = state.profile.value;
     reminderController.state.profile.value = state.profile.value;
+    samsungController.state.profile.value = state.profile.value;
     notificationController.fetchNotificationCounts();
     diagnosticController.fetchDiagnosticNotifications();
     alarmController.getAlarmCount();
