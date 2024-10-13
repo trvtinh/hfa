@@ -28,6 +28,7 @@ class _DataDayState extends State<DataDay> {
   // bool have_file3 = false;
   // bool have_file4 = false;
   final connectController = Get.find<SamsungConnectController>();
+  bool synced = false;
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +92,35 @@ class _DataDayState extends State<DataDay> {
               ),
 
               Expanded(
-                child: ElevatedButton(
+                child: !synced 
+                ? ElevatedButton(
                   onPressed: (){
                     connectController.syncMedData(widget.pass, widget.index.toString(), widget.value, Item.getUnit(widget.index), context);
+                    setState(() {
+                      synced = true;
+                    });
                   }, 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+                  ),
                   child: Container(
                     child: Text(
                       "Đồng Bộ",
+                    ),
+                  ),
+                )
+                : ElevatedButton(
+                  onPressed: (){
+                  }, 
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.outline,
+                  ),
+                  child: Container(
+                    child: Text(
+                      "Đã Đồng Bộ",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
