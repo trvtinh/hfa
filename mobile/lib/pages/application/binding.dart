@@ -15,6 +15,7 @@ import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
 import 'package:health_for_all/pages/profile/page/search_controller.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
+import 'package:health_for_all/pages/samsung_connect/controller.dart';
 import 'package:health_for_all/pages/type_med_history/controller.dart';
 import 'index.dart';
 
@@ -39,6 +40,7 @@ class ApplicationBinding implements Bindings {
     Get.lazyPut(() => ChooseTypeMedController(), fenix: true);
     Get.lazyPut(() => ImageAnalyzeController(), fenix: true);
     Get.lazyPut(() => TypeMedHistoryController(), fenix: true);
+    Get.lazyPut(()=> SamsungConnectController(),fenix: true);
 
     // Get.lazyPut(() => HomeController());
     // Get.lazyPut(() => PostController());

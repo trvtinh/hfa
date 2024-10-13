@@ -1,10 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health/health.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/pages/samsung_connect/controller.dart';
+import 'package:health_for_all/pages/samsung_connect/widget/data_fetched.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:carp_serializable/carp_serializable.dart';
 
@@ -41,23 +45,24 @@ class _HealthConnectState extends State<HealthConnect> {
   final healthConnectController = Get.put(SamsungConnectController());
 
   // All types available depending on platform (iOS ot Android).
-  List<HealthDataType> get types => (Platform.isAndroid)
-      ? healthConnectController.state.dataTypesAndroid
-      : (Platform.isIOS)
-          ? healthConnectController.state.dataTypesIOS
-          : [];
+  // List<HealthDataType> get types => (Platform.isAndroid)
+  //     ? healthConnectController.state.dataTypesAndroid
+  //     : (Platform.isIOS)
+  //         ? healthConnectController.state.dataTypesIOS
+  //         : [];
 // // Or specify specific types
-  // static final types = [
-  //   HealthDataType.WEIGHT,
-  //   HealthDataType.STEPS,
-  //   HealthDataType.HEIGHT,
-  //   HealthDataType.BLOOD_GLUCOSE,
-  //   HealthDataType.WORKOUT,
-  //   HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-  //   HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-  //   // Uncomment this line on iOS - only available on iOS
-  //   // HealthDataType.AUDIOGRAM
-  // ];
+  static final types = [
+    HealthDataType.WEIGHT,
+    // HealthDataType.STEPS,
+    // HealthDataType.HEIGHT,
+    HealthDataType.BLOOD_OXYGEN,
+    HealthDataType.HEART_RATE,
+    // HealthDataType.WORKOUT,
+    // HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
+    // HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
+    // Uncomment this line on iOS - only available on iOS
+    // HealthDataType.AUDIOGRAM
+  ];
 
   // Set up corresponding permissions
 
@@ -140,13 +145,79 @@ class _HealthConnectState extends State<HealthConnect> {
     });
   }
 
+  Widget _buildDateTimeField(
+      BuildContext context,
+      String label,
+      IconData icon,
+      Future<void> Function(BuildContext) onTap,
+      TextEditingController controller,
+      {required double width}) {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      width: width,
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon, color: Theme.of(context).colorScheme.primary),
+          border: const OutlineInputBorder(),
+          labelText: label,
+        ),
+        readOnly: true,
+        onTap: () => onTap(context),
+      ),
+    );
+  }
+
+  void chooseDate() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Chọn khoảng thời gian lấy dữ liệu',
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildDateTimeField(
+                  context,
+                  'Ngày bắt đầu',
+                  Icons.event_note,
+                  healthConnectController.selectDateStart,
+                  healthConnectController.startDateController,
+                  width: MediaQuery.of(context).size.width * 0.8),
+              _buildDateTimeField(
+                  context,
+                  'Ngày kết thúc',
+                  Icons.event_note,
+                  healthConnectController.selectDateEnd,
+                  healthConnectController.endDateController,
+                  width: MediaQuery.of(context).size.width * 0.8),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Xác nhận'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   /// Fetch data points from the health plugin and show them in the app.
   Future<void> fetchData() async {
     setState(() => _state = AppState.FETCHING_DATA);
 
     // get data within the last 24 hours
-    final now = DateTime.now();
-    final yesterday = now.subtract(const Duration(hours: 24));
+    // final now = DateTime.now();
+    // final yesterday = now.subtract(const Duration(hours: 24));
 
     // Clear old data points
     _healthDataList.clear();
@@ -155,8 +226,8 @@ class _HealthConnectState extends State<HealthConnect> {
       // fetch health data
       List<HealthDataPoint> healthData = await Health().getHealthDataFromTypes(
         types: types,
-        startTime: yesterday,
-        endTime: now,
+        startTime: healthConnectController.start,
+        endTime: healthConnectController.end.add(Duration(hours: 24)),
         recordingMethodsToFilter: recordingMethodsToFilter,
       );
 
@@ -169,6 +240,17 @@ class _HealthConnectState extends State<HealthConnect> {
       // save all the new data points (only the first 100)
       _healthDataList.addAll(
           (healthData.length < 100) ? healthData : healthData.sublist(0, 100));
+
+      List<HealthDataPoint> listRemove = [];
+      for (var p in _healthDataList){
+        int setType = 0;
+        if (p.type.toString() == 'HealthDataType.HEART_RATE') setType = 3;
+        if (p.type.toString() == 'HealthDataType.WEIGHT') setType = 7;
+        if (p.type.toString() == 'HealthDataType.BLOOD_OXYGEN') setType = 4;
+        var check = await FirebaseApi.checkExistDocumentForMed('medicalData', 'userId', healthConnectController.state.profile.value?.id ?? '', 'typeId', setType.toString(), 'time', Timestamp.fromDate(p.dateFrom));
+        if (check == true) listRemove.add(p); 
+      }
+      _healthDataList.removeWhere((p) => listRemove.contains(p));
     } catch (error) {
       debugPrint("Exception in getHealthDataFromTypes: $error");
     }
@@ -198,12 +280,12 @@ class _HealthConnectState extends State<HealthConnect> {
     bool success = true;
 
     // misc. health data examples using the writeHealthData() method
-    success &= await Health().writeHealthData(
-        value: 1.925,
-        type: HealthDataType.HEIGHT,
-        startTime: earlier,
-        endTime: now,
-        recordingMethod: RecordingMethod.manual);
+    // success &= await Health().writeHealthData(
+    //     value: 1.925,
+    //     type: HealthDataType.HEIGHT,
+    //     startTime: earlier,
+    //     endTime: now,
+    //     recordingMethod: RecordingMethod.manual);
     success &= await Health().writeHealthData(
         value: 90,
         type: HealthDataType.WEIGHT,
@@ -215,73 +297,73 @@ class _HealthConnectState extends State<HealthConnect> {
         startTime: earlier,
         endTime: now,
         recordingMethod: RecordingMethod.manual);
-    success &= await Health().writeHealthData(
-        value: 90,
-        type: HealthDataType.STEPS,
-        startTime: earlier,
-        endTime: now,
-        recordingMethod: RecordingMethod.manual);
-    success &= await Health().writeHealthData(
-      value: 200,
-      type: HealthDataType.ACTIVE_ENERGY_BURNED,
-      startTime: earlier,
-      endTime: now,
-    );
+    // success &= await Health().writeHealthData(
+    //     value: 90,
+    //     type: HealthDataType.STEPS,
+    //     startTime: earlier,
+    //     endTime: now,
+    //     recordingMethod: RecordingMethod.manual);
+    // success &= await Health().writeHealthData(
+    //   value: 200,
+    //   type: HealthDataType.ACTIVE_ENERGY_BURNED,
+    //   startTime: earlier,
+    //   endTime: now,
+    // );
     success &= await Health().writeHealthData(
         value: 70,
         type: HealthDataType.HEART_RATE,
         startTime: earlier,
         endTime: now);
-    if (Platform.isIOS) {
-      success &= await Health().writeHealthData(
-          value: 30,
-          type: HealthDataType.HEART_RATE_VARIABILITY_SDNN,
-          startTime: earlier,
-          endTime: now);
-    } else {
-      success &= await Health().writeHealthData(
-          value: 30,
-          type: HealthDataType.HEART_RATE_VARIABILITY_RMSSD,
-          startTime: earlier,
-          endTime: now);
-    }
-    success &= await Health().writeHealthData(
-        value: 37,
-        type: HealthDataType.BODY_TEMPERATURE,
-        startTime: earlier,
-        endTime: now);
-    success &= await Health().writeHealthData(
-        value: 105,
-        type: HealthDataType.BLOOD_GLUCOSE,
-        startTime: earlier,
-        endTime: now);
-    success &= await Health().writeHealthData(
-        value: 1.8,
-        type: HealthDataType.WATER,
-        startTime: earlier,
-        endTime: now);
+    // if (Platform.isIOS) {
+    //   success &= await Health().writeHealthData(
+    //       value: 30,
+    //       type: HealthDataType.HEART_RATE_VARIABILITY_SDNN,
+    //       startTime: earlier,
+    //       endTime: now);
+    // } else {
+    //   success &= await Health().writeHealthData(
+    //       value: 30,
+    //       type: HealthDataType.HEART_RATE_VARIABILITY_RMSSD,
+    //       startTime: earlier,
+    //       endTime: now);
+    // }
+    // success &= await Health().writeHealthData(
+    //     value: 37,
+    //     type: HealthDataType.BODY_TEMPERATURE,
+    //     startTime: earlier,
+    //     endTime: now);
+    // success &= await Health().writeHealthData(
+    //     value: 105,
+    //     type: HealthDataType.BLOOD_GLUCOSE,
+    //     startTime: earlier,
+    //     endTime: now);
+    // success &= await Health().writeHealthData(
+    //     value: 1.8,
+    //     type: HealthDataType.WATER,
+    //     startTime: earlier,
+    //     endTime: now);
 
     // different types of sleep
-    success &= await Health().writeHealthData(
-        value: 0.0,
-        type: HealthDataType.SLEEP_REM,
-        startTime: earlier,
-        endTime: now);
-    success &= await Health().writeHealthData(
-        value: 0.0,
-        type: HealthDataType.SLEEP_ASLEEP,
-        startTime: earlier,
-        endTime: now);
-    success &= await Health().writeHealthData(
-        value: 0.0,
-        type: HealthDataType.SLEEP_AWAKE,
-        startTime: earlier,
-        endTime: now);
-    success &= await Health().writeHealthData(
-        value: 0.0,
-        type: HealthDataType.SLEEP_DEEP,
-        startTime: earlier,
-        endTime: now);
+    // success &= await Health().writeHealthData(
+    //     value: 0.0,
+    //     type: HealthDataType.SLEEP_REM,
+    //     startTime: earlier,
+    //     endTime: now);
+    // success &= await Health().writeHealthData(
+    //     value: 0.0,
+    //     type: HealthDataType.SLEEP_ASLEEP,
+    //     startTime: earlier,
+    //     endTime: now);
+    // success &= await Health().writeHealthData(
+    //     value: 0.0,
+    //     type: HealthDataType.SLEEP_AWAKE,
+    //     startTime: earlier,
+    //     endTime: now);
+    // success &= await Health().writeHealthData(
+    //     value: 0.0,
+    //     type: HealthDataType.SLEEP_DEEP,
+    //     startTime: earlier,
+    //     endTime: now);
 
     // specialized write methods
     success &= await Health().writeBloodOxygen(
@@ -289,66 +371,66 @@ class _HealthConnectState extends State<HealthConnect> {
       startTime: earlier,
       endTime: now,
     );
-    success &= await Health().writeWorkoutData(
-      activityType: HealthWorkoutActivityType.AMERICAN_FOOTBALL,
-      title: "Random workout name that shows up in Health Connect",
-      start: now.subtract(const Duration(minutes: 15)),
-      end: now,
-      totalDistance: 2430,
-      totalEnergyBurned: 400,
-    );
-    success &= await Health().writeBloodPressure(
-      systolic: 90,
-      diastolic: 80,
-      startTime: now,
-    );
-    success &= await Health().writeMeal(
-        mealType: MealType.SNACK,
-        startTime: earlier,
-        endTime: now,
-        caloriesConsumed: 1000,
-        carbohydrates: 50,
-        protein: 25,
-        fatTotal: 50,
-        name: "Banana",
-        caffeine: 0.002,
-        vitaminA: 0.001,
-        vitaminC: 0.002,
-        vitaminD: 0.003,
-        vitaminE: 0.004,
-        vitaminK: 0.005,
-        b1Thiamin: 0.006,
-        b2Riboflavin: 0.007,
-        b3Niacin: 0.008,
-        b5PantothenicAcid: 0.009,
-        b6Pyridoxine: 0.010,
-        b7Biotin: 0.011,
-        b9Folate: 0.012,
-        b12Cobalamin: 0.013,
-        calcium: 0.015,
-        copper: 0.016,
-        iodine: 0.017,
-        iron: 0.018,
-        magnesium: 0.019,
-        manganese: 0.020,
-        phosphorus: 0.021,
-        potassium: 0.022,
-        selenium: 0.023,
-        sodium: 0.024,
-        zinc: 0.025,
-        water: 0.026,
-        molybdenum: 0.027,
-        chloride: 0.028,
-        chromium: 0.029,
-        cholesterol: 0.030,
-        fiber: 0.031,
-        fatMonounsaturated: 0.032,
-        fatPolyunsaturated: 0.033,
-        fatUnsaturated: 0.065,
-        fatTransMonoenoic: 0.65,
-        fatSaturated: 066,
-        sugar: 0.067,
-        recordingMethod: RecordingMethod.manual);
+    // success &= await Health().writeWorkoutData(
+    //   activityType: HealthWorkoutActivityType.AMERICAN_FOOTBALL,
+    //   title: "Random workout name that shows up in Health Connect",
+    //   start: now.subtract(const Duration(minutes: 15)),
+    //   end: now,
+    //   totalDistance: 2430,
+    //   totalEnergyBurned: 400,
+    // );
+    // success &= await Health().writeBloodPressure(
+    //   systolic: 90,
+    //   diastolic: 80,
+    //   startTime: now,
+    // );
+    // success &= await Health().writeMeal(
+    //     mealType: MealType.SNACK,
+    //     startTime: earlier,
+    //     endTime: now,
+    //     caloriesConsumed: 1000,
+    //     carbohydrates: 50,
+    //     protein: 25,
+    //     fatTotal: 50,
+    //     name: "Banana",
+    //     caffeine: 0.002,
+    //     vitaminA: 0.001,
+    //     vitaminC: 0.002,
+    //     vitaminD: 0.003,
+    //     vitaminE: 0.004,
+    //     vitaminK: 0.005,
+    //     b1Thiamin: 0.006,
+    //     b2Riboflavin: 0.007,
+    //     b3Niacin: 0.008,
+    //     b5PantothenicAcid: 0.009,
+    //     b6Pyridoxine: 0.010,
+    //     b7Biotin: 0.011,
+    //     b9Folate: 0.012,
+    //     b12Cobalamin: 0.013,
+    //     calcium: 0.015,
+    //     copper: 0.016,
+    //     iodine: 0.017,
+    //     iron: 0.018,
+    //     magnesium: 0.019,
+    //     manganese: 0.020,
+    //     phosphorus: 0.021,
+    //     potassium: 0.022,
+    //     selenium: 0.023,
+    //     sodium: 0.024,
+    //     zinc: 0.025,
+    //     water: 0.026,
+    //     molybdenum: 0.027,
+    //     chloride: 0.028,
+    //     chromium: 0.029,
+    //     cholesterol: 0.030,
+    //     fiber: 0.031,
+    //     fatMonounsaturated: 0.032,
+    //     fatPolyunsaturated: 0.033,
+    //     fatUnsaturated: 0.065,
+    //     fatTransMonoenoic: 0.65,
+    //     fatSaturated: 066,
+    //     sugar: 0.067,
+    //     recordingMethod: RecordingMethod.manual);
 
     // Store an Audiogram - only available on iOS
     // const frequencies = [125.0, 500.0, 1000.0, 2000.0, 4000.0, 8000.0];
@@ -366,12 +448,12 @@ class _HealthConnectState extends State<HealthConnect> {
     //   },
     // );
 
-    success &= await Health().writeMenstruationFlow(
-      flow: MenstrualFlow.medium,
-      isStartOfCycle: true,
-      startTime: earlier,
-      endTime: now,
-    );
+    // success &= await Health().writeMenstruationFlow(
+    //   flow: MenstrualFlow.medium,
+    //   isStartOfCycle: true,
+    //   startTime: earlier,
+    //   endTime: now,
+    // );
 
     setState(() {
       _state = success ? AppState.DATA_ADDED : AppState.DATA_NOT_ADDED;
@@ -472,10 +554,11 @@ class _HealthConnectState extends State<HealthConnect> {
         ],
       ),
       body: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(height: 1,),
+          Divider(
+            height: 1,
+          ),
           if (Platform.isAndroid)
             TextButton(
                 onPressed: getHealthConnectSdkStatus,
@@ -483,9 +566,11 @@ class _HealthConnectState extends State<HealthConnect> {
                     backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                 child: const Text("Kiểm tra kết nối Health Connect",
                     style: TextStyle(color: Colors.white))),
-          if (Platform.isAndroid /*&&
+          if (Platform
+                  .isAndroid /*&&
               Health().healthConnectSdkStatus !=
-                  HealthConnectSdkStatus.sdkAvailable*/)
+                  HealthConnectSdkStatus.sdkAvailable*/
+              )
             TextButton(
                 onPressed: installHealthConnect,
                 style: const ButtonStyle(
@@ -496,8 +581,7 @@ class _HealthConnectState extends State<HealthConnect> {
               Platform.isAndroid &&
                   Health().healthConnectSdkStatus ==
                       HealthConnectSdkStatus.sdkAvailable)
-            Row(
-              children: [
+            Row(children: [
               // TextButton(
               //     onPressed: authorize,
               //     style: const ButtonStyle(
@@ -511,19 +595,23 @@ class _HealthConnectState extends State<HealthConnect> {
                       backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                   child: const Text("Lấy dữ liệu",
                       style: TextStyle(color: Colors.white))),
-              // TextButton(
-              //     onPressed: addData,
-              //     style: const ButtonStyle(
-              //         backgroundColor:
-              //             WidgetStatePropertyAll(Colors.blue)),
-              //     child: const Text("Add Data",
-              //         style: TextStyle(color: Colors.white))),
-              SizedBox(width: 12,),
+              SizedBox(
+                width: 12,
+              ),
               TextButton(
-                  onPressed: deleteData,
+                  onPressed: chooseDate,
                   style: const ButtonStyle(
                       backgroundColor: WidgetStatePropertyAll(Colors.blue)),
-                  child: const Text("Xóa dữ liệu",
+                  child: const Text("Chọn ngày lấy dữ liệu",
+                      style: TextStyle(color: Colors.white))),
+              SizedBox(
+                width: 12,
+              ),
+              TextButton(
+                  onPressed: addData,
+                  style: const ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.blue)),
+                  child: const Text("Add Data",
                       style: TextStyle(color: Colors.white))),
               // TextButton(
               //     onPressed: fetchStepData,
@@ -540,8 +628,14 @@ class _HealthConnectState extends State<HealthConnect> {
               //     child: const Text("Revoke Access",
               //         style: TextStyle(color: Colors.white))),
             ]),
+          TextButton(
+              onPressed: deleteData,
+              style: const ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.blue)),
+              child: const Text("Xóa dữ liệu",
+                  style: TextStyle(color: Colors.white))),
           const Divider(thickness: 3),
-          if (_state == AppState.DATA_READY) _dataFiltration,
+          // if (_state == AppState.DATA_READY) _dataFiltration,
           // if (_state == AppState.STEPS_READY) _stepsFiltration,
           Expanded(child: Center(child: _content))
         ],
@@ -656,56 +750,108 @@ class _HealthConnectState extends State<HealthConnect> {
         ],
       );
 
+  String convert(String val) {
+    String res = "";
+    for (int i = val.length - 1; i >= 0; i--) {
+      if (val[i] == '.')
+        res = "";
+      else if (RegExp(r'^[0-9]$').hasMatch(val[i]))
+        res = val[i] + res;
+      else
+        break;
+    }
+    return res;
+  }
+
+  String convertToHourMinute(DateTime dateTime) {
+    // Define the format "hh:mm" (12-hour format with leading zeros if needed)
+    DateFormat formatter = DateFormat('hh:mm');
+
+    // Format the DateTime object
+    return formatter.format(dateTime);
+  }
+
+  String convertToDayMonthYear(DateTime dateTime) {
+    // Define the format "dd/mm/yyyy"
+    DateFormat formatter = DateFormat('dd/MM/yyyy');
+
+    // Format the DateTime object
+    return formatter.format(dateTime);
+  }
+
   Widget get _contentDataReady => ListView.builder(
       itemCount: _healthDataList.length,
       itemBuilder: (_, index) {
         // filter out manual entires if not wanted
-        if (recordingMethodsToFilter
-            .contains(_healthDataList[index].recordingMethod)) {
-          return Container();
-        }
-
+        // if (recordingMethodsToFilter
+        //     .contains(_healthDataList[index].recordingMethod)) {
+        //   return Container();
+        // }
         HealthDataPoint p = _healthDataList[index];
-        if (p.value is AudiogramHealthValue) {
-          return ListTile(
-            title: Text("${p.typeString}: ${p.value}"),
-            trailing: Text('${p.unitString}'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
-          );
-        }
-        if (p.value is WorkoutHealthValue) {
-          return ListTile(
-            title: Text(
-                "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.name}"),
-            trailing: Text(
-                '${(p.value as WorkoutHealthValue).workoutActivityType.name}'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
-          );
-        }
-        if (p.value is NutritionHealthValue) {
-          return ListTile(
-            title: Text(
-                "${p.typeString} ${(p.value as NutritionHealthValue).mealType}: ${(p.value as NutritionHealthValue).name}"),
-            trailing:
-                Text('${(p.value as NutritionHealthValue).calories} kcal'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
-          );
-        }
-        return ListTile(
-          title: Text("${p.typeString}: ${p.value}"),
-          trailing: Text('${p.unitString}'),
-          subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        int setType = 0;
+        if (p.type.toString() == 'HealthDataType.HEART_RATE') setType = 3;
+        if (p.type.toString() == 'HealthDataType.WEIGHT') setType = 7;
+        if (p.type.toString() == 'HealthDataType.BLOOD_OXYGEN') setType = 4;
+        print(p.type.toString());
+        // if (p.value is AudiogramHealthValue) {
+        //   return ListTile(
+        //     title: Text("${p.typeString}: ${p.value}"),
+        //     trailing: Text('${p.unitString}'),
+        //     subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        //   );
+        // }
+        // if (p.value is WorkoutHealthValue) {
+        //   return ListTile(
+        //     title: Text(
+        //         "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.name}"),
+        //     trailing: Text(
+        //         '${(p.value as WorkoutHealthValue).workoutActivityType.name}'),
+        //     subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        //   );
+        // }
+        // if (p.value is NutritionHealthValue) {
+        //   return ListTile(
+        //     title: Text(
+        //         "${p.typeString} ${(p.value as NutritionHealthValue).mealType}: ${(p.value as NutritionHealthValue).name}"),
+        //     trailing:
+        //         Text('${(p.value as NutritionHealthValue).calories} kcal'),
+        //     subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        //   );
+        // }
+        return Container(
+          decoration: BoxDecoration(border: Border.all()),
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              DataDay(
+                date: convertToDayMonthYear(p.dateFrom),
+                time: convertToHourMinute(p.dateFrom),
+                value: convert(p.value.toString()),
+                index: setType,
+                pass: p.dateFrom,
+              ),
+              // Text(convert(p.value.toString())),
+              // Text('${p.unitString}'),
+              // Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+            ],
+          ),
         );
+        // return ListTile(
+        //   title: Text("${p.typeString}: ${p.value}"),
+        //   trailing: Text('${p.unitString}'),
+        //   subtitle: Text('${p.dateFrom} - ${p.dateTo}\n${p.recordingMethod}'),
+        // );
       });
 
   Widget _contentNoData = const Text('No Data to show');
 
   Widget _contentNotFetched =
       const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-    const Text("Press 'Auth' to get permissions to access health data."),
-    const Text("Press 'Fetch Dat' to get health data."),
-    const Text("Press 'Add Data' to add some random health data."),
-    const Text("Press 'Delete Data' to remove some random health data."),
+    const Text("Bấm vào 'Tải Health Connect' nếu bạn chưa có để bắt đầu đồng bộ hóa", style: TextStyle(fontSize: 20),),
+    SizedBox(height: 10,),
+    const Text("Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health", style: TextStyle(fontSize: 20),),
+    // const Text("Press 'Add Data' to add some random health data."),
+    // const Text("Press 'Delete Data' to remove some random health data."),
   ]);
 
   Widget _authorized = const Text('Authorization granted!');

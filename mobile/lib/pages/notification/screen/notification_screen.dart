@@ -13,6 +13,8 @@ class NotificationScreen extends StatelessWidget {
   final String uid;
   final TypeNotificationStatus status;
   final notiController = Get.find<NotificationController>();
+  List<DocumentSnapshot> notifications =
+      []; // List to store all documents initially
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,7 +39,27 @@ class NotificationScreen extends StatelessWidget {
                     child: Text('Không tìm thấy thông báo nào!!!'));
               }
 
-              final notifications = snapshot.data!.docs;
+              List<QueryDocumentSnapshot> allNotifications =
+                  snapshot.data!.docs;
+
+              if (notifications.isEmpty) {
+                notifications.addAll(allNotifications);
+              }
+              // var notificationChanges = snapshot.data!.docChanges;
+
+              // // Apply changes efficiently
+              // notificationChanges.forEach((change) {
+              //   if (change.type == DocumentChangeType.added) {
+              //     // Handle added documents
+              //     notifications.insert(change.newIndex, change.doc);
+              //   } else if (change.type == DocumentChangeType.modified) {
+              //     // Handle modified documents
+              //     notifications[change.oldIndex] = change.doc;
+              //   } else if (change.type == DocumentChangeType.removed) {
+              //     // Handle removed documents
+              //     notifications.removeAt(change.oldIndex);
+              //   }
+              // });
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (status == TypeNotificationStatus.unread) {
                   notiController.state.unread.value = notifications.length;
@@ -79,6 +101,10 @@ class NotificationScreen extends StatelessWidget {
                                 notification['time'] as Timestamp),
                             content: notification['body'],
                             title: notification['title'],
+                            documentId: notification.id,
+                            isExpanded: false.obs,
+                            status: status,
+                            page: notification['page'],
                           ),
                           const SizedBox(
                             height: 12,
