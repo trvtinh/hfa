@@ -1,11 +1,9 @@
 import 'dart:developer';
 
 import 'package:health_for_all/common/API/firebase_API.dart';
-import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/common/entities/user.dart';
-import 'package:health_for_all/pages/diagnostic/screen/unread_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
@@ -36,22 +34,20 @@ class animatedcontainer extends StatelessWidget {
     required this.user,
     required this.documentId,
     required this.tap,
-    // required this.onTapImportant,
-    // required this.onTapDetail,
   });
 
   void _setImportant(BuildContext context) {
     if (tap != 'important') {
       isImportant.value = !isImportant.value;
-      _handleDelete(context);
-      _handlemoveimportant(context);
+      _handleupdate(context, {'tap': 'important'});
     }
   }
 
   void setseen(BuildContext context) {
     if (tap != 'seen') {
-      _handleDelete(context);
-      _handlemoveseen(context);
+      _handleupdate(context, {'tap': 'seen'});
+      // _handleDelete(context);
+      // _handlemoveseen(context);
     }
   }
 
@@ -462,6 +458,47 @@ class animatedcontainer extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Thành công'),
                 content: const Text('Xóa chẩn đoán thành công'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Get.back(); // Close success dialog
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      });
+    } catch (e) {
+      // Handle any errors
+      log('Error deleting data: $e');
+      _showErrorDialog(context);
+    }
+  }
+
+  Future<void> _handleupdate(
+      BuildContext context, Map<String, dynamic> data) async {
+    try {
+      // Show loading dialog
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      // Perform the delete operation
+      FirebaseApi.updateDocument('diagnostic', documentId, data);
+      // Hide loading dialog and show success dialog after a short delay
+      Future.delayed(const Duration(seconds: 1), () {
+        if (Get.isDialogOpen ?? false) {
+          Get.back(); // Close loading dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Thành công'),
+                content: const Text('Chuyển thành công'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
