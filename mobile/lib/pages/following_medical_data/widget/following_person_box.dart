@@ -19,19 +19,18 @@ class FollowingPersonBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90,
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: Theme.of(context).colorScheme.errorContainer,
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.errorContainer,
-            spreadRadius: 1,
-            blurRadius: 2,
-          ),
-        ],
+        boxShadow: const [
+            BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.3),
+              spreadRadius: 0.6,
+              blurRadius: 2,
+              // offset: Offset(0, 3), // changes position of shadow
+            )
+          ],
       ),
       child: Row(
         children: [
@@ -71,7 +70,6 @@ class FollowingPersonBox extends StatelessWidget {
           ),
           const Spacer(),
           Container(
-            height: 24,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               color: Theme.of(context).colorScheme.primaryFixedDim,
