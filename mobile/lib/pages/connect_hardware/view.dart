@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
-import 'package:health_for_all/pages/connect_hardware/widget/find_device.dart';
-import 'package:health_for_all/pages/connect_hardware/widget/status_device.dart';
+import 'package:health_for_all/pages/connect_hardware/qr_code_scan.dart';
 import 'package:health_for_all/pages/samsung_connect/view.dart';
 
 class ConnectHardwarePage extends GetView<ConnectHardwareController> {
-  ConnectHardwarePage({super.key});
+  const ConnectHardwarePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +44,6 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
                   height: 16,
                 ),
                 connect_samsung(context),
-                const SizedBox(
-                  height: 16,
-                ),
-                list_connect(context),
               ],
             ),
           ),
@@ -58,8 +54,21 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
 
   Widget find_device(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        _showDialog(context);
+      onTap: () async {
+        var adapterState = await FlutterBluePlus.adapterState.first;
+
+        if (adapterState != BluetoothAdapterState.on) {
+          await FlutterBluePlus.turnOn();
+          // Kiểm tra lại sau khi cố gắng bật BLE
+          adapterState = await FlutterBluePlus.adapterState.first;
+        }
+
+        if (adapterState == BluetoothAdapterState.on) {
+          Get.to(() => const ScanQrScreen());
+        } else {
+          // Thêm logic xử lý nếu không bật được BLE (ví dụ: hiện thông báo)
+          Get.snackbar('Lỗi', 'Không thể bật Bluetooth.');
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -136,71 +145,6 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
           ],
         ),
       ),
-    );
-  }
-
-  int num_device = 3;
-  List<String> name_device = [
-    "HFA-Careport-0123",
-    "HFA-Careport-0124",
-    "HFA-Careport-0125",
-  ];
-  List<bool> check_device = [
-    true,
-    false,
-    false,
-  ];
-
-  Widget list_connect(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            children: [
-              Text(
-                "Danh sách nhắc nhở ($num_device)",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontSize: 14,
-                ),
-              ),
-            ],
-          ),
-        ),
-        const Divider(
-          height: 1,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        for (int i = 0; i < num_device; i++)
-          StatusDevice(connected: check_device[i], name_device: name_device[i]),
-      ],
-    );
-  }
-
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          content: const SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FindDevice(
-                  complete_find_all: false,
-                ),
-              ],
-            ),
-          ),
-        );
-      },
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/routes/names.dart';
 import 'package:health_for_all/common/services/notification.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'common/routes/pages.dart';
 import 'common/services/storage.dart';
 import 'common/store/config.dart';
@@ -43,6 +46,20 @@ Future<void> main() async {
     log('access token$accessToken');
   } catch (e) {
     print("Error loading .env file: $e");
+  }
+
+  if (Platform.isAndroid) {
+    if (await FlutterBluePlus.isSupported == false) {
+      log("Bluetooth not supported by this device");
+      return;
+    }
+
+    await [
+      Permission.location,
+      Permission.bluetooth,
+      Permission.bluetoothConnect,
+      Permission.bluetoothScan
+    ].request();
   }
   final credentials = StorageService.to.getUserCredentials();
   if (credentials['userEmail'] != null && credentials['accessToken'] != null) {

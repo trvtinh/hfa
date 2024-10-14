@@ -77,7 +77,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
@@ -92,7 +92,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                               )
                             ],
                           ),
-                          Row(
+                          const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Icon(
