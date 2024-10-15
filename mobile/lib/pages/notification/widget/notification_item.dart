@@ -42,8 +42,12 @@ class NotificationItem extends StatelessWidget {
     if (status.value != 'read') {
       _handleupdate(context, {'status': 'read'});
       // _handleDelete(context);
-      // _handlemoveseen(context);
+      // _handlemoveread(context);
     }
+  }
+
+  void delete(BuildContext context) {
+    _handleDelete(context);
   }
 
   @override
@@ -207,7 +211,24 @@ class NotificationItem extends StatelessWidget {
                                 }
                               },
                             ),
-                            InkWell(
+                            SizedBox(
+                              height: 40,
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SizedBox(
+                                  height:
+                                      26, // Adjust the height to match your row's height
+                                  child: VerticalDivider(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                                    thickness: 1,
+                                    width: 0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
                               onTap: () {
                                 setread(context);
                                 print('User tapped at Read');
@@ -216,11 +237,52 @@ class NotificationItem extends StatelessWidget {
                                 height: 32,
                                 width:
                                     (MediaQuery.of(context).size.width - 64) /
-                                        2,
+                                        3,
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
                                   child: Text(
                                     'Đã đọc',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 40,
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: SizedBox(
+                                  height:
+                                      26, // Adjust the height to match your row's height
+                                  child: VerticalDivider(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                                    thickness: 1,
+                                    width: 0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                setread(context);
+                                print('User tapped at Read');
+                              },
+                              child: SizedBox(
+                                height: 32,
+                                width:
+                                    (MediaQuery.of(context).size.width - 64) /
+                                        3,
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: Text(
+                                    'Xóa',
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
@@ -275,6 +337,47 @@ class NotificationItem extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Thành công'),
                 content: const Text('Chuyển thành công'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Get.back(); // Close success dialog
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      });
+    } catch (e) {
+      // Handle any errors
+      log('Error deleting data: $e');
+      _showErrorDialog(context);
+    }
+  }
+
+  Future<void> _handleDelete(BuildContext context) async {
+    try {
+      // Show loading dialog
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      // Perform the delete operation
+      FirebaseApi.deleteDocument('diagnostic', documentId);
+
+      // Hide loading dialog and show success dialog after a short delay
+      Future.delayed(const Duration(seconds: 1), () {
+        if (Get.isDialogOpen ?? false) {
+          Get.back(); // Close loading dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Thành công'),
+                content: const Text('Xóa chẩn đoán thành công'),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {

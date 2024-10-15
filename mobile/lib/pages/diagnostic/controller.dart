@@ -11,26 +11,23 @@ class DiagnosticController extends GetxController {
   Future fetchDiagnosticNotifications() async {
     final uid = state.profile.value!.id;
     final diagnosticUnreadCount = await FirebaseFirestore.instance
-        .collection('notifications')
+        .collection('diagnostic')
         .where('to_uid', isEqualTo: uid)
-        .where('type', isEqualTo: 'diagnostic')
         .where('status', isEqualTo: 'unread')
         .get()
         .then((snapshot) => snapshot.docs.length);
     state.unread.value = diagnosticUnreadCount;
 
     final readCount = await FirebaseFirestore.instance
-        .collection('notifications')
+        .collection('diagnostic')
         .where('to_uid', isEqualTo: uid)
-        .where('type', isEqualTo: 'diagnostic')
         .where('status', isEqualTo: 'read')
         .get()
         .then((snapshot) => snapshot.docs.length);
     state.read.value = readCount;
     final importanceCount = await FirebaseFirestore.instance
-        .collection('notifications')
+        .collection('diagnostic')
         .where('to_uid', isEqualTo: uid)
-        .where('type', isEqualTo: 'diagnostic')
         .where('status', isEqualTo: 'importance')
         .get()
         .then((snapshot) => snapshot.docs.length);

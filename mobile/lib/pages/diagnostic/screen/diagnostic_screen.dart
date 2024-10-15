@@ -1,15 +1,22 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/user.dart';
+import 'package:health_for_all/common/enum/type_diagnostic_status.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
 
-class UnreadPage extends StatelessWidget {
+class DiagnosticScreen extends StatelessWidget {
   final UserData user;
-  const UnreadPage({super.key, required this.user,});
+  const DiagnosticScreen({
+    super.key,
+    required this.status, required this.user,
+  });
+  final TypeDiagnosticStatus status;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +31,7 @@ class UnreadPage extends StatelessWidget {
               stream: FirebaseFirestore.instance
                   .collection('diagnostic')
                   .where('toUId', isEqualTo: user.id)
-                  .where('tap', isEqualTo: 'unread')
+                  .where('status', isEqualTo: status.value)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -40,6 +47,24 @@ class UnreadPage extends StatelessWidget {
                     .map((doc) => Diagnostic.fromFirestore(
                         doc as DocumentSnapshot<Map<String, dynamic>>))
                     .toList();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (status == TypeDiagnosticStatus.unread) {
+                    controller.state.unread.value =
+                        diagnostics.isNotEmpty ? diagnostics.length : 0;
+                    log('unread: ${controller.state.unread.value}');
+                  }
+                  if (status == TypeDiagnosticStatus.read) {
+                    controller.state.read.value =
+                        diagnostics.isNotEmpty ? diagnostics.length : 0;
+                    log('read: ${controller.state.read.value}');
+                  }
+                  if (status == TypeDiagnosticStatus.important) {
+                    controller.state.importance.value =
+                        diagnostics.isNotEmpty ? diagnostics.length : 0;
+                    log('important: ${controller.state.importance.value}');
+                  }
+                });
+                log('status: ${status.value}');
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: diagnostics.length,
@@ -83,7 +108,7 @@ class UnreadPage extends StatelessWidget {
                               isExpanded: false.obs,
                               user: user,
                               documentId: diagnostic.id!,
-                              tap: diagnostic.tap!,
+                              status: diagnostic.status!,
                             );
                           },
                         );

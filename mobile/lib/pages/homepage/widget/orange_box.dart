@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/medical_data_homepage/view.dart';
 
 class Orangebox extends StatelessWidget {
@@ -17,7 +16,7 @@ class Orangebox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int val2 = 10-int.parse(val1);
+    int val2 = 10 - int.parse(val1);
     return GestureDetector(
       onTap: () {
         Get.to(() => MedicalDataHome(

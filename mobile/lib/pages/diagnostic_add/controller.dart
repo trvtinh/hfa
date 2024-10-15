@@ -10,14 +10,10 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
-import 'package:health_for_all/common/entities/medical_data.dart';
-import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/information.dart';
 import 'package:health_for_all/pages/diagnostic_add/widget/data_box.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 
 class DiagnosticAddController extends GetxController {
   final dateController = TextEditingController();
@@ -41,35 +37,7 @@ class DiagnosticAddController extends GetxController {
       toUId: toUId,
       medicalId: medicalId,
       imageURL: selectedImagesURL,
-      tap: 'unread',
-    );
-    final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
-    return docId;
-  }
-
-  Future moveDiagnosticimportant(String medicalId, String toUId) async {
-    final data = Diagnostic(
-      content: noteController.text,
-      timestamp: Timestamp.fromDate(DateTime.now()),
-      fromUId: appController.state.profile.value!.id!,
-      toUId: toUId,
-      medicalId: medicalId,
-      imageURL: selectedImagesURL,
-      tap: 'important',
-    );
-    final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
-    return docId;
-  }
-
-  Future moveDiagnosticseen(String medicalId, String toUId) async {
-    final data = Diagnostic(
-      content: noteController.text,
-      timestamp: Timestamp.fromDate(DateTime.now()),
-      fromUId: appController.state.profile.value!.id!,
-      toUId: toUId,
-      medicalId: medicalId,
-      imageURL: selectedImagesURL,
-      tap: 'seen',
+      status: 'unread',
     );
     final docId = await FirebaseApi.addDocument('diagnostic', data.toMap());
     return docId;
