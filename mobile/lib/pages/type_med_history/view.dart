@@ -30,12 +30,12 @@ class TypeMedHistory extends StatelessWidget {
               },
               child: changePage.value
                   ? Icon(
-                      Icons.list_outlined,
+                      Icons.assessment_outlined,
                       size: 24,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     )
                   : Icon(
-                      Icons.assessment_outlined,
+                      Icons.list_outlined,
                       size: 24,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),

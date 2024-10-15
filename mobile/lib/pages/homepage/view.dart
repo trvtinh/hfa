@@ -299,7 +299,7 @@ class Homepage extends StatelessWidget {
                                 user: appController.state.profile.value!,
                               ));
                         },
-                        child: StreamBuilder<QuerySnapshot>(
+                        child: Obx(()=>StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('diagnostic')
                               .where('toUId',
@@ -319,25 +319,25 @@ class Homepage extends StatelessWidget {
                                 .map((doc) => Diagnostic.fromFirestore(doc
                                     as DocumentSnapshot<Map<String, dynamic>>))
                                 .toList();
-                            int read = 0;
-                            int unread = 0;
+                            RxInt read = 0.obs;
+                            RxInt unread = 0.obs;
                             for (var i in data) {
                               if (i.status == "unread")
                                 unread++;
                               else
                                 read++;
-                              print("dakmim");
-                              print(i.status);
+                              // print("dakmim");
+                              // print(i.status);
                             }
                             return WhiteBox(
                                 title: 'Chẩn đoán',
                                 iconbox: Icons.health_and_safety_outlined,
                                 text1: 'Chưa xem',
                                 text2: 'Đã xem',
-                                value1: unread.toString(),
-                                value2: read.toString());
+                                value1: unread.value.toString(),
+                                value2: read.value.toString());
                           },
-                        ),
+                        )),
                       ),
                       const SizedBox(
                         width: 10,
@@ -348,7 +348,7 @@ class Homepage extends StatelessWidget {
                               .state.profile.value!.id
                               .toString()));
                         },
-                        child: StreamBuilder<QuerySnapshot>(
+                        child: Obx(()=>StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('prescriptions')
                               .where('patientId',
@@ -387,7 +387,7 @@ class Homepage extends StatelessWidget {
                                 value1: drinking.toString(),
                                 value2: finished.toString());
                           },
-                        ),
+                        )),
                       ),
                     ],
                   ),
@@ -403,7 +403,7 @@ class Homepage extends StatelessWidget {
                               .state.profile.value!.id
                               .toString()));
                         },
-                        child: StreamBuilder<QuerySnapshot>(
+                        child: Obx(()=>StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('reminders')
                               .where('userId',
@@ -429,7 +429,7 @@ class Homepage extends StatelessWidget {
                                 text1: 'Số lời nhắc',
                                 value1: data.length.toString());
                           },
-                        ),
+                        )),
                       ),
                       const SizedBox(
                         width: 10,
@@ -440,7 +440,7 @@ class Homepage extends StatelessWidget {
                                 .state.profile.value!.id
                                 .toString()));
                           },
-                          child: StreamBuilder<QuerySnapshot>(
+                          child: Obx(()=>StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
                                 .collection('alarms')
                                 .where('userId',
@@ -468,7 +468,7 @@ class Homepage extends StatelessWidget {
                                 value1: data.length.toString(),
                               );
                             },
-                          )),
+                          ))),
                     ],
                   ),
                   const SizedBox(
@@ -486,7 +486,7 @@ class Homepage extends StatelessWidget {
                                     .toString(),
                               ));
                         },
-                        child: StreamBuilder<QuerySnapshot>(
+                        child: Obx(()=>StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection('notifications')
                               .where('to_uid',
@@ -523,7 +523,7 @@ class Homepage extends StatelessWidget {
                                 value1: unread.toString(),
                                 value2: read.toString());
                           },
-                        ),
+                        ),)
                       ),
                       const SizedBox(
                         width: 10,

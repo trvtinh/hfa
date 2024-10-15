@@ -214,18 +214,70 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
 
                           final user = medicalSnapshot.data!;
                           return GestureDetector(
-                            onTap: () {
-                              Get.to(() => DiagnosticPage(
-                                    user: user,
-                                  ));
-                            },
-                            child: StreamBuilder<QuerySnapshot>(
+                              onTap: () {
+                                Get.to(() => DiagnosticPage(
+                                      user: user,
+                                    ));
+                              },
+                              child: Obx(
+                                () => StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('diagnostic')
+                                      .where('toUId',
+                                          isEqualTo: historyController
+                                              .state.selectedUser.value.id
+                                              .toString())
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) {
+                                      return const Text('Có lỗi xảy ra');
+                                    }
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const CircularProgressIndicator();
+                                    }
+
+                                    final data = snapshot.data!.docs
+                                        .map((doc) => Diagnostic.fromFirestore(
+                                            doc as DocumentSnapshot<
+                                                Map<String, dynamic>>))
+                                        .toList();
+                                    int read = 0;
+                                    int unread = 0;
+                                    for (var i in data) {
+                                      if (i.status == "unread")
+                                        unread++;
+                                      else
+                                        read++;
+                                    }
+                                    return WhiteBox(
+                                        title: 'Chẩn đoán',
+                                        iconbox:
+                                            Icons.health_and_safety_outlined,
+                                        text1: 'Chưa xem',
+                                        text2: 'Đã xem',
+                                        value1: unread.toString(),
+                                        value2: read.toString());
+                                  },
+                                ),
+                              ));
+                        },
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            print(
+                                historyController.state.selectedUser.value.id);
+                            Get.to(() => PrescriptionPage(historyController
+                                .state.selectedUser.value.id
+                                .toString()));
+                          },
+                          child: Obx(
+                            () => StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
-                                  .collection('diagnostic')
-                                  .where('toUId',
+                                  .collection('prescriptions')
+                                  .where('patientId',
                                       isEqualTo: historyController
-                                          .state.selectedUser.value.id
-                                          .toString())
+                                          .state.selectedUser.value.id)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) {
@@ -237,78 +289,31 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                 }
 
                                 final data = snapshot.data!.docs
-                                    .map((doc) => Diagnostic.fromFirestore(doc
+                                    .map((doc) => Prescription.fromFirestore(doc
                                         as DocumentSnapshot<
                                             Map<String, dynamic>>))
                                     .toList();
-                                int read = 0;
-                                int unread = 0;
+                                int finished = 0;
+                                int drinking = 0;
                                 for (var i in data) {
-                                  if (i.status == "unread")
-                                    unread++;
-                                  else
-                                    read++;
+                                  if (compareTimestamps(
+                                      convertStringtoTime(i.endDate!),
+                                      getYesterdayTimestamp())) {
+                                    drinking++;
+                                  } else {
+                                    finished++;
+                                  }
                                 }
                                 return WhiteBox(
-                                    title: 'Chẩn đoán',
-                                    iconbox: Icons.health_and_safety_outlined,
-                                    text1: 'Chưa xem',
-                                    text2: 'Đã xem',
-                                    value1: unread.toString(),
-                                    value2: read.toString());
+                                    title: 'Đơn thuốc',
+                                    iconbox: Icons.medication_liquid_sharp,
+                                    text1: 'Đang uống',
+                                    text2: 'Hoàn thành',
+                                    value1: finished.toString(),
+                                    value2: drinking.toString());
                               },
                             ),
-                          );
-                        },
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print(historyController.state.selectedUser.value.id);
-                          Get.to(() => PrescriptionPage(historyController
-                              .state.selectedUser.value.id
-                              .toString()));
-                        },
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('prescriptions')
-                              .where('patientId',
-                                  isEqualTo: historyController
-                                      .state.selectedUser.value.id)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return const Text('Có lỗi xảy ra');
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-
-                            final data = snapshot.data!.docs
-                                .map((doc) => Prescription.fromFirestore(doc
-                                    as DocumentSnapshot<Map<String, dynamic>>))
-                                .toList();
-                            int finished = 0;
-                            int drinking = 0;
-                            for (var i in data) {
-                              if (compareTimestamps(
-                                  convertStringtoTime(i.endDate!),
-                                  getYesterdayTimestamp())) {
-                                drinking++;
-                              } else {
-                                finished++;
-                              }
-                            }
-                            return WhiteBox(
-                                title: 'Đơn thuốc',
-                                iconbox: Icons.medication_liquid_sharp,
-                                text1: 'Đang uống',
-                                text2: 'Hoàn thành',
-                                value1: finished.toString(),
-                                value2: drinking.toString());
-                          },
-                        ),
-                      ),
+                          )),
                     ],
                   ),
                   const SizedBox(
@@ -318,74 +323,76 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          Get.to(() => ReminderPage(historyController
-                              .state.selectedUser.value.id
-                              .toString()));
-                        },
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('reminders')
-                              .where('userId',
-                                  isEqualTo: historyController
-                                      .state.selectedUser.value.id)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return const Text('Có lỗi xảy ra');
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-
-                            final data = snapshot.data!.docs
-                                .map((doc) => Reminder.fromFirestore(doc
-                                    as DocumentSnapshot<Map<String, dynamic>>))
-                                .toList();
-                            return WhiteBoxnoW(
-                                title: 'Nhắc nhở',
-                                iconbox: Icons.date_range_outlined,
-                                text1: 'Số lời nhắc',
-                                value1: data.length.toString());
+                          onTap: () {
+                            Get.to(() => ReminderPage(historyController
+                                .state.selectedUser.value.id
+                                .toString()));
                           },
-                        ),
-                      ),
+                          child: Obx(
+                            () => StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('reminders')
+                                  .where('userId',
+                                      isEqualTo: historyController
+                                          .state.selectedUser.value.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) => Reminder.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                return WhiteBoxnoW(
+                                    title: 'Nhắc nhở',
+                                    iconbox: Icons.date_range_outlined,
+                                    text1: 'Số lời nhắc',
+                                    value1: data.length.toString());
+                              },
+                            ),
+                          )),
                       GestureDetector(
                           onTap: () {
                             Get.to(() => AlarmPage(historyController
                                 .state.selectedUser.value.id
                                 .toString()));
                           },
-                          child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection('alarms')
-                                .where('userId',
-                                    isEqualTo: historyController
-                                        .state.selectedUser.value.id)
-                                .snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) {
-                                return const Text('Có lỗi xảy ra');
-                              }
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              }
+                          child: Obx(() => StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('alarms')
+                                    .where('userId',
+                                        isEqualTo: historyController
+                                            .state.selectedUser.value.id)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) {
+                                    return const Text('Có lỗi xảy ra');
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  }
 
-                              final data = snapshot.data!.docs
-                                  .map((doc) => AlarmEntity.fromFirestore(doc
-                                      as DocumentSnapshot<
-                                          Map<String, dynamic>>))
-                                  .toList();
-                              return WhiteBoxnoW(
-                                title: 'Cảnh báo',
-                                iconbox: Icons.warning_amber_outlined,
-                                text1: 'Số cảnh báo',
-                                value1: data.length.toString(),
-                              );
-                            },
-                          )),
+                                  final data = snapshot.data!.docs
+                                      .map((doc) => AlarmEntity.fromFirestore(
+                                          doc as DocumentSnapshot<
+                                              Map<String, dynamic>>))
+                                      .toList();
+                                  return WhiteBoxnoW(
+                                    title: 'Cảnh báo',
+                                    iconbox: Icons.warning_amber_outlined,
+                                    text1: 'Số cảnh báo',
+                                    value1: data.length.toString(),
+                                  );
+                                },
+                              ))),
                     ],
                   ),
                   const SizedBox(
@@ -394,54 +401,56 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                   Row(
                     children: [
                       GestureDetector(
-                        onTap: () {
-                          notificationController.fetchNotificationCounts(
-                              historyController.state.selectedUser.value.id
-                                  .toString());
-                          Get.to(() => NotiPage(
-                              userId: historyController
-                                  .state.selectedUser.value.id
-                                  .toString()));
-                        },
-                        child: StreamBuilder<QuerySnapshot>(
-                          stream: FirebaseFirestore.instance
-                              .collection('notifications')
-                              .where('to_uid',
-                                  isEqualTo: historyController
-                                      .state.selectedUser.value.id)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return const Text('Có lỗi xảy ra');
-                            }
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-
-                            final data = snapshot.data!.docs
-                                .map((doc) => NotificationEntity.fromFirestore(
-                                    doc as DocumentSnapshot<
-                                        Map<String, dynamic>>))
-                                .toList();
-                            int read = 0;
-                            int unread = 0;
-                            for (var i in data) {
-                              if (i.status == "read")
-                                read++;
-                              else
-                                unread++;
-                            }
-                            return WhiteBox(
-                                title: 'Thông báo',
-                                iconbox: Icons.notifications_outlined,
-                                text1: 'Chưa xem',
-                                text2: 'Đã xem',
-                                value1: unread.toString(),
-                                value2: read.toString());
+                          onTap: () {
+                            notificationController.fetchNotificationCounts(
+                                historyController.state.selectedUser.value.id
+                                    .toString());
+                            Get.to(() => NotiPage(
+                                userId: historyController
+                                    .state.selectedUser.value.id
+                                    .toString()));
                           },
-                        ),
-                      ),
+                          child: Obx(
+                            () => StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('notifications')
+                                  .where('to_uid',
+                                      isEqualTo: historyController
+                                          .state.selectedUser.value.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) =>
+                                        NotificationEntity.fromFirestore(doc
+                                            as DocumentSnapshot<
+                                                Map<String, dynamic>>))
+                                    .toList();
+                                int read = 0;
+                                int unread = 0;
+                                for (var i in data) {
+                                  if (i.status == "read")
+                                    read++;
+                                  else
+                                    unread++;
+                                }
+                                return WhiteBox(
+                                    title: 'Thông báo',
+                                    iconbox: Icons.notifications_outlined,
+                                    text1: 'Chưa xem',
+                                    text2: 'Đã xem',
+                                    value1: unread.toString(),
+                                    value2: read.toString());
+                              },
+                            ),
+                          )),
                     ],
                   ),
                 ],

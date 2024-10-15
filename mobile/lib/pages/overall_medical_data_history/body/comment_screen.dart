@@ -278,7 +278,8 @@ class CommentScreen extends StatelessWidget {
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
-                      Get.back(); // Close success dialog
+                      Get.back();
+                      Get.back();
                     },
                     child: const Text('OK'),
                   ),
