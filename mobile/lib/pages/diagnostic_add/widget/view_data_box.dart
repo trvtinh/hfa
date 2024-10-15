@@ -39,9 +39,10 @@ class ViewDataBox extends StatelessWidget {
           width: double.infinity,
           height: 71,
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-          color: Theme.of(context).colorScheme.surfaceContainerLowest,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerLowest,
+            borderRadius:
+                const BorderRadius.vertical(bottom: Radius.circular(8)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
