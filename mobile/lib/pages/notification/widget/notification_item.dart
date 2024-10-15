@@ -162,139 +162,134 @@ class NotificationItem extends StatelessWidget {
                   softWrap: true,
                 ),
                 isExpanded.value == true
-                    ? SizedBox(
-                        child: Row(
-                          children: [
-                            FutureBuilder<UserData>(
-                              future: controller.getUser(userId),
-                              builder: (context, userSnapshot) {
-                                if (userSnapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                } else if (userSnapshot.hasError) {
-                                  return Text('Error: ${userSnapshot.error}');
-                                } else {
-                                  final docs = userSnapshot.data ?? UserData();
-                                  return GestureDetector(
-                                    onTap: () {
-                                      if (page == '/diagnotic') {
-                                        Get.to(() => DiagnosticPage(
-                                              user: docs,
-                                            ));
-                                      }
-                                      if (page == 'follow') {
-                                        Get.to(() => const ProfilePage());
-                                      }
-                                      print('User want to see detail');
-                                    },
-                                    child: SizedBox(
-                                      height: 32,
-                                      width:
-                                          (MediaQuery.of(context).size.width -
-                                                  64) /
-                                              2,
-                                      child: Align(
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          'Chi tiết',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                          ),
+                    ? Row(
+                        children: [
+                          FutureBuilder<UserData>(
+                            future: controller.getUser(userId),
+                            builder: (context, userSnapshot) {
+                              if (userSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (userSnapshot.hasError) {
+                                return Text('Error: ${userSnapshot.error}');
+                              } else {
+                                final docs = userSnapshot.data ?? UserData();
+                                return GestureDetector(
+                                  onTap: () {
+                                    if (page == '/diagnotic') {
+                                      Get.to(() => DiagnosticPage(
+                                            user: docs,
+                                          ));
+                                    }
+                                    if (page == 'follow') {
+                                      Get.to(() => const ProfilePage());
+                                    }
+                                    print('User want to see detail');
+                                  },
+                                  child: SizedBox(
+                                    height: 32,
+                                    width: (MediaQuery.of(context).size.width -
+                                            64) /
+                                        3,
+                                    child: Align(
+                                      alignment: Alignment.bottomCenter,
+                                      child: Text(
+                                        'Chi tiết',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
                                         ),
                                       ),
                                     ),
-                                  );
-                                }
-                              },
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          SizedBox(
+                            height: 40,
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: SizedBox(
+                                height:
+                                    26, // Adjust the height to match your row's height
+                                child: VerticalDivider(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                                  thickness: 1,
+                                  width: 0,
+                                ),
+                              ),
                             ),
-                            SizedBox(
-                              height: 40,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setread(context);
+                              print('User tapped at Read');
+                            },
+                            child: SizedBox(
+                              height: 32,
+                              width:
+                                  (MediaQuery.of(context).size.width - 64) / 3,
                               child: Align(
                                 alignment: Alignment.bottomCenter,
-                                child: SizedBox(
-                                  height:
-                                      26, // Adjust the height to match your row's height
-                                  child: VerticalDivider(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outlineVariant,
-                                    thickness: 1,
-                                    width: 0,
+                                child: Text(
+                                  'Đã đọc',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setread(context);
-                                print('User tapped at Read');
-                              },
+                          ),
+                          SizedBox(
+                            height: 40,
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
                               child: SizedBox(
-                                height: 32,
-                                width:
-                                    (MediaQuery.of(context).size.width - 64) /
-                                        3,
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(
-                                    'Đã đọc',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
+                                height:
+                                    26, // Adjust the height to match your row's height
+                                child: VerticalDivider(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                                  thickness: 1,
+                                  width: 0,
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: 40,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setread(context);
+                              print('User tapped at Read');
+                            },
+                            child: SizedBox(
+                              height: 32,
+                              width:
+                                  (MediaQuery.of(context).size.width - 64) / 3,
                               child: Align(
                                 alignment: Alignment.bottomCenter,
-                                child: SizedBox(
-                                  height:
-                                      26, // Adjust the height to match your row's height
-                                  child: VerticalDivider(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .outlineVariant,
-                                    thickness: 1,
-                                    width: 0,
+                                child: Text(
+                                  'Xóa',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setread(context);
-                                print('User tapped at Read');
-                              },
-                              child: SizedBox(
-                                height: 32,
-                                width:
-                                    (MediaQuery.of(context).size.width - 64) /
-                                        3,
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(
-                                    'Xóa',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       )
                     : SizedBox(
                         child: Align(
