@@ -22,17 +22,14 @@ class Following extends GetView<FollowingController> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            children: [
-              _buildHeader(context, relativesIds.length + patientsIds.length),
-              const SizedBox(height: 16),
-              _buildRelativesList(relativesIds),
-              const SizedBox(height: 16),
-              _buildPatientsList(patientsIds),
-            ],
-          ),
+        child: Column(
+          children: [
+            _buildHeader(context, relativesIds.length + patientsIds.length),
+            const SizedBox(height: 16),
+            _buildRelativesList(relativesIds),
+            const SizedBox(height: 16),
+            _buildPatientsList(patientsIds),
+          ],
         ),
       ),
     );
@@ -42,91 +39,96 @@ class Following extends GetView<FollowingController> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 40,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: Color.fromRGBO(202, 196, 208, 1),
+            color: Theme.of(context).colorScheme.outlineVariant,
             width: 1,
           ),
           bottom: BorderSide(
-            color: Color.fromRGBO(202, 196, 208, 1),
+            color: Theme.of(context).colorScheme.outlineVariant,
             width: 1,
           ),
         ),
       ),
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            height: 22,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.bookmark_added_outlined,
-                  size: 24,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-                const SizedBox(width: 8),
-                SizedBox(
-                  height: 18,
-                  child: Text(
-                    "Đang theo dõi",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+      // padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.bookmark_added_outlined,
+                    size: 24,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    height: 18,
+                    child: Text(
+                      "Đang theo dõi",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 17,
-            height: 16,
-            child: Text(
-              '($count)',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.outline,
-                fontSize: 12,
+                ],
               ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 17,
+              height: 16,
+              child: Text(
+                '($count)',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.outline,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildRelativesList(List<String> relativesIds) {
-    return StreamBuilder(
-      stream: profileController.getUserByIds(relativesIds),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Chưa có người thân!'));
-        } else if (snapshot.hasData) {
-          final users = snapshot.data ?? [];
-          if (users.isEmpty) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: StreamBuilder(
+        stream: profileController.getUserByIds(relativesIds),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Chưa có người thân!'));
+          } else if (snapshot.hasData) {
+            final users = snapshot.data ?? [];
+            if (users.isEmpty) {
+              return const Center(child: Text("Chưa có người thân"));
+            }
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: users.length,
+              itemBuilder: (context, index) {
+                final user = users[index];
+                return Column(
+                  children: [
+                    _buildUserTile(user, "Người thân"),
+                    const SizedBox(height: 10),
+                  ],
+                );
+              },
+            );
+          } else {
             return const Center(child: Text("Chưa có người thân"));
           }
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: users.length,
-            itemBuilder: (context, index) {
-              final user = users[index];
-              return Column(
-                children: [
-                  _buildUserTile(user, "Người thân"),
-                  const SizedBox(height: 10),
-                ],
-              );
-            },
-          );
-        } else {
-          return const Center(child: Text("Chưa có người thân"));
-        }
-      },
+        },
+      ),
     );
   }
 

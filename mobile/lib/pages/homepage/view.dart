@@ -91,13 +91,17 @@ class Homepage extends StatelessWidget {
                                               appController.state.profile.value
                                                       ?.name ??
                                                   "",
-                                              style:
-                                                  const TextStyle(fontSize: 16),
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
                                             ),
                                           ],
                                         ),
                                         const SizedBox(
-                                          height: 4,
+                                          width: 12,
                                         ),
                                         Row(
                                           children: [
@@ -105,10 +109,11 @@ class Homepage extends StatelessWidget {
                                               appController.state.profile.value
                                                       ?.gender ??
                                                   "",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 14,
-                                                color: Color.fromRGBO(
-                                                    121, 116, 126, 1),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
                                               ),
                                             ),
                                             // const SizedBox(
@@ -120,10 +125,11 @@ class Homepage extends StatelessWidget {
                                                       0
                                                   ? ("${appController.state.profile.value?.age} tuổi")
                                                   : '',
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 14,
-                                                color: Color.fromRGBO(
-                                                    121, 116, 126, 1),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
                                               ),
                                             ),
                                           ],
@@ -141,19 +147,23 @@ class Homepage extends StatelessWidget {
                                       children: [
                                         Row(
                                           children: [
-                                            const Text(
+                                            Text(
                                               "Người nhà:",
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Color.fromRGBO(
-                                                    121, 116, 126, 1),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                               ),
                                             ),
                                             const Spacer(),
                                             Badge(
                                               label: Text(
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontSize: 11,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primaryContainer,
                                                   ),
                                                   appController
                                                           .state
@@ -175,19 +185,23 @@ class Homepage extends StatelessWidget {
                                         ),
                                         Row(
                                           children: [
-                                            const Text(
+                                            Text(
                                               "Chuyên gia:",
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Color.fromRGBO(
-                                                    121, 116, 126, 1),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                               ),
                                             ),
                                             const Spacer(),
                                             Badge(
                                               label: Text(
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontSize: 11,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primaryContainer,
                                                   ),
                                                   appController
                                                           .state
@@ -198,9 +212,9 @@ class Homepage extends StatelessWidget {
                                                           .toString() ??
                                                       "0"),
                                               largeSize: 16,
-                                              backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      125, 82, 96, 1),
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiary,
                                             ),
                                           ],
                                         ),
@@ -209,19 +223,23 @@ class Homepage extends StatelessWidget {
                                         ),
                                         Row(
                                           children: [
-                                            const Text(
+                                            Text(
                                               "Đang theo dõi:",
                                               style: TextStyle(
                                                 fontSize: 12,
-                                                color: Color.fromRGBO(
-                                                    121, 116, 126, 1),
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
                                               ),
                                             ),
                                             const Spacer(),
                                             Badge(
                                               label: Text(
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontSize: 11,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer,
                                                 ),
                                                 ((appController
                                                                 .state
@@ -240,9 +258,9 @@ class Homepage extends StatelessWidget {
                                                     .toString(),
                                               ),
                                               largeSize: 16,
-                                              backgroundColor:
-                                                  const Color.fromRGBO(
-                                                      125, 82, 96, 1),
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiary,
                                             ),
                                           ],
                                         ),
@@ -294,7 +312,9 @@ class Homepage extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => PrescriptionPage(appController.state.profile.value!.id.toString()));
+                          Get.to(() => PrescriptionPage(appController
+                              .state.profile.value!.id
+                              .toString()));
                         },
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
