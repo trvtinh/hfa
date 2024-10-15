@@ -7,7 +7,8 @@ import 'package:health_for_all/pages/reminder/widget/add_reminder.dart';
 import 'package:health_for_all/pages/reminder/widget/list_reminder.dart';
 
 class ReminderPage extends GetView<AlarmController> {
-  const ReminderPage({super.key});
+  final String userId;
+  const ReminderPage(this.userId, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,10 @@ class ReminderPage extends GetView<AlarmController> {
   Widget list_reminder(BuildContext context) {
     final reminderController = Get.find<ReminderController>();
     return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('reminders').where('userId', isEqualTo: reminderController.state.profile.value?.id).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('reminders')
+            .where('userId', isEqualTo: userId)
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -140,11 +144,13 @@ class ReminderPage extends GetView<AlarmController> {
             borderRadius: BorderRadius.circular(20),
           ),
           insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          content: const SingleChildScrollView(
+          content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AddReminder(),
+                AddReminder(
+                  userId: userId,
+                ),
               ],
             ),
           ),

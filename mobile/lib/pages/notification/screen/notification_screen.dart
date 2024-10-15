@@ -86,7 +86,7 @@ class NotificationScreen extends StatelessWidget {
                             documentId: notification.id!,
                             isExpanded: false.obs,
                             status: status,
-                            page: notification.page!,
+                            page: notification.page!, userId: uid,
                           ),
                           const SizedBox(
                             height: 12,

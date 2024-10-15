@@ -9,7 +9,8 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 class AddReminder extends StatefulWidget {
-  const AddReminder({super.key});
+  final String userId;
+  const AddReminder({super.key, required this.userId});
 
   @override
   State<AddReminder> createState() => _AddReminderState();
@@ -137,7 +138,7 @@ class _AddReminderState extends State<AddReminder> {
                   backgroundColor: Colors.transparent,
                 ),
                 onPressed: () {
-                  reminderController.addReminder();
+                  reminderController.addReminder(widget.userId);
                   reminderController.clearData();
                   Get.back();
                 },

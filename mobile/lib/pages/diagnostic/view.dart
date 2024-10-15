@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/enum/type_diagnostic_status.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/screen/diagnostic_screen.dart';
 
 class DiagnosticPage extends StatelessWidget {
-  DiagnosticPage({super.key});
+  final UserData user;
+  DiagnosticPage({super.key, required this.user});
   final controller = Get.find<DiagnosticController>();
   @override
   Widget build(BuildContext context) {
@@ -150,15 +153,18 @@ class DiagnosticPage extends StatelessWidget {
               ],
             ),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
               DiagnosticScreen(
+                user: user,
                 status: TypeDiagnosticStatus.unread,
               ),
               DiagnosticScreen(
+                user: user,
                 status: TypeDiagnosticStatus.important,
               ),
               DiagnosticScreen(
+                user: user,
                 status: TypeDiagnosticStatus.read,
               ),
             ],

@@ -1,14 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/alarm_entity.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/common/entities/user.dart';
+import 'package:health_for_all/pages/alarm/view.dart';
+import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/white_box.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
+import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/prescription/index.dart';
+import 'package:health_for_all/pages/reminder/view.dart';
 import 'package:intl/intl.dart';
 import 'controller.dart';
 
@@ -21,6 +29,8 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
   @override
   Widget build(BuildContext context) {
     final historyController = Get.find<OverallMedicalDataHistoryController>();
+    final notificationController = Get.find<NotificationController>();
+    final controller = Get.find<FollowingMedicalDataController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Đang theo dõi'),
@@ -69,20 +79,21 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                       Get.to(() => OverallMedicalDataHistoryPage());
                     },
                     child: Container(
-                      padding: const EdgeInsets.all(12),
+                      padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: Theme.of(context).colorScheme.secondaryContainer,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color.fromRGBO(0, 0, 0, 0.3),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                          ),
-                        ],
-                      ),
+                          borderRadius: BorderRadius.circular(16),
+                          color:
+                              Theme.of(context).colorScheme.secondaryContainer,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.3),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              // offset: Offset(0, 3), // changes position of shadow
+                            )
+                          ]),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -90,27 +101,22 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                               Text(
                                 "Dữ liệu sức khỏe",
                                 style: TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 14,
                                 ),
                               ),
                               Icon(
                                 Icons.open_in_new,
                                 size: 16,
-                              ),
+                              )
                             ],
                           ),
-                          const SizedBox(
-                            height: 8,
-                          ),
-                          Row(
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.monitor_heart_outlined,
                                 size: 48,
                                 color: Color.fromRGBO(101, 85, 143, 1),
-                              ),
-                              const SizedBox(
-                                width: 12,
                               ),
                               Column(
                                 children: [
@@ -118,23 +124,17 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                     "Chưa cập nhật",
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      color: Color.fromRGBO(121, 116, 126, 1),
                                     ),
                                   ),
                                   Text(
                                     '03',
                                     style: TextStyle(
-                                        fontSize: 22,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .error),
-                                  ),
+                                      fontSize: 22,
+                                      color: Color.fromRGBO(179, 38, 30, 1),
+                                    ),
+                                  )
                                 ],
-                              ),
-                              const SizedBox(
-                                width: 16,
                               ),
                               Column(
                                 children: [
@@ -142,22 +142,17 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                     "Đã cập nhật",
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      color: Color.fromRGBO(121, 116, 126, 1),
                                     ),
                                   ),
                                   Text(
                                     '07',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 22,
-                                      color: Colors.green,
+                                      color: Color.fromRGBO(52, 199, 89, 1),
                                     ),
-                                  ),
+                                  )
                                 ],
-                              ),
-                              const SizedBox(
-                                width: 16,
                               ),
                               Column(
                                 children: [
@@ -165,18 +160,16 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                     "Tổng số",
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      color: Color.fromRGBO(121, 116, 126, 1),
                                     ),
                                   ),
                                   Text(
                                     '10',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 22,
                                       color: Color.fromRGBO(29, 27, 32, 1),
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
                             ],
@@ -185,12 +178,14 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                time,
+                                time != ''
+                                    ? "Cập nhật lần cuối: $time"
+                                    : 'Chưa cập nhật',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Color.fromRGBO(121, 116, 126, 1),
                                 ),
-                              ),
+                              )
                             ],
                           ),
                         ],
@@ -201,13 +196,71 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      WhiteBox(
-                          title: 'Chẩn đoán',
-                          iconbox: Icons.health_and_safety_outlined,
-                          text1: 'Chưa xem',
-                          text2: 'Đã xem',
-                          value1: '03',
-                          value2: '07'),
+                      FutureBuilder(
+                        future: controller.getUser(historyController
+                            .state.selectedUser.value.id
+                            .toString()),
+                        builder: (context, medicalSnapshot) {
+                          if (medicalSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+
+                          if (!medicalSnapshot.hasData ||
+                              medicalSnapshot.hasError) {
+                            return const Text('Error loading medical data');
+                          }
+
+                          final user = medicalSnapshot.data!;
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(() => DiagnosticPage(
+                                    user: user,
+                                  ));
+                            },
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('diagnostic')
+                                  .where('toUId',
+                                      isEqualTo: historyController
+                                          .state.selectedUser.value.id
+                                          .toString())
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) => Diagnostic.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                int read = 0;
+                                int unread = 0;
+                                for (var i in data) {
+                                  if (i.status == "unread")
+                                    unread++;
+                                  else
+                                    read++;
+                                }
+                                return WhiteBox(
+                                    title: 'Chẩn đoán',
+                                    iconbox: Icons.health_and_safety_outlined,
+                                    text1: 'Chưa xem',
+                                    text2: 'Đã xem',
+                                    value1: unread.toString(),
+                                    value2: read.toString());
+                              },
+                            ),
+                          );
+                        },
+                      ),
                       GestureDetector(
                         onTap: () {
                           print(historyController.state.selectedUser.value.id);
@@ -266,7 +319,9 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // Get.to(() => const ReminderPage());
+                          Get.to(() => ReminderPage(historyController
+                              .state.selectedUser.value.id
+                              .toString()));
                         },
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -296,29 +351,97 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           },
                         ),
                       ),
-                      WhiteBoxnoW(
-                          title: 'Cảnh báo',
-                          iconbox: Icons.warning_amber_outlined,
-                          text1: 'Số cảnh báo',
-                          value1: '07'),
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(() => AlarmPage(historyController
+                                .state.selectedUser.value.id
+                                .toString()));
+                          },
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('alarms')
+                                .where('userId',
+                                    isEqualTo: historyController
+                                        .state.selectedUser.value.id)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Có lỗi xảy ra');
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+
+                              final data = snapshot.data!.docs
+                                  .map((doc) => AlarmEntity.fromFirestore(doc
+                                      as DocumentSnapshot<
+                                          Map<String, dynamic>>))
+                                  .toList();
+                              return WhiteBoxnoW(
+                                title: 'Cảnh báo',
+                                iconbox: Icons.warning_amber_outlined,
+                                text1: 'Số cảnh báo',
+                                value1: data.length.toString(),
+                              );
+                            },
+                          )),
                     ],
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row(
                     children: [
-                      WhiteBox(
-                          title: 'Thông báo',
-                          iconbox: Icons.notifications_outlined,
-                          text1: 'Chưa xem',
-                          text2: 'Đã xem',
-                          value1: '03',
-                          value2: '07'),
-                      SizedBox(
-                        width: 185,
-                      )
+                      GestureDetector(
+                        onTap: () {
+                          notificationController.fetchNotificationCounts(
+                              historyController.state.selectedUser.value.id
+                                  .toString());
+                          Get.to(() => NotiPage(
+                              userId: historyController
+                                  .state.selectedUser.value.id
+                                  .toString()));
+                        },
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('notifications')
+                              .where('to_uid',
+                                  isEqualTo: historyController
+                                      .state.selectedUser.value.id)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Có lỗi xảy ra');
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            final data = snapshot.data!.docs
+                                .map((doc) => NotificationEntity.fromFirestore(
+                                    doc as DocumentSnapshot<
+                                        Map<String, dynamic>>))
+                                .toList();
+                            int read = 0;
+                            int unread = 0;
+                            for (var i in data) {
+                              if (i.status == "read")
+                                read++;
+                              else
+                                unread++;
+                            }
+                            return WhiteBox(
+                                title: 'Thông báo',
+                                iconbox: Icons.notifications_outlined,
+                                text1: 'Chưa xem',
+                                text2: 'Đã xem',
+                                value1: unread.toString(),
+                                value2: read.toString());
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -346,5 +469,21 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
   bool compareTimestamps(DateTime timestamp1, DateTime timestamp2) {
     return timestamp1
         .isAfter(timestamp2); // true if timestamp1 is before timestamp2
+  }
+}
+
+class NotiPage extends StatelessWidget {
+  final String userId;
+  const NotiPage({super.key, required this.userId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Thông báo'),
+        centerTitle: true,
+      ),
+      body: NotificationPage(userId),
+    );
   }
 }

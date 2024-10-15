@@ -4,13 +4,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/notification_entity.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/notification/state.dart';
 
 class NotificationController extends GetxController {
   final state = NotificationState();
 
-  Future<void> fetchNotificationCounts() async {
-    final uid = state.profile.value!.id;
+  Future<UserData> getUser(String userId) async {
+    final db = FirebaseFirestore.instance;
+    final querySnapshot =
+        await db.collection("users").where('id', isEqualTo: userId).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      final docSnapshot = await querySnapshot.docs.first.reference.get();
+      final userData = UserData.fromFirestore(docSnapshot, null);
+      return userData;
+    }
+    return UserData();
+  }
+
+  Future<void> fetchNotificationCounts(String userId) async {
+    final uid = userId;
 
     // Fetch unread notifications count
     final unreadCount = await FirebaseFirestore.instance
@@ -81,11 +94,11 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> getNoti() async {
+  Future<void> getNoti(String userId) async {
     final notiCollection =
         FirebaseFirestore.instance.collection('notifications').where(
               'to_uid',
-              isEqualTo: state.profile.value!.id,
+              isEqualTo: userId,
             );
     final query = notiCollection.orderBy('time', descending: true);
     final querySnapshot = await query.get();

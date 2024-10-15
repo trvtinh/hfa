@@ -6,7 +6,8 @@ import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 
 class AddAlarm extends StatefulWidget {
-  const AddAlarm({super.key});
+  final String userId;
+  const AddAlarm({super.key, required this.userId});
 
   @override
   State<AddAlarm> createState() => _AddAlarmState();
@@ -130,7 +131,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                alarmController.addAlarm(context);
+                alarmController.addAlarm(context, widget.userId);
               },
               child: Text(
                 "Xác nhận",

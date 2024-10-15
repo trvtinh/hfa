@@ -5,7 +5,8 @@ import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/notification/screen/notification_screen.dart';
 
 class NotificationPage extends GetView<NotificationController> {
-  const NotificationPage({super.key});
+  final String userId;
+  const NotificationPage(this.userId, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -182,19 +183,19 @@ class NotificationPage extends GetView<NotificationController> {
               child: TabBarView(
             children: [
               NotificationScreen(
-                uid: controller.state.profile.value!.id!,
+                uid: userId,
                 status: TypeNotificationStatus.unread,
               ),
               NotificationScreen(
-                uid: controller.state.profile.value!.id!,
+                uid: userId,
                 status: TypeNotificationStatus.warning,
               ),
               NotificationScreen(
-                uid: controller.state.profile.value!.id!,
+                uid: userId,
                 status: TypeNotificationStatus.reminder,
               ),
               NotificationScreen(
-                uid: controller.state.profile.value!.id!,
+                uid: userId,
                 status: TypeNotificationStatus.read,
               ),
             ],

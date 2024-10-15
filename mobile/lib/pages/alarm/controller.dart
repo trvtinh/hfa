@@ -17,7 +17,7 @@ class AlarmController extends GetxController {
   final lowThresholdController = TextEditingController();
   RxInt numberAlarm = 0.obs;
 
-  Future addAlarm(BuildContext context) async {
+  Future addAlarm(BuildContext context, String userId) async {
     final unit = unitController.text;
     final highThreshold = highThresholdController.text;
     final lowThreshold = lowThresholdController.text;
@@ -27,7 +27,7 @@ class AlarmController extends GetxController {
       return;
     }
     final alarm = AlarmEntity(
-      userId: state.profile.value!.id,
+      userId: userId,
       time: Timestamp.fromDate(DateTime.now()),
       highThreshold: highThreshold,
       lowThreshold: lowThreshold,

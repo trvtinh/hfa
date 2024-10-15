@@ -4,15 +4,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/enum/type_diagnostic_status.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
 
 class DiagnosticScreen extends StatelessWidget {
+  final UserData user;
   const DiagnosticScreen({
     super.key,
-    required this.status,
+    required this.status, required this.user,
   });
   final TypeDiagnosticStatus status;
 
@@ -28,7 +30,7 @@ class DiagnosticScreen extends StatelessWidget {
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('diagnostic')
-                  .where('toUId', isEqualTo: controller.state.profile.value!.id)
+                  .where('toUId', isEqualTo: user.id)
                   .where('status', isEqualTo: status.value)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -104,7 +106,7 @@ class DiagnosticScreen extends StatelessWidget {
                               isImportant: false.obs,
                               attachments: diagnostic.imageURL!,
                               isExpanded: false.obs,
-                              user: controller.state.profile.value!,
+                              user: user,
                               documentId: diagnostic.id!,
                               status: diagnostic.status!,
                             );

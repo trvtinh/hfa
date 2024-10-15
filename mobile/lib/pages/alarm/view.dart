@@ -7,7 +7,8 @@ import 'package:health_for_all/pages/alarm/widget/add_alarm.dart';
 import 'package:health_for_all/pages/alarm/widget/list_alarm.dart';
 
 class AlarmPage extends GetView<AlarmController> {
-  const AlarmPage({super.key});
+  final String userId;
+  const AlarmPage(this.userId, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class AlarmPage extends GetView<AlarmController> {
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
                     .where('userId',
-                        isEqualTo: controller.state.profile.value!.id)
+                        isEqualTo: userId)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -85,7 +86,7 @@ class AlarmPage extends GetView<AlarmController> {
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
                     .where('userId',
-                        isEqualTo: controller.state.profile.value!.id)
+                        isEqualTo: userId)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -177,11 +178,11 @@ class AlarmPage extends GetView<AlarmController> {
             borderRadius: BorderRadius.circular(20),
           ),
           insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-          content: const SingleChildScrollView(
+          content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AddAlarm(),
+                AddAlarm(userId: userId,),
               ],
             ),
           ),

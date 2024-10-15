@@ -49,7 +49,7 @@ class ReminderController extends GetxController {
     return res;
   }
 
-  Future<void> addReminder() async {
+  Future<void> addReminder(String userId) async {
     selectedPrescriptionsId.clear();
     for (var i in selectedPrescriptions) {
       selectedPrescriptionsId.add(i.id!);
@@ -69,7 +69,7 @@ class ReminderController extends GetxController {
       time: timeController.text,
       date: dueDateController.text,
       numDate: tmp,
-      userId: state.profile.value?.id,
+      userId: userId,
     );
 
     log(data.toString());
