@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/alarm_entity.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
@@ -276,10 +277,34 @@ class Homepage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const DiagnosticPage());
+                          Get.to(() => DiagnosticPage(user: appController.state.profile.value!,));
                         },
-                        child: Obx(() {
-                          return WhiteBox(
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('diagnostic')
+                              .where('toUId',
+                                  isEqualTo:
+                                      appController.state.profile.value?.id)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Có lỗi xảy ra');
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            final data = snapshot.data!.docs
+                                .map((doc) => Diagnostic.fromFirestore(doc
+                                    as DocumentSnapshot<Map<String, dynamic>>))
+                                .toList();
+                            // int read = 0;
+                            // int unread = 0;
+                            // for (var i in data) {
+                            //   if (i.status)
+                            // }
+                            return WhiteBox(
                               title: 'Chẩn đoán',
                               iconbox: Icons.health_and_safety_outlined,
                               text1: 'Chưa xem',
@@ -290,7 +315,8 @@ class Homepage extends StatelessWidget {
                               value2: appController
                                   .diagnosticController.state.read.value
                                   .toString());
-                        }),
+                          },
+                        ),
                       ),
                       const SizedBox(
                         width: 10,

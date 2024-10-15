@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/enum/type_notification_status.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/profile/page/follower_view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
 
@@ -19,7 +21,8 @@ class NotificationItem extends StatelessWidget {
       required this.isExpanded,
       required this.status,
       required this.documentId,
-      required this.page});
+      required this.page,
+      required this.userId});
   final String name;
   final String time;
   final String content;
@@ -28,6 +31,7 @@ class NotificationItem extends StatelessWidget {
   final String page;
   late RxBool isExpanded;
   final TypeNotificationStatus status;
+  final String userId;
 
   void _toggleContainer() {
     isExpanded.value = !isExpanded.value;
@@ -44,6 +48,7 @@ class NotificationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<NotificationController>();
     return Obx(
       () => GestureDetector(
         onTap: () {
@@ -156,34 +161,51 @@ class NotificationItem extends StatelessWidget {
                     ? SizedBox(
                         child: Row(
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (page == '/diagnotic') {
-                                  Get.to(() => const DiagnosticPage());
-                                }
-                                if (page == 'follow') {
-                                  Get.to(() => const ProfilePage());
-                                }
-                                print('User want to see detail');
-                              },
-                              child: SizedBox(
-                                height: 32,
-                                width:
-                                    (MediaQuery.of(context).size.width - 64) /
-                                        2,
-                                child: Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Text(
-                                    'Chi tiết',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                            FutureBuilder<UserData>(
+                              future: controller.getUser(userId),
+                              builder: (context, userSnapshot) {
+                                if (userSnapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                } else if (userSnapshot.hasError) {
+                                  return Text('Error: ${userSnapshot.error}');
+                                } else {
+                                  final docs = userSnapshot.data ?? UserData();
+                                  return GestureDetector(
+                                    onTap: () {
+                                      if (page == '/diagnotic') {
+                                        Get.to(() => DiagnosticPage(
+                                              user: docs,
+                                            ));
+                                      }
+                                      if (page == 'follow') {
+                                        Get.to(() => const ProfilePage());
+                                      }
+                                      print('User want to see detail');
+                                    },
+                                    child: SizedBox(
+                                      height: 32,
+                                      width:
+                                          (MediaQuery.of(context).size.width -
+                                                  64) /
+                                              2,
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Text(
+                                          'Chi tiết',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ),
+                                  );
+                                }
+                              },
                             ),
                             InkWell(
                               onTap: () {

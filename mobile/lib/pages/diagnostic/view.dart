@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/diagnostic/screen/important_view.dart';
 import 'package:health_for_all/pages/diagnostic/screen/unread_view.dart';
 import 'package:health_for_all/pages/diagnostic/screen/seen_view.dart';
 
 class DiagnosticPage extends StatelessWidget {
-  const DiagnosticPage({super.key});
+  final UserData user;
+  const DiagnosticPage({super.key, required this.user, });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,11 +38,11 @@ class DiagnosticPage extends StatelessWidget {
               ],
             ),
           ),
-          body: const TabBarView(
+          body: TabBarView(
             children: [
-              UnreadPage(),
-              ImportantPage(),
-              SeenPage(),
+              UnreadPage(user: user,),
+              ImportantPage(user: user,),
+              SeenPage(user: user,),
             ],
           ),
         ),

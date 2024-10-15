@@ -77,7 +77,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => const DiagnosticPage());
+              Get.to(() => DiagnosticPage(user: controller.state.profile.value!,));
             },
             child: const ListTile(
               leading: Icon(

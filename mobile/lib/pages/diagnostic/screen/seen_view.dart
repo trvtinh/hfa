@@ -2,12 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
 
 class SeenPage extends StatelessWidget {
-  const SeenPage({super.key});
+  final UserData user;
+  const SeenPage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class SeenPage extends StatelessWidget {
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('diagnostic')
-                  .where('toUId', isEqualTo: controller.state.profile.value!.id)
+                  .where('toUId', isEqualTo: user.id)
                   .where('tap', isEqualTo: 'seen')
                   .snapshots(),
               builder: (context, snapshot) {
@@ -79,7 +81,7 @@ class SeenPage extends StatelessWidget {
                               isImportant: false.obs,
                               attachments: diagnostic.imageURL!,
                               isExpanded: false.obs,
-                              user: controller.state.profile.value!,
+                              user: user,
                               documentId: diagnostic.id!,
                               tap: diagnostic.tap!,
                             );
