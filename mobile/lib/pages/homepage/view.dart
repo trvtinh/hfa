@@ -294,7 +294,7 @@ class Homepage extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const PrescriptionPage());
+                          Get.to(() => PrescriptionPage(appController.state.profile.value!.id.toString()));
                         },
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
