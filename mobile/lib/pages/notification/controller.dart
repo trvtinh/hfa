@@ -9,8 +9,8 @@ import 'package:health_for_all/pages/notification/state.dart';
 class NotificationController extends GetxController {
   final state = NotificationState();
 
-  Future<void> fetchNotificationCounts() async {
-    final uid = state.profile.value!.id;
+  Future<void> fetchNotificationCounts(String userId) async {
+    final uid = userId;
 
     // Fetch unread notifications count
     final unreadCount = await FirebaseFirestore.instance
@@ -81,11 +81,11 @@ class NotificationController extends GetxController {
     }
   }
 
-  Future<void> getNoti() async {
+  Future<void> getNoti(String userId) async {
     final notiCollection =
         FirebaseFirestore.instance.collection('notifications').where(
               'to_uid',
-              isEqualTo: state.profile.value!.id,
+              isEqualTo: userId,
             );
     final query = notiCollection.orderBy('time', descending: true);
     final querySnapshot = await query.get();

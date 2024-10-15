@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/alarm_entity.dart';
+import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
@@ -13,6 +14,7 @@ import 'package:health_for_all/pages/connect_hardware/view.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/homepage/widget/white_box.dart';
 import 'package:health_for_all/pages/homepage/widget/orange_box.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/prescription/index.dart';
 import 'package:health_for_all/pages/profile/index.dart';
@@ -22,6 +24,7 @@ import 'package:intl/intl.dart';
 class Homepage extends StatelessWidget {
   Homepage({super.key});
   final appController = Get.find<ApplicationController>();
+  final notificationController = Get.find<NotificationController>();
 
   DateTime convertStringtoTime(String date) {
     DateFormat format = DateFormat('dd/MM/yyyy');
@@ -88,11 +91,11 @@ class Homepage extends StatelessWidget {
                                         Wrap(
                                           children: [
                                             Text(
-                                              appController.state.profile
-                                                      .value?.name ??
+                                              appController.state.profile.value
+                                                      ?.name ??
                                                   "",
-                                              style: const TextStyle(
-                                                  fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
                                           ],
                                         ),
@@ -294,7 +297,9 @@ class Homepage extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => PrescriptionPage(appController.state.profile.value!.id.toString()));
+                          Get.to(() => PrescriptionPage(appController
+                              .state.profile.value!.id
+                              .toString()));
                         },
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -347,7 +352,9 @@ class Homepage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const ReminderPage());
+                          Get.to(() => ReminderPage(appController
+                              .state.profile.value!.id
+                              .toString()));
                         },
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -382,7 +389,9 @@ class Homepage extends StatelessWidget {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Get.to(() => const AlarmPage());
+                            Get.to(() => AlarmPage(appController
+                                .state.profile.value!.id
+                                .toString()));
                           },
                           child: StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
@@ -423,19 +432,49 @@ class Homepage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const NotiPage());
-                        },
-                        child: Obx(() => WhiteBox(
-                            title: 'Thông báo',
-                            iconbox: Icons.notifications_outlined,
-                            text1: 'Chưa xem',
-                            text2: 'Đã xem',
-                            value1: appController
-                                .notificationController.state.unread
-                                .toString(),
-                            value2: appController
-                                .notificationController.state.read
-                                .toString())),
+                          notificationController.fetchNotificationCounts(appController
+                              .state.profile.value!.id
+                              .toString());
+                            Get.to(() => NotiPage(userId: appController
+                              .state.profile.value!.id
+                              .toString(),));
+                          },
+                        child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('notifications')
+                                  .where('to_uid',
+                                      isEqualTo:
+                                          appController.state.profile.value?.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+                        
+                                final data = snapshot.data!.docs
+                                    .map((doc) => NotificationEntity.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                int read = 0;
+                                int unread = 0;
+                                for (var i in data){
+                                  if (i.status == "read") read ++;
+                                  else unread ++;
+                                }
+                                return WhiteBox(
+                                title: 'Thông báo',
+                                iconbox: Icons.notifications_outlined,
+                                text1: 'Chưa xem',
+                                text2: 'Đã xem',
+                                value1: unread.toString(),
+                                value2: read.toString());
+                              },
+                            ),
                       ),
                       const SizedBox(
                         width: 10,
@@ -542,7 +581,8 @@ class Homepage extends StatelessWidget {
 }
 
 class NotiPage extends StatelessWidget {
-  const NotiPage({super.key});
+  final String userId;
+  const NotiPage({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -551,7 +591,7 @@ class NotiPage extends StatelessWidget {
         title: const Text('Thông báo'),
         centerTitle: true,
       ),
-      body: const NotificationPage(),
+      body: NotificationPage(userId),
     );
   }
 }

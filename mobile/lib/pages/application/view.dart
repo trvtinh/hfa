@@ -32,7 +32,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           Homepage(),
           Following(),
           MedicalDataPage(),
-          const NotificationPage(),
+          NotificationPage(controller.state.profile.value?.id?.toString() ?? ""),
           const ProfilePage()
         ],
       );
@@ -98,15 +98,18 @@ class ApplicationPage extends GetView<ApplicationController> {
               Icons.date_range_outlined,
             ),
             title: const Text('Nhắc nhở'),
-            onTap: () => Get.to(() => const ReminderPage()),
+            onTap: () => Get.to(() => ReminderPage(controller.state.profile.value!.id.toString())),
           ),
           ListTile(
             leading: const Icon(Icons.notifications_none),
             title: const Text('Thông báo'),
-            onTap: () => Get.to(() => const NotiPage()),
+            onTap: () {
+              controller.notificationController.fetchNotificationCounts(controller.state.profile.value?.id?.toString() ?? "");
+              Get.to(() => NotiPage(userId: controller.state.profile.value?.id?.toString() ?? ""));
+            },
           ),
           ListTile(
-            onTap: () => Get.to(() => const AlarmPage()),
+            onTap: () => Get.to(() =>  AlarmPage(controller.state.profile.value!.id.toString())),
             leading: const Icon(
               Icons.warning_amber_outlined,
             ),
@@ -235,7 +238,8 @@ class About_HFA extends StatelessWidget {
 }
 
 class NotiPage extends StatelessWidget {
-  const NotiPage({super.key});
+  final String userId;
+  const NotiPage({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +248,7 @@ class NotiPage extends StatelessWidget {
         title: const Text('Thông báo'),
         centerTitle: true,
       ),
-      body: const NotificationPage(),
+      body: NotificationPage(userId),
     );
   }
 }

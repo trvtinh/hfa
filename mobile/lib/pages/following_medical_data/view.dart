@@ -1,14 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/alarm_entity.dart';
+import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/common/entities/user.dart';
+import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/white_box.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
+import 'package:health_for_all/pages/notification/view.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/prescription/index.dart';
+import 'package:health_for_all/pages/reminder/view.dart';
 import 'package:intl/intl.dart';
 import 'controller.dart';
 
@@ -21,6 +27,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
   @override
   Widget build(BuildContext context) {
     final historyController = Get.find<OverallMedicalDataHistoryController>();
+    final notificationController = Get.find<NotificationController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Đang theo dõi'),
@@ -196,8 +203,9 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                       GestureDetector(
                         onTap: () {
                           print(historyController.state.selectedUser.value.id);
-                          Get.to(() => PrescriptionPage(
-                              historyController.state.selectedUser.value.id.toString()));
+                          Get.to(() => PrescriptionPage(historyController
+                              .state.selectedUser.value.id
+                              .toString()));
                         },
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -250,7 +258,9 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          // Get.to(() => const ReminderPage());
+                          Get.to(() => ReminderPage(historyController
+                              .state.selectedUser.value.id
+                              .toString()));
                         },
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -280,29 +290,97 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           },
                         ),
                       ),
-                      WhiteBoxnoW(
-                          title: 'Cảnh báo',
-                          iconbox: Icons.warning_amber_outlined,
-                          text1: 'Số cảnh báo',
-                          value1: '07'),
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(() => AlarmPage(historyController
+                                .state.selectedUser.value.id
+                                .toString()));
+                          },
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('alarms')
+                                .where('userId',
+                                    isEqualTo: historyController
+                                        .state.selectedUser.value.id)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) {
+                                return const Text('Có lỗi xảy ra');
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              }
+
+                              final data = snapshot.data!.docs
+                                  .map((doc) => AlarmEntity.fromFirestore(doc
+                                      as DocumentSnapshot<
+                                          Map<String, dynamic>>))
+                                  .toList();
+                              return WhiteBoxnoW(
+                                title: 'Cảnh báo',
+                                iconbox: Icons.warning_amber_outlined,
+                                text1: 'Số cảnh báo',
+                                value1: data.length.toString(),
+                              );
+                            },
+                          )),
                     ],
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Row(
                     children: [
-                      WhiteBox(
-                          title: 'Thông báo',
-                          iconbox: Icons.notifications_outlined,
-                          text1: 'Chưa xem',
-                          text2: 'Đã xem',
-                          value1: '03',
-                          value2: '07'),
-                      SizedBox(
-                        width: 185,
-                      )
+                      GestureDetector(
+                        onTap: () {
+                          notificationController.fetchNotificationCounts(historyController
+                                  .state.selectedUser.value.id
+                                  .toString());
+                          Get.to(() => NotiPage(
+                              userId: historyController
+                                  .state.selectedUser.value.id
+                                  .toString()));
+                        },
+                        child: StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection('notifications')
+                              .where('to_uid',
+                                  isEqualTo: historyController
+                                      .state.selectedUser.value.id)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Có lỗi xảy ra');
+                            }
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+
+                            final data = snapshot.data!.docs
+                                .map((doc) => NotificationEntity.fromFirestore(
+                                    doc as DocumentSnapshot<
+                                        Map<String, dynamic>>))
+                                .toList();
+                            int read = 0;
+                            int unread = 0;
+                            for (var i in data) {
+                              if (i.status == "read")
+                                read++;
+                              else
+                                unread++;
+                            }
+                            return WhiteBox(
+                                title: 'Thông báo',
+                                iconbox: Icons.notifications_outlined,
+                                text1: 'Chưa xem',
+                                text2: 'Đã xem',
+                                value1: unread.toString(),
+                                value2: read.toString());
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -330,5 +408,21 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
   bool compareTimestamps(DateTime timestamp1, DateTime timestamp2) {
     return timestamp1
         .isAfter(timestamp2); // true if timestamp1 is before timestamp2
+  }
+}
+
+class NotiPage extends StatelessWidget {
+  final String userId;
+  const NotiPage({super.key, required this.userId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Thông báo'),
+        centerTitle: true,
+      ),
+      body: NotificationPage(userId),
+    );
   }
 }

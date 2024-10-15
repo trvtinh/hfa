@@ -166,7 +166,6 @@ class ApplicationController extends GetxController {
     chooseMedController.state.profile.value = state.profile.value;
     reminderController.state.profile.value = state.profile.value;
     samsungController.state.profile.value = state.profile.value;
-    notificationController.fetchNotificationCounts();
     diagnosticController.fetchDiagnosticNotifications();
     alarmController.getAlarmCount();
     log('Dữ liệu diagnostic noti: ${diagnosticController.state.profile.value.toString()}');
