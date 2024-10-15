@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/alarm_entity.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
+import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/white_box.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
@@ -28,6 +30,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
   Widget build(BuildContext context) {
     final historyController = Get.find<OverallMedicalDataHistoryController>();
     final notificationController = Get.find<NotificationController>();
+    final controller = Get.find<FollowingMedicalDataController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Đang theo dõi'),
@@ -193,13 +196,71 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      WhiteBox(
-                          title: 'Chẩn đoán',
-                          iconbox: Icons.health_and_safety_outlined,
-                          text1: 'Chưa xem',
-                          text2: 'Đã xem',
-                          value1: '03',
-                          value2: '07'),
+                      FutureBuilder(
+                        future: controller.getUser(historyController
+                            .state.selectedUser.value.id
+                            .toString()),
+                        builder: (context, medicalSnapshot) {
+                          if (medicalSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+
+                          if (!medicalSnapshot.hasData ||
+                              medicalSnapshot.hasError) {
+                            return const Text('Error loading medical data');
+                          }
+
+                          final user = medicalSnapshot.data!;
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(() => DiagnosticPage(
+                                    user: user,
+                                  ));
+                            },
+                            child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('diagnostic')
+                                  .where('toUId',
+                                      isEqualTo: historyController
+                                          .state.selectedUser.value.id
+                                          .toString())
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) => Diagnostic.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                int read = 0;
+                                int unread = 0;
+                                for (var i in data) {
+                                  if (i.status == "unread")
+                                    unread++;
+                                  else
+                                    read++;
+                                }
+                                return WhiteBox(
+                                    title: 'Chẩn đoán',
+                                    iconbox: Icons.health_and_safety_outlined,
+                                    text1: 'Chưa xem',
+                                    text2: 'Đã xem',
+                                    value1: unread.toString(),
+                                    value2: read.toString());
+                              },
+                            ),
+                          );
+                        },
+                      ),
                       GestureDetector(
                         onTap: () {
                           print(historyController.state.selectedUser.value.id);
@@ -334,8 +395,8 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          notificationController.fetchNotificationCounts(historyController
-                                  .state.selectedUser.value.id
+                          notificationController.fetchNotificationCounts(
+                              historyController.state.selectedUser.value.id
                                   .toString());
                           Get.to(() => NotiPage(
                               userId: historyController

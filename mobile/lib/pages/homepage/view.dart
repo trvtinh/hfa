@@ -299,22 +299,19 @@ class Homepage extends StatelessWidget {
                                 .map((doc) => Diagnostic.fromFirestore(doc
                                     as DocumentSnapshot<Map<String, dynamic>>))
                                 .toList();
-                            // int read = 0;
-                            // int unread = 0;
-                            // for (var i in data) {
-                            //   if (i.status)
-                            // }
+                            int read = 0;
+                            int unread = 0;
+                            for (var i in data) {
+                              if (i.status == "unread") unread++;
+                              else read ++;
+                            }
                             return WhiteBox(
                               title: 'Chẩn đoán',
                               iconbox: Icons.health_and_safety_outlined,
                               text1: 'Chưa xem',
                               text2: 'Đã xem',
-                              value1: appController
-                                  .diagnosticController.state.unread.value
-                                  .toString(),
-                              value2: appController
-                                  .diagnosticController.state.read.value
-                                  .toString());
+                              value1: unread.toString(),
+                              value2: read.toString());
                           },
                         ),
                       ),
