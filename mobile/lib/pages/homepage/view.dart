@@ -88,11 +88,11 @@ class Homepage extends StatelessWidget {
                                         Wrap(
                                           children: [
                                             Text(
-                                              appController.state.profile
-                                                      .value?.name ??
+                                              appController.state.profile.value
+                                                      ?.name ??
                                                   "",
-                                              style: const TextStyle(
-                                                  fontSize: 16),
+                                              style:
+                                                  const TextStyle(fontSize: 16),
                                             ),
                                           ],
                                         ),
@@ -273,7 +273,7 @@ class Homepage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => const DiagnosticPage());
+                          Get.to(() => DiagnosticPage());
                         },
                         child: Obx(() {
                           return WhiteBox(

@@ -8,7 +8,7 @@ class Diagnostic {
   String? toUId;
   List<String>? imageURL;
   String? medicalId;
-  String? tap;
+  String? status;
 
   Diagnostic(
       {this.id,
@@ -18,11 +18,11 @@ class Diagnostic {
       this.toUId,
       this.imageURL,
       this.medicalId,
-      this.tap});
+      this.status});
 
   @override
   String toString() {
-    return 'Diagnostic{id: $id, content: $content, timestamp: $timestamp, fromUId: $fromUId, toUId: $toUId, imageURL: $imageURL, medicalId: $medicalId, tap: $tap}';
+    return 'Diagnostic{id: $id, content: $content, timestamp: $timestamp, fromUId: $fromUId, toUId: $toUId, imageURL: $imageURL, medicalId: $medicalId, status: $status}';
   }
 
   factory Diagnostic.fromFirestore(
@@ -35,7 +35,7 @@ class Diagnostic {
       timestamp: data?['timestamp'] as Timestamp?,
       fromUId: data?['fromUId'] as String?,
       toUId: data?['toUId'] as String?,
-      tap: data?['tap'] as String?,
+      status: data?['status'] as String?,
       imageURL: (data?['imageURL'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
@@ -51,7 +51,7 @@ class Diagnostic {
       'toUId': toUId,
       'imageURL': imageURL,
       'medicalId': medicalId,
-      'tap': tap,
+      'status': status,
     };
   }
 }

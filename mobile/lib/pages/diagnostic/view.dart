@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:health_for_all/pages/diagnostic/screen/important_view.dart';
-import 'package:health_for_all/pages/diagnostic/screen/unread_view.dart';
-import 'package:health_for_all/pages/diagnostic/screen/seen_view.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/common/enum/type_diagnostic_status.dart';
+import 'package:health_for_all/pages/diagnostic/controller.dart';
+import 'package:health_for_all/pages/diagnostic/screen/diagnostic_screen.dart';
 
 class DiagnosticPage extends StatelessWidget {
-  const DiagnosticPage({super.key});
+  DiagnosticPage({super.key});
+  final controller = Get.find<DiagnosticController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,25 +24,143 @@ class DiagnosticPage extends StatelessWidget {
                 ),
               ),
             ],
-            bottom: const TabBar(
+            bottom: TabBar(
               tabs: [
                 Tab(
-                  child: Text('Chưa xem'),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Chưa đọc',
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 13,
+                          ),
+                          overflow: TextOverflow
+                              .ellipsis, // Thêm thuộc tính này để cắt ngắn văn bản nếu quá dài
+                        ),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Obx(() {
+                          if (controller.state.unread.value > 0) {
+                            return Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.red[900],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                      controller.state.unread.value.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      )),
+                                ));
+                          } else {
+                            return Container();
+                          }
+                        })
+                      ]),
                 ),
                 Tab(
-                  child: Text('Quan trọng'),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Quan trọng',
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 13,
+                          ),
+                          overflow: TextOverflow
+                              .ellipsis, // Thêm thuộc tính này để cắt ngắn văn bản nếu quá dài
+                        ),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Obx(() {
+                          if (controller.state.importance.value > 0) {
+                            return Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.red[900],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                      controller.state.importance.value
+                                          .toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      )),
+                                ));
+                          } else {
+                            return Container();
+                          }
+                        })
+                      ]),
                 ),
                 Tab(
-                  child: Text('Đã xem'),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Đã đọc',
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.onSurfaceVariant,
+                            fontSize: 13,
+                          ),
+                          overflow: TextOverflow
+                              .ellipsis, // Thêm thuộc tính này để cắt ngắn văn bản nếu quá dài
+                        ),
+                        const SizedBox(
+                          width: 2,
+                        ),
+                        Obx(() {
+                          if (controller.state.read.value > 0) {
+                            return Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: Colors.red[900],
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                      controller.state.read.value.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 8,
+                                      )),
+                                ));
+                          } else {
+                            return Container();
+                          }
+                        })
+                      ]),
                 ),
               ],
             ),
           ),
           body: const TabBarView(
             children: [
-              UnreadPage(),
-              ImportantPage(),
-              SeenPage(),
+              DiagnosticScreen(
+                status: TypeDiagnosticStatus.unread,
+              ),
+              DiagnosticScreen(
+                status: TypeDiagnosticStatus.important,
+              ),
+              DiagnosticScreen(
+                status: TypeDiagnosticStatus.read,
+              ),
             ],
           ),
         ),

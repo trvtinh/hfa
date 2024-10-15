@@ -19,7 +19,7 @@ class animatedcontainer extends StatelessWidget {
   final UserData user;
   late RxBool isExpanded;
   final String documentId;
-  final String tap;
+  final String status;
   final diagnosticController = Get.find<DiagnosticAddController>();
 
   animatedcontainer({
@@ -33,27 +33,31 @@ class animatedcontainer extends StatelessWidget {
     required this.med,
     required this.user,
     required this.documentId,
-    required this.tap,
+    required this.status,
   });
 
   void _setImportant(BuildContext context) {
-    if (tap != 'important') {
+    if (status != 'important') {
       isImportant.value = !isImportant.value;
-      _handleupdate(context, {'tap': 'important'});
+      _handleupdate(context, {'status': 'important'});
+    } else {
+      isImportant.value = !isImportant.value;
+      _handleupdate(context, {'status': 'read'});
     }
   }
 
-  void setseen(BuildContext context) {
-    if (tap != 'seen') {
-      _handleupdate(context, {'tap': 'seen'});
-      // _handleDelete(context);
-      // _handlemoveseen(context);
-    }
+  void _delete(BuildContext context) {
+    _handleDelete(context);
   }
+
+  // void setread(BuildContext context) {
+  //   if (status != 'read') {
+  //     _handleupdate(context, {'status': 'read'});
+  //   }
+  // }
 
   void _toggleContainer() {
     isExpanded.value = !isExpanded.value;
-    // isExpanded = true;
   }
 
   @override
@@ -234,9 +238,20 @@ class animatedcontainer extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                InkWell(
+                                SizedBox(
+                                  height:
+                                      26, // Adjust the height to match your row's height
+                                  child: VerticalDivider(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                                    thickness: 1,
+                                    width: 0,
+                                  ),
+                                ),
+                                GestureDetector(
                                   onTap: () {
-                                    log('ontap');
+                                    log('onstatus');
                                     _setImportant(context);
                                   },
                                   child: SizedBox(
@@ -272,9 +287,20 @@ class animatedcontainer extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                InkWell(
+                                SizedBox(
+                                  height:
+                                      26, // Adjust the height to match your row's height
+                                  child: VerticalDivider(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                                    thickness: 1,
+                                    width: 0,
+                                  ),
+                                ),
+                                GestureDetector(
                                   onTap: () {
-                                    setseen(context);
+                                    _delete(context);
                                   },
                                   child: SizedBox(
                                     height: 40,
@@ -284,7 +310,7 @@ class animatedcontainer extends StatelessWidget {
                                     child: Align(
                                       alignment: Alignment.center,
                                       child: Text(
-                                        'Đã đọc',
+                                        'Xóa',
                                         style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.w500,
@@ -319,122 +345,6 @@ class animatedcontainer extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> _handlemoveimportant(BuildContext context) async {
-    try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
-
-      // Perform the saving operation
-      await diagnosticController.addImage();
-      await diagnosticController.moveDiagnosticimportant(
-        med.id!,
-        user.id!,
-      );
-      // FirebaseMessagingApi.sendMessage(
-      //     user.fcmtoken!,
-      //     'Chẩn đoán',
-      //     "${diagnosticController.appController.state.profile.value!.name!} đã gửi chẩn đoán đến bạn",
-      //     'diagnostic',
-      //     '/diagnotic',
-      //     user.id!,
-      //     'unread',
-      //     diagnosticId: docId,
-      //     medicalId: medicalId);
-
-      Future.delayed(const Duration(seconds: 1), () {
-        if (Get.isDialogOpen ?? false) {
-          Get.back(); // Close loading dialog
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Thành công'),
-                content: const Text('Thành công chuyển chẩn đoán'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      // Get.back(); // Close success dialog
-                      Get.back(); // Navigate back
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      });
-
-      // Clear the data after saving
-      diagnosticController.selectedFiles.clear();
-      diagnosticController.selectedImagesURL.clear();
-    } catch (e) {
-      // Handle any errors
-      log('Error saving data: $e');
-      _showErrorDialog(context);
-    }
-  }
-
-  Future<void> _handlemoveseen(BuildContext context) async {
-    try {
-      Get.dialog(
-        const Center(child: CircularProgressIndicator()),
-        barrierDismissible: false,
-      );
-
-      // Perform the saving operation
-      await diagnosticController.addImage();
-      await diagnosticController.moveDiagnosticseen(
-        med.id!,
-        user.id!,
-      );
-      // FirebaseMessagingApi.sendMessage(
-      //     user.fcmtoken!,
-      //     'Chẩn đoán',
-      //     "${diagnosticController.appController.state.profile.value!.name!} đã gửi chẩn đoán đến bạn",
-      //     'diagnostic',
-      //     '/diagnotic',
-      //     user.id!,
-      //     'unread',
-      //     diagnosticId: docId,
-      //     medicalId: medicalId);
-
-      Future.delayed(const Duration(seconds: 1), () {
-        if (Get.isDialogOpen ?? false) {
-          Get.back(); // Close loading dialog
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Thành công'),
-                content: const Text('Thành công chuyển chẩn đoán'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () {
-                      // Get.back(); // Close success dialog
-                      Get.back(); // Navigate back
-                    },
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            },
-          );
-        }
-      });
-
-      // Clear the data after saving
-      diagnosticController.selectedFiles.clear();
-      diagnosticController.selectedImagesURL.clear();
-    } catch (e) {
-      // Handle any errors
-      log('Error saving data: $e');
-      _showErrorDialog(context);
-    }
   }
 
   Future<void> _handleDelete(BuildContext context) async {

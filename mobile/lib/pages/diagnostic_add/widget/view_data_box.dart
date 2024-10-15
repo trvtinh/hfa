@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +6,7 @@ import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ViewDataBox extends StatefulWidget {
+class ViewDataBox extends StatelessWidget {
   final String leadingiconpath;
   final String title;
   final String time;
@@ -16,7 +15,7 @@ class ViewDataBox extends StatefulWidget {
   final String note;
   final List<String> selectedFiles;
 
-  const ViewDataBox({
+  ViewDataBox({
     super.key,
     required this.leadingiconpath,
     required this.title,
@@ -26,33 +25,31 @@ class ViewDataBox extends StatefulWidget {
     required this.time,
     required this.selectedFiles,
   });
-
-  @override
-  State<ViewDataBox> createState() => ViewDataBoxState();
-}
-
-class ViewDataBoxState extends State<ViewDataBox> {
   final diagnosticaddController = Get.find<DiagnosticAddController>();
   final medicalController = Get.find<MedicalDataController>();
   final appController = Get.find<ApplicationController>();
 
   @override
   Widget build(BuildContext context) {
-    bool haveFile = widget.selectedFiles.isNotEmpty;
-    bool haveNote = widget.note.isNotEmpty;
+    bool haveFile = selectedFiles.isNotEmpty;
+    bool haveNote = note.isNotEmpty;
     return Column(
       children: [
         Container(
           width: double.infinity,
           height: 71,
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+          color: Theme.of(context).colorScheme.surfaceContainerLowest,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const SizedBox(width: 16),
-              Image.asset(widget.leadingiconpath),
+              Image.asset(leadingiconpath),
               const SizedBox(width: 8),
-              Expanded(child: _buildTextContainer(widget.title, widget.time)),
+              Expanded(child: _buildTextContainer(context, title, time)),
               Expanded(child: _buildValueUnitColumn(context)),
               // const SizedBox(width: 8),
               GestureDetector(
@@ -152,7 +149,7 @@ class ViewDataBoxState extends State<ViewDataBox> {
     );
   }
 
-  Widget _buildTextContainer(String name, String time) {
+  Widget _buildTextContainer(context, String name, String time) {
     return SizedBox(
       height: 76,
       child: Column(
@@ -194,7 +191,7 @@ class ViewDataBoxState extends State<ViewDataBox> {
           Align(
             alignment: Alignment.center,
             child: Text(
-              widget.value,
+              value,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
                 fontSize: 14,
@@ -204,7 +201,7 @@ class ViewDataBoxState extends State<ViewDataBox> {
           Align(
             alignment: Alignment.center,
             child: Text(
-              widget.unit,
+              unit,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
                 fontSize: 11,
@@ -257,7 +254,7 @@ class ViewDataBoxState extends State<ViewDataBox> {
                       ],
                     ),
                   ),
-                  controller: TextEditingController(text: widget.note),
+                  controller: TextEditingController(text: note),
                 ),
               ));
         });
@@ -290,14 +287,14 @@ class ViewDataBoxState extends State<ViewDataBox> {
               content: IntrinsicHeight(
                   child: Column(
                 children: [
-                  _buildFileList(),
+                  _buildFileList(context),
                 ],
               )));
         });
   }
 
-  Widget _buildFileList() {
-    if (widget.selectedFiles.isEmpty) {
+  Widget _buildFileList(context) {
+    if (selectedFiles.isEmpty) {
       return DottedBorder(
         borderType: BorderType.RRect,
         radius: const Radius.circular(4),
@@ -316,16 +313,16 @@ class ViewDataBoxState extends State<ViewDataBox> {
     } else {
       return ListView.builder(
         shrinkWrap: true,
-        itemCount: widget.selectedFiles.length,
+        itemCount: selectedFiles.length,
         itemBuilder: (context, index) {
           final Future<XFile?> file =
-              diagnosticaddController.urlToFile(widget.selectedFiles[index]);
+              diagnosticaddController.urlToFile(selectedFiles[index]);
           return FutureBuilder<XFile?>(
             future: file,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
-                  return _buildFileItem(snapshot.data!);
+                  return _buildFileItem(context, snapshot.data!);
                 } else {
                   return Text('Failed to load file');
                 }
@@ -339,7 +336,7 @@ class ViewDataBoxState extends State<ViewDataBox> {
     }
   }
 
-  Widget _buildFileItem(XFile file) {
+  Widget _buildFileItem(context, XFile file) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Container(

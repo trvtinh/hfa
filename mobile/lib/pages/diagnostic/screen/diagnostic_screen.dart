@@ -1,13 +1,20 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/enum/type_diagnostic_status.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/widget/animated_container.dart';
 
-class SeenPage extends StatelessWidget {
-  const SeenPage({super.key});
+class DiagnosticScreen extends StatelessWidget {
+  const DiagnosticScreen({
+    super.key,
+    required this.status,
+  });
+  final TypeDiagnosticStatus status;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +29,7 @@ class SeenPage extends StatelessWidget {
               stream: FirebaseFirestore.instance
                   .collection('diagnostic')
                   .where('toUId', isEqualTo: controller.state.profile.value!.id)
-                  .where('tap', isEqualTo: 'seen')
+                  .where('status', isEqualTo: status.value)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,6 +45,24 @@ class SeenPage extends StatelessWidget {
                     .map((doc) => Diagnostic.fromFirestore(
                         doc as DocumentSnapshot<Map<String, dynamic>>))
                     .toList();
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (status == TypeDiagnosticStatus.unread) {
+                    controller.state.unread.value =
+                        diagnostics.isNotEmpty ? diagnostics.length : 0;
+                    log('unread: ${controller.state.unread.value}');
+                  }
+                  if (status == TypeDiagnosticStatus.read) {
+                    controller.state.read.value =
+                        diagnostics.isNotEmpty ? diagnostics.length : 0;
+                    log('read: ${controller.state.read.value}');
+                  }
+                  if (status == TypeDiagnosticStatus.important) {
+                    controller.state.importance.value =
+                        diagnostics.isNotEmpty ? diagnostics.length : 0;
+                    log('important: ${controller.state.importance.value}');
+                  }
+                });
+                log('status: ${status.value}');
                 return ListView.builder(
                   shrinkWrap: true,
                   itemCount: diagnostics.length,
@@ -81,7 +106,7 @@ class SeenPage extends StatelessWidget {
                               isExpanded: false.obs,
                               user: controller.state.profile.value!,
                               documentId: diagnostic.id!,
-                              tap: diagnostic.tap!,
+                              status: diagnostic.status!,
                             );
                           },
                         );

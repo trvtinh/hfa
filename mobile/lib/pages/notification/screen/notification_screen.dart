@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/enum/type_notification_status.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
@@ -13,8 +14,6 @@ class NotificationScreen extends StatelessWidget {
   final String uid;
   final TypeNotificationStatus status;
   final notiController = Get.find<NotificationController>();
-  List<DocumentSnapshot> notifications =
-      []; // List to store all documents initially
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,27 +38,10 @@ class NotificationScreen extends StatelessWidget {
                     child: Text('Không tìm thấy thông báo nào!!!'));
               }
 
-              List<QueryDocumentSnapshot> allNotifications =
-                  snapshot.data!.docs;
-
-              if (notifications.isEmpty) {
-                notifications.addAll(allNotifications);
-              }
-              // var notificationChanges = snapshot.data!.docChanges;
-
-              // // Apply changes efficiently
-              // notificationChanges.forEach((change) {
-              //   if (change.type == DocumentChangeType.added) {
-              //     // Handle added documents
-              //     notifications.insert(change.newIndex, change.doc);
-              //   } else if (change.type == DocumentChangeType.modified) {
-              //     // Handle modified documents
-              //     notifications[change.oldIndex] = change.doc;
-              //   } else if (change.type == DocumentChangeType.removed) {
-              //     // Handle removed documents
-              //     notifications.removeAt(change.oldIndex);
-              //   }
-              // });
+              final notifications = snapshot.data!.docs
+                  .map((doc) => NotificationEntity.fromFirestore(
+                      doc as DocumentSnapshot<Map<String, dynamic>>))
+                  .toList();
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 if (status == TypeNotificationStatus.unread) {
                   notiController.state.unread.value = notifications.length;
@@ -84,7 +66,7 @@ class NotificationScreen extends StatelessWidget {
                   final notification = notifications[index];
 
                   return FutureBuilder<String>(
-                    future: notiController.getNameByUId(notification['to_uid']),
+                    future: notiController.getNameByUId(notification.toUId!),
                     builder: (context, nameSnapshot) {
                       if (nameSnapshot.connectionState ==
                           ConnectionState.waiting) {
@@ -98,13 +80,13 @@ class NotificationScreen extends StatelessWidget {
                           NotificationItem(
                             name: name,
                             time: DatetimeChange.timestampToString(
-                                notification['time'] as Timestamp),
-                            content: notification['body'],
-                            title: notification['title'],
-                            documentId: notification.id,
+                                notification.time as Timestamp),
+                            content: notification.body!,
+                            title: notification.title!,
+                            documentId: notification.id!,
                             isExpanded: false.obs,
                             status: status,
-                            page: notification['page'],
+                            page: notification.page!,
                           ),
                           const SizedBox(
                             height: 12,

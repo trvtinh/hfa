@@ -68,8 +68,10 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                    ),
+                        color:
+                            Theme.of(context).colorScheme.surfaceContainerHigh,
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(8))),
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                     child: Text(
                       DatetimeChange.getDatetimeString(

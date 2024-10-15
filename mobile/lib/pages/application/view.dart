@@ -77,7 +77,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           InkWell(
             onTap: () {
-              Get.to(() => const DiagnosticPage());
+              Get.to(() => DiagnosticPage());
             },
             child: const ListTile(
               leading: Icon(
@@ -202,28 +202,33 @@ class About_HFA extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Divider(height: 1,),
+            Divider(
+              height: 1,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  SizedBox(height: 30,),
+                  SizedBox(
+                    height: 30,
+                  ),
                   Text(
                     "Video về project",
                     style: TextStyle(
                       fontSize: 30,
                     ),
                   ),
-                  SizedBox(height: 30,),
-                  Container(
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Image.asset("assets/qr_to_project.png")
+                  SizedBox(
+                    height: 30,
                   ),
+                  Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Image.asset("assets/qr_to_project.png")),
                 ],
               ),
             ),
