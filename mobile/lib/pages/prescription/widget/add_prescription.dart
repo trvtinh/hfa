@@ -11,7 +11,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class AddPrescription extends StatefulWidget {
-  const AddPrescription({super.key});
+  final String userId;
+  const AddPrescription({super.key, required this.userId});
 
   @override
   State<AddPrescription> createState() => _AddPrescriptionState();
@@ -395,7 +396,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
             }
             prescriptionController.selectedFiles = selectedFiles.obs;
             try {
-              await prescriptionController.addPrescription();
+              await prescriptionController.addPrescription(widget.userId);
               Get.snackbar("Thành công", "Thêm đơn thuốc thành công",
                   backgroundColor: Colors.green);
               Future.delayed(const Duration(seconds: 1), () {

@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/comment.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
@@ -8,6 +11,14 @@ class CommentScreen extends StatelessWidget {
   CommentScreen({super.key});
   RxBool isExpanded = false.obs;
   final controller = Get.find<OverallMedicalDataHistoryController>();
+  void _toggleContainer() {
+    isExpanded.value = !isExpanded.value;
+  }
+
+  void _delete(BuildContext context, Comment comment) {
+    _handleDelete(context, comment);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -15,9 +26,10 @@ class CommentScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            const Icon(
-              Icons.comment,
+            Icon(
+              Icons.comment_outlined,
               size: 20,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(
               width: 10,
@@ -106,68 +118,200 @@ class CommentScreen extends StatelessWidget {
   Widget buildBoxComment(Comment comment, BuildContext context, String name) {
     return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
-      return Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Theme.of(context).colorScheme.surfaceContainerLowest),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(
-                  Icons.comment,
-                  size: 16,
-                ),
-                const SizedBox(
-                  width: 6,
-                ),
-                const Text("·"),
-                const SizedBox(
-                  width: 6,
-                ),
-                Text(name),
-                const SizedBox(
-                  width: 6,
-                ),
-                const Text("·"),
-                const SizedBox(
-                  width: 6,
-                ),
-                Text(
-                  '${DatetimeChange.getHourString(comment.time.toDate())}, ${DatetimeChange.getDatetimeString(comment.time.toDate())}',
-                  style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer),
-                ),
-                // Spacer(),
-                // Obx(() => IconButton(
-                //     onPressed: () {
-                //       isExpanded.value = !isExpanded.value;
-                //     },
-                //     icon: isExpanded.value
-                //         ? const Icon(Icons.keyboard_arrow_up_rounded)
-                //         : const Icon(Icons.keyboard_arrow_down_rounded)))
-              ],
+      return Obx(
+        () => GestureDetector(
+          onTap: () {
+            _toggleContainer();
+          },
+          child: IntrinsicHeight(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.symmetric(vertical: 6),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: Theme.of(context).colorScheme.surfaceContainerLowest,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.comment_outlined,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        '•',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(name),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        '•',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 6,
+                      ),
+                      Text(
+                        '${DatetimeChange.getHourString(comment.time.toDate())}, ${DatetimeChange.getDatetimeString(comment.time.toDate())}',
+                        style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer),
+                      ),
+                      Icon(
+                        isExpanded.value
+                            ? Icons.keyboard_arrow_up_outlined
+                            : Icons.keyboard_arrow_down_outlined,
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                  const Row(
+                    children: [
+                      Text('Đã bình luận'),
+                      SizedBox(
+                        width: 6,
+                      ),
+                      // const Text("·"),
+                      // const SizedBox(
+                      //   width: 6,
+                      // ),
+                    ],
+                  ),
+                  Text(comment.content),
+                  isExpanded.value == true
+                      ? SizedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  _delete(context, comment);
+                                  log('comment: ${controller.state.commmentList.length}');
+                                },
+                                child: SizedBox(
+                                  height: 40,
+                                  width:
+                                      (MediaQuery.of(context).size.width - 64) /
+                                          3,
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Xóa',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : SizedBox(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'thêm ...',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                            ),
+                          ),
+                        )
+                ],
+              ),
             ),
-            const Row(
-              children: [
-                Text('Đã bình luận'),
-                SizedBox(
-                  width: 6,
-                ),
-                // const Text("·"),
-                // const SizedBox(
-                //   width: 6,
-                // ),
-              ],
-            ),
-            Text(comment.content)
-          ],
+          ),
         ),
       );
     });
+  }
+
+  Future<void> _handleDelete(BuildContext context, Comment comment) async {
+    try {
+      // Show loading dialog
+      Get.dialog(
+        const Center(child: CircularProgressIndicator()),
+        barrierDismissible: false,
+      );
+
+      // Perform the delete operation
+      FirebaseApi.deleteDocument('comments', comment.id!);
+
+      // Hide loading dialog and show success dialog after a short delay
+      Future.delayed(const Duration(seconds: 1), () {
+        if (Get.isDialogOpen ?? false) {
+          Get.back(); // Close loading dialog
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Thành công'),
+                content: const Text('Xóa bình luận thành công'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Get.back(); // Close success dialog
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      });
+    } catch (e) {
+      // Handle any errors
+      log('Error deleting data: $e');
+      _showErrorDialog(context);
+    }
+  }
+
+  void _showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Lỗi'),
+          content: const Text('Lỗi khi xóa dữ liệu. Hãy thử lại!'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Dismiss the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

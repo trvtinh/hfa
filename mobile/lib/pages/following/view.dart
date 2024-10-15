@@ -22,14 +22,17 @@ class Following extends GetView<FollowingController> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(context, relativesIds.length + patientsIds.length),
-            const SizedBox(height: 16),
-            _buildRelativesList(relativesIds),
-            const SizedBox(height: 16),
-            _buildPatientsList(patientsIds),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              _buildHeader(context, relativesIds.length + patientsIds.length),
+              const SizedBox(height: 16),
+              _buildRelativesList(relativesIds),
+              const SizedBox(height: 16),
+              _buildPatientsList(patientsIds),
+            ],
+          ),
         ),
       ),
     );
@@ -55,23 +58,22 @@ class Following extends GetView<FollowingController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(
-            width: 319,
+          SizedBox(
             height: 22,
             child: Row(
               children: [
                 Icon(
                   Icons.bookmark_added_outlined,
                   size: 24,
-                  color: Color.fromRGBO(73, 69, 79, 1),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 SizedBox(
                   height: 18,
                   child: Text(
                     "Đang theo dõi",
                     style: TextStyle(
-                      color: Color.fromRGBO(73, 69, 79, 1),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ),
@@ -81,14 +83,11 @@ class Following extends GetView<FollowingController> {
           SizedBox(
             width: 17,
             height: 16,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                '($count)',
-                style: const TextStyle(
-                  color: Color.fromRGBO(121, 116, 126, 1),
-                  fontSize: 12,
-                ),
+            child: Text(
+              '($count)',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.outline,
+                fontSize: 12,
               ),
             ),
           ),

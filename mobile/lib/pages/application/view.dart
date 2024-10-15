@@ -87,7 +87,7 @@ class ApplicationPage extends GetView<ApplicationController> {
             ),
           ),
           ListTile(
-            onTap: () => Get.to(() => const PrescriptionPage()),
+            onTap: () => Get.to(() => PrescriptionPage(controller.state.profile.value!.id.toString())),
             leading: const Icon(
               Icons.medication_liquid_sharp,
             ),

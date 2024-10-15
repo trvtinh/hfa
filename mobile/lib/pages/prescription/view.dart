@@ -9,7 +9,8 @@ import 'package:health_for_all/pages/prescription/widget/filter_sheet.dart';
 import 'package:health_for_all/pages/prescription/widget/precription_box.dart';
 
 class PrescriptionPage extends GetView<PrescriptionController> {
-  const PrescriptionPage({super.key});
+  final String userId;
+  const PrescriptionPage(this.userId, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +91,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   Widget filter_prescription(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
       stream:
-          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: controller.state.profile.value?.id).snapshots(),
+          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: userId).snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -139,7 +140,7 @@ class PrescriptionPage extends GetView<PrescriptionController> {
         StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('prescriptions')
-              .where('patientId', isEqualTo: controller.state.profile.value?.id)
+              .where('patientId', isEqualTo: userId)
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -208,11 +209,11 @@ class PrescriptionPage extends GetView<PrescriptionController> {
           insetPadding: const EdgeInsets.all(10),
           content: SizedBox(
             width: MediaQuery.of(context).size.width - 70,
-            child: const SingleChildScrollView(
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(child: AddPrescription()),
+                  Flexible(child: AddPrescription(userId: userId,)),
                 ],
               ),
             ),

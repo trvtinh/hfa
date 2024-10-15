@@ -50,7 +50,7 @@ class PrescriptionController extends GetxController {
   //   await FirebaseApi.addDocument("medicines", data.toJson());
   // }
 
-  Future addPrescription() async {
+  Future addPrescription(String userId) async {
     doses = doseControllers
         .map((controller) => controller.text.trim())
         .toList(); // Trim the text inputs
@@ -80,7 +80,7 @@ class PrescriptionController extends GetxController {
       medicineDose: doses,
       sumDose: sumDose,
       files: selectedFiles,
-      patientId: state.profile.value?.id,
+      patientId: userId,
     );
 
     log(data.toString());

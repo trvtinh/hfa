@@ -242,13 +242,20 @@ class _HealthConnectState extends State<HealthConnect> {
           (healthData.length < 100) ? healthData : healthData.sublist(0, 100));
 
       List<HealthDataPoint> listRemove = [];
-      for (var p in _healthDataList){
+      for (var p in _healthDataList) {
         int setType = 0;
         if (p.type.toString() == 'HealthDataType.HEART_RATE') setType = 3;
         if (p.type.toString() == 'HealthDataType.WEIGHT') setType = 7;
         if (p.type.toString() == 'HealthDataType.BLOOD_OXYGEN') setType = 4;
-        var check = await FirebaseApi.checkExistDocumentForMed('medicalData', 'userId', healthConnectController.state.profile.value?.id ?? '', 'typeId', setType.toString(), 'time', Timestamp.fromDate(p.dateFrom));
-        if (check == true) listRemove.add(p); 
+        var check = await FirebaseApi.checkExistDocumentForMed(
+            'medicalData',
+            'userId',
+            healthConnectController.state.profile.value?.id ?? '',
+            'typeId',
+            setType.toString(),
+            'time',
+            Timestamp.fromDate(p.dateFrom));
+        if (check == true) listRemove.add(p);
       }
       _healthDataList.removeWhere((p) => listRemove.contains(p));
     } catch (error) {
@@ -554,7 +561,7 @@ class _HealthConnectState extends State<HealthConnect> {
         ],
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Divider(
             height: 1,
@@ -581,7 +588,9 @@ class _HealthConnectState extends State<HealthConnect> {
               Platform.isAndroid &&
                   Health().healthConnectSdkStatus ==
                       HealthConnectSdkStatus.sdkAvailable)
-            Row(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
               // TextButton(
               //     onPressed: authorize,
               //     style: const ButtonStyle(
@@ -846,13 +855,55 @@ class _HealthConnectState extends State<HealthConnect> {
   Widget _contentNoData = const Text('No Data to show');
 
   Widget _contentNotFetched =
-      const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-    const Text("Bấm vào 'Tải Health Connect' nếu bạn chưa có để bắt đầu đồng bộ hóa", style: TextStyle(fontSize: 20),),
-    SizedBox(height: 10,),
-    const Text("Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health", style: TextStyle(fontSize: 20),),
-    // const Text("Press 'Add Data' to add some random health data."),
-    // const Text("Press 'Delete Data' to remove some random health data."),
-  ]);
+      Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(),
+            color: Colors.white,
+          ),
+          padding: const EdgeInsets.all(16),
+          child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              const Text(
+          "Hướng dẫn sử dụng",
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+              ),
+              SizedBox(
+          height: 10,
+              ),
+              const Text(
+          "1. Bấm vào 'Tải Health Connect' nếu bạn chưa có để bắt đầu đồng bộ hóa",
+          style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+          height: 10,
+              ),
+              const Text(
+          "2. Cho quyền viết và sửa dữ liệu y tế của ứng dụng HFA - Health For All và Samsung Health trong Health Connect",
+          style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+          height: 10,
+              ),
+              const Text(
+          "3. Bấm vào 'Chọn ngày lấy dữ liệu' để chọn khoảng thời gian lấy dữ liệu từ Samsung Health",
+          style: TextStyle(fontSize: 20),
+              ),
+              SizedBox(
+          height: 10,
+              ),
+              const Text(
+          "4. Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health",
+          style: TextStyle(fontSize: 20),
+              ),
+              // const Text("Press 'Add Data' to add some random health data."),
+              // const Text("Press 'Delete Data' to remove some random health data."),
+            ]),
+        ),
+      );
 
   Widget _authorized = const Text('Authorization granted!');
 
