@@ -14,7 +14,7 @@ class animatedcontainer extends StatelessWidget {
   final String time;
   final MedicalEntity med;
   final String notification;
-  late RxBool isImportant;
+  late RxBool isimportance;
   final List<String> attachments;
   final UserData user;
   late RxBool isExpanded;
@@ -27,7 +27,7 @@ class animatedcontainer extends StatelessWidget {
     required this.doctor,
     required this.time,
     required this.notification,
-    required this.isImportant,
+    required this.isimportance,
     required this.attachments,
     required this.isExpanded,
     required this.med,
@@ -36,12 +36,12 @@ class animatedcontainer extends StatelessWidget {
     required this.status,
   });
 
-  void _setImportant(BuildContext context) {
-    if (status != 'important') {
-      isImportant.value = !isImportant.value;
-      _handleupdate(context, {'status': 'important'});
+  void _setimportance(BuildContext context) {
+    if (status != 'importance') {
+      isimportance.value = !isimportance.value;
+      _handleupdate(context, {'status': 'importance'});
     } else {
-      isImportant.value = !isImportant.value;
+      isimportance.value = !isimportance.value;
       _handleupdate(context, {'status': 'read'});
     }
   }
@@ -112,7 +112,7 @@ class animatedcontainer extends StatelessWidget {
                         const SizedBox(width: 6),
                         Icon(
                           Icons.star,
-                          color: isImportant.value
+                          color: isimportance.value
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context)
                                   .colorScheme
@@ -252,7 +252,7 @@ class animatedcontainer extends StatelessWidget {
                                 GestureDetector(
                                   onTap: () {
                                     log('onstatus');
-                                    _setImportant(context);
+                                    _setimportance(context);
                                   },
                                   child: SizedBox(
                                     height: 40,
@@ -264,7 +264,7 @@ class animatedcontainer extends StatelessWidget {
                                           MainAxisAlignment.center,
                                       children: [
                                         Icon(
-                                          isImportant.value
+                                          isimportance.value
                                               ? Icons.star
                                               : Icons.star_border_outlined,
                                           color: Theme.of(context)
