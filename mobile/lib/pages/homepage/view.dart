@@ -306,56 +306,46 @@ class Homepage extends StatelessWidget {
                               ));
                           log('Unread: ${diagnosticController.state.unread.value}, Read: ${diagnosticController.state.read.value}, Importance: ${diagnosticController.state.importance.value}');
                         },
-                        child: WhiteBox(
-                            title: 'Chẩn đoán',
-                            iconbox: Icons.health_and_safety_outlined,
-                            text1: 'Chưa xem',
-                            text2: 'Đã xem',
-                            value1: diagnosticController.state.unread.value
-                                .toString(),
-                            value2: (diagnosticController.state.read.value +
-                                    diagnosticController.state.importance.value)
-                                .toString()),
-                        // child: Obx(() => StreamBuilder<QuerySnapshot>(
-                        //       stream: FirebaseFirestore.instance
-                        //           .collection('diagnostic')
-                        //           .where('toUId',
-                        //               isEqualTo:
-                        //                   appController.state.profile.value?.id)
-                        //           .snapshots(),
-                        //       builder: (context, snapshot) {
-                        //         if (snapshot.hasError) {
-                        //           return const Text('Có lỗi xảy ra');
-                        //         }
-                        //         if (snapshot.connectionState ==
-                        //             ConnectionState.waiting) {
-                        //           return const CircularProgressIndicator();
-                        //         }
+                        child: Obx(() => StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('diagnostic')
+                                  .where('toUId',
+                                      isEqualTo:
+                                          appController.state.profile.value?.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
 
-                        //         final data = snapshot.data!.docs
-                        //             .map((doc) => Diagnostic.fromFirestore(doc
-                        //                 as DocumentSnapshot<
-                        //                     Map<String, dynamic>>))
-                        //             .toList();
-                        //         RxInt read = 0.obs;
-                        //         RxInt unread = 0.obs;
-                        //         for (var i in data) {
-                        //           if (i.status == "unread")
-                        //             unread++;
-                        //           else
-                        //             read++;
-                        //           // print("dakmim");
-                        //           // print(i.status);
-                        //         }
-                        //         return WhiteBox(
-                        //             title: 'Chẩn đoán',
-                        //             iconbox: Icons.health_and_safety_outlined,
-                        //             text1: 'Chưa xem',
-                        //             text2: 'Đã xem',
-                        //             value1: unread.value.toString(),
-                        //             value2: read.value.toString());
-                        //       },
-                        //     )),
+                                final data = snapshot.data!.docs
+                                    .map((doc) => Diagnostic.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                RxInt read = 0.obs;
+                                RxInt unread = 0.obs;
+                                for (var i in data) {
+                                  if (i.status == "unread")
+                                    unread++;
+                                  else
+                                    read++;
+                                  // print("dakmim");
+                                  // print(i.status);
+                                }
+                                return WhiteBox(
+                                    title: 'Chẩn đoán',
+                                    iconbox: Icons.health_and_safety_outlined,
+                                    text1: 'Chưa xem',
+                                    text2: 'Đã xem',
+                                    value1: unread.value.toString(),
+                                    value2: read.value.toString());
+                              },
+                            )),
                       ),
                       const SizedBox(
                         width: 10,
