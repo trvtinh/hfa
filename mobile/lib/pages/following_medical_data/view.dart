@@ -8,6 +8,7 @@ import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
+import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 import 'package:health_for_all/pages/homepage/widget/white_box.dart';
@@ -30,6 +31,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
   Widget build(BuildContext context) {
     final historyController = Get.find<OverallMedicalDataHistoryController>();
     final notificationController = Get.find<NotificationController>();
+    final diagnosticController = Get.find<DiagnosticController>();
     final controller = Get.find<FollowingMedicalDataController>();
     return Scaffold(
       appBar: AppBar(
@@ -215,6 +217,10 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           final user = medicalSnapshot.data!;
                           return GestureDetector(
                               onTap: () {
+                                diagnosticController.fetchDiagnosticCounts(
+                                    historyController
+                                        .state.selectedUser.value.id
+                                        .toString());
                                 Get.to(() => DiagnosticPage(
                                       user: user,
                                     ));

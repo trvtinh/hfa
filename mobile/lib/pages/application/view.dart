@@ -20,9 +20,13 @@ import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
   const ApplicationPage({super.key});
+  @override
+  // TODO: implement controller
+  ApplicationController get controller => super.controller;
 
   @override
   Widget build(BuildContext context) {
+    controller.onReady();
     Widget buildPageView() {
       return PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -78,6 +82,8 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           InkWell(
             onTap: () {
+              controller.diagnosticController.fetchDiagnosticCounts(
+                  controller.state.profile.value?.id?.toString() ?? "");
               Get.to(() => DiagnosticPage(
                     user: controller.state.profile.value!,
                   ));

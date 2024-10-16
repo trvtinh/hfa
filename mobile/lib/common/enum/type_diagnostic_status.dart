@@ -1,4 +1,4 @@
-enum TypeDiagnosticStatus { unread, read, important }
+enum TypeDiagnosticStatus { unread, read, importance }
 
 extension TypeDiagnosticStatusExtension on TypeDiagnosticStatus {
   String get value {
@@ -7,8 +7,8 @@ extension TypeDiagnosticStatusExtension on TypeDiagnosticStatus {
         return "read";
       case TypeDiagnosticStatus.unread:
         return "unread";
-      case TypeDiagnosticStatus.important:
-        return "important";
+      case TypeDiagnosticStatus.importance:
+        return "importance";
     }
   }
 }

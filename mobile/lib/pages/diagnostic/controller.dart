@@ -8,11 +8,11 @@ import 'package:health_for_all/pages/diagnostic/state.dart';
 
 class DiagnosticController extends GetxController {
   final state = DiagnosticState();
-  Future fetchDiagnosticNotifications() async {
-    final uid = state.profile.value!.id;
+  Future<void> fetchDiagnosticCounts(String userId) async {
+    final uid = userId;
     final diagnosticUnreadCount = await FirebaseFirestore.instance
         .collection('diagnostic')
-        .where('to_uid', isEqualTo: uid)
+        .where('toUId', isEqualTo: uid)
         .where('status', isEqualTo: 'unread')
         .get()
         .then((snapshot) => snapshot.docs.length);
@@ -20,14 +20,14 @@ class DiagnosticController extends GetxController {
 
     final readCount = await FirebaseFirestore.instance
         .collection('diagnostic')
-        .where('to_uid', isEqualTo: uid)
+        .where('toUId', isEqualTo: uid)
         .where('status', isEqualTo: 'read')
         .get()
         .then((snapshot) => snapshot.docs.length);
     state.read.value = readCount;
     final importanceCount = await FirebaseFirestore.instance
         .collection('diagnostic')
-        .where('to_uid', isEqualTo: uid)
+        .where('toUId', isEqualTo: uid)
         .where('status', isEqualTo: 'importance')
         .get()
         .then((snapshot) => snapshot.docs.length);

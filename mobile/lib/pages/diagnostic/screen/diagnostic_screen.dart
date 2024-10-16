@@ -14,7 +14,8 @@ class DiagnosticScreen extends StatelessWidget {
   final UserData user;
   const DiagnosticScreen({
     super.key,
-    required this.status, required this.user,
+    required this.status,
+    required this.user,
   });
   final TypeDiagnosticStatus status;
 
@@ -58,10 +59,10 @@ class DiagnosticScreen extends StatelessWidget {
                         diagnostics.isNotEmpty ? diagnostics.length : 0;
                     log('read: ${controller.state.read.value}');
                   }
-                  if (status == TypeDiagnosticStatus.important) {
+                  if (status == TypeDiagnosticStatus.importance) {
                     controller.state.importance.value =
                         diagnostics.isNotEmpty ? diagnostics.length : 0;
-                    log('important: ${controller.state.importance.value}');
+                    log('importance: ${controller.state.importance.value}');
                   }
                 });
                 log('status: ${status.value}');
@@ -103,7 +104,7 @@ class DiagnosticScreen extends StatelessWidget {
                                   diagnostic.timestamp!),
                               med: medicaldata,
                               notification: diagnostic.content!,
-                              isImportant: false.obs,
+                              isimportance: false.obs,
                               attachments: diagnostic.imageURL!,
                               isExpanded: false.obs,
                               user: user,
