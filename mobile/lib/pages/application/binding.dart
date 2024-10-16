@@ -40,7 +40,7 @@ class ApplicationBinding implements Bindings {
     Get.lazyPut(() => ChooseTypeMedController(), fenix: true);
     Get.lazyPut(() => ImageAnalyzeController(), fenix: true);
     Get.lazyPut(() => TypeMedHistoryController(), fenix: true);
-    Get.lazyPut(()=> SamsungConnectController(),fenix: true);
+    Get.lazyPut(() => SamsungConnectController(), fenix: true);
 
     // Get.lazyPut(() => HomeController());
     // Get.lazyPut(() => PostController());

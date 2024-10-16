@@ -20,13 +20,13 @@ import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
   const ApplicationPage({super.key});
-  @override
-  // TODO: implement controller
-  ApplicationController get controller => super.controller;
+  // @override
+  // // TODO: implement controller
+  // ApplicationController get controller => super.controller;
 
   @override
   Widget build(BuildContext context) {
-    controller.onReady();
+    // controller.onReady();
     Widget buildPageView() {
       return PageView(
         physics: const NeverScrollableScrollPhysics(),
@@ -97,7 +97,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () => Get.to(() => PrescriptionPage(
-                controller.state.profile.value!.id.toString())),
+                controller.state.profile.value!.id.toString(), true)),
             leading: const Icon(
               Icons.medication_liquid_sharp,
             ),
@@ -109,7 +109,7 @@ class ApplicationPage extends GetView<ApplicationController> {
             ),
             title: const Text('Nhắc nhở'),
             onTap: () => Get.to(() =>
-                ReminderPage(controller.state.profile.value!.id.toString())),
+                ReminderPage(controller.state.profile.value!.id.toString(), true)),
           ),
           ListTile(
             leading: const Icon(Icons.notifications_none),
@@ -125,7 +125,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ListTile(
             onTap: () {
               Get.to(() =>
-                  AlarmPage(controller.state.profile.value!.id.toString()));
+                  AlarmPage(controller.state.profile.value!.id.toString(), true));
             },
             leading: const Icon(
               Icons.warning_amber_outlined,

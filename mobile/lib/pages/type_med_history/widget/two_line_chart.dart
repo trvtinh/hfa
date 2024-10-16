@@ -228,7 +228,7 @@ class _TwoLineChartState extends State<TwoLineChart> {
         const Divider(
           height: 1,
         ),
-        Padding(
+        /*Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
@@ -334,7 +334,7 @@ class _TwoLineChartState extends State<TwoLineChart> {
                 ),
             ],
           ),
-        ),
+        ),*/
       ],
     );
   }

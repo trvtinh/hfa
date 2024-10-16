@@ -258,14 +258,19 @@ class OverallMedicalDataHistoryController extends GetxController {
             );
           }
         },
-        child: ComboBox(
-          leadingiconpath: Item.getIconPath(index),
-          title: Item.getTitle(index),
-          value: data?.value ?? '--',
-          unit: Item.getUnit(index),
-          time: data != null
-              ? DatetimeChange.getHourString(data.time!.toDate())
-              : '--',
+        child: Column(
+          children: [
+            ComboBox(
+              leadingiconpath: Item.getIconPath(index),
+              title: Item.getTitle(index),
+              value: data?.value ?? '--',
+              unit: Item.getUnit(index),
+              time: data != null
+                  ? DatetimeChange.getHourString(data.time!.toDate())
+                  : '--',
+            ),
+            Divider(height: 1,),
+          ],
         ),
       );
     });
