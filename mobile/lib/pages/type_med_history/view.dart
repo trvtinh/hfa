@@ -166,7 +166,7 @@ class TypeMedHistory extends StatelessWidget {
                 ),
               ),
             ),
-            GestureDetector(
+            /*GestureDetector(
               onTap: () {
                 showComment.value = true;
                 showAlarm.value = false;
@@ -194,7 +194,7 @@ class TypeMedHistory extends StatelessWidget {
               },
               child: icon_round(context, showAlarm.value,
                   icon: Icons.warning_amber_outlined),
-            ),
+            ),*/
           ],
         ),
       ),

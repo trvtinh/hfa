@@ -8,7 +8,8 @@ import 'package:health_for_all/pages/alarm/widget/list_alarm.dart';
 
 class AlarmPage extends GetView<AlarmController> {
   final String userId;
-  const AlarmPage(this.userId, {super.key});
+  final bool right;
+  const AlarmPage(this.userId, this.right, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +131,9 @@ class AlarmPage extends GetView<AlarmController> {
   Widget add_alarm(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _showAddDialog(context);
+        if (right == false) Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        else _showAddDialog(context);
       },
       child: Container(
         padding: const EdgeInsets.all(12),

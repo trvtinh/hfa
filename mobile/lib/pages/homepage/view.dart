@@ -346,7 +346,7 @@ class Homepage extends StatelessWidget {
                         onTap: () {
                           Get.to(() => PrescriptionPage(appController
                               .state.profile.value!.id
-                              .toString()));
+                              .toString(), true));
                         },
                         child: Obx(()=>StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -401,7 +401,7 @@ class Homepage extends StatelessWidget {
                         onTap: () {
                           Get.to(() => ReminderPage(appController
                               .state.profile.value!.id
-                              .toString()));
+                              .toString(), true));
                         },
                         child: Obx(()=>StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
@@ -438,7 +438,7 @@ class Homepage extends StatelessWidget {
                           onTap: () {
                             Get.to(() => AlarmPage(appController
                                 .state.profile.value!.id
-                                .toString()));
+                                .toString(), true));
                           },
                           child: Obx(()=>StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance

@@ -8,7 +8,8 @@ import 'package:health_for_all/pages/reminder/widget/list_reminder.dart';
 
 class ReminderPage extends GetView<AlarmController> {
   final String userId;
-  const ReminderPage(this.userId, {super.key});
+  final bool right;
+  const ReminderPage(this.userId, this.right, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +97,9 @@ class ReminderPage extends GetView<AlarmController> {
   Widget add_reminder(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _showAddDialog(context);
+        if (right == false) Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red); 
+        else _showAddDialog(context);
       },
       child: Container(
         padding: const EdgeInsets.all(12),

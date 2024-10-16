@@ -10,7 +10,8 @@ import 'package:health_for_all/pages/prescription/widget/precription_box.dart';
 
 class PrescriptionPage extends GetView<PrescriptionController> {
   final String userId;
-  const PrescriptionPage(this.userId, {super.key});
+  final bool right;
+  const PrescriptionPage(this.userId, this.right, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +52,9 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   Widget add_prescrition(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _showDialog(context);
+        if (right == false) Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
+          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        else _showDialog(context);
       },
       child: Container(
         decoration: BoxDecoration(

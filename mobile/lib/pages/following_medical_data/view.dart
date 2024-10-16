@@ -265,11 +265,9 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                       ),
                       GestureDetector(
                           onTap: () {
-                            print(
-                                historyController.state.selectedUser.value.id);
                             Get.to(() => PrescriptionPage(historyController
                                 .state.selectedUser.value.id
-                                .toString()));
+                                .toString(), historyController.state.selectedUser.value.isDoctor ?? false));
                           },
                           child: Obx(
                             () => StreamBuilder<QuerySnapshot>(
@@ -326,7 +324,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           onTap: () {
                             Get.to(() => ReminderPage(historyController
                                 .state.selectedUser.value.id
-                                .toString()));
+                                .toString(), historyController.state.selectedUser.value.isDoctor ?? false));
                           },
                           child: Obx(
                             () => StreamBuilder<QuerySnapshot>(
@@ -362,7 +360,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           onTap: () {
                             Get.to(() => AlarmPage(historyController
                                 .state.selectedUser.value.id
-                                .toString()));
+                                .toString(), historyController.state.selectedUser.value.isDoctor ?? false));
                           },
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
