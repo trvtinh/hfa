@@ -28,19 +28,19 @@ class ApplicationPage extends GetView<ApplicationController> {
   Widget build(BuildContext context) {
     // controller.onReady();
     Widget buildPageView() {
-      return PageView(
-        physics: const NeverScrollableScrollPhysics(),
-        controller: controller.pageController,
-        onPageChanged: controller.handPageChanged,
-        children: [
-          Homepage(),
-          Following(),
-          MedicalDataPage(),
-          NotificationPage(
-              controller.state.profile.value?.id?.toString() ?? ""),
-          const ProfilePage()
-        ],
-      );
+      return Obx(() => PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: controller.pageController,
+            onPageChanged: controller.handPageChanged,
+            children: [
+              Homepage(),
+              Following(),
+              MedicalDataPage(),
+              NotificationPage(
+                  controller.state.profile.value?.id?.toString() ?? ""),
+              const ProfilePage()
+            ],
+          ));
     }
 
     Widget buildBottomNavigationBar() {
@@ -108,8 +108,8 @@ class ApplicationPage extends GetView<ApplicationController> {
               Icons.date_range_outlined,
             ),
             title: const Text('Nhắc nhở'),
-            onTap: () => Get.to(() =>
-                ReminderPage(controller.state.profile.value!.id.toString(), true)),
+            onTap: () => Get.to(() => ReminderPage(
+                controller.state.profile.value!.id.toString(), true)),
           ),
           ListTile(
             leading: const Icon(Icons.notifications_none),
@@ -124,8 +124,8 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () {
-              Get.to(() =>
-                  AlarmPage(controller.state.profile.value!.id.toString(), true));
+              Get.to(() => AlarmPage(
+                  controller.state.profile.value!.id.toString(), true));
             },
             leading: const Icon(
               Icons.warning_amber_outlined,
