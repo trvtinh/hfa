@@ -352,9 +352,9 @@ class Homepage extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => PrescriptionPage(appController
-                              .state.profile.value!.id
-                              .toString()));
+                          Get.to(() => PrescriptionPage(
+                              appController.state.profile.value!.id.toString(),
+                              true));
                         },
                         child: Obx(() => StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
@@ -408,9 +408,9 @@ class Homepage extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.to(() => ReminderPage(appController
-                              .state.profile.value!.id
-                              .toString()));
+                          Get.to(() => ReminderPage(
+                              appController.state.profile.value!.id.toString(),
+                              true));
                         },
                         child: Obx(() => StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
@@ -446,9 +446,10 @@ class Homepage extends StatelessWidget {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Get.to(() => AlarmPage(appController
-                                .state.profile.value!.id
-                                .toString()));
+                            Get.to(() => AlarmPage(
+                                appController.state.profile.value!.id
+                                    .toString(),
+                                true));
                           },
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
