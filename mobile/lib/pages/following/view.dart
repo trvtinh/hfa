@@ -167,13 +167,12 @@ class Following extends GetView<FollowingController> {
   }
 
   Widget _buildUserTile(UserData user, String role) {
-    return InkWell(
+    return GestureDetector(
       onTap: () {
-        controller.overallMedicalDataHistoryController.state.selectedUserId
-            .value = user.id ?? "";
-        controller.overallMedicalDataHistoryController.state.selectedUser
-            .value = user;
-        log('User id: ${controller.overallMedicalDataHistoryController.state.selectedUser.value.id}');
+        appController.state.selectedUserId.value = user.id ?? "";
+        appController.state.selectedUser.value = user;
+        log('User id: ${appController.state.selectedUser.value.id}');
+        appController.getUpdatedLatestMedical();
         Get.to(() => Obx(() => FollowingMedicalData(
               user: user,
               role: role,

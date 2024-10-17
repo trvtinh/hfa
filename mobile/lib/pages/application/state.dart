@@ -13,5 +13,7 @@ class ApplicationState {
   RxString updateTime = ''.obs;
   RxMap<String, dynamic> medicalData = <String, dynamic>{}.obs;
   RxInt updateMedData = 0.obs;
+  RxString selectedUserId = ''.obs;
+  Rx<UserData> selectedUser = UserData().obs;
   // var user = Rxn<UserDB>();
 }

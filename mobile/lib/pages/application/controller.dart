@@ -38,7 +38,8 @@ class ApplicationController extends GetxController {
   final chooseMedController = Get.find<ChooseTypeMedController>();
   final reminderController = Get.find<ReminderController>();
   final samsungController = Get.find<SamsungConnectController>();
-  final followingMedicalDataController = Get.find<FollowingMedicalDataController>();
+  final followingMedicalDataController =
+      Get.find<FollowingMedicalDataController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -172,8 +173,9 @@ class ApplicationController extends GetxController {
     diagnosticController.fetchDiagnosticCounts(state.profile.value!.id!);
     notificationController.fetchNotificationCounts(state.profile.value!.id!);
     alarmController.getAlarmCount();
+    state.selectedUser.value = state.profile.value!;
+    state.selectedUserId.value = state.profile.value!.id!;
     log('Dữ liệu diagnostic noti: ${diagnosticController.state.profile.value.toString()}');
-
     log('Dữ liệu profile noti: ${notificationController.state.profile.value.toString()}');
     getUpdatedDataTime(); // Chuyển từ await sang chỉ gọi hàm để tạo stream lắng nghe
     getUpdatedLatestMedical();
@@ -241,7 +243,8 @@ class ApplicationController extends GetxController {
       // Lắng nghe sự thay đổi của dữ liệu trong Firestore
       _medicalDataSubscriptions[type] = db
           .collection('medicalData')
-          .where('userId', isEqualTo: state.profile.value!.id!)
+          // .where('userId', isEqualTo: state.profile.value!.id!)
+          .where('userId', isEqualTo: state.selectedUserId.value)
           .where('typeId', isEqualTo: type)
           .where('time', isLessThanOrEqualTo: time)
           .orderBy('time', descending: true)

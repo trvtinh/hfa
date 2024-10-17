@@ -80,7 +80,7 @@ class ApplicationPage extends GetView<ApplicationController> {
             leading: const Icon(Icons.monitor_heart_outlined),
             title: const Text('Dữ liệu sức khỏe'),
           ),
-          InkWell(
+          GestureDetector(
             onTap: () {
               controller.diagnosticController.fetchDiagnosticCounts(
                   controller.state.profile.value?.id?.toString() ?? "");

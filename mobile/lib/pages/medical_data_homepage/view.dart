@@ -438,14 +438,14 @@ class MedicalDataHome extends StatelessWidget {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              Get.to(() => TypeMedHistory('Phiếu xét nghiệm máu'));
+              Get.to(() => TypeMedHistory('PPG'));
             },
             child: GreyBox(
-              title: 'Phiếu xét nghiệm máu',
+              title: 'PPG',
               iconpath:
                   'assets/medical_data_Home_images/medical_information.png',
-              value: 'OK',
-              unit: ' ',
+              value: value2 != "" ? value2 : "--",
+              unit: '--',
               time: time2 == '' ? "Chưa cập nhật" : time2,
               warning: time2 == '' ? true : false,
             ),

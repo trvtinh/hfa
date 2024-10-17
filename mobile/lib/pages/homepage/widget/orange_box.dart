@@ -77,7 +77,7 @@ class Orangebox extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      val1,
+                      val2.toString(),
                       style: const TextStyle(
                         fontSize: 22,
                         color: Color.fromRGBO(179, 38, 30, 1),
@@ -98,7 +98,7 @@ class Orangebox extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      val2.toString(),
+                      val1,
                       style: const TextStyle(
                         fontSize: 22,
                         color: Color.fromRGBO(52, 199, 89, 1),

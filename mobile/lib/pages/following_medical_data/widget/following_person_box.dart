@@ -22,15 +22,15 @@ class FollowingPersonBox extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: Theme.of(context).colorScheme.errorContainer,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.3),
-              spreadRadius: 0.6,
-              blurRadius: 2,
-              // offset: Offset(0, 3), // changes position of shadow
-            )
-          ],
+          BoxShadow(
+            color: Color.fromRGBO(0, 0, 0, 0.3),
+            spreadRadius: 0.6,
+            blurRadius: 2,
+            // offset: Offset(0, 3), // changes position of shadow
+          )
+        ],
       ),
       child: Row(
         children: [
