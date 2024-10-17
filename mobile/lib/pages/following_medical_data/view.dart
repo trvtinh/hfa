@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/common/entities/reminder.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
@@ -29,12 +32,29 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
       {super.key, required this.user, required this.role, required this.time});
   @override
   Widget build(BuildContext context) {
-    final historyController = Get.find<OverallMedicalDataHistoryController>();
+    // final historyController = Get.find<OverallMedicalDataHistoryController>();
     final notificationController = Get.find<NotificationController>();
     final diagnosticController = Get.find<DiagnosticController>();
+    final appController = Get.find<ApplicationController>();
+
     final controller = Get.find<FollowingMedicalDataController>();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            appController.state.selectedUser.value =
+                appController.state.profile.value!;
+            appController.state.selectedUserId.value =
+                appController.state.profile.value!.id!;
+            log('Current User id: ${appController.state.selectedUser.value.id}');
+            appController.getUpdatedLatestMedical();
+            Get.back();
+          },
+          icon: Icon(
+            color: Theme.of(context).colorScheme.onSurface,
+            Icons.arrow_back,
+          ),
+        ),
         title: const Text('Đang theo dõi'),
         elevation: 0,
         // leading: IconButton(
@@ -80,126 +100,146 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                     onTap: () {
                       Get.to(() => OverallMedicalDataHistoryPage());
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromRGBO(0, 0, 0, 0.3),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              // offset: Offset(0, 3), // changes position of shadow
-                            )
-                          ]),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Dữ liệu sức khỏe",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Icon(
-                                Icons.open_in_new,
-                                size: 16,
+                    // child: Obx(() {
+                    //   RxInt update = appController.state.updateMedData;
+                    //   return Orangebox(
+                    //     val1: update.toString(),
+                    //     val3: '10',
+                    //     time: time != ''
+                    //         ? "Cập nhật lần cuối: $time"
+                    //         : 'Chưa cập nhật',
+                    //   );
+                    // }),
+                    child: Obx(() {
+                      RxInt update = appController.state.updateMedData;
+                      return Container(
+                        padding: EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: Theme.of(context).colorScheme.errorContainer,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromRGBO(0, 0, 0, 0.3),
+                                spreadRadius: 1,
+                                blurRadius: 2,
+                                // offset: Offset(0, 3), // changes position of shadow
                               )
-                            ],
-                          ),
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Icon(
-                                Icons.monitor_heart_outlined,
-                                size: 48,
-                                color: Color.fromRGBO(101, 85, 143, 1),
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "Chưa cập nhật",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color.fromRGBO(121, 116, 126, 1),
-                                    ),
+                            ]),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Dữ liệu sức khỏe",
+                                  style: TextStyle(
+                                    fontSize: 14,
                                   ),
-                                  Text(
-                                    '03',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      color: Color.fromRGBO(179, 38, 30, 1),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "Đã cập nhật",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color.fromRGBO(121, 116, 126, 1),
-                                    ),
-                                  ),
-                                  Text(
-                                    '07',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      color: Color.fromRGBO(52, 199, 89, 1),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(
-                                    "Tổng số",
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Color.fromRGBO(121, 116, 126, 1),
-                                    ),
-                                  ),
-                                  Text(
-                                    '10',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      color: Color.fromRGBO(29, 27, 32, 1),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                time != ''
-                                    ? "Cập nhật lần cuối: $time"
-                                    : 'Chưa cập nhật',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Color.fromRGBO(121, 116, 126, 1),
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                                Icon(
+                                  Icons.open_in_new,
+                                  size: 16,
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.monitor_heart_outlined,
+                                  size: 48,
+                                  color: Color.fromRGBO(101, 85, 143, 1),
+                                ),
+                                const SizedBox(
+                                  width: 12,
+                                ),
+                                Column(
+                                  children: [
+                                    const Text(
+                                      "Chưa cập nhật",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromRGBO(121, 116, 126, 1),
+                                      ),
+                                    ),
+                                    Text(
+                                      (10 - update.value).toString(),
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        color: Color.fromRGBO(179, 38, 30, 1),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                Column(
+                                  children: [
+                                    const Text(
+                                      "Đã cập nhật",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromRGBO(121, 116, 126, 1),
+                                      ),
+                                    ),
+                                    Text(
+                                      update.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        color: Color.fromRGBO(52, 199, 89, 1),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  width: 16,
+                                ),
+                                const Column(
+                                  children: [
+                                    Text(
+                                      "Tổng số",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Color.fromRGBO(121, 116, 126, 1),
+                                      ),
+                                    ),
+                                    Text(
+                                      '10',
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        color: Color.fromRGBO(29, 27, 32, 1),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  time != ''
+                                      ? "Cập nhật lần cuối: $time"
+                                      : 'Chưa cập nhật',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Color.fromRGBO(121, 116, 126, 1),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       FutureBuilder(
-                        future: controller.getUser(historyController
+                        future: controller.getUser(appController
                             .state.selectedUser.value.id
                             .toString()),
                         builder: (context, medicalSnapshot) {
@@ -218,8 +258,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           return GestureDetector(
                               onTap: () {
                                 diagnosticController.fetchDiagnosticCounts(
-                                    historyController
-                                        .state.selectedUser.value.id
+                                    appController.state.selectedUser.value.id
                                         .toString());
                                 Get.to(() => DiagnosticPage(
                                       user: user,
@@ -230,7 +269,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                   stream: FirebaseFirestore.instance
                                       .collection('diagnostic')
                                       .where('toUId',
-                                          isEqualTo: historyController
+                                          isEqualTo: appController
                                               .state.selectedUser.value.id
                                               .toString())
                                       .snapshots(),
@@ -271,16 +310,19 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                       ),
                       GestureDetector(
                           onTap: () {
-                            Get.to(() => PrescriptionPage(historyController
-                                .state.selectedUser.value.id
-                                .toString(), historyController.state.selectedUser.value.isDoctor ?? false));
+                            Get.to(() => PrescriptionPage(
+                                appController.state.selectedUser.value.id
+                                    .toString(),
+                                appController
+                                        .state.selectedUser.value.isDoctor ??
+                                    false));
                           },
                           child: Obx(
                             () => StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
                                   .collection('prescriptions')
                                   .where('patientId',
-                                      isEqualTo: historyController
+                                      isEqualTo: appController
                                           .state.selectedUser.value.id)
                                   .snapshots(),
                               builder: (context, snapshot) {
@@ -328,16 +370,19 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                     children: [
                       GestureDetector(
                           onTap: () {
-                            Get.to(() => ReminderPage(historyController
-                                .state.selectedUser.value.id
-                                .toString(), historyController.state.selectedUser.value.isDoctor ?? false));
+                            Get.to(() => ReminderPage(
+                                appController.state.selectedUser.value.id
+                                    .toString(),
+                                appController
+                                        .state.selectedUser.value.isDoctor ??
+                                    false));
                           },
                           child: Obx(
                             () => StreamBuilder<QuerySnapshot>(
                               stream: FirebaseFirestore.instance
                                   .collection('reminders')
                                   .where('userId',
-                                      isEqualTo: historyController
+                                      isEqualTo: appController
                                           .state.selectedUser.value.id)
                                   .snapshots(),
                               builder: (context, snapshot) {
@@ -364,15 +409,18 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           )),
                       GestureDetector(
                           onTap: () {
-                            Get.to(() => AlarmPage(historyController
-                                .state.selectedUser.value.id
-                                .toString(), historyController.state.selectedUser.value.isDoctor ?? false));
+                            Get.to(() => AlarmPage(
+                                appController.state.selectedUser.value.id
+                                    .toString(),
+                                appController
+                                        .state.selectedUser.value.isDoctor ??
+                                    false));
                           },
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('alarms')
                                     .where('userId',
-                                        isEqualTo: historyController
+                                        isEqualTo: appController
                                             .state.selectedUser.value.id)
                                     .snapshots(),
                                 builder: (context, snapshot) {
@@ -407,10 +455,10 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                       GestureDetector(
                           onTap: () {
                             notificationController.fetchNotificationCounts(
-                                historyController.state.selectedUser.value.id
+                                appController.state.selectedUser.value.id
                                     .toString());
                             Get.to(() => NotiPage(
-                                userId: historyController
+                                userId: appController
                                     .state.selectedUser.value.id
                                     .toString()));
                           },
@@ -419,7 +467,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                               stream: FirebaseFirestore.instance
                                   .collection('notifications')
                                   .where('to_uid',
-                                      isEqualTo: historyController
+                                      isEqualTo: appController
                                           .state.selectedUser.value.id)
                                   .snapshots(),
                               builder: (context, snapshot) {

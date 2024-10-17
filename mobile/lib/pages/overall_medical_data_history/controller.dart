@@ -269,7 +269,9 @@ class OverallMedicalDataHistoryController extends GetxController {
                   ? DatetimeChange.getHourString(data.time!.toDate())
                   : '--',
             ),
-            Divider(height: 1,),
+            const Divider(
+              height: 1,
+            ),
           ],
         ),
       );
@@ -348,8 +350,8 @@ class OverallMedicalDataHistoryController extends GetxController {
           .collection('medicalData')
           .where('typeId', isEqualTo: typeId)
           .where('userId',
-              isEqualTo: state.selectedUserId.value != ""
-                  ? state.selectedUserId.value
+              isEqualTo: appController.state.selectedUserId.value != ""
+                  ? appController.state.selectedUserId.value
                   : appController.state.profile.value
                       ?.id) // Lọc tài liệu với 'time' >= startOfDay
           .where('time',
@@ -404,8 +406,8 @@ class OverallMedicalDataHistoryController extends GetxController {
           .collection('medicalData')
           .where('typeId', isEqualTo: typeId)
           .where('userId',
-              isEqualTo: state.selectedUserId.value != ""
-                  ? state.selectedUserId.value
+              isEqualTo: appController.state.selectedUserId.value != ""
+                  ? appController.state.selectedUserId.value
                   : appController.state.profile.value?.id)
           .where('time',
               isGreaterThanOrEqualTo:
@@ -465,8 +467,8 @@ class OverallMedicalDataHistoryController extends GetxController {
           .collection('medicalData')
           .where('typeId', isEqualTo: typeId)
           .where('userId',
-              isEqualTo: state.selectedUserId.value != ""
-                  ? state.selectedUserId.value
+              isEqualTo: appController.state.selectedUserId.value != ""
+                  ? appController.state.selectedUserId.value
                   : appController.state.profile.value?.id)
           .where('time',
               isGreaterThanOrEqualTo:

@@ -7,6 +7,7 @@ import 'package:health_for_all/common/entities/comment.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
 import 'package:health_for_all/pages/type_med_history/state.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,7 @@ import 'package:intl/intl.dart';
 class TypeMedHistoryController extends GetxController {
   final medicalController = Get.find<OverallMedicalDataHistoryController>();
   final state = TypeMedicalHistoryState();
+  final appController = Get.find<ApplicationController>();
   RxMap<String, List<MedicalEntity>> result =
       <String, List<MedicalEntity>>{}.obs;
   Rx<DateTime> rangeStart = DateTime.now().obs;
@@ -78,8 +80,8 @@ class TypeMedHistoryController extends GetxController {
           .collection('medicalData')
           .where('typeId', isEqualTo: typeId)
           .where('userId',
-              isEqualTo: medicalController.state.selectedUserId.value != ""
-                  ? medicalController.state.selectedUserId.value
+              isEqualTo: appController.state.selectedUserId.value != ""
+                  ? appController.state.selectedUserId.value
                   : medicalController.appController.state.profile.value?.id)
           .where('time',
               isGreaterThanOrEqualTo:

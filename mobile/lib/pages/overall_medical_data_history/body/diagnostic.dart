@@ -104,8 +104,7 @@ class DiagnosticScreen extends StatelessWidget {
               controller
                   .fetchData(appController.state.profile.value!.relatives!);
               Get.to(() => Obx(() => DiagnosticAddView(
-                  user: followingController.overallMedicalDataHistoryController
-                      .state.selectedUser.value,
+                  user: appController.state.selectedUser.value,
                   medicalData: controller.state.selectedData.value)));
             },
             child: Container(

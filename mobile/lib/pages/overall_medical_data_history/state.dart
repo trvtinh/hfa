@@ -13,7 +13,7 @@ class OverrallMedicalDataHistoryState {
   RxList<Diagnostic> diagnosticList = <Diagnostic>[].obs;
   RxInt diagnosticCount = 0.obs;
   RxString medicalId = ''.obs;
-  RxString selectedUserId = ''.obs;
-  Rx<UserData> selectedUser = UserData().obs;
+  // RxString selectedUserId = ''.obs;
+  // Rx<UserData> selectedUser = UserData().obs;
   Rx<MedicalEntity> selectedData = MedicalEntity().obs;
 }
