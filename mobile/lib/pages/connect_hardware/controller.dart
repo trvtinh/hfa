@@ -1,12 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/pages/connect_hardware/state.dart';
 import 'connection_page.dart';
 
 class ConnectHardwareController extends GetxController {
+  final state = ConnectHardwareState();
   StreamSubscription? streamSubscription; // To manage the stream
   StreamSubscription? notificationSubscription; // To manage the stream
   final writeDataController = TextEditingController();
@@ -19,6 +25,7 @@ class ConnectHardwareController extends GetxController {
   bool isFoundreadCharacteristic = false;
   bool isFoundwriteCharacteristic = false;
   RxString remoteId = "".obs;
+  Map<String, dynamic> currentData = {};
 
   RxString storageDataReceive = "".obs;
   RxList<String> storageDataSend = <String>[].obs;
@@ -33,8 +40,10 @@ class ConnectHardwareController extends GetxController {
         if (results.isNotEmpty) {
           ScanResult r = results.last; // Get the last scanned device
           log('Found device: ${r.device.remoteId}: "${r.advertisementData.advName}"');
-          scannedDevices.add(r); // Add the device to the list
+          scannedDevices.add(r);
+          // Add the device to the list
           await connectToDevice(scannedDevices.first.device);
+          log('dmmmmmmmmmm10290391203');
         }
       },
       onError: (e) => log('Scan error: $e'),
@@ -57,6 +66,7 @@ class ConnectHardwareController extends GetxController {
 
   Future<void> connectToDevice(BluetoothDevice device) async {
     try {
+      log('Connecting to ${device.remoteId}');
       await device.connect();
       log('Connected to ${device.remoteId}');
 
@@ -98,6 +108,32 @@ class ConnectHardwareController extends GetxController {
     }
   }
 
+  String formatDate(DateTime date) {
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+  }
+
+  String formatTime(DateTime date) {
+    return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+  }
+
+  void processData() {
+    int medId = currentData["dataType"];
+    List<dynamic> value = currentData["dataValue"];
+    int interval = currentData["interval"];
+    DateTime now = DateTime.now();
+    List<DateTime> time = [];
+    for (int i = value.length - 1; i >= 0; i--) {
+      time.add(now.subtract(Duration(milliseconds: interval * i)));
+    }
+    for (int i =0;i<value.length;i++){
+      state.medDate.add(formatDate(time[i]));
+      state.medTime.add(formatTime(time[i]));
+      state.medId.add(medId);
+      state.medPass.add(time[i]);
+      state.medValue.add(value[i]);
+    }
+  }
+
   Future<void> enableNotifications() async {
     try {
       // Lắng nghe dữ liệu được gửi từ ESP32 qua notify
@@ -110,8 +146,11 @@ class ConnectHardwareController extends GetxController {
       notificationSubscription =
           readCharacteristic.value?.onValueReceived.listen((data) {
         String receivedData = String.fromCharCodes(data);
+        log('Received data 1: $receivedData');
+        currentData = jsonDecode(receivedData);
+        processData();
         storageDataReceive.value += receivedData;
-        log('Received data: $receivedData');
+        log('Received data 2: $receivedData');  
       }, onError: (error) {
         log('Error receiving data: $error');
       });
@@ -139,6 +178,11 @@ class ConnectHardwareController extends GetxController {
     writeCharacteristic = Rx<BluetoothCharacteristic?>(null);
     readCharacteristic = Rx<BluetoothCharacteristic?>(null);
     storageDataSend.clear();
+    state.medDate.clear();
+    state.medId.clear();
+    state.medPass.clear();
+    state.medTime.clear();
+    state.medValue.clear();
   }
 
   // Send data to the connected device's characteristic
@@ -158,6 +202,50 @@ class ConnectHardwareController extends GetxController {
     } else {
       log('No characteristic available to send data.');
     }
+  }
+
+  Future syncMedData(DateTime time, String typeId, String value, String unit,
+      BuildContext context) async {
+    // isLoading = true.obs;
+    Get.dialog(const Center(child: CircularProgressIndicator()));
+
+    var check = await FirebaseApi.checkExistDocumentForMed(
+        'medicalData',
+        'userId',
+        state.profile.value?.id ?? '',
+        'typeId',
+        typeId,
+        'time',
+        Timestamp.fromDate(time));
+    final data = MedicalEntity(
+      userId: state.profile.value?.id,
+      time: Timestamp.fromDate(time),
+      typeId: typeId,
+      value: value,
+      unit: unit,
+    );
+
+    log(data.toString());
+    await FirebaseApi.addDocument("medicalData", data.toFirestoreMap());
+    // isLoading = false.obs;
+    Get.back();
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Thành công'),
+            content: const Text('Đã đồng bộ dữ liệu'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Get.back(); // Dismiss the dialog
+                },
+                child: const Text('Xác nhận'),
+              ),
+            ],
+          );
+        },
+      );
   }
 
   @override
