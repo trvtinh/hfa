@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
-import 'package:health_for_all/pages/connect_hardware/widget/data_fetched.dart';
 
 class ConnectionPage extends GetView<ConnectHardwareController> {
   const ConnectionPage({super.key, required this.device});
@@ -10,7 +9,6 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ConnectHardwareController>();
     return Scaffold(
       appBar: AppBar(
         title: Text(device.advertisementData.advName),
@@ -30,30 +28,84 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         child: Column(
           children: [
-            Center(
-              child: Column(
-                children: [
-                  const Text('Dữ liệu đo đã nhận'),
-                  const SizedBox(height: 10),
-                  Obx(() => Expanded(
-                      child: ListView.builder(
-                          itemCount: controller.state.medId.length,
-                          itemBuilder: (context, index) {
-                            return DataDay(
-                                date: controller.state.medDate[index],
-                                time: controller.state.medTime[index],
-                                value:
-                                    controller.state.medValue[index].toString(),
-                                index: index,
-                                pass: controller.state.medPass[index]);
-                          }))),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                      onPressed: () {
-                        controller.clearData();
+            Expanded(
+              flex: 3,
+              child: Center(
+                child: Column(
+                  children: [
+                    const Text('Ghi dữ liệu'),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: controller.writeDataController,
+                      decoration: const InputDecoration(
+                        hintText: 'Nhập dữ liệu',
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () async {
+                        await controller.sendData();
+                        controller.storageDataSend
+                            .add(controller.writeDataController.text);
+                        controller.writeDataController.clear();
                       },
-                      child: const Text('Xóa dữ liệu đã nhận'))
-                ],
+                      child: const Text('Gửi'),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text('Dữ liệu đã gửi'),
+                    const SizedBox(height: 10),
+                    Obx(() => Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: controller.storageDataSend
+                                  .map((e) => Text(e))
+                                  .toList(),
+                            ),
+                          ),
+                        )),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        controller.storageDataSend.clear();
+                      },
+                      child: const Text('Xóa dữ liệu đã gửi'),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Center(
+                child: Column(
+                  children: [
+                    const Text('Đọc dữ liệu'),
+                    const SizedBox(height: 10),
+                    Obx(() => Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          width: MediaQuery.of(context).size.width,
+                          child: SingleChildScrollView(
+                            child: Text(controller.storageDataReceive.value),
+                          ),
+                        )),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                        onPressed: () {
+                          controller.storageDataReceive.value = '';
+                        },
+                        child: const Text('Xóa dữ liệu đã nhận'))
+                  ],
+                ),
               ),
             ),
           ],

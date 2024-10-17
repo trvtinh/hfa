@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
-import 'package:health_for_all/pages/connect_hardware/mid_connect_page.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import 'connection_page.dart';
@@ -32,7 +31,6 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
           navigateToConnectionPage(result!.code!);
         }
       });
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     return Scaffold(
@@ -49,12 +47,10 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
   }
 
   Future navigateToConnectionPage(String remoteId) async {
-    // final remoteId = processString(result!.code!);
-    // bLeController.remoteId.value = remoteId.trim();
+    final remoteId = processString(result!.code!);
+    bLeController.remoteId.value = remoteId.trim();
     try {
-      // await bLeController.scanDevice();
-      // log("finished");
-      Get.to(() => MidConnectPage(address: remoteId)); 
+      await bLeController.scanDevice();
     } catch (e) {
       log(e.toString());
     }

@@ -5,6 +5,8 @@ import 'package:health_for_all/pages/connect_hardware/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/qr_code_scan.dart';
 import 'package:health_for_all/pages/samsung_connect/view.dart';
 
+import 'connection_page.dart';
+
 class ConnectHardwarePage extends GetView<ConnectHardwareController> {
   const ConnectHardwarePage({super.key});
 
@@ -44,6 +46,39 @@ class ConnectHardwarePage extends GetView<ConnectHardwareController> {
                   height: 16,
                 ),
                 connect_samsung(context),
+                const SizedBox(
+                  height: 16,
+                ),
+                Obx(() {
+                  if (controller.scannedDevices.isNotEmpty) {
+                    return Column(
+                      children: [
+                        const Text('Thiết bị đã quét'),
+                        const SizedBox(height: 10),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: controller.scannedDevices.length,
+                          itemBuilder: (context, index) {
+                            final device = controller.scannedDevices[index];
+                            return ListTile(
+                              title: Text(device.advertisementData.advName),
+                              subtitle: Text(device.device.remoteId.toString()),
+                              onTap: () async {
+                                await controller
+                                    .connectToDevice(device.device)
+                                    .then((value) {
+                                  Get.to(() => ConnectionPage(device: device));
+                                });
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                }),
               ],
             ),
           ),

@@ -41,9 +41,8 @@ class ConnectHardwareController extends GetxController {
           ScanResult r = results.last; // Get the last scanned device
           log('Found device: ${r.device.remoteId}: "${r.advertisementData.advName}"');
           scannedDevices.add(r);
+          Get.back();
           // Add the device to the list
-          await connectToDevice(scannedDevices.first.device);
-          log('dmmmmmmmmmm10290391203');
         }
       },
       onError: (e) => log('Scan error: $e'),
@@ -125,7 +124,7 @@ class ConnectHardwareController extends GetxController {
     for (int i = value.length - 1; i >= 0; i--) {
       time.add(now.subtract(Duration(milliseconds: interval * i)));
     }
-    for (int i =0;i<value.length;i++){
+    for (int i = 0; i < value.length; i++) {
       state.medDate.add(formatDate(time[i]));
       state.medTime.add(formatTime(time[i]));
       state.medId.add(medId);
@@ -150,7 +149,7 @@ class ConnectHardwareController extends GetxController {
         currentData = jsonDecode(receivedData);
         processData();
         storageDataReceive.value += receivedData;
-        log('Received data 2: $receivedData');  
+        log('Received data 2: $receivedData');
       }, onError: (error) {
         log('Error receiving data: $error');
       });
@@ -230,22 +229,22 @@ class ConnectHardwareController extends GetxController {
     // isLoading = false.obs;
     Get.back();
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Thành công'),
-            content: const Text('Đã đồng bộ dữ liệu'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Get.back(); // Dismiss the dialog
-                },
-                child: const Text('Xác nhận'),
-              ),
-            ],
-          );
-        },
-      );
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thành công'),
+          content: const Text('Đã đồng bộ dữ liệu'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Get.back(); // Dismiss the dialog
+              },
+              child: const Text('Xác nhận'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
