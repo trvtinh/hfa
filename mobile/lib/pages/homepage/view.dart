@@ -1,482 +1,637 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/entities/alarm_entity.dart';
+import 'package:health_for_all/common/entities/diagnostic.dart';
+import 'package:health_for_all/common/entities/notification_entity.dart';
+import 'package:health_for_all/common/entities/prescription.dart';
+import 'package:health_for_all/common/entities/reminder.dart';
+import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/application/controller.dart';
-import 'package:health_for_all/pages/homepage/widget/WhiteBox.dart';
+import 'package:health_for_all/pages/chatbot/view.dart';
+import 'package:health_for_all/pages/connect_hardware/view.dart';
+import 'package:health_for_all/pages/diagnostic/controller.dart';
+import 'package:health_for_all/pages/diagnostic/view.dart';
+import 'package:health_for_all/pages/homepage/widget/white_box.dart';
+import 'package:health_for_all/pages/homepage/widget/orange_box.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
+import 'package:health_for_all/pages/notification/view.dart';
+import 'package:health_for_all/pages/prescription/index.dart';
+import 'package:health_for_all/pages/profile/index.dart';
+import 'package:health_for_all/pages/reminder/view.dart';
+import 'package:intl/intl.dart';
 
 class Homepage extends StatelessWidget {
   Homepage({super.key});
   final appController = Get.find<ApplicationController>();
+  final notificationController = Get.find<NotificationController>();
+  final diagnosticController = Get.find<DiagnosticController>();
+
+  DateTime convertStringtoTime(String date) {
+    DateFormat format = DateFormat('dd/MM/yyyy');
+    DateTime dateTime = format.parse(date);
+    return dateTime;
+  }
+
+  DateTime getYesterdayTimestamp() {
+    DateTime now = DateTime.now(); // Get the current date and time
+    DateTime yesterday =
+        now.subtract(const Duration(days: 1)); // Subtract one day
+    return yesterday; // This returns the DateTime object for yesterday
+  }
+
+  bool compareTimestamps(DateTime timestamp1, DateTime timestamp2) {
+    return timestamp1
+        .isAfter(timestamp2); // true if timestamp1 is before timestamp2
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
+          children: [
             const Divider(
-              color: Colors.black,
-              thickness: 0.5,
+              height: 1,
             ),
             Container(
-              height: 80,
-              width: 380,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.3),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      // offset: Offset(0, 3), // changes position of shadow
-                    )
-                  ]),
+              padding: const EdgeInsets.all(16),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Obx(() => Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              const SizedBox(width: 12),
-                              CircleAvatar(
-                                  radius: 28,
-                                  backgroundImage: CachedNetworkImageProvider(
-                                      appController
-                                              .state.profile.value?.photourl ??
-                                          'https://s3-alpha-sig.figma.com/img/447d/ffec/b39241368aea1a19b6a61652750c7316?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Q3518w86n~r1T95c867IZ4KfhmZWH2VjaBSvsuGASCjV4DVOqIHyyX1aTHbMwVGavXu~nj1hwsqyUk2fLCst~Mv7Ld5495xnB9vABr5rP4QgaSsfLkZyS0plApMhQ7P4gJn1wXNvZRc2yq6UELDcyg6ZrfnJUDna7i7dW6z7hDCg2-2uSATU8v4-uq5U5mhrZ883gatl7ZNw5sLmCFB3LNN-2SmCbskKe2rPynkWEr4kXg8UIRdmCw2zsJN2EEwnwkvJUaj3qVucjsImnnQ65EuF8V7LhOpVP3l3qBkxlK-IpQjPAlQ23j-d2Bsa9PavrclCgDwLkaO66tX3vzJpFQ__')),
-                              const SizedBox(width: 12),
-                              Container(
-                                width: 130,
-                                height: 56,
-                                padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
-                                child: Column(
-                                  children: [
-                                    Row(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => const ProfilePage());
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.3),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              // offset: Offset(0, 3), // changes position of shadow
+                            )
+                          ]),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Obx(() => Row(children: [
+                                  CircleAvatar(
+                                      radius: 28,
+                                      backgroundImage: CachedNetworkImageProvider(
+                                          appController.state.profile.value
+                                                  ?.photourl ??
+                                              "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficonduck.com%2Ficons%2F160691%2Favatar-default-symbolic&psig=AOvVaw2gPEQ_lKQuUXivxfgTKXo-&ust=1723564687779000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIi5g4Hp74cDFQAAAAAdAAAAABAE")),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
                                       children: [
-                                        Text(
-                                          appController
-                                                  .state.profile.value?.name ??
-                                              "",
-                                          style: TextStyle(fontSize: 16),
+                                        Wrap(
+                                          children: [
+                                            Text(
+                                              appController.state.profile.value
+                                                      ?.name ??
+                                                  "",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 12,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              appController.state.profile.value
+                                                      ?.gender ??
+                                                  "",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text(
+                                              appController.state.profile.value
+                                                          ?.age !=
+                                                      0
+                                                  ? ("${appController.state.profile.value?.age} tuổi")
+                                                  : '',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .outline,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width / 2.9,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Người nhà:",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Badge(
+                                              label: Text(
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primaryContainer,
+                                                  ),
+                                                  appController
+                                                          .state
+                                                          .profile
+                                                          .value
+                                                          ?.relatives
+                                                          ?.length
+                                                          .toString() ??
+                                                      "0"),
+                                              largeSize: 16,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiary,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Chuyên gia:",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Badge(
+                                              label: Text(
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    color: Theme.of(context)
+                                                        .colorScheme
+                                                        .primaryContainer,
+                                                  ),
+                                                  appController
+                                                          .state
+                                                          .profile
+                                                          .value
+                                                          ?.doctors
+                                                          ?.length
+                                                          .toString() ??
+                                                      "0"),
+                                              largeSize: 16,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiary,
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Đang theo dõi:",
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .secondary,
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Badge(
+                                              label: Text(
+                                                style: TextStyle(
+                                                  fontSize: 11,
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primaryContainer,
+                                                ),
+                                                ((appController
+                                                                .state
+                                                                .profile
+                                                                .value
+                                                                ?.relatives
+                                                                ?.length ??
+                                                            0) +
+                                                        (appController
+                                                                .state
+                                                                .profile
+                                                                .value
+                                                                ?.patients
+                                                                ?.length ??
+                                                            0))
+                                                    .toString(),
+                                              ),
+                                              largeSize: 16,
+                                              backgroundColor: Theme.of(context)
+                                                  .colorScheme
+                                                  .tertiary,
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 88,
-                                          height: 20,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                "Nam",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color.fromRGBO(
-                                                      121, 116, 126, 1),
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 12,
-                                              ),
-                                              Text(
-                                                "24 tuổi",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: Color.fromRGBO(
-                                                      121, 116, 126, 1),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              const SizedBox(
-                                width: 146,
-                                height: 56,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    SizedBox(
-                                      width: 120,
-                                      height: 16,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Người nhà:",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Color.fromRGBO(
-                                                  121, 116, 126, 1),
-                                            ),
-                                          ),
-                                          // SizedBox(
-                                          //   width: 30,
-                                          // ),
-                                          Badge(
-                                            // child: Text("2"),
-                                            label: Text("2"),
-                                            largeSize: 16,
-                                            backgroundColor:
-                                                Color.fromRGBO(125, 82, 96, 1),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 120,
-                                      height: 16,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Chuyên gia:",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Color.fromRGBO(
-                                                  121, 116, 126, 1),
-                                            ),
-                                          ),
-                                          // SizedBox(
-                                          //   width: 30,
-                                          // ),
-                                          Badge(
-                                            // child: Text("2"),
-                                            label: Text("1"),
-                                            largeSize: 16,
-                                            backgroundColor:
-                                                Color.fromRGBO(125, 82, 96, 1),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 120,
-                                      height: 16,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Đang theo dõi:",
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: Color.fromRGBO(
-                                                  121, 116, 126, 1),
-                                            ),
-                                          ),
-                                          // SizedBox(
-                                          //   width: 30,
-                                          // ),
-                                          Badge(
-                                            // child: Text("2"),
-                                            label: Text("1"),
-                                            largeSize: 16,
-                                            backgroundColor:
-                                                Color.fromRGBO(125, 82, 96, 1),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ]))
-                  ]),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Container(
-              height: 124,
-              width: 380,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Theme.of(context).colorScheme.errorContainer,
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.3),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      // offset: Offset(0, 3), // changes position of shadow
-                    )
-                  ]),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const SizedBox(
-                    width: 356,
-                    height: 20,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Dữ liệu sức khỏe",
-                          style: TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                        Icon(
-                          Icons.open_in_new,
-                          size: 16,
-                        )
-                      ],
+                                  )
+                                ]))
+                          ]),
                     ),
                   ),
-                  SizedBox(
-                    width: 356,
-                    height: 48,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(
-                          Icons.monitor_heart_outlined,
-                          size: 48,
-                          color: Color.fromRGBO(101, 85, 143, 1),
-                        ),
-                        SizedBox(
-                          child: Row(
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Obx(() {
+                    RxInt update = appController.state.updateMedData;
+                    return Orangebox(
+                        val1: update.toString(),
+                        val3: "10",
+                        time: appController.state.updateTime.value == ""
+                            ? "Chưa cập nhật dữ liệu lần nào"
+                            : "Cập nhật lần cuối ${appController.state.updateTime.value}");
+                  }),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          diagnosticController.fetchDiagnosticCounts(
+                              appController.state.profile.value!.id.toString());
+                          Get.to(() => DiagnosticPage(
+                                user: appController.state.profile.value!,
+                              ));
+                          log('Unread: ${diagnosticController.state.unread.value}, Read: ${diagnosticController.state.read.value}, Importance: ${diagnosticController.state.importance.value}');
+                        },
+                        child: Obx(() => StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('diagnostic')
+                                  .where('toUId',
+                                      isEqualTo:
+                                          appController.state.profile.value?.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) => Diagnostic.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                RxInt read = 0.obs;
+                                RxInt unread = 0.obs;
+                                for (var i in data) {
+                                  if (i.status == "unread")
+                                    unread++;
+                                  else
+                                    read++;
+                                  // print("dakmim");
+                                  // print(i.status);
+                                }
+                                return WhiteBox(
+                                    title: 'Chẩn đoán',
+                                    iconbox: Icons.health_and_safety_outlined,
+                                    text1: 'Chưa xem',
+                                    text2: 'Đã xem',
+                                    value1: unread.value.toString(),
+                                    value2: read.value.toString());
+                              },
+                            )),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => PrescriptionPage(
+                              appController.state.profile.value!.id.toString(),
+                              true));
+                        },
+                        child: Obx(() => StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('prescriptions')
+                                  .where('patientId',
+                                      isEqualTo:
+                                          appController.state.profile.value?.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) => Prescription.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                int finished = 0;
+                                int drinking = 0;
+                                for (var i in data) {
+                                  if (compareTimestamps(
+                                      convertStringtoTime(i.endDate!),
+                                      getYesterdayTimestamp())) {
+                                    drinking++;
+                                  } else {
+                                    finished++;
+                                  }
+                                }
+                                return WhiteBox(
+                                    title: 'Đơn thuốc',
+                                    iconbox: Icons.medication_liquid_sharp,
+                                    text1: 'Đang uống',
+                                    text2: 'Hoàn thành',
+                                    value1: drinking.toString(),
+                                    value2: finished.toString());
+                              },
+                            )),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => ReminderPage(
+                              appController.state.profile.value!.id.toString(),
+                              true));
+                        },
+                        child: Obx(() => StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('reminders')
+                                  .where('userId',
+                                      isEqualTo:
+                                          appController.state.profile.value?.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) => Reminder.fromFirestore(doc
+                                        as DocumentSnapshot<
+                                            Map<String, dynamic>>))
+                                    .toList();
+                                return WhiteBoxnoW(
+                                    title: 'Nhắc nhở',
+                                    iconbox: Icons.date_range_outlined,
+                                    text1: 'Số lời nhắc',
+                                    value1: data.length.toString());
+                              },
+                            )),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(() => AlarmPage(
+                                appController.state.profile.value!.id
+                                    .toString(),
+                                true));
+                          },
+                          child: Obx(() => StreamBuilder<QuerySnapshot>(
+                                stream: FirebaseFirestore.instance
+                                    .collection('alarms')
+                                    .where('userId',
+                                        isEqualTo: appController
+                                            .state.profile.value?.id)
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) {
+                                    return const Text('Có lỗi xảy ra');
+                                  }
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  }
+
+                                  final data = snapshot.data!.docs
+                                      .map((doc) => AlarmEntity.fromFirestore(
+                                          doc as DocumentSnapshot<
+                                              Map<String, dynamic>>))
+                                      .toList();
+                                  return WhiteBoxnoW(
+                                    title: 'Cảnh báo',
+                                    iconbox: Icons.warning_amber_outlined,
+                                    text1: 'Số cảnh báo',
+                                    value1: data.length.toString(),
+                                  );
+                                },
+                              ))),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            notificationController.fetchNotificationCounts(
+                                appController.state.profile.value!.id
+                                    .toString());
+                            Get.to(() => NotiPage(
+                                  userId: appController.state.profile.value!.id
+                                      .toString(),
+                                ));
+                          },
+                          child: Obx(
+                            () => StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection('notifications')
+                                  .where('to_uid',
+                                      isEqualTo:
+                                          appController.state.profile.value?.id)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return const Text('Có lỗi xảy ra');
+                                }
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                final data = snapshot.data!.docs
+                                    .map((doc) =>
+                                        NotificationEntity.fromFirestore(doc
+                                            as DocumentSnapshot<
+                                                Map<String, dynamic>>))
+                                    .toList();
+                                int read = 0;
+                                int unread = 0;
+                                for (var i in data) {
+                                  if (i.status == "read")
+                                    read++;
+                                  else
+                                    unread++;
+                                }
+                                return WhiteBox(
+                                    title: 'Thông báo',
+                                    iconbox: Icons.notifications_outlined,
+                                    text1: 'Chưa xem',
+                                    text2: 'Đã xem',
+                                    value1: unread.toString(),
+                                    value2: read.toString());
+                              },
+                            ),
+                          )),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(() => const ChatbotPage());
+                        },
+                        child: const WhiteBoxnoVal(
+                            title: 'Trò chuyện với HFA',
+                            iconbox: Icons.smart_toy_outlined,
+                            text1: 'Trò chuyện y tế với HFA'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(() => ConnectHardwarePage());
+                    },
+                    child: Container(
+                      height: 87,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: const Color.fromRGBO(234, 221, 255, 1),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromRGBO(0, 0, 0, 0.3),
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                            )
+                          ]),
+                      child: const Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                width: 100,
-                                height: 48,
-                                child: const Column(
-                                  children: [
-                                    Text(
-                                      "Chưa cập nhật",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color.fromRGBO(121, 116, 126, 1),
-                                      ),
-                                    ),
-                                    Text(
-                                      "03",
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        color: Color.fromRGBO(179, 38, 30, 1),
-                                      ),
-                                    )
-                                  ],
+                              Text(
+                                "Kết nối với thiết bị",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
                                 ),
                               ),
-                              Container(
-                                width: 100,
-                                height: 48,
-                                child: const Column(
-                                  children: [
-                                    Text(
-                                      "Đã cập nhật",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color.fromRGBO(121, 116, 126, 1),
-                                      ),
-                                    ),
-                                    Text(
-                                      "07",
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        color: Color.fromRGBO(52, 199, 89, 1),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 100,
-                                height: 48,
-                                child: const Column(
-                                  children: [
-                                    Text(
-                                      "Tổng số",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Color.fromRGBO(121, 116, 126, 1),
-                                      ),
-                                    ),
-                                    Text(
-                                      "10",
-                                      style: TextStyle(
-                                        fontSize: 22,
-                                        color: Color.fromRGBO(29, 27, 32, 1),
-                                      ),
-                                    )
-                                  ],
-                                ),
+                              Icon(
+                                Icons.open_in_new,
+                                size: 16,
                               )
                             ],
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: 8,
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.developer_board,
+                                size: 32,
+                                color: Color.fromRGBO(101, 85, 143, 1),
+                              ),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                "Đang kết nối",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color.fromRGBO(52, 199, 89, 1),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 16,
+                              ),
+                              Text(
+                                "HFA-Careport-0123",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color.fromRGBO(33, 0, 93, 1),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(
-                    width: 356,
-                    height: 16,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Cập nhật lúc 06:00, 27/07/2024",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color.fromRGBO(121, 116, 126, 1),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                WhiteBox(
-                    title: 'Chẩn đoán',
-                    iconpath: 'assets/images/health_and_safety.png',
-                    text1: 'Chưa xem',
-                    text2: 'Đã xem',
-                    value1: '03',
-                    value2: '07'),
-                WhiteBox(
-                    title: 'Đơn thuốc',
-                    iconpath: 'assets/images/medication_liquid.png',
-                    text1: 'Đang uống',
-                    text2: 'Hoàn thành',
-                    value1: '03',
-                    value2: '07'),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                WhiteBoxnoW(
-                    title: 'Nhắc nhở',
-                    iconpath: 'assets/images/date_range.png',
-                    text1: 'Số lời nhắc',
-                    value1: '07'),
-                WhiteBoxnoW(
-                    title: 'Cảnh báo',
-                    iconpath: 'assets/images/warning_amber.png',
-                    text1: 'Số cảnh báo',
-                    value1: '07'),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                WhiteBox(
-                    title: 'Thông báo',
-                    iconpath: 'assets/images/notifications.png',
-                    text1: 'Chưa xem',
-                    text2: 'Đã xem',
-                    value1: '03',
-                    value2: '07'),
-                WhiteBoxnoVal(
-                    title: 'Trò chuyện với HFA',
-                    iconpath: 'assets/images/smart_toy.png',
-                    text1: 'Trò chuyện y tế',
-                    text2: 'với HFA'),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Container(
-              height: 84,
-              width: 380,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: const Color.fromRGBO(234, 221, 255, 1),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.3),
-                      spreadRadius: 1,
-                      blurRadius: 2,
-                      // offset: Offset(0, 3), // changes position of shadow
-                    )
-                  ]),
-              child: const Column(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: 356,
-                    height: 20,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Kết nối với thiết bị",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                          ),
-                        ),
-                        Icon(
-                          Icons.open_in_new,
-                          size: 16,
-                        )
-                      ],
-                    ),
+                    height: 10,
                   ),
-                  SizedBox(
-                    width: 356,
-                    height: 32,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.developer_board,
-                          size: 32,
-                          color: Color.fromRGBO(101, 85, 143, 1),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          "Đang kết nối",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color.fromRGBO(52, 199, 89, 1),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        Text(
-                          "HFA-Careport-0123",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Color.fromRGBO(33, 0, 93, 1),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
                 ],
               ),
-            ),
-            const SizedBox(
-              height: 10,
             ),
           ],
         ),
@@ -485,5 +640,21 @@ class Homepage extends StatelessWidget {
     // return const Center(
     //   child: Text('Homepage'),
     // );
+  }
+}
+
+class NotiPage extends StatelessWidget {
+  final String userId;
+  const NotiPage({super.key, required this.userId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Thông báo'),
+        centerTitle: true,
+      ),
+      body: NotificationPage(userId),
+    );
   }
 }
