@@ -10,7 +10,7 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ConnectHardwareController>();
+    // final controller = Get.find<ConnectHardwareController>();
     return Scaffold(
       appBar: AppBar(
         title: Text(device.advertisementData.advName),
@@ -31,31 +31,54 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
         child: Column(
           children: [
             Center(
-              child: Column(
-                children: [
-                  const Text('Dữ liệu đo đã nhận'),
-                  const SizedBox(height: 10),
-                  Obx(() => Expanded(
-                      child: ListView.builder(
-                          itemCount: controller.state.medId.length,
-                          itemBuilder: (context, index) {
-                            return DataDay(
-                                date: controller.state.medDate[index],
-                                time: controller.state.medTime[index],
-                                value:
-                                    controller.state.medValue[index].toString(),
-                                index: index,
-                                pass: controller.state.medPass[index]);
-                          }))),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                      onPressed: () {
-                        controller.clearData();
-                      },
-                      child: const Text('Xóa dữ liệu đã nhận'))
-                ],
-              ),
-            ),
+                child: Column(
+              children: [
+                const Text('Dữ liệu đo đã nhận'),
+                const SizedBox(height: 10),
+                Obx(() {
+                  if (controller.state.medId.isEmpty) {
+                    return const Center(child: Text('Không có dữ liệu.'));
+                  }
+                  // return ListView.builder(
+                  //   itemCount: controller.state.medId.length,
+                  //   itemBuilder: (context, index) {
+                  //     return DataDay(
+                  //         date: controller.state.medDate[index],
+                  //         time: controller.state.medTime[index],
+                  //         value: controller.state.medValue[index].toString(),
+                  //         index: index,
+                  //         pass: controller.state.medPass[index]);
+                  //   },
+                  // );
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          for (int i=0;i<controller.state.medId.length;i++)
+                            DataDay(
+                            date: controller.state.medDate[i],
+                            time: controller.state.medTime[i],
+                            value: controller.state.medValue[i].toString(),
+                            index: controller.state.medId[i],
+                            pass: controller.state.medPass[i]),
+                        ],
+                      ),
+                    ),
+                  );
+                  // return Text(controller.state.medId.length.toString());
+                }),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: () {
+                    // controller.clearData();
+                  },
+                  child: const Text('Xóa dữ liệu đã nhận'),
+                )
+              ],
+            )),
           ],
         ),
       ),

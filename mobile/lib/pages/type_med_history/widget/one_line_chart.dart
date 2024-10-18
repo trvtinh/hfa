@@ -27,7 +27,7 @@ class _OneLineChartState extends State<OneLineChart> {
   final controller = Get.find<TypeMedHistoryController>();
   // X-axis and Y-axis data based on random points generated earlier
   List<String> xAxisData = [];
-  List<int> yAxisData = [];
+  List<double> yAxisData = [];
 
   @override
   void initState() {
@@ -40,7 +40,7 @@ class _OneLineChartState extends State<OneLineChart> {
         .expand((value) {
           return value.map((e) => e.value!);
         })
-        .map((e) => int.parse(e))
+        .map((e) => double.parse(e))
         .toList();
   }
 

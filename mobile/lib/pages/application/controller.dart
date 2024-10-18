@@ -38,10 +38,9 @@ class ApplicationController extends GetxController {
   final alarmController = Get.find<AlarmController>();
   final chooseMedController = Get.find<ChooseTypeMedController>();
   final reminderController = Get.find<ReminderController>();
-  final samsungController = Get.find<SamsungConnectController>();
-  final followingMedicalDataController =
-      Get.find<FollowingMedicalDataController>();
-  final connectHardwareController = Get.find<ConnectHardwareController>();
+  // final samsungController = Get.find<SamsungConnectController>();
+  final followingMedicalDataController = Get.find<FollowingMedicalDataController>();
+  // final connectHardwareController = Get.find<ConnectHardwareController>();
   late final List<String> tabTitles;
   late final PageController pageController;
   late final List<BottomNavigationBarItem> bottomTabs;
@@ -170,9 +169,9 @@ class ApplicationController extends GetxController {
     chatBotController.state.profile.value = state.profile.value;
     chooseMedController.state.profile.value = state.profile.value;
     reminderController.state.profile.value = state.profile.value;
-    samsungController.state.profile.value = state.profile.value;
+    // samsungController.state.profile.value = state.profile.value;
     followingMedicalDataController.state.profile.value = state.profile.value;
-    connectHardwareController.state.profile.value = state.profile.value;
+    // connectHardwareController.state.profile.value = state.profile.value;
     diagnosticController.fetchDiagnosticCounts(state.profile.value!.id!);
     notificationController.fetchNotificationCounts(state.profile.value!.id!);
     alarmController.getAlarmCount();

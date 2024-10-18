@@ -8,6 +8,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/state.dart';
 import 'connection_page.dart';
 
@@ -25,7 +26,8 @@ class ConnectHardwareController extends GetxController {
   bool isFoundreadCharacteristic = false;
   bool isFoundwriteCharacteristic = false;
   RxString remoteId = "".obs;
-  Map<String, dynamic> currentData = {};
+  final appController = Get.find<ApplicationController>();
+  String receivedData = "";
 
   RxString storageDataReceive = "".obs;
   RxList<String> storageDataSend = <String>[].obs;
@@ -41,9 +43,8 @@ class ConnectHardwareController extends GetxController {
           ScanResult r = results.last; // Get the last scanned device
           log('Found device: ${r.device.remoteId}: "${r.advertisementData.advName}"');
           scannedDevices.add(r);
+          Get.back();
           // Add the device to the list
-          await connectToDevice(scannedDevices.first.device);
-          log('dmmmmmmmmmm10290391203');
         }
       },
       onError: (e) => log('Scan error: $e'),
@@ -116,41 +117,65 @@ class ConnectHardwareController extends GetxController {
     return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 
-  void processData() {
-    int medId = currentData["dataType"];
-    List<dynamic> value = currentData["dataValue"];
-    int interval = currentData["interval"];
+  void processData(Map<String, dynamic> decodeData) {
+    // Safely extract medId, dataValue, and interval from the decoded data
+    int medId = decodeData["dataType"] is int ? decodeData["dataType"] : 0;
+    List<dynamic> value = decodeData["dataValue"] ?? [];
+    int interval = decodeData["interval"] is int ? decodeData["interval"] : 500;
+
     DateTime now = DateTime.now();
+
+    // Log the data for debugging purposes
+    log("MedId: $medId, Values: $value, Interval: $interval");
+
     List<DateTime> time = [];
     for (int i = value.length - 1; i >= 0; i--) {
       time.add(now.subtract(Duration(milliseconds: interval * i)));
     }
-    for (int i =0;i<value.length;i++){
+
+    for (int i = 0; i < value.length; i++) {
       state.medDate.add(formatDate(time[i]));
       state.medTime.add(formatTime(time[i]));
       state.medId.add(medId);
       state.medPass.add(time[i]);
-      state.medValue.add(value[i]);
+      if (value[i] is int) {
+        int dak = value[i];
+        state.medValue.add(dak.toDouble());
+      } else
+        state.medValue.add(value[i]);
     }
   }
 
   Future<void> enableNotifications() async {
     try {
-      // Lắng nghe dữ liệu được gửi từ ESP32 qua notify
+      // Cancel any existing notification subscription
       notificationSubscription?.cancel();
 
-      await readCharacteristic.value?.setNotifyValue(true); // Kích hoạt notify
+      // Enable notifications on the characteristic
+      await readCharacteristic.value?.setNotifyValue(true);
       log('Notifications enabled.');
 
-      // Lắng nghe dữ liệu được gửi từ ESP32 qua notify
+      // Listen for data sent via notify from ESP32
       notificationSubscription =
           readCharacteristic.value?.onValueReceived.listen((data) {
-        String receivedData = String.fromCharCodes(data);
-        log('Received data 1: $receivedData');
-        currentData = jsonDecode(receivedData);
-        processData();
-        storageDataReceive.value += receivedData;
-        log('Received data 2: $receivedData');  
+        receivedData += String.fromCharCodes(data);
+
+        // Log received data for debugging
+        log('Received data chunk: $receivedData');
+
+        // Check if the last character is '}', indicating the end of the JSON message
+        if (receivedData.endsWith("}")) {
+          try {
+            // Decode the JSON string and process the data
+            Map<String, dynamic> decodeData = jsonDecode(receivedData);
+            processData(decodeData);
+          } catch (e) {
+            log('Error decoding JSON data: $e');
+          } finally {
+            // Reset receivedData after processing
+            receivedData = "";
+          }
+        }
       }, onError: (error) {
         log('Error receiving data: $error');
       });
@@ -209,16 +234,16 @@ class ConnectHardwareController extends GetxController {
     // isLoading = true.obs;
     Get.dialog(const Center(child: CircularProgressIndicator()));
 
-    var check = await FirebaseApi.checkExistDocumentForMed(
-        'medicalData',
-        'userId',
-        state.profile.value?.id ?? '',
-        'typeId',
-        typeId,
-        'time',
-        Timestamp.fromDate(time));
+    // var check = await FirebaseApi.checkExistDocumentForMed(
+    //     'medicalData',
+    //     'userId',
+    //     state.profile.value?.id ?? '',
+    //     'typeId',
+    //     typeId,
+    //     'time',
+    //     Timestamp.fromDate(time));
     final data = MedicalEntity(
-      userId: state.profile.value?.id,
+      userId: appController.state.profile.value?.id,
       time: Timestamp.fromDate(time),
       typeId: typeId,
       value: value,
@@ -227,25 +252,26 @@ class ConnectHardwareController extends GetxController {
 
     log(data.toString());
     await FirebaseApi.addDocument("medicalData", data.toFirestoreMap());
+    appController.getUpdatedLatestMedical();
     // isLoading = false.obs;
     Get.back();
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Thành công'),
-            content: const Text('Đã đồng bộ dữ liệu'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Get.back(); // Dismiss the dialog
-                },
-                child: const Text('Xác nhận'),
-              ),
-            ],
-          );
-        },
-      );
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thành công'),
+          content: const Text('Đã đồng bộ dữ liệu'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text('Xác nhận'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

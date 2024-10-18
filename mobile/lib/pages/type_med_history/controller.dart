@@ -122,7 +122,7 @@ class TypeMedHistoryController extends GetxController {
     for (int i = 0;
         i <= DatetimeChange.getDuration(rangeEnd.value, rangeStart.value);
         i++) {
-      await fetchEventsInDay(temp, value, 5);
+      await fetchEventsInDay(temp, value, 100);
       temp = temp.add(const Duration(days: 1));
 
       log(result.toString());
