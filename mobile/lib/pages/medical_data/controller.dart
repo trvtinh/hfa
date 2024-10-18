@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/pages/application/index.dart';
 import 'package:health_for_all/pages/medical_data/state.dart';
 import 'package:health_for_all/pages/medical_data/widget/combo_box.dart';
@@ -16,11 +19,19 @@ class MedicalDataController extends GetxController {
     length++;
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    timeController.text = DateFormat('hh:mm a')
+        .format(DateTime.now()); // Use 'hh:mm a' for 12-hour format
+  }
+
   final noteController = TextEditingController();
   final unitController = TextEditingController();
   final valueController = TextEditingController();
   DateTime datetime = DateTime.now();
-  TimeOfDay timeOfDay = TimeOfDay.now();
+  Rx<TimeOfDay> timeOfDay = TimeOfDay.now().obs;
 
   void clearController() {
     noteController.clear();
@@ -28,65 +39,19 @@ class MedicalDataController extends GetxController {
     valueController.clear();
   }
 
-  List<ComboBox> get entries => List.generate(length, (index) {
-        return ComboBox(
-          noteController: noteController,
-          unitController: unitController,
-          valueController: valueController,
-          leadingiconpath: _getIconPath(index),
-          title: _getTitle(index),
-          value: valueController.text.obs,
-          unit: unitController.text.obs,
-        );
+  List get entries => List.generate(length, (index) {
+        return Obx(() => ComboBox(
+              time: DateFormat('HH:mm').format(DateTime(
+                  0, 0, 0, timeOfDay.value.hour, timeOfDay.value.minute)),
+              noteController: noteController,
+              unitController: TextEditingController(text: Item.getUnit(index)),
+              valueController: valueController,
+              leadingiconpath: Item.getIconPath(index),
+              title: Item.getTitle(index),
+              value: valueController.text.obs,
+              unit: Item.getUnit(index).obs,
+            ));
       });
-
-  static String _getIconPath(int index) {
-    const iconPaths = [
-      'assets/images/huyet_ap.png',
-      'assets/images/than_nhiet.png',
-      'assets/images/duong_huyet.png',
-      'assets/images/nhip_tim.png',
-      'assets/images/spo2.png',
-      'assets/images/hrv.png',
-      'assets/images/ecg.png',
-      'assets/images/can_nang.png',
-      'assets/images/xet_nghiem_mau.png',
-      'assets/images/axit_uric.png',
-    ];
-    return iconPaths[index];
-  }
-
-  static String _getTitle(int index) {
-    const titles = [
-      'Huyết áp',
-      'Thân nhiệt',
-      'Đường huyết',
-      'Nhịp tim',
-      'SPO2',
-      'HRV',
-      'ECG - Điện tâm đồ',
-      'Cân nặng',
-      'Xét nghiệm máu',
-      'Axit Uric',
-    ];
-    return titles[index];
-  }
-
-  static RxString _getUnit(int index) {
-    const units = [
-      'mmHg',
-      '°C',
-      'mg/dL',
-      'lần/phút',
-      '%',
-      'ms',
-      '--',
-      'kg',
-      '--',
-      '--',
-    ];
-    return units[index].obs;
-  }
 
   Future<void> selectDate(BuildContext context) async {
     final selectedDate = await showDatePicker(
@@ -107,37 +72,33 @@ class MedicalDataController extends GetxController {
   Future<void> selectTime(BuildContext context) async {
     final selectedTime = await showTimePicker(
       context: context,
-      initialTime: timeOfDay,
+      initialTime: timeOfDay.value,
     );
 
     if (selectedTime != null) {
-      timeOfDay = selectedTime;
+      timeOfDay.value = selectedTime;
       final formattedTime = selectedTime.format(context);
       timeController.text = formattedTime;
       updateTimestamp(); // Cập nhật timestamp
     }
   }
 
-  String updateTimestamp() {
+  Timestamp updateTimestamp() {
     final updatedDateTime = DateTime(
       datetime.year,
       datetime.month,
       datetime.day,
-      timeOfDay.hour,
-      timeOfDay.minute,
+      timeOfDay.value.hour,
+      timeOfDay.value.minute,
     );
 
     final finalDateTime = updatedDateTime.copyWith(second: 0, millisecond: 0);
 
     // Định dạng DateTime thành chuỗi
-    final formattedDateTime =
-        DateFormat('dd/MM/yyyy HH:mm:ss').format(finalDateTime);
-
+    final dateTimestamp = Timestamp.fromDate(finalDateTime);
     // In ra hoặc làm gì đó với formattedDateTime
-    return formattedDateTime;
+    return dateTimestamp;
   }
-
-  Future<void> addMedicalData() async {}
 
   Future<String?> saveImageUrlToFirestore(String imageUrl) async {
     try {
@@ -147,10 +108,10 @@ class MedicalDataController extends GetxController {
         'time': DateFormat('dd/MM/yyyy HH:mm:ss').format(DateTime.now()),
         'userID': appController.state.profile.value!.id,
       });
-      print('Image URL saved to Firestore');
+      log('Image URL saved to Firestore');
       return docRef.id; // Trả về ID của tài liệu
     } catch (e) {
-      print('Error saving image URL to Firestore: $e');
+      log('Error saving image URL to Firestore: $e');
       return null; // Trả về null nếu có lỗi
     }
   }

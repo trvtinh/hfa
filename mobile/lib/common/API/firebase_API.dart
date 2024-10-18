@@ -1,19 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseApi {
   FirebaseApi._();
   static final FirebaseStorage _storage = FirebaseStorage.instance;
   static final db = FirebaseFirestore.instance;
-  static Future<void> initNotifications() async {
-    final firebaseMessaging = FirebaseMessaging.instance;
-    await firebaseMessaging.requestPermission();
-    final fCMToken = await firebaseMessaging.getToken();
-    print('FCM Token: $fCMToken');
-  }
 
   static Future<QuerySnapshot<Map<String, dynamic>>> getQuerySnapshot(
       String collection, String field, String value) async {
@@ -37,6 +30,31 @@ class FirebaseApi {
     } catch (e) {
       print('Error retrieving document ID: $e');
       return null;
+    }
+  }
+
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getDocumentSnapshotById(
+      String collection, String docId) async {
+    try {
+      final docSnapshot = await db.collection(collection).doc(docId).get();
+      if (docSnapshot.exists) {
+        return docSnapshot;
+      } else {
+        throw Exception('No document found with ID: $docId');
+      }
+    } catch (e) {
+      throw Exception('Error retrieving document snapshot: $e');
+    }
+  }
+
+  static Future updateDocument(
+      String collection, String documentId, Map<String, dynamic> data) async {
+    try {
+      final docRef = db.collection(collection).doc(documentId);
+      await docRef.update(data);
+      print('Document $documentId updated successfully in $collection.');
+    } catch (e) {
+      print('Error updating document: $e');
     }
   }
 
@@ -99,11 +117,12 @@ class FirebaseApi {
     }
   }
 
-  static Future<void> addDocument(
+  static Future addDocument(
       String collection, Map<String, dynamic> data) async {
     try {
-      await db.collection(collection).add(data);
+      final docRef = await db.collection(collection).add(data);
       print('Document added successfully to $collection.');
+      return docRef.id;
     } catch (e) {
       print('Error adding document: $e');
     }
@@ -125,4 +144,15 @@ class FirebaseApi {
       return null;
     }
   }
+
+  // static Future updateDocument(
+  //     String collection, String documentId, Map<String, dynamic> data) async {
+  //   try {
+  //     final docRef = db.collection(collection).doc(documentId);
+  //     await docRef.update(data);
+  //     log('Document $documentId updated successfully in $collection.');
+  //   } catch (e) {
+  //     log('Error updating document: $e');
+  //   }
+  // }
 }

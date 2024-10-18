@@ -12,14 +12,19 @@ import 'package:intl/intl.dart';
 class ProfileController extends GetxController {
   final state = ProfileState();
   final appController = Get.find<ApplicationController>();
-  @override
-  void onInit() async {
-    super.onInit();
-  }
 
   DateTime parseDate(String dateString) {
     final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
     return dateFormat.parse(dateString);
+  }
+
+  Future<List<String>> getUserIdsFromDocument(String field) async {
+    final docId = await FirebaseApi.getDocumentId(
+        'users', 'id', appController.state.profile.value!.id!);
+    DocumentSnapshot doc =
+        await FirebaseFirestore.instance.collection('users').doc(docId).get();
+    List<dynamic> ids = doc.get(field);
+    return ids.map((id) => id.toString()).toList();
   }
 
   int calculateAge(String dateString) {
