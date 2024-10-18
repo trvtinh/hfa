@@ -12,8 +12,8 @@ class ViewDataBox extends StatelessWidget {
   final String time;
   final String value;
   final String unit;
-  final String note;
-  final List<String> selectedFiles;
+  String? note;
+  List<String>? selectedFiles;
 
   ViewDataBox({
     super.key,
@@ -21,9 +21,9 @@ class ViewDataBox extends StatelessWidget {
     required this.title,
     required this.value,
     required this.unit,
-    required this.note,
+    this.note,
     required this.time,
-    required this.selectedFiles,
+    this.selectedFiles,
   });
   final diagnosticaddController = Get.find<DiagnosticAddController>();
   final medicalController = Get.find<MedicalDataController>();
@@ -31,8 +31,8 @@ class ViewDataBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool haveFile = selectedFiles.isNotEmpty;
-    bool haveNote = note.isNotEmpty;
+bool haveFile = selectedFiles != null && selectedFiles!.isNotEmpty;
+bool haveNote = note != null && note!.isNotEmpty;
     return Column(
       children: [
         Container(
@@ -295,7 +295,7 @@ class ViewDataBox extends StatelessWidget {
   }
 
   Widget _buildFileList(context) {
-    if (selectedFiles.isEmpty) {
+    if (selectedFiles!.isEmpty) {
       return DottedBorder(
         borderType: BorderType.RRect,
         radius: const Radius.circular(4),
@@ -314,10 +314,10 @@ class ViewDataBox extends StatelessWidget {
     } else {
       return ListView.builder(
         shrinkWrap: true,
-        itemCount: selectedFiles.length,
+        itemCount: selectedFiles!.length,
         itemBuilder: (context, index) {
           final Future<XFile?> file =
-              diagnosticaddController.urlToFile(selectedFiles[index]);
+              diagnosticaddController.urlToFile(selectedFiles![index]);
           return FutureBuilder<XFile?>(
             future: file,
             builder: (context, snapshot) {

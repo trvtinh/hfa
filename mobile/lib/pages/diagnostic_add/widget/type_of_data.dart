@@ -88,10 +88,10 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                     title: Item.getTitle(int.parse(medicalData.typeId!)),
                     value: medicalData.value!,
                     unit: Item.getUnit(int.parse(medicalData.typeId!)),
-                    note: medicalData.note!,
+                    note: medicalData.note,
                     time: DatetimeChange.getHourString(
                         medicalData.time!.toDate()),
-                    selectedFiles: medicalData.imageUrls!,
+                    selectedFiles: medicalData.imageUrls,
                   ),
 
                   // for(int i=0; i<tapped.length; i++){
