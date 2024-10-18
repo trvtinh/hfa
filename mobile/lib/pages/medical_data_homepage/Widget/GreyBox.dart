@@ -39,7 +39,7 @@ class GreyBoxState extends State<GreyBox> {
   Widget build(BuildContext context) {
     return Container(
       height: 112,
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+      width: 186,
       // padding: Padding(
 
       // ),
@@ -56,6 +56,7 @@ class GreyBoxState extends State<GreyBox> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
+            width: 162,
             height: 16,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -68,7 +69,7 @@ class GreyBoxState extends State<GreyBox> {
                     color: Color.fromRGBO(29, 27, 32, 1),
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.open_in_new_outlined,
                   size: 16,
                 ),
@@ -76,6 +77,7 @@ class GreyBoxState extends State<GreyBox> {
             ),
           ),
           SizedBox(
+            width: 162,
             height: 40,
             child: Row(
               children: [
@@ -89,17 +91,17 @@ class GreyBoxState extends State<GreyBox> {
                     children: [
                       Text(
                         widget.value,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 22,
                           color: Color.fromRGBO(33, 0, 93, 1),
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 8,
                       ),
                       Text(
                         widget.unit,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 11,
                           color: Color.fromRGBO(98, 91, 113, 1),
@@ -112,13 +114,14 @@ class GreyBoxState extends State<GreyBox> {
             ),
           ),
           SizedBox(
+            width: 162,
             height: 16,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   widget.time,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Color.fromRGBO(121, 116, 126, 1),
                     fontSize: 12,
                   ),
@@ -129,8 +132,16 @@ class GreyBoxState extends State<GreyBox> {
                     size: 16,
                     Icons.priority_high_outlined,
                     color: widget.warning == true
-                        ? const Color.fromRGBO(179, 38, 30, 1)
-                        : const Color.fromRGBO(243, 237, 247, 1)),
+                        ? Color.fromRGBO(179, 38, 30, 1)
+                        : Color.fromRGBO(243, 237, 247, 1)),
+
+                // )
+                // const IconWarning(
+                //     icon: Icon(
+                //       size: 16,
+                //       Icons.priority_high_outlined,
+                //       color: Color.fromRGBO(179, 38, 30, 1),
+                //     )),
               ],
             ),
           ),

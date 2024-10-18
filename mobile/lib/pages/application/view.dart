@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/pages/alarm/view.dart';
-import 'package:health_for_all/pages/chatbot/view.dart';
-import 'package:health_for_all/pages/connect_hardware/view.dart';
-import 'package:health_for_all/pages/demo_ecg/view.dart';
-import 'package:health_for_all/pages/demo_pcg/view.dart';
-import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
-import 'package:health_for_all/pages/image_analyze/view.dart';
 import 'package:health_for_all/pages/medical_data/view.dart';
-import 'package:health_for_all/pages/medical_data_homepage/view.dart';
 import 'package:health_for_all/pages/notification/view.dart';
-import 'package:health_for_all/pages/diagnostic/view.dart';
-import 'package:health_for_all/pages/prescription/view.dart';
-import 'package:health_for_all/pages/profile/page/information_view.dart';
+import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
-import 'package:health_for_all/pages/reminder/view.dart';
 import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
-  const ApplicationPage({super.key});
+  ApplicationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +19,9 @@ class ApplicationPage extends GetView<ApplicationController> {
         onPageChanged: controller.handPageChanged,
         children: [
           Homepage(),
-          Following(),
+          OverallMedicalDataHistoryPage(),
           MedicalDataPage(),
-          const NotificationPage(),
+          NotificationPage(),
           const ProfilePage()
         ],
       );
@@ -67,89 +56,48 @@ class ApplicationPage extends GetView<ApplicationController> {
         padding: EdgeInsets.zero,
         children: [
           buildDrawerHeader(),
-          ListTile(
-            onTap: () => Get.to(() => MedicalDataHome(
-                time: controller.state.updateTime.value == ""
-                    ? "Chưa cập nhật dữ liệu lần nào"
-                    : "Cập nhật lần cuối ${controller.state.updateTime.value}")),
-            leading: const Icon(Icons.monitor_heart_outlined),
-            title: const Text('Dữ liệu sức khỏe'),
+          const ListTile(
+            leading: Icon(Icons.monitor_heart),
+            title: Text('Dữ liệu sức khỏe'),
           ),
-          InkWell(
-            onTap: () {
-              Get.to(() => const DiagnosticPage());
-            },
-            child: const ListTile(
-              leading: Icon(
-                Icons.health_and_safety_outlined,
-              ),
-              title: Text('Chẩn đoán'),
-            ),
+          const ListTile(
+            leading: Icon(Icons.health_and_safety),
+            title: Text('Chuẩn đoán'),
           ),
-          ListTile(
-            onTap: () => Get.to(() => const PrescriptionPage()),
-            leading: const Icon(
-              Icons.medication_liquid_sharp,
-            ),
-            title: const Text('Đơn thuốc'),
+          const ListTile(
+            leading: Icon(Icons.medication_liquid),
+            title: Text('Đơn thuốc'),
           ),
-          ListTile(
-            leading: const Icon(
-              Icons.date_range_outlined,
-            ),
-            title: const Text('Nhắc nhở'),
-            onTap: () => Get.to(() => const ReminderPage()),
+          const ListTile(
+            leading: Icon(Icons.date_range),
+            title: Text('Nhắc nhỏ'),
           ),
-          ListTile(
-            leading: const Icon(Icons.notifications_none),
-            title: const Text('Thông báo'),
-            onTap: () => Get.to(() => const NotiPage()),
+          const ListTile(
+            leading: Icon(Icons.notifications_none),
+            title: Text('Thông báo'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.warning_amber),
+            title: Text('Cảnh báo'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.memory),
+            title: Text('Kết nối với thiết bị'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.smart_toy),
+            title: Text('Trò chuyện với HFA-Bot'),
+          ),
+          const ListTile(
+            leading: Icon(Icons.account_circle),
+            title: Text('Tài khoản'),
           ),
           ListTile(
-            onTap: () => Get.to(() => const AlarmPage()),
-            leading: const Icon(
-              Icons.warning_amber_outlined,
-            ),
-            title: const Text('Cảnh báo'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => ConnectHardwarePage()),
-            leading: const Icon(Icons.memory),
-            title: const Text('Kết nối với thiết bị'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => const ChatbotPage()),
-            leading: const Icon(
-              Icons.smart_toy_outlined,
-            ),
-            title: const Text('Trò chuyện với HFA-Bot'),
-          ),
-          ListTile(
-            leading: const Icon(Icons.account_circle),
-            title: const Text('Tài khoản'),
-            onTap: () => Get.to(() => const InfoPage()),
-          ),
-          ListTile(
-            leading: const Icon(Icons.account_circle),
-            title: const Text('Đăng xuất'),
+            leading: Icon(Icons.account_circle),
+            title: Text('Đăng xuất'),
             onTap: () async {
               await controller.onLogOut();
             },
-          ),
-          ListTile(
-            onTap: () => Get.to(() => ImageAnalyzePage()),
-            leading: const Icon(Icons.memory_outlined),
-            title: const Text('Phân tích hình ảnh'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => const DemoECG()),
-            leading: const Icon(Icons.add_chart_outlined),
-            title: const Text('ECG - Điện tâm đồ'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => const AudioPlayerView()),
-            leading: const Icon(Icons.sos_rounded),
-            title: const Text('PCG'),
           ),
         ],
       ));
@@ -191,12 +139,12 @@ class About_HFA extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Về chúng tôi"),
+        title: Text("Về chúng tôi"),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(Icons.arrow_back),
+          child: Icon(Icons.arrow_back),
         ),
       ),
       body: const Center(
@@ -211,35 +159,6 @@ class About_HFA extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class NotiPage extends StatelessWidget {
-  const NotiPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Thông báo'),
-        centerTitle: true,
-      ),
-      body: const NotificationPage(),
-    );
-  }
-}
-
-class InfoPage extends StatelessWidget {
-  const InfoPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Thông tin tài khoản"),
-      ),
-      body: const InformationPage(),
     );
   }
 }

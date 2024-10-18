@@ -14,6 +14,21 @@ class SignInPage extends GetView<SignInController> {
 
   @override
   Widget build(BuildContext context) {
+    //sign user in method
+    void signUserIn() async {
+      // show loading circle
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Colors.black,
+            ),
+          );
+        },
+      );
+    }
+
     return Scaffold(
       // backgroundColor: Colors.grey[300],
       body: SafeArea(
@@ -31,31 +46,30 @@ class SignInPage extends GetView<SignInController> {
               const SizedBox(height: 25),
 
               //Health For All
-              Text(
+              const Text(
                 "Health For All",
                 style: TextStyle(
-                  fontSize: 36,
-                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 30,
                 ),
               ),
 
               const SizedBox(height: 25),
 
               //Welcome
-              Text(
+              const Text(
                 "Chào mừng!",
                 style: TextStyle(
-                  fontSize: 22,
-                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
 
               //Login to continue
-              Text(
+              const Text(
                 "Xin hãy đăng nhập để tiếp tục",
                 style: TextStyle(
-                  fontSize: 22,
-                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
 

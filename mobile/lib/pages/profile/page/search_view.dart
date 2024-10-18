@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:health_for_all/common/API/firebase_messaging_api.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
 import 'search_controller.dart';
 
@@ -31,8 +29,7 @@ class SearchingBar extends GetView<SearchingController> {
             prefixIcon: Obx(() => IconButton(
                   icon: Icon(controller.hasText.value
                       ? Icons.arrow_back
-                      : Icons.add_circle_outline,
-                      color: Theme.of(context).colorScheme.primary,),
+                      : Icons.add_circle_outline),
                   onPressed: () {
                     if (controller.hasText.value) {
                       _clearText();
@@ -172,7 +169,6 @@ class UserViewListTile extends StatelessWidget {
 class _FollowerDialog extends StatefulWidget {
   final Map<String, dynamic> follower;
   final bool following;
-
   const _FollowerDialog({
     required this.follower,
     required this.following,
@@ -185,8 +181,6 @@ class _FollowerDialog extends StatefulWidget {
 class __FollowerDialogState extends State<_FollowerDialog> {
   String? selectedCategory;
   final controller = Get.find<ProfileController>();
-  final appController = Get.find<ApplicationController>();
-
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -246,45 +240,21 @@ class __FollowerDialogState extends State<_FollowerDialog> {
                   onPressed: () {
                     // Handle the confirmation button press
                     if (selectedCategory != null) {
-                      log('Confirmed: $selectedCategory');
-                      // ignore: avoid_print
-                      log('id : ${widget.follower['id']}');
+                      print('Confirmed: $selectedCategory');
+                      print('id : ' + widget.follower['id']);
                       if (selectedCategory == 'Người nhà') {
                         controller.sendRequest(
                             widget.follower['id'], 'relative');
-                        FirebaseMessagingApi.sendMessage(
-                          widget.follower['fcmtoken'],
-                          'Yêu cầu làm người nhà ',
-                          "${appController.state.profile.value!.name!} muốn trở thành người nhà của bạn",
-                          'unread',
-                          'follow',
-                          widget.follower['id'],
-                          'common',
-                        );
+                        log('1');
                       } else {
                         if (widget.following) {
                           controller.sendRequest(
                               widget.follower['id'], 'doctor');
-                          FirebaseMessagingApi.sendMessage(
-                            widget.follower['fcmtoken'],
-                            'Yêu cầu làm bác sĩ ',
-                            "${appController.state.profile.value!.name!} muốn trở trành bác sĩ của bạn",
-                            "unread",
-                            "follow",
-                            widget.follower['id'],
-                            'common',
-                          );
+                          log('2');
                         } else {
                           controller.sendRequest(
                               widget.follower['id'], 'patient');
-                          FirebaseMessagingApi.sendMessage(
-                              widget.follower['fcmtoken'],
-                              'Yêu cầu làm bệnh nhân ',
-                              "${appController.state.profile.value!.name!} muốn trở trành bệnh nhân của bạn",
-                              "unread",
-                              "follow",
-                              widget.follower['id'],
-                              'common');
+                          log('3');
                         }
                       }
                     }

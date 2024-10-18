@@ -37,29 +37,4 @@ class StorageService extends GetxService {
   Future<bool> remove(String key) async {
     return await _prefs.remove(key);
   }
-
-  // New methods for user credentials
-  Future<void> saveUserCredentials(String email, String accessToken,
-      String displayName, String photoUrl) async {
-    await _prefs.setString('userEmail', email);
-    await _prefs.setString('accessToken', accessToken);
-    await _prefs.setString('displayName', displayName);
-    await _prefs.setString('photoUrl', photoUrl);
-  }
-
-  Map<String, String?> getUserCredentials() {
-    return {
-      'userEmail': _prefs.getString('userEmail'),
-      'accessToken': _prefs.getString('accessToken'),
-      'displayName': _prefs.getString('displayName'),
-      'photoUrl': _prefs.getString('photoUrl'),
-    };
-  }
-
-  Future<void> clearUserCredentials() async {
-    await _prefs.remove('userEmail');
-    await _prefs.remove('accessToken');
-    await _prefs.remove('displayName');
-    await _prefs.remove('photoUrl');
-  }
 }
