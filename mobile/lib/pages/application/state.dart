@@ -9,11 +9,5 @@ class ApplicationState {
   set page(value) => _page.value = value;
   var head_detail = Rx<UserLoginResponseEntity?>(null);
   var profile = Rx<UserData?>(null);
-  RxInt age = 0.obs;
-  RxString updateTime = ''.obs;
-  RxMap<String, dynamic> medicalData = <String, dynamic>{}.obs;
-  RxInt updateMedData = 0.obs;
-  RxString selectedUserId = ''.obs;
-  Rx<UserData> selectedUser = UserData().obs;
   // var user = Rxn<UserDB>();
 }

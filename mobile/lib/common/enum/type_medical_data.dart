@@ -7,7 +7,7 @@ enum TypeMedicalData {
   hrv,
   ecg,
   weight,
-  ppg,
+  bloodTest,
   axitUric
 }
 
@@ -30,8 +30,8 @@ extension TypeMedicalDataExtension on TypeMedicalData {
         return "ECG - Điện tâm đồ";
       case TypeMedicalData.weight:
         return "Cân nặng";
-      case TypeMedicalData.ppg:
-        return "PPG";
+      case TypeMedicalData.bloodTest:
+        return "Xét nghiệm máu";
       case TypeMedicalData.axitUric:
         return "Axit Uric";
     }
@@ -57,7 +57,7 @@ extension TypeMedicalDataExtension on TypeMedicalData {
       case '7':
         return TypeMedicalData.weight;
       case '8':
-        return TypeMedicalData.ppg;
+        return TypeMedicalData.bloodTest;
       case '9':
         return TypeMedicalData.axitUric;
       default:

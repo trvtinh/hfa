@@ -3,15 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
-import 'package:health_for_all/pages/application/index.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
 import 'package:health_for_all/pages/medical_data/widget/more_data.dart';
-import 'package:intl/intl.dart';
 
 class MedicalDataPage extends GetView<MedicalDataController> {
   MedicalDataPage({super.key});
-  RxBool isLoading = false.obs;
-  final appController = Get.find<ApplicationController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,16 +28,6 @@ class MedicalDataPage extends GetView<MedicalDataController> {
             height: 0.7,
           ),
         ),
-        actions: [
-          Icon(
-            Icons.add_to_photos_outlined,
-            size: 24,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -49,13 +36,13 @@ class MedicalDataPage extends GetView<MedicalDataController> {
               children: [
                 _buildDateTimeField(context, 'Ngày', Icons.event_note,
                     controller.selectDate, controller.dateController,
-                    width: MediaQuery.of(context).size.width / 5 * 3 - 2),
+                    width: MediaQuery.of(context).size.width / 5 * 3),
                 _buildDateTimeField(context, 'Thời gian', Icons.schedule,
                     controller.selectTime, controller.timeController,
-                    width: MediaQuery.of(context).size.width / 5 * 2 + 2),
+                    width: MediaQuery.of(context).size.width / 5 * 2),
               ],
             ),
-            // _buildSearchField(context),
+            _buildSearchField(context),
             const Divider(height: 2),
             ...controller.entries,
             const MoreData(),
@@ -100,7 +87,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
         child: TextField(
           textAlignVertical: TextAlignVertical.center,
           decoration: InputDecoration(
-            hintText: "Tìm dữ liệu",
+            hintText: "Input Text",
             border: InputBorder.none,
             prefixIcon: Icon(Icons.search,
                 color: Theme.of(context).colorScheme.onSurfaceVariant),
@@ -137,12 +124,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
       child: TextButton(
         onPressed: () async {
           if (label == 'Lưu') {
-            isLoading.value = true;
             try {
-              if (isLoading.value) {
-                Get.dialog(const Center(child: CircularProgressIndicator()));
-              }
-              log(isLoading.value.toString());
               // Perform the saving operation
               for (var value in controller.state.data.values) {
                 if (value.imagePaths != null) {
@@ -155,35 +137,24 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                 log(value.toString());
                 await FirebaseApi.addDocument(
                     'medicalData', value.toFirestoreMap());
-                if (value == controller.state.data.values.last) {
-                  isLoading.value = false;
-                  Get.back();
-                }
-                appController.getUpdatedLatestMedical();
               }
 
               // Clear the data after saving
               controller.state.data.clear();
-              log(controller.state.data.toString());
+
               // Show success dialog
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('Thành công'),
-                    content: const Text('Dữ liệu đã được ghi nhận'),
+                    title: Text('Thành công'),
+                    content: Text('Dữ liệu đã được ghi nhận'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
-                          controller.dateController.text =
-                              DateFormat('dd/MM/yyyy').format(DateTime.now());
-                          controller.timeController.text =
-                              DateFormat('hh:mm a').format(DateTime.now());
-                          controller.state.data.clear();
-
-                          Get.back(); // Dismiss the dialog
+                          Navigator.of(context).pop(); // Dismiss the dialog
                         },
-                        child: const Text('OK'),
+                        child: Text('OK'),
                       ),
                     ],
                   );
@@ -196,14 +167,15 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('Lỗi'),
-                    content: const Text('Lỗi khi lưu dữ liệu. Hãy thử lại!'),
+                    title: Text('Error'),
+                    content: Text(
+                        'An error occurred while saving data. Please try again.'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop(); // Dismiss the dialog
                         },
-                        child: const Text('OK'),
+                        child: Text('OK'),
                       ),
                     ],
                   );

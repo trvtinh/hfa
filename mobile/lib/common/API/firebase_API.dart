@@ -40,48 +40,6 @@ class FirebaseApi {
     }
   }
 
-  static Future<bool?> checkExistDocumentForMed(
-      String collection, String field1, String value1, String field2, String value2, String field3, Timestamp value3) async {
-    try {
-      final querySnapshot =
-          await db.collection(collection).where(field1, isEqualTo: value1).where(field2, isEqualTo: value2).where(field3, isEqualTo: value3).get();
-      if (querySnapshot.docs.isNotEmpty) {
-        return true;
-      } else {
-        print('No document found with $field1: $value1');
-        return false;
-      }
-    } catch (e) {
-      print('Error retrieving document ID: $e');
-      return false;
-    }
-  }
-
-  static Future<DocumentSnapshot<Map<String, dynamic>>> getDocumentSnapshotById(
-      String collection, String docId) async {
-    try {
-      final docSnapshot = await db.collection(collection).doc(docId).get();
-      if (docSnapshot.exists) {
-        return docSnapshot;
-      } else {
-        throw Exception('No document found with ID: $docId');
-      }
-    } catch (e) {
-      throw Exception('Error retrieving document snapshot: $e');
-    }
-  }
-
-  static Future updateDocument(
-      String collection, String documentId, Map<String, dynamic> data) async {
-    try {
-      final docRef = db.collection(collection).doc(documentId);
-      await docRef.update(data);
-      print('Document $documentId updated successfully in $collection.');
-    } catch (e) {
-      print('Error updating document: $e');
-    }
-  }
-
   static Future<void> deleteDocument(
       String collection, String documentId) async {
     try {

@@ -100,7 +100,7 @@ class MedicalDataController extends GetxController {
       datetime = selectedDate;
       final formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
       dateController.text = formattedDate;
-      updateTimestamp();
+      updateTimestamp(); // Cập nhật timestamp
     }
   }
 
@@ -114,7 +114,7 @@ class MedicalDataController extends GetxController {
       timeOfDay = selectedTime;
       final formattedTime = selectedTime.format(context);
       timeController.text = formattedTime;
-      updateTimestamp();
+      updateTimestamp(); // Cập nhật timestamp
     }
   }
 
