@@ -248,7 +248,11 @@ class About_HFA extends StatelessWidget {
                         border: Border.all(),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: Image.asset("assets/qr_to_project.png")),
+                      child: Image.asset(
+                        "assets/qr_to_project.png",
+                        width: MediaQuery.of(context).size.width / 2,
+                        height: MediaQuery.of(context).size.height / 2,
+                      )),
                 ],
               ),
             ),
