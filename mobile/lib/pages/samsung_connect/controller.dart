@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health/health.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/ecg_entity.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/samsung_connect/state.dart';
@@ -19,7 +20,6 @@ class SamsungConnectController extends GetxController {
   final state = SamsungConnectState();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
-  RxBool isLoading = false.obs;
   final appController = Get.find<ApplicationController>();
 
   Future<void> selectDateStart(BuildContext context) async {
@@ -54,44 +54,8 @@ class SamsungConnectController extends GetxController {
 
   Future syncMedData(DateTime time, String typeId, String value, String unit,
       BuildContext context) async {
-    // isLoading = true.obs;
     Get.dialog(const Center(child: CircularProgressIndicator()));
 
-    // var check = await FirebaseApi.checkExistDocumentForMed(
-    //     'medicalData',
-    //     'userId',
-    //     appController.state.profile.value?.id ?? '',
-    //     'typeId',
-    //     typeId,
-    //     'time',
-    //     Timestamp.fromDate(time));
-
-    // if (check == true) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         title: const Text('Lỗi'),
-    //         content: const Text('Dữ liệu này đã được thêm từ trước'),
-    //         actions: <Widget>[
-    //           TextButton(
-    //             onPressed: () {
-    //               Get.back();
-    //               Get.back(); // Dismiss the dialog
-    //             },
-    //             child: const Text('Xác nhận'),
-    //           ),
-    //         ],
-    //       );
-    //     },
-    //   );
-    //   return;
-    // }
-
-    // Create the Prescription object with valid data
-
-    // print("dakmim1");
-    // print(typeId);
     final data = MedicalEntity(
       userId: appController.state.profile.value?.id,
       time: Timestamp.fromDate(time),

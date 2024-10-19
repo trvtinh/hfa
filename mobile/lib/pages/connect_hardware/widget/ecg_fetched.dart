@@ -3,26 +3,27 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
 
-class DataFetched extends StatefulWidget {
+class EcgFetched extends StatefulWidget {
   final String date;
   final String time;
-  final String value;
+  final List<String> value;
   final int index;
   final DateTime pass;
 
-  const DataFetched({
+  const EcgFetched({
     super.key,
     required this.date,
     required this.time,
     required this.value,
-    required this.index, required this.pass,
+    required this.index,
+    required this.pass,
   });
 
   @override
-  State<DataFetched> createState() => _DataFetchedState();
+  State<EcgFetched> createState() => _EcgFetchedState();
 }
 
-class _DataFetchedState extends State<DataFetched> {
+class _EcgFetchedState extends State<EcgFetched> {
   // bool have_file1 = false;
   // bool have_file2 = false;
   // bool have_file3 = false;
@@ -39,7 +40,9 @@ class _DataFetchedState extends State<DataFetched> {
           child: Row(
             children: [
               Image.asset(Item.getIconPath(widget.index)),
-              SizedBox(width: 12,),
+              SizedBox(
+                width: 12,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,9 +75,10 @@ class _DataFetchedState extends State<DataFetched> {
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
-                  children: [// Adds space between hour and index
+                  children: [
+                    // Adds space between hour and index
                     Text(
-                      widget.value,
+                      "--",
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontSize: 22,
@@ -92,40 +96,45 @@ class _DataFetchedState extends State<DataFetched> {
               ),
 
               Expanded(
-                child: !synced 
-                ? ElevatedButton(
-                  onPressed: (){
-                    connectController.syncMedData(widget.pass, widget.index.toString(), widget.value, Item.getUnit(widget.index), context);
-                    setState(() {
-                      synced = true;
-                    });
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                  ),
-                  child: Container(
-                    child: Text(
-                      "Đồng Bộ",
-                    ),
-                  ),
-                )
-                : ElevatedButton(
-                  onPressed: (){
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.outline,
-                  ),
-                  child: Container(
-                    child: Text(
-                      "Đã Đồng Bộ",
-                      style: TextStyle(
-                        color: Colors.white,
+                child: !synced
+                    ? ElevatedButton(
+                        onPressed: () {
+                          connectController.syncEcgData(
+                              widget.pass,
+                              widget.value,
+                              Item.getUnit(widget.index),
+                              context);
+                          setState(() {
+                            synced = true;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surfaceContainer,
+                        ),
+                        child: Container(
+                          child: Text(
+                            "Đồng Bộ",
+                          ),
+                        ),
+                      )
+                    : ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.outline,
+                        ),
+                        child: Container(
+                          child: Text(
+                            "Đã Đồng Bộ",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ),
-        
+
               // Icons for additional actions in the same row
               // const SizedBox(width: 16),
               // icon_round(have_file1, icon: Icons.edit_note_outlined),

@@ -3,6 +3,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/widget/data_fetched.dart';
+import 'package:health_for_all/pages/connect_hardware/widget/ecg_fetched.dart';
 
 class ConnectionPage extends GetView<ConnectHardwareController> {
   const ConnectionPage({super.key, required this.device});
@@ -57,13 +58,26 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          for (int i=0;i<controller.state.medId.length;i++)
-                            DataDay(
-                            date: controller.state.medDate[i],
-                            time: controller.state.medTime[i],
-                            value: controller.state.medValue[i].toString(),
-                            index: controller.state.medId[i],
-                            pass: controller.state.medPass[i]),
+                          for (int i = 0;
+                              i < controller.state.medId.length;
+                              i++)
+                            if (controller.state.medValue[i].isNotEmpty&&controller.state.medValue[i].length > 1)
+                              EcgFetched(
+                                  date: controller.state.medDate[i],
+                                  time: controller.state.medTime[i],
+                                  value: controller.state.medValue[i]
+                                      .map((e) => e.toString())
+                                      .toList(),
+                                  index: controller.state.medId[i],
+                                  pass: controller.state.medPass[i])
+                            else
+                              DataFetched(
+                                  date: controller.state.medDate[i],
+                                  time: controller.state.medTime[i],
+                                  value: controller.state.medValue[i][0]
+                                      .toString(),
+                                  index: controller.state.medId[i],
+                                  pass: controller.state.medPass[i])
                         ],
                       ),
                     ),
