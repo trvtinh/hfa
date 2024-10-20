@@ -2,7 +2,11 @@ import 'dart:developer';
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:health_for_all/pages/medical_data/widget/crop_image.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../controller.dart';
 
 class AddFile extends StatefulWidget {
   AddFile({super.key, this.files, this.onFilesChanged});
@@ -17,7 +21,7 @@ class AddFile extends StatefulWidget {
 class _AddFileState extends State<AddFile> {
   final ImagePicker _picker = ImagePicker();
   final List<XFile> selectedFiles = [];
-
+  final controller = Get.find<MedicalDataController>();
   @override
   void initState() {
     super.initState();
@@ -34,16 +38,9 @@ class _AddFileState extends State<AddFile> {
     });
   }
 
-  void capturePhoto() async {
-    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
-    if (photo != null) {
-      setState(() {
-        selectedFiles.add(photo);
-        log(selectedFiles.length.toString());
-        widget.onFilesChanged
-            ?.call(selectedFiles); // Notify parent about changes
-      });
-    }
+  void capturePhoto() {
+    log('Capture photo');
+    Get.to(() => const CropImage());
   }
 
   @override
@@ -106,6 +103,17 @@ class _AddFileState extends State<AddFile> {
                   ),
                 ),
               ),
+              Obx(() {
+                if (controller.state.selectedFile.value != null) {
+                  log('Photo selected: ${controller.state.selectedFile.value!.path}');
+                  selectedFiles.add(controller.state.selectedFile.value!);
+                  widget.onFilesChanged
+                      ?.call(selectedFiles); // Notify parent about changes
+                } else {
+                  log('No photo selected.');
+                }
+                return Container(); // Return a non-nullable widget
+              })
             ],
           ),
           const SizedBox(height: 16),

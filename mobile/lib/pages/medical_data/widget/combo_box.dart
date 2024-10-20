@@ -51,9 +51,11 @@ class _ComboBoxState extends State<ComboBox> {
     if (widget.valueController.text.isEmpty) {
       imageAnalyze.state.image.value = File(newFiles[0].path);
       isLoading.value = true;
-      if (isLoading.value) {
-        Get.dialog(const Center(child: CircularProgressIndicator()));
-      }
+      Future.delayed(Duration.zero, () {
+        if (isLoading.value) {
+          Get.dialog(const Center(child: CircularProgressIndicator()));
+        }
+      });
       log('image : ${imageAnalyze.state.image.value}');
       await imageAnalyze.analyzeImage().then((_) {
         widget.valueController.text =
@@ -61,6 +63,14 @@ class _ComboBoxState extends State<ComboBox> {
       }).whenComplete(() {
         Get.back();
         isLoading.value = false;
+        Future.delayed(Duration.zero, () {
+          setState(() {
+            selectedFiles = newFiles;
+            for (var i in selectedFiles) {
+              log('combobox : ${i.path}');
+            }
+          });
+        });
       });
       if (widget.title == 'Huyết áp') {
         medicalController.state.data[widget.title]?.value =
@@ -70,12 +80,6 @@ class _ComboBoxState extends State<ComboBox> {
             '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}');
       }
     }
-    setState(() {
-      selectedFiles = newFiles;
-      for (var i in selectedFiles) {
-        log('combobox : ${i.path}');
-      }
-    });
   }
 
   RxBool ischeck = false.obs;
