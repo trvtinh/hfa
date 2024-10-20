@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/application/controller.dart';
-import 'package:health_for_all/pages/ecg_data_page/view.dart';
+import 'package:health_for_all/pages/graph_data_page/view.dart';
 import 'package:health_for_all/pages/medical_data/index.dart';
 import 'package:health_for_all/pages/medical_data_homepage/widget/GreyBox.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
@@ -355,7 +355,7 @@ class MedicalDataHome extends StatelessWidget {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              Get.to(() => EcgDataPage("ECG - Điện tâm đồ"));
+              Get.to(() => GraphDataPage("ECG - Điện tâm đồ"));
             },
             child: GreyBox(
               title: 'ECG - Điện tâm đồ',
@@ -439,7 +439,7 @@ class MedicalDataHome extends StatelessWidget {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              Get.to(() => TypeMedHistory('PPG'));
+              Get.to(() => GraphDataPage('PPG'));
             },
             child: GreyBox(
               title: 'PPG',

@@ -122,29 +122,27 @@ class ConnectHardwareController extends GetxController {
     try {
       // Safely extract medId, dataValue, and interval from the decoded data
       int medId = decodeData["dataType"] is int ? decodeData["dataType"] : 0;
-      List<dynamic> value = decodeData["dataValue"] ?? [];
+      List<dynamic> takeIndex = decodeData["dataValue"] ?? [];
+      List<double> index =
+          takeIndex.map((e) => double.parse(e.toString())).toList();
+      double value = 0;
+      for (int i = 0; i < index.length; i++) value += index[i];
+      value /= index.length;
       int interval =
           decodeData["interval"] is int ? decodeData["interval"] : 500;
-
       DateTime now = DateTime.now();
 
-      log("MedId: $medId, Values: $value, Interval: $interval");
+      log("MedId: $medId, Indexes: $index, Interval: $interval");
 
       // Add the date, time, and id to the respective RxList properties
       state.medDate.add(formatDate(now));
       state.medTime.add(formatTime(now));
       state.medId.add(medId);
       state.medPass.add(now);
+      state.medIndex.add(index);
+      state.medValue.add(value.toString());
 
       // Safely convert dynamic values to doubles, ignoring invalid values
-      state.medValue.add(value.map((e) {
-        try {
-          return double.parse(e.toString());
-        } catch (err) {
-          log("Invalid value in dataValue: $e");
-          return 0.0; // Or handle the invalid value appropriately
-        }
-      }).toList());
     } catch (e) {
       log("Error processing data: $e");
       // Optionally handle the error more specifically if needed
@@ -161,6 +159,7 @@ class ConnectHardwareController extends GetxController {
       log('Notifications enabled.');
 
       // Listen for data sent via notify from ESP32
+      // receivedData = "";
       notificationSubscription =
           readCharacteristic.value?.onValueReceived.listen((data) {
         receivedData += String.fromCharCodes(data);
@@ -168,6 +167,7 @@ class ConnectHardwareController extends GetxController {
 
         // Log received data for debugging
         log('Received data: $tmp');
+        log('Length: ${receivedData.length}');
 
         // Check if the last character is '}', indicating the end of the JSON message
         if (receivedData.endsWith("}")) {
@@ -272,19 +272,21 @@ class ConnectHardwareController extends GetxController {
     );
   }
 
-  Future syncEcgData(DateTime time, List<String> value, String unit,
-      BuildContext context) async {
+  Future syncEcgData(DateTime time, String typeId, List<String> index, String value,
+      String unit, BuildContext context) async {
     Get.dialog(const Center(child: CircularProgressIndicator()));
 
-    final data = EcgEntity(
+    final data = MedicalEntity(
       userId: appController.state.profile.value?.id,
       time: Timestamp.fromDate(time),
       value: value,
       unit: unit,
+      typeId: typeId,
+      index: index,
     );
 
     log(data.toString());
-    await FirebaseApi.addDocument("ecgData", data.toFirestoreMap());
+    await FirebaseApi.addDocument("medicalData", data.toFirestoreMap());
     // appController.getUpdatedLatestMedical();
     Get.back();
     showDialog(

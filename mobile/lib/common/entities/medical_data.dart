@@ -12,23 +12,26 @@ class MedicalEntity {
   String? unit;
   String? note;
   List<String>? imagePaths;
+  List<String>? index; // New field for index
 
-  MedicalEntity(
-      {this.commentIds,
-      this.userId,
-      this.dianoticIds,
-      this.imageUrls,
-      this.id,
-      this.time,
-      this.typeId,
-      this.value,
-      this.unit,
-      this.note,
-      this.imagePaths});
+  MedicalEntity({
+    this.commentIds,
+    this.userId,
+    this.dianoticIds,
+    this.imageUrls,
+    this.id,
+    this.time,
+    this.typeId,
+    this.value,
+    this.unit,
+    this.note,
+    this.imagePaths,
+    this.index, // Added to constructor
+  });
 
   @override
   String toString() {
-    return 'MedicalEntity{id: $id, typeId: $typeId, time: $time, value: $value, imageUrls: $imageUrls, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId, unit : $unit, note: $note, image: $imagePaths}';
+    return 'MedicalEntity{id: $id, typeId: $typeId, time: $time, value: $value, imageUrls: $imageUrls, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId, unit : $unit, note: $note, imagePaths: $imagePaths, index: $index}';
   }
 
   factory MedicalEntity.fromFirestore(
@@ -55,6 +58,9 @@ class MedicalEntity {
       imagePaths: (data?['imagePaths'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
+      index: (data?['index'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(), // Added to handle index field
     );
   }
 
@@ -71,6 +77,7 @@ class MedicalEntity {
       if (unit != null) 'unit': unit,
       if (note != null) 'note': note,
       if (imagePaths != null) 'imagePaths': imagePaths,
+      if (index != null) 'index': index, // Added to Firestore map
     };
   }
 }

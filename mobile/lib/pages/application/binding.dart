@@ -5,7 +5,7 @@ import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
-import 'package:health_for_all/pages/ecg_data_page/controller.dart';
+import 'package:health_for_all/pages/graph_data_page/controller.dart';
 import 'package:health_for_all/pages/following/controller.dart';
 import 'package:health_for_all/pages/following_medical_data/controller.dart';
 import 'package:health_for_all/pages/image_analyze/controller.dart';

@@ -19,8 +19,8 @@ class ImageAnalyzeController extends GetxController {
       "goal": "Analyze blood pressure images and return the systolic and diastolic values as integer variables.",
       "output_format": "Dart Code",
       "example_output": "
-        int systolic = 120;
-        int diastolic = 80;
+        int systolic = 0;
+        int diastolic = 0;
       ",
       "rules": [
         "Return only the variable declarations.",

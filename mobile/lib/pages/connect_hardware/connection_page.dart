@@ -65,17 +65,16 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
                               EcgFetched(
                                   date: controller.state.medDate[i],
                                   time: controller.state.medTime[i],
-                                  value: controller.state.medValue[i]
+                                  value: controller.state.medValue[i],
+                                  index: controller.state.medIndex[i]
                                       .map((e) => e.toString())
                                       .toList(),
-                                  index: controller.state.medId[i],
-                                  pass: controller.state.medPass[i])
+                                  pass: controller.state.medPass[i], medId: controller.state.medId[i],)
                             else
                               DataFetched(
                                   date: controller.state.medDate[i],
                                   time: controller.state.medTime[i],
-                                  value: controller.state.medValue[i][0]
-                                      .toString(),
+                                  value: controller.state.medValue[i],
                                   index: controller.state.medId[i],
                                   pass: controller.state.medPass[i])
                         ],

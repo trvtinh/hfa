@@ -6,8 +6,9 @@ import 'package:health_for_all/pages/connect_hardware/controller.dart';
 class EcgFetched extends StatefulWidget {
   final String date;
   final String time;
-  final List<String> value;
-  final int index;
+  final List<String> index;
+  final String value;
+  final int medId;
   final DateTime pass;
 
   const EcgFetched({
@@ -15,8 +16,7 @@ class EcgFetched extends StatefulWidget {
     required this.date,
     required this.time,
     required this.value,
-    required this.index,
-    required this.pass,
+    required this.pass, required this.index, required this.medId,
   });
 
   @override
@@ -39,7 +39,7 @@ class _EcgFetchedState extends State<EcgFetched> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
-              Image.asset(Item.getIconPath(widget.index)),
+              Image.asset(Item.getIconPath(widget.medId)),
               SizedBox(
                 width: 12,
               ),
@@ -48,7 +48,7 @@ class _EcgFetchedState extends State<EcgFetched> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Item.getTitle(widget.index),
+                      Item.getTitle(widget.medId),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 16,
@@ -78,14 +78,14 @@ class _EcgFetchedState extends State<EcgFetched> {
                   children: [
                     // Adds space between hour and index
                     Text(
-                      "--",
+                      widget.value,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                         fontSize: 22,
                       ),
                     ),
                     Text(
-                      Item.getUnit(widget.index),
+                      Item.getUnit(widget.medId),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 12,
@@ -101,8 +101,10 @@ class _EcgFetchedState extends State<EcgFetched> {
                         onPressed: () {
                           connectController.syncEcgData(
                               widget.pass,
+                              widget.medId.toString(),
+                              widget.index,
                               widget.value,
-                              Item.getUnit(widget.index),
+                              Item.getUnit(widget.medId),
                               context);
                           setState(() {
                             synced = true;

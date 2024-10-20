@@ -3,7 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class EcgEntity {
   String? id;
   Timestamp? time;
-  List<String>? value; // Changed from String? to List<String>?
+  List<String>? index; // List of indices
+  String? value; // New string field
   List<String>? commentIds;
   List<String>? dianoticIds;
   String? userId;
@@ -16,14 +17,15 @@ class EcgEntity {
     this.dianoticIds,
     this.id,
     this.time,
-    this.value, // Updated constructor
+    this.index, // Updated constructor
+    this.value, // New string field
     this.unit,
     this.note,
   });
 
   @override
   String toString() {
-    return 'MedicalEntity{id: $id, time: $time, value: $value, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId, unit : $unit, note: $note}';
+    return 'EcgEntity{id: $id, time: $time, index: $index, value: $value, commentIds: $commentIds, dianoticIds: $dianoticIds, userId: $userId, unit: $unit, note: $note}';
   }
 
   factory EcgEntity.fromFirestore(
@@ -33,9 +35,10 @@ class EcgEntity {
     return EcgEntity(
       id: snapshot.id,
       time: data?['time'] as Timestamp?,
-      value: (data?['value'] as List<dynamic>?)
+      index: (data?['index'] as List<dynamic>?)
           ?.map((item) => item as String)
-          .toList(), // Changed to handle List<String>
+          .toList(),
+      value: data?['value'] as String?, // Retrieve the new string field
       commentIds: (data?['commentIds'] as List<dynamic>?)
           ?.map((item) => item as String)
           .toList(),
@@ -52,7 +55,8 @@ class EcgEntity {
     return {
       if (id != null) 'id': id,
       if (time != null) 'time': time,
-      if (value != null) 'value': value, // Updated to store List<String>
+      if (index != null) 'index': index,
+      if (value != null) 'value': value, // Store the new string field
       if (commentIds != null) 'commentIds': commentIds,
       if (dianoticIds != null) 'dianoticIds': dianoticIds,
       if (userId != null) 'userId': userId,
