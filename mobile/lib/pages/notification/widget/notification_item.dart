@@ -268,8 +268,8 @@ class NotificationItem extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              setread(context);
-                              print('User tapped at Read');
+                              delete(context);
+                              print('User tapped at Delete');
                             },
                             child: SizedBox(
                               height: 32,
@@ -361,7 +361,7 @@ class NotificationItem extends StatelessWidget {
       );
 
       // Perform the delete operation
-      FirebaseApi.deleteDocument('diagnostic', documentId);
+      FirebaseApi.deleteDocument('notifications', documentId);
 
       // Hide loading dialog and show success dialog after a short delay
       Future.delayed(const Duration(seconds: 1), () {

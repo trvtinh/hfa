@@ -39,7 +39,8 @@ class ApplicationController extends GetxController {
   final chooseMedController = Get.find<ChooseTypeMedController>();
   final reminderController = Get.find<ReminderController>();
   // final samsungController = Get.find<SamsungConnectController>();
-  final followingMedicalDataController = Get.find<FollowingMedicalDataController>();
+  final followingMedicalDataController =
+      Get.find<FollowingMedicalDataController>();
   // final connectHardwareController = Get.find<ConnectHardwareController>();
   late final List<String> tabTitles;
   late final PageController pageController;
