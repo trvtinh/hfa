@@ -5,6 +5,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,6 +51,10 @@ Future<void> main() async {
   } catch (e) {
     print("Error loading .env file: $e");
   }
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // Hoặc landscapeLeft, tùy bạn
+  ]);
+
 
   if (Platform.isAndroid) {
     if (await FlutterBluePlus.isSupported == false) {
