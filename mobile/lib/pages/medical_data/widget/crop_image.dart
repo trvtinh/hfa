@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' hide log;
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -115,9 +116,12 @@ class _YoloVideoState extends State<YoloVideo> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        AspectRatio(
-          aspectRatio: controller.value.aspectRatio,
-          child: CameraPreview(controller),
+        Transform.rotate(
+          angle: controller.description.sensorOrientation * pi / 180,
+          child: AspectRatio(
+            aspectRatio: controller.value.aspectRatio,
+            child: CameraPreview(controller),
+          ),
         ),
         ...displayBoxesAroundRecognizedObjects(size),
         Positioned(
@@ -196,7 +200,7 @@ class _YoloVideoState extends State<YoloVideo> {
         imghehe.setPixel(x, y, imghehe.getColor(r, g, b));
       }
     }
-    img.Image rotatedImage = img.copyRotate(imghehe, angle: 90);
+    img.Image rotatedImage = img.copyRotate(imghehe, angle: controller.description.sensorOrientation);
     return rotatedImage;
   }
 
@@ -331,52 +335,11 @@ class PolygonPainter extends CustomPainter {
       }
       path.close();
     }
-
     canvas.drawPath(path, paint);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
-  }
-}
-
-class DisplayImageScreen extends StatelessWidget {
-  final XFile imageFile;
-
-  DisplayImageScreen({super.key, required this.imageFile});
-  final controller = Get.find<MedicalDataController>();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Ảnh màn hình máy đo"),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-              child: Center(
-            child: Image.file(File(imageFile.path)), // Hiển thị ảnh từ XFile
-          )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                onPressed: () => Get.back(),
-                child: const Text("Quay lại"),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  controller.state.selectedFile.value = imageFile;
-                  Get.back();
-                },
-                child: const Text("Xác nhận"),
-              ),
-            ],
-          )
-        ],
-      ),
-    );
   }
 }
