@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/alarm_entity.dart';
@@ -35,6 +36,7 @@ class AlarmController extends GetxController {
       enable: true,
     );
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       await FirebaseApi.addDocument('alarms', alarm.toMap());
       showDialog(
         context: context,
@@ -63,6 +65,9 @@ class AlarmController extends GetxController {
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       log(e.toString());
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   void clearData() {
@@ -73,31 +78,46 @@ class AlarmController extends GetxController {
 
   Future getAlarmCount() async {
     final uid = state.profile.value!.id;
-    final alarmCount = await FirebaseFirestore.instance
-        .collection('alarms')
-        .where('userId', isEqualTo: uid)
-        .get()
-        .then((snapshot) => snapshot.docs.length);
+    var alarmCount = 0;
+    try {
+      EasyLoading.show(status: "Đang xử lí...");
+      alarmCount = await FirebaseFirestore.instance
+          .collection('alarms')
+          .where('userId', isEqualTo: uid)
+          .get()
+          .then((snapshot) => snapshot.docs.length);
+    } catch (e) {
+      log(e.toString());
+    } finally {
+      EasyLoading.dismiss();
+    };
     numberAlarm.value = alarmCount;
   }
 
   Future changeEnable(String id, bool value) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       await FirebaseFirestore.instance
           .collection('alarms')
           .doc(id)
           .update({'enable': value});
     } catch (e) {
       log(e.toString());
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 
   Future deleteAlarm(String id) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       await FirebaseFirestore.instance.collection('alarms').doc(id).delete();
       clearData();
     } catch (e) {
       log(e.toString());
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 
@@ -119,6 +139,7 @@ class AlarmController extends GetxController {
       enable: true,
     );
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       await FirebaseFirestore.instance
           .collection('alarms')
           .doc(id)
@@ -149,6 +170,9 @@ class AlarmController extends GetxController {
       Get.snackbar("Lỗi", "Sửa cảnh báo thất bại",
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       log(e.toString());
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 }

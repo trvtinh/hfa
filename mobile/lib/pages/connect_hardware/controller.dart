@@ -273,8 +273,8 @@ class ConnectHardwareController extends GetxController {
     );
   }
 
-  Future syncEcgData(DateTime time, String typeId, List<String> index, String value,
-      String unit, BuildContext context) async {
+  Future syncEcgData(DateTime time, String typeId, List<String> index,
+      String value, String unit, BuildContext context) async {
     Get.dialog(const Center(child: CircularProgressIndicator()));
 
     final data = MedicalEntity(

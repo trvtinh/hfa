@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health/health.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
@@ -121,10 +122,14 @@ class _HealthConnectState extends State<HealthConnect> {
     if (!hasPermissions) {
       // requesting access to the data types before reading them
       try {
+        EasyLoading.show(status: "Đang xử lí...");
+
         authorized = await Health()
             .requestAuthorization(types, permissions: permissions);
       } catch (error) {
         debugPrint("Exception in authorize: $error");
+      } finally {
+        EasyLoading.dismiss();
       }
     }
 
@@ -223,6 +228,8 @@ class _HealthConnectState extends State<HealthConnect> {
     _healthDataList.clear();
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
+
       // fetch health data
       List<HealthDataPoint> healthData = await Health().getHealthDataFromTypes(
         types: types,
@@ -260,6 +267,9 @@ class _HealthConnectState extends State<HealthConnect> {
       _healthDataList.removeWhere((p) => listRemove.contains(p));
     } catch (error) {
       debugPrint("Exception in getHealthDataFromTypes: $error");
+    }
+    finally{
+      EasyLoading.dismiss();
     }
 
     // filter out duplicates
@@ -503,12 +513,16 @@ class _HealthConnectState extends State<HealthConnect> {
 
     if (stepsPermission) {
       try {
+        EasyLoading.show(status: "Đang xử lí...");
         steps = await Health().getTotalStepsInInterval(midnight, now,
             includeManualEntry:
                 !recordingMethodsToFilter.contains(RecordingMethod.manual));
       } catch (error) {
         debugPrint("Exception in getTotalStepsInInterval: $error");
       }
+      finally{
+      EasyLoading.dismiss();
+    }
 
       debugPrint('Total number of steps: $steps');
 
@@ -529,10 +543,14 @@ class _HealthConnectState extends State<HealthConnect> {
     bool success = false;
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       await Health().revokePermissions();
       success = true;
     } catch (error) {
       debugPrint("Exception in revokeAccess: $error");
+    }
+    finally{
+      EasyLoading.dismiss();
     }
 
     setState(() {
@@ -588,9 +606,7 @@ class _HealthConnectState extends State<HealthConnect> {
               Platform.isAndroid &&
                   Health().healthConnectSdkStatus ==
                       HealthConnectSdkStatus.sdkAvailable)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               // TextButton(
               //     onPressed: authorize,
               //     style: const ButtonStyle(
@@ -854,56 +870,56 @@ class _HealthConnectState extends State<HealthConnect> {
 
   Widget _contentNoData = const Text('No Data to show');
 
-  Widget _contentNotFetched =
-      Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(),
-            color: Colors.white,
-          ),
-          padding: const EdgeInsets.all(16),
-          child: const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Text(
+  Widget _contentNotFetched = Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Container(
+      decoration: BoxDecoration(
+        border: Border.all(),
+        color: Colors.white,
+      ),
+      padding: const EdgeInsets.all(16),
+      child:
+          const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const Text(
           "Hướng dẫn sử dụng",
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
           ),
-              ),
-              SizedBox(
+        ),
+        SizedBox(
           height: 10,
-              ),
-              const Text(
+        ),
+        const Text(
           "1. Bấm vào 'Tải Health Connect' nếu bạn chưa có để bắt đầu đồng bộ hóa",
           style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(
+        ),
+        SizedBox(
           height: 10,
-              ),
-              const Text(
+        ),
+        const Text(
           "2. Cho quyền viết và sửa dữ liệu y tế của ứng dụng HFA - Health For All và Samsung Health trong Health Connect",
           style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(
+        ),
+        SizedBox(
           height: 10,
-              ),
-              const Text(
+        ),
+        const Text(
           "3. Bấm vào 'Chọn ngày lấy dữ liệu' để chọn khoảng thời gian lấy dữ liệu từ Samsung Health",
           style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(
+        ),
+        SizedBox(
           height: 10,
-              ),
-              const Text(
+        ),
+        const Text(
           "4. Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health",
           style: TextStyle(fontSize: 20),
-              ),
-              // const Text("Press 'Add Data' to add some random health data."),
-              // const Text("Press 'Delete Data' to remove some random health data."),
-            ]),
         ),
-      );
+        // const Text("Press 'Add Data' to add some random health data."),
+        // const Text("Press 'Delete Data' to remove some random health data."),
+      ]),
+    ),
+  );
 
   Widget _authorized = const Text('Authorization granted!');
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,6 +57,7 @@ class ImageAnalyzeController extends GetxController {
     if (state.image.value == null) return;
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final imageBytes = await state.image.value!.readAsBytes();
       final imagePart = DataPart('image/jpeg', imageBytes);
 
@@ -86,6 +88,9 @@ class ImageAnalyzeController extends GetxController {
       }
     } catch (e) {
       state.analysisResult.value = 'Lỗi phân tích hình ảnh: $e';
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/pages/choose_type_med/controller.dart';
@@ -396,6 +397,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
             }
             prescriptionController.selectedFiles = selectedFiles.obs;
             try {
+              EasyLoading.show(status: "Đang xử lí...");
+
               await prescriptionController.addPrescription(widget.userId);
               Get.snackbar("Thành công", "Thêm đơn thuốc thành công",
                   backgroundColor: Colors.green);
@@ -409,6 +412,8 @@ class _AddPrescriptionState extends State<AddPrescription> {
               log(e.toString());
               Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm đơn thuốc",
                   backgroundColor: Colors.red);
+            } finally {
+              EasyLoading.dismiss();
             }
             Get.back();
           },

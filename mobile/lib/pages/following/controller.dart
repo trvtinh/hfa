@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/application/controller.dart';
@@ -26,6 +27,8 @@ class FollowingController extends GetxController {
     final db = FirebaseFirestore.instance;
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
+
       // Chuyển đổi DateTime thành Timestamp
       final time = Timestamp.fromDate(DateTime.now());
 
@@ -55,6 +58,8 @@ class FollowingController extends GetxController {
       // Xử lý lỗi
       print('Error fetching updated time $e');
       return 'Lỗi';
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 

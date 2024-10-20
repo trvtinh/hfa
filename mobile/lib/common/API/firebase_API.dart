@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class FirebaseApi {
   FirebaseApi._();
@@ -19,6 +20,7 @@ class FirebaseApi {
   static Future<String?> getDocumentId(
       String collection, String field, String value) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final querySnapshot =
           await db.collection(collection).where(field, isEqualTo: value).get();
       if (querySnapshot.docs.isNotEmpty) {
@@ -31,11 +33,15 @@ class FirebaseApi {
       print('Error retrieving document ID: $e');
       return null;
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future<bool?> checkExistDocumentForMed(
       String collection, String field1, String value1, String field2, String value2, String field3, Timestamp value3) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final querySnapshot =
           await db.collection(collection).where(field1, isEqualTo: value1).where(field2, isEqualTo: value2).where(field3, isEqualTo: value3).get();
       if (querySnapshot.docs.isNotEmpty) {
@@ -48,11 +54,15 @@ class FirebaseApi {
       print('Error retrieving document ID: $e');
       return false;
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future<DocumentSnapshot<Map<String, dynamic>>> getDocumentSnapshotById(
       String collection, String docId) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final docSnapshot = await db.collection(collection).doc(docId).get();
       if (docSnapshot.exists) {
         return docSnapshot;
@@ -62,33 +72,45 @@ class FirebaseApi {
     } catch (e) {
       throw Exception('Error retrieving document snapshot: $e');
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future updateDocument(
       String collection, String documentId, Map<String, dynamic> data) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final docRef = db.collection(collection).doc(documentId);
       await docRef.update(data);
       print('Document $documentId updated successfully in $collection.');
     } catch (e) {
       print('Error updating document: $e');
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future<void> deleteDocument(
       String collection, String documentId) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final docRef = db.collection(collection).doc(documentId);
       await docRef.delete();
       print('Document $documentId deleted successfully from $collection.');
     } catch (e) {
       print('Error deleting document: $e');
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future<bool> addValueToArrayField(
       String collection, String id, String fieldName, String valueToAdd) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final querySnapshot = await getQuerySnapshot(collection, 'id', id);
       if (querySnapshot.docs.isEmpty) {
         print('No document found with id: $id');
@@ -108,11 +130,15 @@ class FirebaseApi {
       print('Error adding value to array field: $e');
       return false;
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future<bool> removeValueFromArrayField(String collection, String id,
       String fieldName, String valueToRemove) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final querySnapshot = await getQuerySnapshot(collection, 'id', id);
       if (querySnapshot.docs.isEmpty) {
         print('No document found with id: $id');
@@ -132,22 +158,30 @@ class FirebaseApi {
       print('Error removing value from array field: $e');
       return false;
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future addDocument(
       String collection, Map<String, dynamic> data) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final docRef = await db.collection(collection).add(data);
       print('Document added successfully to $collection.');
       return docRef.id;
     } catch (e) {
       print('Error adding document: $e');
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   static Future<String?> uploadImage(
       String imagePath, String folderPath) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       File file = File(imagePath);
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference storageRef = _storage.ref().child('$folderPath/$fileName');
@@ -159,6 +193,9 @@ class FirebaseApi {
     } catch (e) {
       print('Error uploading image: $e');
       return null;
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

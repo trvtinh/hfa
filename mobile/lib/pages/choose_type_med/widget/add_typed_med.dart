@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/choose_type_med/controller.dart';
 import 'package:image_picker/image_picker.dart';
@@ -94,7 +95,7 @@ class _AddTypedMedState extends State<AddTypedMed> {
         maxLines: maxLines ?? 1,
         decoration: InputDecoration(
           labelText: label,
-          hintText: hint, 
+          hintText: hint,
           hintStyle: TextStyle(
             color: Theme.of(context).colorScheme.outline,
             fontSize: 16,
@@ -126,12 +127,15 @@ class _AddTypedMedState extends State<AddTypedMed> {
         TextButton(
           onPressed: () async {
             try {
+              EasyLoading.show(status: "Đang xử lí...");
               await medicineController.addMedicineBase();
               medicineController.clearData();
             } catch (e) {
               log(e.toString());
               Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
                   backgroundColor: Colors.red);
+            } finally {
+              EasyLoading.dismiss();
             }
           },
           child: Text(

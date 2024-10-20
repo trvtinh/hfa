@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 
 class UserListTile extends StatelessWidget {
@@ -38,6 +39,7 @@ class UserListTile extends StatelessWidget {
         ),
         onPressed: () async {
           try {
+            EasyLoading.show(status: "Đang xử lí...");
             final success = await FirebaseApi.removeValueFromArrayField(
               collection,
               id,
@@ -56,6 +58,8 @@ class UserListTile extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Error occurred: $e')),
             );
+          } finally {
+            EasyLoading.dismiss();
           }
         },
       ),

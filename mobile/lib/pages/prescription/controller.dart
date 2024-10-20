@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
@@ -60,12 +61,17 @@ class PrescriptionController extends GetxController {
       // Ensure that the string is not empty and can be converted to an integer
       if (i.isNotEmpty) {
         try {
+          EasyLoading.show(status: "Đang xử lí...");
+
           sumDose += int.parse(i); // Safely parse the integer
         } catch (e) {
           print(
               'Error parsing dose: $i'); // Log the specific string causing an issue
           continue; // Skip this value and move to the next one
         }
+        finally{
+      EasyLoading.dismiss();
+    }
       }
     }
 

@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/request_follow.dart';
@@ -69,6 +70,7 @@ class ProfileController extends GetxController {
     List<UserRequest> requests = [];
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Lấy danh sách các yêu cầu từ Firestore
       final querySnapshot = await FirebaseApi.getQuerySnapshot(
           'requestFollows', 'toUId', appController.state.profile.value!.id!);
@@ -100,6 +102,9 @@ class ProfileController extends GetxController {
       requests = await Future.wait(requestFutures);
     } catch (e) {
       print('Error fetching requests: $e');
+    }
+    finally{
+      EasyLoading.dismiss();
     }
     for (var i in requests) {
       print("name: " + i.user!.name.toString() + 'role : ' + i.role.toString());

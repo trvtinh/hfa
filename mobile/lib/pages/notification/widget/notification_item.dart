@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
@@ -314,6 +315,7 @@ class NotificationItem extends StatelessWidget {
   Future<void> _handleupdate(
       BuildContext context, Map<String, dynamic> data) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Show loading dialog
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
@@ -350,10 +352,14 @@ class NotificationItem extends StatelessWidget {
       log('Error deleting data: $e');
       _showErrorDialog(context);
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   Future<void> _handleDelete(BuildContext context) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Show loading dialog
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
@@ -390,6 +396,9 @@ class NotificationItem extends StatelessWidget {
       // Handle any errors
       log('Error deleting data: $e');
       _showErrorDialog(context);
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

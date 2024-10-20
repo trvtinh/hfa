@@ -36,7 +36,7 @@ class _GraphChartState extends State<GraphChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Biểu đồ ECG"),
+        title: Text("Biểu đồ"),
       ),
       body: Column(
         children: [
@@ -72,13 +72,7 @@ class _GraphChartState extends State<GraphChart> {
                   ),
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 40,
-                      getTitlesWidget: (value, meta) {
-                        return Text('$value',
-                            style: const TextStyle(fontSize: 10));
-                      },
-                      interval: yInterval,
+                      showTitles: false, // Hide Y-axis titles
                     ),
                   ),
                   topTitles: const AxisTitles(

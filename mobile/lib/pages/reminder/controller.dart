@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
@@ -84,6 +85,7 @@ class ReminderController extends GetxController {
 
   bool checkDate(String saveDate) {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Parse the saveDate string in the format 'dd/mm/yyyy'
       DateTime saveDateTime = DateFormat('dd/MM/yyyy').parse(saveDate);
 
@@ -96,16 +98,23 @@ class ReminderController extends GetxController {
       print('Error parsing date: $e');
       return false; // Return false in case of an error
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   Future<void> fetchPrescriptions() async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       QuerySnapshot<Map<String, dynamic>> snapshot =
           await FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: state.profile.value?.id).get();
       prescriptionList.value =
           snapshot.docs.map((doc) => Prescription.fromFirestore(doc)).toList();
     } catch (e) {
       print("Error fetching prescriptions: $e");
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

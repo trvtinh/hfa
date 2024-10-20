@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/pages/application/index.dart';
@@ -102,6 +103,7 @@ class MedicalDataController extends GetxController {
 
   Future<String?> saveImageUrlToFirestore(String imageUrl) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final docRef = FirebaseFirestore.instance.collection('images').doc();
       await docRef.set({
         'url': imageUrl,
@@ -113,6 +115,9 @@ class MedicalDataController extends GetxController {
     } catch (e) {
       log('Error saving image URL to Firestore: $e');
       return null; // Trả về null nếu có lỗi
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 }

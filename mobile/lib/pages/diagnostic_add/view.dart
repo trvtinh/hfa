@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
@@ -120,6 +121,7 @@ class DiagnosticAddView extends StatelessWidget {
 
   Future<void> _handleSave(BuildContext context) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
@@ -174,6 +176,9 @@ class DiagnosticAddView extends StatelessWidget {
       // Handle any errors
       log('Error saving data: $e');
       _showErrorDialog(context);
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

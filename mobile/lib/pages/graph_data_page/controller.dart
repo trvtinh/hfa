@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/comment.dart';
@@ -44,6 +45,8 @@ class EcgDataController extends GetxController {
     final db = FirebaseFirestore.instance;
     final List<MedicalEntity> data = [];
     try {
+      EasyLoading.show(status: "Đang xử lí...");
+
       // Xác định khoảng thời gian của ngày
       final startOfDay = DateTime(date.year, date.month, date.day, 0, 0, 0);
       final endOfDay =
@@ -103,6 +106,9 @@ class EcgDataController extends GetxController {
       // Xử lý lỗi
       print('Error fetching event in day: $e');
       return null;
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 
