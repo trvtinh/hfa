@@ -41,7 +41,7 @@ class _DataDayGraphState extends State<DataDayGraph> {
                         const SizedBox(
                             width: 6), // Adds space between hour and index
                         Text(
-                          "--",
+                          widget.data.value!,
                           style: TextStyle(
                             color: Theme.of(context)
                                 .colorScheme

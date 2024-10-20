@@ -27,35 +27,35 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        child: Column(
-          children: [
-            Center(
-                child: Column(
-              children: [
-                const Text('Dữ liệu đo đã nhận'),
-                const SizedBox(height: 10),
-                Obx(() {
-                  if (controller.state.medId.isEmpty) {
-                    return const Center(child: Text('Không có dữ liệu.'));
-                  }
-                  // return ListView.builder(
-                  //   itemCount: controller.state.medId.length,
-                  //   itemBuilder: (context, index) {
-                  //     return DataDay(
-                  //         date: controller.state.medDate[index],
-                  //         time: controller.state.medTime[index],
-                  //         value: controller.state.medValue[index].toString(),
-                  //         index: index,
-                  //         pass: controller.state.medPass[index]);
-                  //   },
-                  // );
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                    ),
-                    child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          child: Column(
+            children: [
+              Center(
+                  child: Column(
+                children: [
+                  const Text('Dữ liệu đo đã nhận'),
+                  const SizedBox(height: 10),
+                  Obx(() {
+                    if (controller.state.medId.isEmpty) {
+                      return const Center(child: Text('Không có dữ liệu.'));
+                    }
+                    // return ListView.builder(
+                    //   itemCount: controller.state.medId.length,
+                    //   itemBuilder: (context, index) {
+                    //     return DataDay(
+                    //         date: controller.state.medDate[index],
+                    //         time: controller.state.medTime[index],
+                    //         value: controller.state.medValue[index].toString(),
+                    //         index: index,
+                    //         pass: controller.state.medPass[index]);
+                    //   },
+                    // );
+                    return Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                      ),
                       child: Column(
                         children: [
                           for (int i = 0;
@@ -79,20 +79,20 @@ class ConnectionPage extends GetView<ConnectHardwareController> {
                                   pass: controller.state.medPass[i])
                         ],
                       ),
-                    ),
-                  );
-                  // return Text(controller.state.medId.length.toString());
-                }),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: () {
-                    // controller.clearData();
-                  },
-                  child: const Text('Xóa dữ liệu đã nhận'),
-                )
-              ],
-            )),
-          ],
+                    );
+                    // return Text(controller.state.medId.length.toString());
+                  }),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // controller.clearData();
+                    },
+                    child: const Text('Xóa dữ liệu đã nhận'),
+                  )
+                ],
+              )),
+            ],
+          ),
         ),
       ),
     );

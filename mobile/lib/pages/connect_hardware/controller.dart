@@ -128,6 +128,7 @@ class ConnectHardwareController extends GetxController {
       double value = 0;
       for (int i = 0; i < index.length; i++) value += index[i];
       value /= index.length;
+      value = double.parse(value.toStringAsFixed(2));
       int interval =
           decodeData["interval"] is int ? decodeData["interval"] : 500;
       DateTime now = DateTime.now();
