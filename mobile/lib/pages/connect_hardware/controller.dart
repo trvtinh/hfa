@@ -29,6 +29,7 @@ class ConnectHardwareController extends GetxController {
   RxString remoteId = "".obs;
   final appController = Get.find<ApplicationController>();
   String receivedData = "";
+  List<String> receivedIndex = [];
 
   RxString storageDataReceive = "".obs;
   RxList<String> storageDataSend = <String>[].obs;
@@ -118,19 +119,18 @@ class ConnectHardwareController extends GetxController {
     return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 
-  void processData(Map<String, dynamic> decodeData) {
+  void processData() {
     try {
       // Safely extract medId, dataValue, and interval from the decoded data
-      int medId = decodeData["dataType"] is int ? decodeData["dataType"] : 0;
-      List<dynamic> takeIndex = decodeData["dataValue"] ?? [];
-      List<double> index =
-          takeIndex.map((e) => double.parse(e.toString())).toList();
+      int medId = int.parse(receivedIndex[0]);
+      receivedIndex.removeAt(0);
+      int interval = int.parse(receivedIndex[0]);
+      receivedIndex.removeAt(0);
+      List<double> index = receivedIndex.map((e) => double.parse(e)).toList();
       double value = 0;
       for (int i = 0; i < index.length; i++) value += index[i];
       value /= index.length;
       value = double.parse(value.toStringAsFixed(2));
-      int interval =
-          decodeData["interval"] is int ? decodeData["interval"] : 500;
       DateTime now = DateTime.now();
 
       log("MedId: $medId, Indexes: $index, Interval: $interval");
@@ -163,25 +163,28 @@ class ConnectHardwareController extends GetxController {
       // receivedData = "";
       notificationSubscription =
           readCharacteristic.value?.onValueReceived.listen((data) {
-        receivedData += String.fromCharCodes(data);
-        String tmp = String.fromCharCodes(data);
-
+        receivedData = String.fromCharCodes(data);
+        // String tmp = String.fromCharCodes(data);
+        // log('Length: $receivedData');
+        if (receivedData != "}"&& receivedData != ","){
+          log('ReceivedData: $receivedData');
+          receivedIndex.add(receivedData);
+        }
         // Log received data for debugging
-        log('Received data: $tmp');
-        log('Length: ${receivedData.length}');
+        // log('Received data: $tmp');
 
         // Check if the last character is '}', indicating the end of the JSON message
-        if (receivedData.endsWith("}")) {
+        if (receivedData == "}") {
           try {
-            log('Received data chunk: $receivedData');
+            // log('Received data chunk: $receivedData');
+            log("Start decoding");
             // Decode the JSON string and process the data
-            Map<String, dynamic> decodeData = jsonDecode(receivedData);
-            processData(decodeData);
+            processData();
           } catch (e) {
             log('Error decoding JSON data: $e');
           } finally {
             // Reset receivedData after processing
-            receivedData = "";
+            receivedIndex.clear();
           }
         }
       }, onError: (error) {
