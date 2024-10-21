@@ -72,7 +72,8 @@ Future<void> main() async {
       Permission.location,
       Permission.bluetooth,
       Permission.bluetoothConnect,
-      Permission.bluetoothScan
+      Permission.bluetoothScan,
+      Permission.camera
     ].request();
   }
   final credentials = StorageService.to.getUserCredentials();

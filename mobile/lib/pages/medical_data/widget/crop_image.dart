@@ -57,8 +57,8 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   void initState() {
-    super.initState();
     init();
+    super.initState();
   }
 
   init() async {
@@ -113,14 +113,29 @@ class _YoloVideoState extends State<YoloVideo> {
         ),
       );
     }
+    Orientation deviceOrientation = MediaQuery.of(context).orientation;
+    final double aspectRatio = controller.value.aspectRatio;
+    log(aspectRatio.toString());
+    log(size.toString());
     return Stack(
       fit: StackFit.expand,
       children: [
         Transform.rotate(
-          angle: controller.description.sensorOrientation * pi / 180,
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: CameraPreview(controller),
+          angle: (controller.description.sensorOrientation -
+                  (deviceOrientation == Orientation.portrait ? 0 : 0)) *
+              pi /
+              180,
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit
+                  .cover, // Phóng to camera để khớp với màn hình, cắt đi các phần dư
+              child: SizedBox(
+                width: size.width, // Đảm bảo tỷ lệ camera được giữ nguyên
+                height: size.width *
+                    aspectRatio, // Đảm bảo tỷ lệ camera được giữ nguyên
+                child: CameraPreview(controller),
+              ),
+            ),
           ),
         ),
         ...displayBoxesAroundRecognizedObjects(size),
