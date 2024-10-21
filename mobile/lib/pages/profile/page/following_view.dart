@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
@@ -167,7 +166,6 @@ class _FollowingPageState extends State<FollowingPage> {
                           // Xử lý cho vai trò 'doctor'
                           if (user.role == 'doctor') {
                             try {
-                              EasyLoading.show(status: "Đang xử lí...");
                               final a1 = await FirebaseApi.addValueToArrayField(
                                 'users',
                                 user.user!.id!,
@@ -194,13 +192,10 @@ class _FollowingPageState extends State<FollowingPage> {
                               }
                             } catch (e) {
                               print('Error occurred: $e');
-                            } finally {
-                              EasyLoading.dismiss();
                             }
                           }
                           if (user.role == 'patient') {
                             try {
-                              EasyLoading.show(status: "Đang xử lí...");
                               final a1 = await FirebaseApi.addValueToArrayField(
                                 'users',
                                 user.user!.id!,
@@ -227,14 +222,11 @@ class _FollowingPageState extends State<FollowingPage> {
                               }
                             } catch (e) {
                               print('Error occurred: $e');
-                            } finally {
-                              EasyLoading.dismiss();
                             }
                           }
 
                           if (user.role == 'relative') {
                             try {
-                              EasyLoading.show(status: "Đang xử lí...");
                               final a1 = await FirebaseApi.addValueToArrayField(
                                 'users',
                                 user.user!.id!,
@@ -261,8 +253,6 @@ class _FollowingPageState extends State<FollowingPage> {
                               }
                             } catch (e) {
                               print('Error occurred: $e');
-                            } finally {
-                              EasyLoading.dismiss();
                             }
                           }
                         },

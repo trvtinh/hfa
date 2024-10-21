@@ -57,8 +57,8 @@ Future<void> main() async {
     // EasyLoading.dismiss();
   }
   SystemChrome.setPreferredOrientations([
-    // DeviceOrientation.portraitUp, // Hoặc landscapeLeft, tùy bạn
-    DeviceOrientation.landscapeLeft
+    DeviceOrientation.portraitUp, // Hoặc landscapeLeft, tùy bạn
+    //DeviceOrientation.landscapeLeft
   ]);
 
   if (Platform.isAndroid) {
