@@ -52,13 +52,14 @@ Future<void> main() async {
     log('access token$accessToken');
   } catch (e) {
     print("Error loading .env file: $e");
-  }
-  finally{
+  } finally {
     // EasyLoading.dismiss();
   }
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp, // Hoặc landscapeLeft, tùy bạn
-    //DeviceOrientation.landscapeLeft
+    DeviceOrientation.portraitUp, // Portrait orientation (up)
+    DeviceOrientation.portraitDown, // Reverse portrait orientation (down)
+    DeviceOrientation.landscapeLeft, // Landscape orientation (left)
+    DeviceOrientation.landscapeRight, // Landscape orientation (right)
   ]);
 
   if (Platform.isAndroid) {

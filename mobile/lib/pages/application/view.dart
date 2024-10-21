@@ -22,13 +22,11 @@ import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
   const ApplicationPage({super.key});
-  // @override
-  // // TODO: implement controller
-  // ApplicationController get controller => super.controller;
 
   @override
   Widget build(BuildContext context) {
-    // controller.onReady();
+    controller.onInit();
+    controller.onReady();
     Widget buildPageView() {
       return Obx(() => PageView(
             physics: const NeverScrollableScrollPhysics(),

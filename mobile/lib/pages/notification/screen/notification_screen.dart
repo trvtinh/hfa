@@ -55,9 +55,9 @@ class NotificationScreen extends StatelessWidget {
                   notiController.state.reminder.value = notifications.length;
                   log('reminder: ${notiController.state.reminder.value}');
                 }
-                if (status == TypeNotificationStatus.warning) {
-                  notiController.state.warning.value = notifications.length;
-                  log('warning: ${notiController.state.warning.value}');
+                if (status == TypeNotificationStatus.alarm) {
+                  notiController.state.alarm.value = notifications.length;
+                  log('alarm: ${notiController.state.alarm.value}');
                 }
               });
               return ListView.builder(
@@ -79,14 +79,9 @@ class NotificationScreen extends StatelessWidget {
                         children: [
                           NotificationItem(
                             name: name,
-                            time: DatetimeChange.timestampToString(
-                                notification.time as Timestamp),
-                            content: notification.body!,
-                            title: notification.title!,
-                            documentId: notification.id!,
                             isExpanded: false.obs,
                             status: status,
-                            page: notification.page!, userId: uid,
+                            notification: notification,
                           ),
                           const SizedBox(
                             height: 12,

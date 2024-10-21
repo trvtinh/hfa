@@ -3,11 +3,15 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
+import 'package:health_for_all/pages/notification/controller.dart';
+import 'package:health_for_all/pages/profile/controller.dart';
 
 class AddAlarm extends StatefulWidget {
   final String userId;
-  const AddAlarm({super.key, required this.userId});
+  final List<String> relativesIds;
+  const AddAlarm({super.key, required this.userId, required this.relativesIds});
 
   @override
   State<AddAlarm> createState() => _AddAlarmState();
@@ -15,6 +19,7 @@ class AddAlarm extends StatefulWidget {
 
 class _AddAlarmState extends State<AddAlarm> {
   final alarmController = Get.find<AlarmController>();
+  final profileController = Get.find<ProfileController>();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -72,6 +77,11 @@ class _AddAlarmState extends State<AddAlarm> {
   Widget body() {
     return Column(
       children: [
+        const SizedBox(
+          height: 24,
+        ),
+        // drop(),
+        dropRelatives(),
         const SizedBox(
           height: 24,
         ),
@@ -188,6 +198,40 @@ class _AddAlarmState extends State<AddAlarm> {
       10,
       (index) =>
           Item.getTitle(index)); // Use Item.getTitle to populate the list
+  final List<String> listRelatives = [];
+
+  Widget dropRelatives() {
+    return StreamBuilder(
+      stream: profileController.getUserByIds(widget.relativesIds),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Chưa có người nhà!'));
+        } else if (snapshot.hasData) {
+          final relatives = snapshot.data ?? [];
+          if (relatives.isEmpty) {
+            return const Center(child: Text("Chưa có người nhà"));
+          }
+          return DropdownMenu(
+            width: MediaQuery.of(context).size.width - 70,
+            hintText: "Chọn người nhà",
+            onSelected: (String? value) {
+              alarmController.selectedRelative.value = value!;
+              log(alarmController.selectedRelative.value);
+            },
+            dropdownMenuEntries:
+                relatives.map<DropdownMenuEntry<String>>((UserData value) {
+              return DropdownMenuEntry<String>(
+                  value: value.id!, label: value.name!);
+            }).toList(),
+          );
+        } else {
+          return const Center(child: Text("Chưa có bệnh nhân"));
+        }
+      },
+    );
+  }
 
   Widget drop_alt() {
     return DropdownMenu(

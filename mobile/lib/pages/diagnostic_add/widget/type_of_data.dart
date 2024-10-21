@@ -91,7 +91,7 @@ class TypeOfData extends GetView<DiagnosticAddController> {
                     note: medicalData.note,
                     time: DatetimeChange.getHourString(
                         medicalData.time!.toDate()),
-                    selectedFiles: medicalData.imageUrls,
+                    attachments: medicalData.imageUrls,
                   ),
 
                   // for(int i=0; i<tapped.length; i++){

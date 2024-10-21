@@ -584,7 +584,7 @@ class _HealthConnectState extends State<HealthConnect> {
                 onPressed: installHealthConnect,
                 style: const ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(Colors.blue)),
-                child: const Text("Tải Health Connect",
+                child: const Text("Kiểm tra quyền truy cập của Health Connect",
                     style: TextStyle(color: Colors.white))),
           if (Platform.isIOS ||
               Platform.isAndroid &&
@@ -613,15 +613,15 @@ class _HealthConnectState extends State<HealthConnect> {
                       backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                   child: const Text("Chọn ngày lấy dữ liệu",
                       style: TextStyle(color: Colors.white))),
-              SizedBox(
-                width: 12,
-              ),
-              TextButton(
-                  onPressed: addData,
-                  style: const ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.blue)),
-                  child: const Text("Add Data",
-                      style: TextStyle(color: Colors.white))),
+              // SizedBox(
+              //   width: 12,
+              // ),
+              // TextButton(
+              //     onPressed: addData,
+              //     style: const ButtonStyle(
+              //         backgroundColor: WidgetStatePropertyAll(Colors.blue)),
+              //     child: const Text("Add Data",
+              //         style: TextStyle(color: Colors.white))),
               // TextButton(
               //     onPressed: fetchStepData,
               //     style: const ButtonStyle(
@@ -637,12 +637,12 @@ class _HealthConnectState extends State<HealthConnect> {
               //     child: const Text("Revoke Access",
               //         style: TextStyle(color: Colors.white))),
             ]),
-          TextButton(
-              onPressed: deleteData,
-              style: const ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.blue)),
-              child: const Text("Xóa dữ liệu",
-                  style: TextStyle(color: Colors.white))),
+          // TextButton(
+          //     onPressed: deleteData,
+          //     style: const ButtonStyle(
+          //         backgroundColor: WidgetStatePropertyAll(Colors.blue)),
+          //     child: const Text("Xóa dữ liệu",
+          //         style: TextStyle(color: Colors.white))),
           const Divider(thickness: 3),
           // if (_state == AppState.DATA_READY) _dataFiltration,
           // if (_state == AppState.STEPS_READY) _stepsFiltration,

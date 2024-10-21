@@ -9,7 +9,6 @@ class GraphDataPage extends StatelessWidget {
   final ecgController = Get.find<EcgDataController>();
 
   GraphDataPage(this.title, {super.key});
-  final RxBool changePage = true.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -18,23 +17,10 @@ class GraphDataPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
         actions: [
-          Obx(
-            () => GestureDetector(
-              onTap: () {
-                changePage.value = !changePage.value;
-              },
-              child: changePage.value
-                  ? Icon(
-                      Icons.assessment_outlined,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    )
-                  : Icon(
-                      Icons.list_outlined,
-                      size: 24,
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
-            ),
+          Icon(
+            Icons.help_outline,
+            size: 24,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
           const SizedBox(width: 12),
         ],
@@ -48,9 +34,10 @@ class GraphDataPage extends StatelessWidget {
             Obx(() => Column(
                   children: [
                     for (var i in ecgController.result.keys)
-                      for (int j=0;j<ecgController.result[i]!.length;j++)
+                      for (int j = 0; j < ecgController.result[i]!.length; j++)
                         DataDayGraph(
-                          date: DateFormat('dd/MM/yyyy HH:mm').format(ecgController.result[i]![j].time!.toDate()),
+                          date: DateFormat('dd/MM/yyyy HH:mm').format(
+                              ecgController.result[i]![j].time!.toDate()),
                           data: ecgController.result[i]![j],
                         )
                   ],

@@ -41,12 +41,13 @@ class _GraphChartState extends State<GraphChart> {
       body: Column(
         children: [
           Container(
-            height: 300, // Adjusted height to account for padding and text
-            decoration: const BoxDecoration(
+            height: 310, // Adjusted height to account for padding and text
+            decoration: BoxDecoration(
               color: Colors.white,
+              border: Border.all(),
             ),
             padding:
-                const EdgeInsets.only(left: 12, right: 24, top: 26, bottom: 8),
+                const EdgeInsets.only(left: 12, right: 12, top: 26, bottom: 26),
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(

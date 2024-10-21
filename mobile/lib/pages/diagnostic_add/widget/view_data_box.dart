@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/pages/medical_data/controller.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
 
 class ViewDataBox extends StatelessWidget {
   final String leadingiconpath;
@@ -13,7 +15,7 @@ class ViewDataBox extends StatelessWidget {
   final String value;
   final String unit;
   String? note;
-  List<String>? selectedFiles;
+  List<String>? attachments = [];
 
   ViewDataBox({
     super.key,
@@ -23,7 +25,7 @@ class ViewDataBox extends StatelessWidget {
     required this.unit,
     this.note,
     required this.time,
-    this.selectedFiles,
+    this.attachments,
   });
   final diagnosticaddController = Get.find<DiagnosticAddController>();
   final medicalController = Get.find<MedicalDataController>();
@@ -31,18 +33,16 @@ class ViewDataBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-bool haveFile = selectedFiles != null && selectedFiles!.isNotEmpty;
-bool haveNote = note != null && note!.isNotEmpty;
+    bool haveFile = attachments != null && attachments!.isNotEmpty;
+    bool haveNote = note != null && note!.isNotEmpty;
     return Column(
       children: [
         Container(
           width: double.infinity,
           height: 71,
           padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainerLowest,
-            borderRadius:
-                const BorderRadius.vertical(bottom: Radius.circular(8)),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(8)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -58,14 +58,16 @@ bool haveNote = note != null && note!.isNotEmpty;
                   shownotepopup(context);
                 },
                 child: Container(
+                  width: 26,
+                  height: 26,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(context).colorScheme.surfaceContainerLowest,
                     border: Border.all(
                         color: Theme.of(context).colorScheme.outlineVariant),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(1.5),
+                  child: Align(
+                    alignment: Alignment.center,
                     child: haveNote
                         ? Badge(
                             child: Icon(
@@ -75,7 +77,7 @@ bool haveNote = note != null && note!.isNotEmpty;
                                   : Theme.of(context)
                                       .colorScheme
                                       .outlineVariant,
-                              size: 16,
+                              size: 18,
                             ),
                           )
                         : Icon(
@@ -83,7 +85,7 @@ bool haveNote = note != null && note!.isNotEmpty;
                             color: haveNote
                                 ? Theme.of(context).colorScheme.primary
                                 : Theme.of(context).colorScheme.outlineVariant,
-                            size: 16,
+                            size: 18,
                           ),
                   ),
                 ),
@@ -94,14 +96,16 @@ bool haveNote = note != null && note!.isNotEmpty;
                   showfilepopup(context);
                 },
                 child: Container(
+                  width: 26,
+                  height: 26,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Theme.of(context).colorScheme.surfaceContainerLowest,
                     border: Border.all(
                         color: Theme.of(context).colorScheme.outlineVariant),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(1.5),
+                  child: Align(
+                    alignment: Alignment.center,
                     child: haveFile
                         ? Badge(
                             child: Icon(
@@ -111,7 +115,7 @@ bool haveNote = note != null && note!.isNotEmpty;
                                   : Theme.of(context)
                                       .colorScheme
                                       .outlineVariant,
-                              size: 16,
+                              size: 18,
                             ),
                           )
                         : Icon(
@@ -119,25 +123,27 @@ bool haveNote = note != null && note!.isNotEmpty;
                             color: haveFile
                                 ? Theme.of(context).colorScheme.primary
                                 : Theme.of(context).colorScheme.outlineVariant,
-                            size: 16,
+                            size: 18,
                           ),
                   ),
                 ),
               ),
               const SizedBox(width: 8),
               Container(
+                width: 26,
+                height: 26,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Theme.of(context).colorScheme.surfaceContainerLowest,
                   border: Border.all(
                       color: Theme.of(context).colorScheme.outlineVariant),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(1.5),
+                child: Align(
+                  alignment: Alignment.center,
                   child: Icon(
                     Icons.clear,
                     color: Theme.of(context).colorScheme.outlineVariant,
-                    size: 16,
+                    size: 18,
                   ),
                 ),
               ),
@@ -154,27 +160,22 @@ bool haveNote = note != null && note!.isNotEmpty;
     return SizedBox(
       height: 76,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              name,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
+          Text(
+            name,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurface,
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
             ),
           ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              time,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                fontWeight: FontWeight.normal,
-              ),
+          Text(
+            time,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ],
@@ -184,7 +185,6 @@ bool haveNote = note != null && note!.isNotEmpty;
 
   Widget _buildValueUnitColumn(BuildContext context) {
     return SizedBox(
-      height: 55,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start, // Align text to the start
@@ -195,7 +195,7 @@ bool haveNote = note != null && note!.isNotEmpty;
               value,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
-                fontSize: 14,
+                fontSize: 22,
               ),
             ),
           ),
@@ -204,6 +204,7 @@ bool haveNote = note != null && note!.isNotEmpty;
             child: Text(
               unit,
               style: TextStyle(
+                fontWeight: FontWeight.w500,
                 color: Theme.of(context).colorScheme.secondary,
                 fontSize: 11,
               ),
@@ -219,6 +220,7 @@ bool haveNote = note != null && note!.isNotEmpty;
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+              insetPadding: const EdgeInsets.all(10),
               title: Row(
                 children: [
                   Icon(
@@ -263,81 +265,84 @@ bool haveNote = note != null && note!.isNotEmpty;
 
   void showfilepopup(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-              title: Row(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          insetPadding: const EdgeInsets.all(10),
+          title: Row(
+            children: [
+              Icon(
+                Icons.attach_file,
+                size: 32,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Text(
+                'File đính kèm',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              )
+            ],
+          ),
+          content: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              border: Border.all(
+                  width: 1,
+                  color: Theme.of(context).colorScheme.outlineVariant),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  Icon(
-                    Icons.attach_file,
-                    size: 32,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  Text(
-                    'File đính kèm',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  )
+                  buildFileList(context),
                 ],
               ),
-              content: IntrinsicHeight(
-                  child: Column(
-                children: [
-                  _buildFileList(context),
-                ],
-              )));
-        });
+            ),
+          ),
+        );
+      },
+    );
   }
 
-  Widget _buildFileList(context) {
-    if (selectedFiles!.isEmpty) {
+  Widget buildFileList(BuildContext context) {
+    if (attachments == null || attachments!.isEmpty) {
       return DottedBorder(
         borderType: BorderType.RRect,
         radius: const Radius.circular(4),
         dashPattern: const [2, 3],
         color: Theme.of(context).colorScheme.outline,
         child: Container(
+          // width: 260,
           height: 32,
           padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
           alignment: Alignment.topLeft,
           child: Text(
             'Không có file đính kèm',
-            style: TextStyle(color: Theme.of(context).colorScheme.outline),
+            style:
+                TextStyle(color: Theme.of(context).colorScheme.outlineVariant),
           ),
         ),
       );
     } else {
-      return ListView.builder(
-        shrinkWrap: true,
-        itemCount: selectedFiles!.length,
-        itemBuilder: (context, index) {
-          final Future<XFile?> file =
-              diagnosticaddController.urlToFile(selectedFiles![index]);
-          return FutureBuilder<XFile?>(
-            future: file,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
-                  return _buildFileItem(context, snapshot.data!);
-                } else {
-                  return Text('Failed to load file');
-                }
-              } else {
-                return CircularProgressIndicator();
-              }
-            },
-          );
-        },
+      log('start to build list');
+      return Column(
+        children: [
+          for (int i = 0; i < attachments!.length; i++)
+            buildFileItem(attachments![i], context),
+        ],
       );
     }
   }
 
-  Widget _buildFileItem(context, XFile file) {
+  Widget buildFileItem(String file, BuildContext context) {
+    log('start to build file');
+    final String fileName = path.basename(file);
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Container(
@@ -349,16 +354,39 @@ bool haveNote = note != null && note!.isNotEmpty;
         child: Row(
           children: [
             Icon(
-              _getFileIcon(file),
+              Icons.image,
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                file.name,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.w500,
+              child: GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.network(file),
+                            TextButton(
+                              onPressed: () {
+                                Get.back();
+                              },
+                              child: const Text('Close'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+                child: Text(
+                  fileName,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -368,22 +396,96 @@ bool haveNote = note != null && note!.isNotEmpty;
     );
   }
 
-  IconData _getFileIcon(XFile file) {
-    final String extension = file.name.split('.').last;
-    switch (extension.toLowerCase()) {
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'gif':
-        return Icons.image;
-      case 'mp4':
-      case 'avi':
-      case 'mov':
-        return Icons.video_file;
-      case 'pdf':
-        return Icons.picture_as_pdf;
-      default:
-        return Icons.insert_drive_file;
-    }
-  }
+  // Widget _buildFileList(context) {
+  //   if (selectedFiles!.isEmpty) {
+  //     return DottedBorder(
+  //       borderType: BorderType.RRect,
+  //       radius: const Radius.circular(4),
+  //       dashPattern: const [2, 3],
+  //       color: Theme.of(context).colorScheme.outline,
+  //       child: Container(
+  //         height: 32,
+  //         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+  //         alignment: Alignment.topLeft,
+  //         child: Text(
+  //           'Không có file đính kèm',
+  //           style: TextStyle(color: Theme.of(context).colorScheme.outline),
+  //         ),
+  //       ),
+  //     );
+  //   } else {
+  //     return ListView.builder(
+  //       shrinkWrap: true,
+  //       itemCount: selectedFiles!.length,
+  //       itemBuilder: (context, index) {
+  //         final Future<XFile?> file =
+  //             diagnosticaddController.urlToFile(selectedFiles![index]);
+  //         return FutureBuilder<XFile?>(
+  //           future: file,
+  //           builder: (context, snapshot) {
+  //             if (snapshot.connectionState == ConnectionState.done) {
+  //               if (snapshot.hasData) {
+  //                 return _buildFileItem(context, snapshot.data!);
+  //               } else {
+  //                 return Text('Failed to load file');
+  //               }
+  //             } else {
+  //               return CircularProgressIndicator();
+  //             }
+  //           },
+  //         );
+  //       },
+  //     );
+  //   }
+  // }
+
+  // Widget _buildFileItem(context, XFile file) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(vertical: 4.0),
+  //     child: Container(
+  //       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.circular(10),
+  //         color: Theme.of(context).colorScheme.primaryContainer,
+  //       ),
+  //       child: Row(
+  //         children: [
+  //           Icon(
+  //             _getFileIcon(file),
+  //             color: Theme.of(context).colorScheme.primary,
+  //           ),
+  //           const SizedBox(width: 8),
+  //           Expanded(
+  //             child: Text(
+  //               file.name,
+  //               style: TextStyle(
+  //                 color: Theme.of(context).colorScheme.onPrimaryContainer,
+  //                 fontWeight: FontWeight.w500,
+  //               ),
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // IconData _getFileIcon(XFile file) {
+  //   final String extension = file.name.split('.').last;
+  //   switch (extension.toLowerCase()) {
+  //     case 'jpg':
+  //     case 'jpeg':
+  //     case 'png':
+  //     case 'gif':
+  //       return Icons.image;
+  //     case 'mp4':
+  //     case 'avi':
+  //     case 'mov':
+  //       return Icons.video_file;
+  //     case 'pdf':
+  //       return Icons.picture_as_pdf;
+  //     default:
+  //       return Icons.insert_drive_file;
+  //   }
+  // }
 }

@@ -43,14 +43,14 @@ class NotificationController extends GetxController {
         .then((snapshot) => snapshot.docs.length);
     state.read.value = readCount;
 
-    // Fetch warning notifications count
-    final warningCount = await FirebaseFirestore.instance
+    // Fetch alarm notifications count
+    final alarmCount = await FirebaseFirestore.instance
         .collection('notifications')
         .where('to_uid', isEqualTo: uid)
-        .where('status', isEqualTo: 'warning')
+        .where('status', isEqualTo: 'alarm')
         .get()
         .then((snapshot) => snapshot.docs.length);
-    state.warning.value = warningCount;
+    state.alarm.value = alarmCount;
 
     // Fetch reminder notifications count
     final reminderCount = await FirebaseFirestore.instance
@@ -61,7 +61,7 @@ class NotificationController extends GetxController {
         .then((snapshot) => snapshot.docs.length);
     state.reminder.value = reminderCount;
 
-    log('Unread: ${state.unread.value}, Read: ${state.read.value}, Warning: ${state.warning.value}, Reminder: ${state.reminder.value}');
+    log('Unread: ${state.unread.value}, Read: ${state.read.value}, Alarm: ${state.alarm.value}, Reminder: ${state.reminder.value}');
   }
 
   Future addNoti(String title, String body, String page, String type,
