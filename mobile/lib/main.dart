@@ -53,9 +53,10 @@ Future<void> main() async {
   }
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
-    DeviceOrientation.landscapeLeft// Hoặc landscapeLeft, tùy bạn
+    DeviceOrientation.landscapeLeft, // Hoặc landscapeLeft, tùy bạn
+    DeviceOrientation.landscapeRight, // Hoặc landscapeRight, tùy bạn
+    DeviceOrientation.portraitDown,
   ]);
-
 
   if (Platform.isAndroid) {
     if (await FlutterBluePlus.isSupported == false) {
@@ -67,7 +68,8 @@ Future<void> main() async {
       Permission.location,
       Permission.bluetooth,
       Permission.bluetoothConnect,
-      Permission.bluetoothScan
+      Permission.bluetoothScan,
+      Permission.camera
     ].request();
   }
   final credentials = StorageService.to.getUserCredentials();
