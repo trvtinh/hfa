@@ -42,9 +42,9 @@ class ApplicationController extends GetxController {
   final followingMedicalDataController =
       Get.find<FollowingMedicalDataController>();
   // final connectHardwareController = Get.find<ConnectHardwareController>();
-  late final List<String> tabTitles;
-  late final PageController pageController;
-  late final List<BottomNavigationBarItem> bottomTabs;
+  late List<String> tabTitles;
+  late PageController pageController;
+  late List<BottomNavigationBarItem> bottomTabs;
   StreamSubscription<QuerySnapshot>? _updatedDataTimeSubscription;
   final Map<String, StreamSubscription<QuerySnapshot>>
       _medicalDataSubscriptions = {};
@@ -132,7 +132,7 @@ class ApplicationController extends GetxController {
         label: 'Cá nhân',
       ),
     ];
-    pageController = PageController(initialPage: state.page);
+    pageController = PageController(initialPage: 0);
   }
 
   bool isEqualToToday(String date) {
@@ -162,6 +162,7 @@ class ApplicationController extends GetxController {
 
   @override
   void onReady() async {
+    pageController = PageController(initialPage: 0);
     await getProfile();
     notificationController.state.profile.value = state.profile.value;
     diagnosticController.state.profile.value = state.profile.value;
@@ -190,6 +191,7 @@ class ApplicationController extends GetxController {
   }
 
   Future<void> onLogOut() async {
+    pageController.dispose();
     await UserStore.to.onLogout();
     await googleSignIn.signOut();
     Get.offAndToNamed(AppRoutes.SIGN_IN);

@@ -1,11 +1,14 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/enum/type_notification_status.dart';
+import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/profile/page/follower_view.dart';
@@ -15,23 +18,13 @@ class NotificationItem extends StatelessWidget {
   NotificationItem(
       {super.key,
       required this.name,
-      required this.time,
-      required this.content,
-      required this.title,
       required this.isExpanded,
       required this.status,
-      required this.documentId,
-      required this.page,
-      required this.userId});
+      required this.notification});
   final String name;
-  final String time;
-  final String content;
-  final String title;
-  final String documentId;
-  final String page;
   late RxBool isExpanded;
   final TypeNotificationStatus status;
-  final String userId;
+  final NotificationEntity notification;
 
   void _toggleContainer() {
     isExpanded.value = !isExpanded.value;
@@ -117,7 +110,9 @@ class NotificationItem extends StatelessWidget {
                       const SizedBox(
                         width: 6,
                       ),
-                      Text(time,
+                      Text(
+                          DatetimeChange.timestampToString(
+                              notification.time as Timestamp),
                           style: TextStyle(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
@@ -139,7 +134,7 @@ class NotificationItem extends StatelessWidget {
                   height: 12,
                 ),
                 Text(
-                  title,
+                  notification.title!,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
                     fontSize: 16,
@@ -152,7 +147,7 @@ class NotificationItem extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  content,
+                  notification.body!,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                     fontSize: 16,
@@ -165,7 +160,7 @@ class NotificationItem extends StatelessWidget {
                     ? Row(
                         children: [
                           FutureBuilder<UserData>(
-                            future: controller.getUser(userId),
+                            future: controller.getUser(notification.toUId!),
                             builder: (context, userSnapshot) {
                               if (userSnapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -176,12 +171,12 @@ class NotificationItem extends StatelessWidget {
                                 final docs = userSnapshot.data ?? UserData();
                                 return GestureDetector(
                                   onTap: () {
-                                    if (page == '/diagnotic') {
+                                    if (notification.page! == '/diagnotic') {
                                       Get.to(() => DiagnosticPage(
                                             user: docs,
                                           ));
                                     }
-                                    if (page == 'follow') {
+                                    if (notification.page! == 'follow') {
                                       Get.to(() => const ProfilePage());
                                     }
                                     print('User want to see detail');
@@ -321,7 +316,7 @@ class NotificationItem extends StatelessWidget {
       );
 
       // Perform the delete operation
-      FirebaseApi.updateDocument('notifications', documentId, data);
+      FirebaseApi.updateDocument('notifications', notification.id!, data);
       // Hide loading dialog and show success dialog after a short delay
       Future.delayed(const Duration(seconds: 1), () {
         if (Get.isDialogOpen ?? false) {
@@ -361,7 +356,7 @@ class NotificationItem extends StatelessWidget {
       );
 
       // Perform the delete operation
-      FirebaseApi.deleteDocument('notifications', documentId);
+      FirebaseApi.deleteDocument('notifications', notification.id!);
 
       // Hide loading dialog and show success dialog after a short delay
       Future.delayed(const Duration(seconds: 1), () {

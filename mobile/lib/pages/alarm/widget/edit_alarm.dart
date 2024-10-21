@@ -164,7 +164,7 @@ class _EditAlarmState extends State<EditAlarm> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                alarmController.editAlarm(widget.id!);
+                // alarmController.editAlarm(widget.id!);
               },
               child: Text(
                 "Xác nhận",

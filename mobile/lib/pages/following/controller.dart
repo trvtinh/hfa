@@ -9,17 +9,17 @@ class FollowingController extends GetxController {
   final appController = Get.find<ApplicationController>();
   final overallMedicalDataHistoryController =
       Get.find<OverallMedicalDataHistoryController>();
-  Map<dynamic, int> warningCountMap = <String, int>{}.obs;
+  Map<dynamic, int> alarmCountMap = <String, int>{}.obs;
   Map<String, String> updatedTimeMap = <String, String>{}.obs;
-  Future getWarningCount(String id) async {
-    final warningCount = await FirebaseFirestore.instance
+  Future getAlarmCount(String id) async {
+    final alarmCount = await FirebaseFirestore.instance
         .collection('notifications')
         .where('to_uid', isEqualTo: id)
-        .where('status', isEqualTo: 'warning')
+        .where('status', isEqualTo: 'alarm')
         .get()
         .then((snapshot) => snapshot.docs.length);
-    log('Warning count: $warningCount');
-    warningCountMap[id] = warningCount;
+    log('Alarm count: $alarmCount');
+    alarmCountMap[id] = alarmCount;
   }
 
   Future getUpdatedDataTime(String id) async {
@@ -59,7 +59,7 @@ class FollowingController extends GetxController {
   }
 
   Future getFollowingData(String id) async {
-    await getWarningCount(id);
+    await getAlarmCount(id);
     await getUpdatedDataTime(id);
   }
 

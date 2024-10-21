@@ -51,9 +51,9 @@ Future<void> main() async {
   } catch (e) {
     print("Error loading .env file: $e");
   }
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp, // Hoặc landscapeLeft, tùy bạn
-  ]);
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp, // Hoặc landscapeLeft, tùy bạn
+  // ]);
 
 
   if (Platform.isAndroid) {

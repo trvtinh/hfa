@@ -419,7 +419,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('alarms')
-                                    .where('userId',
+                                    .where('toUId',
                                         isEqualTo: appController
                                             .state.selectedUser.value.id)
                                     .snapshots(),

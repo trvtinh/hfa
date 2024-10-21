@@ -5,12 +5,14 @@ import 'package:health_for_all/common/entities/alarm_entity.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/alarm/widget/add_alarm.dart';
 import 'package:health_for_all/pages/alarm/widget/list_alarm.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 
 class AlarmPage extends GetView<AlarmController> {
   final String userId;
   final bool right;
-  const AlarmPage(this.userId, this.right, {super.key});
+  AlarmPage(this.userId, this.right, {super.key});
 
+  final appController = Get.find<ApplicationController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,8 +55,7 @@ class AlarmPage extends GetView<AlarmController> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
-                    .where('userId',
-                        isEqualTo: userId)
+                    .where('toUId', isEqualTo: userId)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -86,8 +87,7 @@ class AlarmPage extends GetView<AlarmController> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
-                    .where('userId',
-                        isEqualTo: userId)
+                    .where('toUId', isEqualTo: userId)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -131,9 +131,11 @@ class AlarmPage extends GetView<AlarmController> {
   Widget add_alarm(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (right == false) Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-        else _showAddDialog(context);
+        if (right == false)
+          Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
+              snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        else
+          _showAddDialog(context);
       },
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -173,6 +175,7 @@ class AlarmPage extends GetView<AlarmController> {
   }
 
   void _showAddDialog(BuildContext context) {
+    final relativesIds = appController.state.profile.value?.relatives ?? [];
     showDialog(
       context: context,
       builder: (context) {
@@ -185,7 +188,10 @@ class AlarmPage extends GetView<AlarmController> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AddAlarm(userId: userId,),
+                AddAlarm(
+                  userId: userId,
+                  relativesIds: relativesIds,
+                ),
               ],
             ),
           ),

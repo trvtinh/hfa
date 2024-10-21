@@ -105,6 +105,7 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation deviceOrientation = MediaQuery.of(context).orientation;
     final Size size = MediaQuery.of(context).size;
     if (!isLoaded) {
       return const Scaffold(
@@ -117,12 +118,22 @@ class _YoloVideoState extends State<YoloVideo> {
       fit: StackFit.expand,
       children: [
         Transform.rotate(
-          angle: controller.description.sensorOrientation * pi / 180,
+          angle: (controller.description.sensorOrientation -
+                  (deviceOrientation == Orientation.portrait ? 0 : 90)) *
+              pi /
+              180,
           child: AspectRatio(
             aspectRatio: controller.value.aspectRatio,
             child: CameraPreview(controller),
           ),
         ),
+        // Transform.rotate(
+        //   angle: controller.description.sensorOrientation * pi / 180,
+        //   child: AspectRatio(
+        //     aspectRatio: controller.value.aspectRatio,
+        //     child: CameraPreview(controller),
+        //   ),
+        // ),
         ...displayBoxesAroundRecognizedObjects(size),
         Positioned(
           bottom: 75,
@@ -200,7 +211,8 @@ class _YoloVideoState extends State<YoloVideo> {
         imghehe.setPixel(x, y, imghehe.getColor(r, g, b));
       }
     }
-    img.Image rotatedImage = img.copyRotate(imghehe, angle: controller.description.sensorOrientation);
+    img.Image rotatedImage = img.copyRotate(imghehe,
+        angle: controller.description.sensorOrientation);
     return rotatedImage;
   }
 
