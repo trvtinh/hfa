@@ -20,7 +20,7 @@ class AddFile extends StatefulWidget {
 
 class _AddFileState extends State<AddFile> {
   final ImagePicker _picker = ImagePicker();
-  final List<XFile> selectedFiles = [];
+  RxList<XFile> selectedFiles = <XFile>[].obs;
   final controller = Get.find<MedicalDataController>();
   @override
   void initState() {
@@ -145,13 +145,13 @@ class _AddFileState extends State<AddFile> {
         constraints: const BoxConstraints(
           maxHeight: 50, // Adjust this value based on your layout needs
         ),
-        child: ListView.builder(
+        child: Obx(()=>ListView.builder(
           itemCount: selectedFiles.length,
           itemBuilder: (context, index) {
             final XFile file = selectedFiles[index];
             return _buildFileItem(file);
           },
-        ),
+        )),
       );
     }
   }

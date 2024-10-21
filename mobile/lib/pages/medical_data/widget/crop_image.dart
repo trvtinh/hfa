@@ -122,7 +122,7 @@ class _YoloVideoState extends State<YoloVideo> {
       children: [
         Transform.rotate(
           angle: (controller.description.sensorOrientation -
-                  (deviceOrientation == Orientation.portrait ? 0 : 0)) *
+                  (deviceOrientation == Orientation.portrait ? 90 : 0)) *
               pi /
               180,
           child: Center(
@@ -174,6 +174,8 @@ class _YoloVideoState extends State<YoloVideo> {
   }
 
   Future<void> loadYoloModel() async {
+    
+    log("init");
     await widget.vision.loadYoloModel(
       labels: 'assets/AI_model/labels.txt',
       modelPath: 'assets/AI_model/best_float32.tflite',
@@ -215,7 +217,8 @@ class _YoloVideoState extends State<YoloVideo> {
         imghehe.setPixel(x, y, imghehe.getColor(r, g, b));
       }
     }
-    img.Image rotatedImage = img.copyRotate(imghehe, angle: controller.description.sensorOrientation);
+    img.Image rotatedImage = img.copyRotate(imghehe,
+        angle: controller.description.sensorOrientation);
     return rotatedImage;
   }
 
