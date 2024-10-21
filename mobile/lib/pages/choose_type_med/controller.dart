@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
@@ -44,6 +45,7 @@ class ChooseTypeMedController extends GetxController {
     );
     log(medicine.toString());
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       await FirebaseApi.addDocument("medicineBases", medicine.toJson());
       Get.back();
       Get.snackbar("Thành công", "Thêm thuốc thành công",
@@ -52,6 +54,9 @@ class ChooseTypeMedController extends GetxController {
       log(e.toString());
       Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
           backgroundColor: Colors.red);
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

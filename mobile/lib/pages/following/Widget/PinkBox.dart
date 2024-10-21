@@ -4,13 +4,13 @@ import 'package:health_for_all/common/entities/user.dart';
 class Pinkbox extends StatelessWidget {
   final UserData user;
   final String role;
-  final String warningCount;
+  final String alarmCount;
   final String time;
   const Pinkbox({
     super.key,
     required this.user,
     required this.role,
-    required this.warningCount,
+    required this.alarmCount,
     required this.time,
   });
 
@@ -133,9 +133,9 @@ class Pinkbox extends StatelessWidget {
                       ),
                     ),
                     Badge(
-                      label: Text(warningCount),
+                      label: Text(alarmCount),
                       largeSize: 16,
-                      backgroundColor: warningCount == '0'
+                      backgroundColor: alarmCount == '0'
                           ? Theme.of(context).colorScheme.secondary
                           : Theme.of(context).colorScheme.error,
                     ),

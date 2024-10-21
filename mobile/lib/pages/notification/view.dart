@@ -75,7 +75,7 @@ class NotificationPage extends GetView<NotificationController> {
                           width: 2,
                         ),
                         Obx(() {
-                          if (controller.state.warning.value > 0) {
+                          if (controller.state.alarm.value > 0) {
                             return Container(
                                 padding: const EdgeInsets.all(4),
                                 decoration: BoxDecoration(
@@ -84,7 +84,7 @@ class NotificationPage extends GetView<NotificationController> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                      controller.state.unread.value.toString(),
+                                      controller.state.alarm.value.toString(),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -124,7 +124,8 @@ class NotificationPage extends GetView<NotificationController> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                      controller.state.unread.value.toString(),
+                                      controller.state.reminder.value
+                                          .toString(),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -188,7 +189,7 @@ class NotificationPage extends GetView<NotificationController> {
               ),
               NotificationScreen(
                 uid: userId,
-                status: TypeNotificationStatus.warning,
+                status: TypeNotificationStatus.alarm,
               ),
               NotificationScreen(
                 uid: userId,

@@ -19,18 +19,22 @@ class _DemoECGState extends State<DemoECG> {
     loadCsvData();
   }
 
-  // Load CSV data from the local file and parse it
+  // Load CSV data from the local file and parse it, limiting to 10,000 points
   Future<void> loadCsvData() async {
-    final data = await rootBundle.loadString('assets/duplicated_ecg_data.csv');
+    final data = await rootBundle.loadString('assets/ecg_20000_points.csv');
     final lines = const LineSplitter().convert(data);
     List<FlSpot> parsedSpots = [];
 
+    int limit = 3000; // Set limit to 10,000 data points
+    int count = 0;
+
     for (var line in lines.skip(1)) {
-      // Skip header
+      if (count >= limit) break; // Stop after reaching 10,000 points
       final values = line.split(',');
-      double x = double.parse(values[0]);
+      double x = double.parse(values[0]); // Convert time string to seconds
       double y = double.parse(values[1]);
       parsedSpots.add(FlSpot(x, y));
+      count++;
     }
 
     setState(() {

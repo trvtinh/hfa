@@ -106,7 +106,6 @@ class _YoloVideoState extends State<YoloVideo> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-
     if (!isLoaded) {
       return const Scaffold(
         body: Center(

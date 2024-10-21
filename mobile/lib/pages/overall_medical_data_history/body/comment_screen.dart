@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/comment.dart';
@@ -256,6 +257,7 @@ class CommentScreen extends StatelessWidget {
 
   Future<void> _handleDelete(BuildContext context, Comment comment) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Show loading dialog
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
@@ -293,6 +295,9 @@ class CommentScreen extends StatelessWidget {
       // Handle any errors
       log('Error deleting data: $e');
       _showErrorDialog(context);
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

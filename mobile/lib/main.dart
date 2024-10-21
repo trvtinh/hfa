@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_messaging_api.dart';
@@ -45,11 +46,14 @@ Future<void> main() async {
   await FirebaseMessagingApi.init();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   try {
+    // EasyLoading.show(status: "Đang xử lí...");
     await dotenv.load(fileName: ".env");
     String accessToken = await FirebaseMessagingApi.getAccessToken();
     log('access token$accessToken');
   } catch (e) {
     print("Error loading .env file: $e");
+  } finally {
+    // EasyLoading.dismiss();
   }
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -96,14 +100,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        builder: (BuildContext context, Widget? child) => GetMaterialApp(
-              title: 'Health For All',
-              // theme: ThemeData(
-              //   primarySwatch: Colors.,
-              // ),
-              initialRoute: initialRoute,
-              getPages: AppPages.routes,
-              debugShowCheckedModeBanner: false,
-            ));
+      builder: (BuildContext context, Widget? child) => GetMaterialApp(
+        title: 'Health For All',
+        initialRoute: initialRoute,
+        getPages: AppPages.routes,
+        debugShowCheckedModeBanner: false,
+        builder: (context, child) =>
+            EasyLoading.init()(context, child), // Correct usage here
+      ),
+    );
   }
 }

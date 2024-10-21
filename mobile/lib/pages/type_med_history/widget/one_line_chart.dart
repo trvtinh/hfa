@@ -61,12 +61,12 @@ class _OneLineChartState extends State<OneLineChart> {
     return Column(
       children: [
         Container(
-          height: 300, // Adjusted height to account for padding and text
+          height: 310, // Adjusted height to account for padding and text
           decoration: const BoxDecoration(
             color: Colors.white,
           ),
           padding:
-              const EdgeInsets.only(left: 12, right: 24, top: 26, bottom: 8),
+              const EdgeInsets.only(left: 12, right: 12, top: 26, bottom: 26),
           child: LineChart(
             LineChartData(
               // Limit the number of grid lines to 4 on the Y-axis and more frequent on X-axis
@@ -95,7 +95,7 @@ class _OneLineChartState extends State<OneLineChart> {
               titlesData: FlTitlesData(
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
-                    showTitles: true,
+                    showTitles: false,
                     reservedSize: 35, // Adjust space for text
                     getTitlesWidget: (value, meta) {
                       final index = value.toInt();

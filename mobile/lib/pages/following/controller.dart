@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/application/controller.dart';
@@ -9,23 +10,25 @@ class FollowingController extends GetxController {
   final appController = Get.find<ApplicationController>();
   final overallMedicalDataHistoryController =
       Get.find<OverallMedicalDataHistoryController>();
-  Map<dynamic, int> warningCountMap = <String, int>{}.obs;
+  Map<dynamic, int> alarmCountMap = <String, int>{}.obs;
   Map<String, String> updatedTimeMap = <String, String>{}.obs;
-  Future getWarningCount(String id) async {
-    final warningCount = await FirebaseFirestore.instance
+  Future getAlarmCount(String id) async {
+    final alarmCount = await FirebaseFirestore.instance
         .collection('notifications')
         .where('to_uid', isEqualTo: id)
-        .where('status', isEqualTo: 'warning')
+        .where('status', isEqualTo: 'alarm')
         .get()
         .then((snapshot) => snapshot.docs.length);
-    log('Warning count: $warningCount');
-    warningCountMap[id] = warningCount;
+    log('Alarm count: $alarmCount');
+    alarmCountMap[id] = alarmCount;
   }
 
   Future getUpdatedDataTime(String id) async {
     final db = FirebaseFirestore.instance;
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
+
       // Chuyển đổi DateTime thành Timestamp
       final time = Timestamp.fromDate(DateTime.now());
 
@@ -55,11 +58,13 @@ class FollowingController extends GetxController {
       // Xử lý lỗi
       print('Error fetching updated time $e');
       return 'Lỗi';
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 
   Future getFollowingData(String id) async {
-    await getWarningCount(id);
+    await getAlarmCount(id);
     await getUpdatedDataTime(id);
   }
 

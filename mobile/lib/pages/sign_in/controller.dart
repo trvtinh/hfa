@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_for_all/common/API/firebase_messaging_api.dart';
@@ -23,6 +24,7 @@ class SignInController extends GetxController {
 
   Future<void> handleSignIn() async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final user = await _googleSignIn.signIn();
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
@@ -111,6 +113,9 @@ class SignInController extends GetxController {
         "Có lỗi xảy ra khi đăng nhập, vui lòng thử lại sau",
         snackPosition: SnackPosition.BOTTOM,
       );
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

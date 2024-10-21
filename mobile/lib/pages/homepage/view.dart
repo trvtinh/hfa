@@ -79,204 +79,181 @@ class Homepage extends StatelessWidget {
                               // offset: Offset(0, 3), // changes position of shadow
                             )
                           ]),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Obx(() => Row(children: [
-                                  CircleAvatar(
-                                      radius: 28,
-                                      backgroundImage: CachedNetworkImageProvider(
-                                          appController.state.profile.value
-                                                  ?.photourl ??
-                                              "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficonduck.com%2Ficons%2F160691%2Favatar-default-symbolic&psig=AOvVaw2gPEQ_lKQuUXivxfgTKXo-&ust=1723564687779000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIi5g4Hp74cDFQAAAAAdAAAAABAE")),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Wrap(
-                                          children: [
-                                            Text(
-                                              appController.state.profile.value
-                                                      ?.name ??
-                                                  "",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          width: 12,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              appController.state.profile.value
-                                                      ?.gender ??
-                                                  "",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 4,
-                                            ),
-                                            Text(
-                                              appController.state.profile.value
-                                                          ?.age !=
-                                                      0
-                                                  ? ("${appController.state.profile.value?.age} tuổi")
-                                                  : '',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .outline,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ],
+                      child: Obx(() => Row(children: [
+                            CircleAvatar(
+                                radius: 28,
+                                backgroundImage: CachedNetworkImageProvider(
+                                    appController
+                                            .state.profile.value?.photourl ??
+                                        "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficonduck.com%2Ficons%2F160691%2Favatar-default-symbolic&psig=AOvVaw2gPEQ_lKQuUXivxfgTKXo-&ust=1723564687779000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCIi5g4Hp74cDFQAAAAAdAAAAABAE")),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Wrap(
+                                  children: [
+                                    Text(
+                                      appController.state.profile.value?.name ??
+                                          "",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
                                     ),
+                                  ],
+                                ),
+                                // const SizedBox(
+                                //   width: 12,
+                                // ),
+                                Text(
+                                  appController.state.profile.value?.gender ??
+                                      "",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
                                   ),
-                                  const SizedBox(width: 12),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2.9,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                ),
+                                // const SizedBox(
+                                //   width: 4,
+                                // ),
+                                Text(
+                                  appController.state.profile.value?.age != 0
+                                      ? ("${appController.state.profile.value?.age} tuổi")
+                                      : '',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color:
+                                        Theme.of(context).colorScheme.outline,
+                                  ),
+                                )
+                              ],
+                            ),
+                            const Spacer(),
+                            IntrinsicWidth(
+                              child: SizedBox(
+                                height: 56,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Người nhà:",
+                                        Text(
+                                          "Người nhà:",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        ),
+                                        Badge(
+                                          label: Text(
                                               style: TextStyle(
-                                                fontSize: 12,
+                                                fontSize: 11,
                                                 color: Theme.of(context)
                                                     .colorScheme
-                                                    .secondary,
+                                                    .primaryContainer,
                                               ),
-                                            ),
-                                            const Spacer(),
-                                            Badge(
-                                              label: Text(
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primaryContainer,
-                                                  ),
-                                                  appController
-                                                          .state
-                                                          .profile
-                                                          .value
-                                                          ?.relatives
-                                                          ?.length
-                                                          .toString() ??
-                                                      "0"),
-                                              largeSize: 16,
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiary,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Chuyên gia:",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            Badge(
-                                              label: Text(
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .primaryContainer,
-                                                  ),
-                                                  appController
-                                                          .state
-                                                          .profile
-                                                          .value
-                                                          ?.doctors
-                                                          ?.length
-                                                          .toString() ??
-                                                      "0"),
-                                              largeSize: 16,
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiary,
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              "Đang theo dõi:",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .secondary,
-                                              ),
-                                            ),
-                                            const Spacer(),
-                                            Badge(
-                                              label: Text(
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .primaryContainer,
-                                                ),
-                                                ((appController
-                                                                .state
-                                                                .profile
-                                                                .value
-                                                                ?.relatives
-                                                                ?.length ??
-                                                            0) +
-                                                        (appController
-                                                                .state
-                                                                .profile
-                                                                .value
-                                                                ?.patients
-                                                                ?.length ??
-                                                            0))
-                                                    .toString(),
-                                              ),
-                                              largeSize: 16,
-                                              backgroundColor: Theme.of(context)
-                                                  .colorScheme
-                                                  .tertiary,
-                                            ),
-                                          ],
+                                              appController.state.profile.value
+                                                      ?.relatives?.length
+                                                      .toString() ??
+                                                  "0"),
+                                          largeSize: 16,
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
                                         ),
                                       ],
                                     ),
-                                  )
-                                ]))
-                          ]),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Chuyên gia:",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        ),
+                                        Badge(
+                                          label: Text(
+                                              style: TextStyle(
+                                                fontSize: 11,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .primaryContainer,
+                                              ),
+                                              appController.state.profile.value
+                                                      ?.doctors?.length
+                                                      .toString() ??
+                                                  "0"),
+                                          largeSize: 16,
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Đang theo dõi:",
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                          ),
+                                        ),
+                                        Badge(
+                                          label: Text(
+                                            style: TextStyle(
+                                              fontSize: 11,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryContainer,
+                                            ),
+                                            ((appController
+                                                            .state
+                                                            .profile
+                                                            .value
+                                                            ?.relatives
+                                                            ?.length ??
+                                                        0) +
+                                                    (appController
+                                                            .state
+                                                            .profile
+                                                            .value
+                                                            ?.patients
+                                                            ?.length ??
+                                                        0))
+                                                .toString(),
+                                          ),
+                                          largeSize: 16,
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .tertiary,
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ])),
                     ),
                   ),
                   const SizedBox(
@@ -454,7 +431,7 @@ class Homepage extends StatelessWidget {
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('alarms')
-                                    .where('userId',
+                                    .where('toUId',
                                         isEqualTo: appController
                                             .state.profile.value?.id)
                                     .snapshots(),

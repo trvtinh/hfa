@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/entities/ecg_entity.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/connect_hardware/state.dart';
@@ -28,6 +29,7 @@ class ConnectHardwareController extends GetxController {
   RxString remoteId = "".obs;
   final appController = Get.find<ApplicationController>();
   String receivedData = "";
+  List<String> receivedIndex = [];
 
   RxString storageDataReceive = "".obs;
   RxList<String> storageDataSend = <String>[].obs;
@@ -117,32 +119,34 @@ class ConnectHardwareController extends GetxController {
     return '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 
-  void processData(Map<String, dynamic> decodeData) {
-    // Safely extract medId, dataValue, and interval from the decoded data
-    int medId = decodeData["dataType"] is int ? decodeData["dataType"] : 0;
-    List<dynamic> value = decodeData["dataValue"] ?? [];
-    int interval = decodeData["interval"] is int ? decodeData["interval"] : 500;
+  void processData() {
+    try {
+      // Safely extract medId, dataValue, and interval from the decoded data
+      int medId = int.parse(receivedIndex[0]);
+      receivedIndex.removeAt(0);
+      int interval = int.parse(receivedIndex[0]);
+      receivedIndex.removeAt(0);
+      List<double> index = receivedIndex.map((e) => double.parse(e)).toList();
+      double value = 0;
+      for (int i = 0; i < index.length; i++) value += index[i];
+      value /= index.length;
+      value = double.parse(value.toStringAsFixed(2));
+      DateTime now = DateTime.now();
 
-    DateTime now = DateTime.now();
+      log("MedId: $medId, Indexes: $index, Interval: $interval");
 
-    // Log the data for debugging purposes
-    log("MedId: $medId, Values: $value, Interval: $interval");
-
-    List<DateTime> time = [];
-    for (int i = value.length - 1; i >= 0; i--) {
-      time.add(now.subtract(Duration(milliseconds: interval * i)));
-    }
-
-    for (int i = 0; i < value.length; i++) {
-      state.medDate.add(formatDate(time[i]));
-      state.medTime.add(formatTime(time[i]));
+      // Add the date, time, and id to the respective RxList properties
+      state.medDate.add(formatDate(now));
+      state.medTime.add(formatTime(now));
       state.medId.add(medId);
-      state.medPass.add(time[i]);
-      if (value[i] is int) {
-        int dak = value[i];
-        state.medValue.add(dak.toDouble());
-      } else
-        state.medValue.add(value[i]);
+      state.medPass.add(now);
+      state.medIndex.add(index);
+      state.medValue.add(value.toString());
+
+      // Safely convert dynamic values to doubles, ignoring invalid values
+    } catch (e) {
+      log("Error processing data: $e");
+      // Optionally handle the error more specifically if needed
     }
   }
 
@@ -156,24 +160,31 @@ class ConnectHardwareController extends GetxController {
       log('Notifications enabled.');
 
       // Listen for data sent via notify from ESP32
+      // receivedData = "";
       notificationSubscription =
           readCharacteristic.value?.onValueReceived.listen((data) {
-        receivedData += String.fromCharCodes(data);
-
+        receivedData = String.fromCharCodes(data);
+        // String tmp = String.fromCharCodes(data);
+        // log('Length: $receivedData');
+        if (receivedData != "}"&& receivedData != ","){
+          log('ReceivedData: $receivedData');
+          receivedIndex.add(receivedData);
+        }
         // Log received data for debugging
-        log('Received data chunk: $receivedData');
+        // log('Received data: $tmp');
 
         // Check if the last character is '}', indicating the end of the JSON message
-        if (receivedData.endsWith("}")) {
+        if (receivedData == "}") {
           try {
+            // log('Received data chunk: $receivedData');
+            log("Start decoding");
             // Decode the JSON string and process the data
-            Map<String, dynamic> decodeData = jsonDecode(receivedData);
-            processData(decodeData);
+            processData();
           } catch (e) {
             log('Error decoding JSON data: $e');
           } finally {
             // Reset receivedData after processing
-            receivedData = "";
+            receivedIndex.clear();
           }
         }
       }, onError: (error) {
@@ -233,15 +244,6 @@ class ConnectHardwareController extends GetxController {
       BuildContext context) async {
     // isLoading = true.obs;
     Get.dialog(const Center(child: CircularProgressIndicator()));
-
-    // var check = await FirebaseApi.checkExistDocumentForMed(
-    //     'medicalData',
-    //     'userId',
-    //     state.profile.value?.id ?? '',
-    //     'typeId',
-    //     typeId,
-    //     'time',
-    //     Timestamp.fromDate(time));
     final data = MedicalEntity(
       userId: appController.state.profile.value?.id,
       time: Timestamp.fromDate(time),
@@ -265,6 +267,42 @@ class ConnectHardwareController extends GetxController {
             TextButton(
               onPressed: () {
                 Get.back();
+              },
+              child: const Text('Xác nhận'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future syncEcgData(DateTime time, String typeId, List<String> index,
+      String value, String unit, BuildContext context) async {
+    Get.dialog(const Center(child: CircularProgressIndicator()));
+
+    final data = MedicalEntity(
+      userId: appController.state.profile.value?.id,
+      time: Timestamp.fromDate(time),
+      value: value,
+      unit: unit,
+      typeId: typeId,
+      index: index,
+    );
+
+    log(data.toString());
+    await FirebaseApi.addDocument("medicalData", data.toFirestoreMap());
+    // appController.getUpdatedLatestMedical();
+    Get.back();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thành công'),
+          content: const Text('Đã đồng bộ dữ liệu ECG'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Get.back(); // Dismiss the dialog
               },
               child: const Text('Xác nhận'),
             ),

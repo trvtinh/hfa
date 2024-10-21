@@ -181,13 +181,12 @@ class Following extends GetView<FollowingController> {
       },
       child: Obx(() {
         final time = controller.updatedTimeMap[user.id] ?? '';
-        final warningCount =
-            controller.warningCountMap[user.id]?.toString() ?? '0';
+        final alarmCount = controller.alarmCountMap[user.id]?.toString() ?? '0';
         return Pinkbox(
           user: user,
           time: time,
           role: role,
-          warningCount: warningCount,
+          alarmCount: alarmCount,
         );
       }),
     );

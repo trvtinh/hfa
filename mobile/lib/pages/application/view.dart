@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
@@ -20,13 +22,11 @@ import 'controller.dart';
 
 class ApplicationPage extends GetView<ApplicationController> {
   const ApplicationPage({super.key});
-  // @override
-  // // TODO: implement controller
-  // ApplicationController get controller => super.controller;
 
   @override
   Widget build(BuildContext context) {
-    // controller.onReady();
+    controller.onInit();
+    controller.onReady();
     Widget buildPageView() {
       return Obx(() => PageView(
             physics: const NeverScrollableScrollPhysics(),
@@ -250,8 +250,8 @@ class About_HFA extends StatelessWidget {
                       ),
                       child: Image.asset(
                         "assets/qr_to_project.png",
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: MediaQuery.of(context).size.height / 2,
+                        width: min(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height) / 2,
+                        height: min(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height) / 2,
                       )),
                 ],
               ),

@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
@@ -39,11 +40,12 @@ class ApplicationController extends GetxController {
   final chooseMedController = Get.find<ChooseTypeMedController>();
   final reminderController = Get.find<ReminderController>();
   // final samsungController = Get.find<SamsungConnectController>();
-  final followingMedicalDataController = Get.find<FollowingMedicalDataController>();
+  final followingMedicalDataController =
+      Get.find<FollowingMedicalDataController>();
   // final connectHardwareController = Get.find<ConnectHardwareController>();
-  late final List<String> tabTitles;
-  late final PageController pageController;
-  late final List<BottomNavigationBarItem> bottomTabs;
+  late List<String> tabTitles;
+  late PageController pageController;
+  late List<BottomNavigationBarItem> bottomTabs;
   StreamSubscription<QuerySnapshot>? _updatedDataTimeSubscription;
   final Map<String, StreamSubscription<QuerySnapshot>>
       _medicalDataSubscriptions = {};
@@ -58,6 +60,7 @@ class ApplicationController extends GetxController {
 
   Future<UserData> getProfile() async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       String profile = await UserStore.to.getProfile();
       if (profile.isNotEmpty) {
         UserLoginResponseEntity userdata =
@@ -85,6 +88,9 @@ class ApplicationController extends GetxController {
       }
     } catch (e) {
       log('Lỗi khi lấy hồ sơ: $e');
+    }
+    finally{
+      EasyLoading.dismiss();
     }
     return state.profile.value!;
   }
@@ -131,7 +137,7 @@ class ApplicationController extends GetxController {
         label: 'Cá nhân',
       ),
     ];
-    pageController = PageController(initialPage: state.page);
+    pageController = PageController(initialPage: 0);
   }
 
   bool isEqualToToday(String date) {
@@ -161,6 +167,7 @@ class ApplicationController extends GetxController {
 
   @override
   void onReady() async {
+    pageController = PageController(initialPage: 0);
     await getProfile();
     notificationController.state.profile.value = state.profile.value;
     diagnosticController.state.profile.value = state.profile.value;
@@ -189,6 +196,7 @@ class ApplicationController extends GetxController {
   }
 
   Future<void> onLogOut() async {
+    pageController.dispose();
     await UserStore.to.onLogout();
     await googleSignIn.signOut();
     Get.offAndToNamed(AppRoutes.SIGN_IN);
@@ -197,6 +205,7 @@ class ApplicationController extends GetxController {
   void getUpdatedDataTime() {
     final db = FirebaseFirestore.instance;
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final time = Timestamp.fromDate(DateTime.now());
 
       // Lắng nghe sự thay đổi của dữ liệu trong Firestore
@@ -225,6 +234,9 @@ class ApplicationController extends GetxController {
     } catch (e) {
       print('Error setting up listener for updated time: $e');
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   void getUpdatedLatestMedical() {
@@ -237,6 +249,7 @@ class ApplicationController extends GetxController {
   void getUpdatedLatestTypeMedical(String type) {
     final db = FirebaseFirestore.instance;
     try {
+      // EasyLoading.show(status: "Đang xử lí...");
       final time = Timestamp.fromDate(DateTime.now());
 
       // Lắng nghe sự thay đổi của dữ liệu trong Firestore
