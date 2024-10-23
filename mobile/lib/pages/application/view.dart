@@ -124,8 +124,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () {
-              Get.to(() => AlarmPage(
-                  controller.state.profile.value!.id.toString(), true));
+              Get.to(() => AlarmPage(controller.state.profile.value!, true));
             },
             leading: const Icon(
               Icons.warning_amber_outlined,
@@ -250,8 +249,12 @@ class About_HFA extends StatelessWidget {
                       ),
                       child: Image.asset(
                         "assets/qr_to_project.png",
-                        width: min(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height) / 2,
-                        height: min(MediaQuery.of(context).size.width,MediaQuery.of(context).size.height) / 2,
+                        width: min(MediaQuery.of(context).size.width,
+                                MediaQuery.of(context).size.height) /
+                            2,
+                        height: min(MediaQuery.of(context).size.width,
+                                MediaQuery.of(context).size.height) /
+                            2,
                       )),
                 ],
               ),

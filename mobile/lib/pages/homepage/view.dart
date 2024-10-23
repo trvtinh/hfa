@@ -424,9 +424,7 @@ class Homepage extends StatelessWidget {
                       GestureDetector(
                           onTap: () {
                             Get.to(() => AlarmPage(
-                                appController.state.profile.value!.id
-                                    .toString(),
-                                true));
+                                appController.state.profile.value!, true));
                           },
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance

@@ -2,17 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/alarm_entity.dart';
+import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/alarm/widget/add_alarm.dart';
 import 'package:health_for_all/pages/alarm/widget/list_alarm.dart';
 import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/following/controller.dart';
 
 class AlarmPage extends GetView<AlarmController> {
-  final String userId;
+  final UserData user;
   final bool right;
-  AlarmPage(this.userId, this.right, {super.key});
+  AlarmPage(this.user, this.right, {super.key});
 
   final appController = Get.find<ApplicationController>();
+  final followingController = Get.find<FollowingController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +58,7 @@ class AlarmPage extends GetView<AlarmController> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
-                    .where('toUId', isEqualTo: userId)
+                    .where('toUId', isEqualTo: user.id)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -87,7 +90,7 @@ class AlarmPage extends GetView<AlarmController> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
-                    .where('toUId', isEqualTo: userId)
+                    .where('toUId', isEqualTo: user.id)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -103,6 +106,7 @@ class AlarmPage extends GetView<AlarmController> {
                       .map((doc) => AlarmEntity.fromFirestore(
                           doc as DocumentSnapshot<Map<String, dynamic>>))
                       .toList();
+                  controller.state.alarms.value = alarms;
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     controller.numberAlarm.value = alarms.length;
                   });
@@ -131,11 +135,14 @@ class AlarmPage extends GetView<AlarmController> {
   Widget add_alarm(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (right == false)
+        if (right == false) {
           Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
               snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-        else
+        } else {
+          followingController
+              .fetchRelatives(appController.state.profile.value!.id!);
           _showAddDialog(context);
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -189,7 +196,7 @@ class AlarmPage extends GetView<AlarmController> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 AddAlarm(
-                  userId: userId,
+                  user: user,
                   relativesIds: relativesIds,
                 ),
               ],
