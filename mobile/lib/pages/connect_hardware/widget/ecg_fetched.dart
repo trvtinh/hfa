@@ -3,26 +3,27 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
 
-class DataFetched extends StatefulWidget {
+class EcgFetched extends StatefulWidget {
   final String date;
   final String time;
+  final List<String> index;
   final String value;
-  final int index;
+  final int medId;
   final DateTime pass;
 
-  const DataFetched({
+  const EcgFetched({
     super.key,
     required this.date,
     required this.time,
     required this.value,
-    required this.index, required this.pass,
+    required this.pass, required this.index, required this.medId,
   });
 
   @override
-  State<DataFetched> createState() => _DataFetchedState();
+  State<EcgFetched> createState() => _EcgFetchedState();
 }
 
-class _DataFetchedState extends State<DataFetched> {
+class _EcgFetchedState extends State<EcgFetched> {
   // bool have_file1 = false;
   // bool have_file2 = false;
   // bool have_file3 = false;
@@ -38,14 +39,16 @@ class _DataFetchedState extends State<DataFetched> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
-              Image.asset(Item.getIconPath(widget.index)),
-              SizedBox(width: 12,),
+              Image.asset(Item.getIconPath(widget.medId)),
+              SizedBox(
+                width: 12,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      Item.getTitle(widget.index),
+                      Item.getTitle(widget.medId),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 16,
@@ -72,7 +75,8 @@ class _DataFetchedState extends State<DataFetched> {
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
-                  children: [// Adds space between hour and index
+                  children: [
+                    // Adds space between hour and index
                     Text(
                       widget.value,
                       style: TextStyle(
@@ -81,7 +85,7 @@ class _DataFetchedState extends State<DataFetched> {
                       ),
                     ),
                     Text(
-                      Item.getUnit(widget.index),
+                      Item.getUnit(widget.medId),
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 12,
@@ -92,40 +96,47 @@ class _DataFetchedState extends State<DataFetched> {
               ),
 
               Expanded(
-                child: !synced 
-                ? ElevatedButton(
-                  onPressed: (){
-                    connectController.syncMedData(widget.pass, widget.index.toString(), widget.value, Item.getUnit(widget.index), context);
-                    setState(() {
-                      synced = true;
-                    });
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                  ),
-                  child: Container(
-                    child: Text(
-                      "Đồng Bộ",
-                    ),
-                  ),
-                )
-                : ElevatedButton(
-                  onPressed: (){
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.outline,
-                  ),
-                  child: Container(
-                    child: Text(
-                      "Đã Đồng Bộ",
-                      style: TextStyle(
-                        color: Colors.white,
+                child: !synced
+                    ? ElevatedButton(
+                        onPressed: () {
+                          connectController.syncEcgData(
+                              widget.pass,
+                              widget.medId.toString(),
+                              widget.index,
+                              widget.value,
+                              Item.getUnit(widget.medId),
+                              context);
+                          setState(() {
+                            synced = true;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surfaceContainer,
+                        ),
+                        child: Container(
+                          child: Text(
+                            "Đồng Bộ",
+                          ),
+                        ),
+                      )
+                    : ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.outline,
+                        ),
+                        child: Container(
+                          child: Text(
+                            "Đã Đồng Bộ",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ),
-        
+
               // Icons for additional actions in the same row
               // const SizedBox(width: 16),
               // icon_round(have_file1, icon: Icons.edit_note_outlined),

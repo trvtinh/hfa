@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/pages/application/index.dart';
@@ -139,6 +141,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
           if (label == 'Lưu') {
             isLoading.value = true;
             try {
+              EasyLoading.show(status: "Đang xử lí...");
               if (isLoading.value) {
                 Get.dialog(const Center(child: CircularProgressIndicator()));
               }
@@ -209,6 +212,8 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                   );
                 },
               );
+            } finally {
+              EasyLoading.dismiss();
             }
           }
         },

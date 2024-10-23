@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +18,7 @@ class ViewImage extends StatelessWidget {
     String message;
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Download image
       final http.Response response = await http.get(Uri.parse(imageUrl));
 
@@ -41,6 +43,9 @@ class ViewImage extends StatelessWidget {
       }
     } catch (e) {
       message = 'Error: $e';
+    }
+    finally{
+      EasyLoading.dismiss();
     }
 
     scaffoldMessenger.showSnackBar(SnackBar(

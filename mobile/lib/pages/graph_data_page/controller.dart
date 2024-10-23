@@ -1,21 +1,23 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/comment.dart';
+import 'package:health_for_all/common/entities/ecg_entity.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
 import 'package:health_for_all/pages/application/controller.dart';
+import 'package:health_for_all/pages/graph_data_page/state.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/controller.dart';
-import 'package:health_for_all/pages/type_med_history/state.dart';
 import 'package:intl/intl.dart';
 
-class TypeMedHistoryController extends GetxController {
+class EcgDataController extends GetxController {
   final medicalController = Get.find<OverallMedicalDataHistoryController>();
-  final state = TypeMedicalHistoryState();
+  final state = EcgHistoryDataState();
   final appController = Get.find<ApplicationController>();
   RxMap<String, List<MedicalEntity>> result =
       <String, List<MedicalEntity>>{}.obs;
@@ -25,17 +27,6 @@ class TypeMedHistoryController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-  }
-
-  Future getAllCommentByMedicalType(String medicalId) async {
-    final snapshot =
-        await FirebaseApi.getQuerySnapshot('comments', 'medicalId', medicalId);
-    if (snapshot.docs.isNotEmpty) {
-      for (var doc in snapshot.docs) {
-        final comment = Comment.fromFirestore(doc);
-        state.commmentList.add(comment);
-      }
-    }
   }
 
   Future<String> getUser(String userId) async {
@@ -55,6 +46,7 @@ class TypeMedHistoryController extends GetxController {
     final List<MedicalEntity> data = [];
     try {
       EasyLoading.show(status: "Đang xử lí...");
+
       // Xác định khoảng thời gian của ngày
       final startOfDay = DateTime(date.year, date.month, date.day, 0, 0, 0);
       final endOfDay =
@@ -114,7 +106,8 @@ class TypeMedHistoryController extends GetxController {
       // Xử lý lỗi
       print('Error fetching event in day: $e');
       return null;
-    } finally {
+    }
+    finally{
       EasyLoading.dismiss();
     }
   }

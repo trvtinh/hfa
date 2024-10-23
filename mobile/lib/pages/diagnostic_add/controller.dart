@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -136,6 +137,7 @@ class DiagnosticAddController extends GetxController {
 
   Future<XFile?> urlToFile(String imageUrl) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Step 1: Download the image data from the URL
       final response = await http.get(Uri.parse(imageUrl));
       if (response.statusCode == 200) {
@@ -155,6 +157,9 @@ class DiagnosticAddController extends GetxController {
     } catch (e) {
       print('Error: $e');
       return null;
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 }

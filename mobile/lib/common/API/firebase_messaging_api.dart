@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/services/services.dart';
@@ -149,6 +150,7 @@ class FirebaseMessagingApi {
       }
     };
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       await http
           .post(Uri.parse(endpointCloudMessaging),
               body: jsonEncode(data),
@@ -162,6 +164,9 @@ class FirebaseMessagingApi {
           diagnosticId: diagnosticId, medicalId: medicalId);
     } catch (e) {
       print('Error sending message: $e');
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

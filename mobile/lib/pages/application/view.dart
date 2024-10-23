@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
@@ -122,8 +124,7 @@ class ApplicationPage extends GetView<ApplicationController> {
           ),
           ListTile(
             onTap: () {
-              Get.to(() => AlarmPage(
-                  controller.state.profile.value!.id.toString(), true));
+              Get.to(() => AlarmPage(controller.state.profile.value!, true));
             },
             leading: const Icon(
               Icons.warning_amber_outlined,
@@ -248,8 +249,12 @@ class About_HFA extends StatelessWidget {
                       ),
                       child: Image.asset(
                         "assets/qr_to_project.png",
-                        width: MediaQuery.of(context).size.width / 2,
-                        height: MediaQuery.of(context).size.height / 2,
+                        width: min(MediaQuery.of(context).size.width,
+                                MediaQuery.of(context).size.height) /
+                            2,
+                        height: min(MediaQuery.of(context).size.width,
+                                MediaQuery.of(context).size.height) /
+                            2,
                       )),
                 ],
               ),

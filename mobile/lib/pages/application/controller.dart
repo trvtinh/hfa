@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
@@ -59,6 +60,7 @@ class ApplicationController extends GetxController {
 
   Future<UserData> getProfile() async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       String profile = await UserStore.to.getProfile();
       if (profile.isNotEmpty) {
         UserLoginResponseEntity userdata =
@@ -86,6 +88,9 @@ class ApplicationController extends GetxController {
       }
     } catch (e) {
       log('Lỗi khi lấy hồ sơ: $e');
+    }
+    finally{
+      EasyLoading.dismiss();
     }
     return state.profile.value!;
   }
@@ -200,6 +205,7 @@ class ApplicationController extends GetxController {
   void getUpdatedDataTime() {
     final db = FirebaseFirestore.instance;
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final time = Timestamp.fromDate(DateTime.now());
 
       // Lắng nghe sự thay đổi của dữ liệu trong Firestore
@@ -228,6 +234,9 @@ class ApplicationController extends GetxController {
     } catch (e) {
       print('Error setting up listener for updated time: $e');
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   void getUpdatedLatestMedical() {
@@ -240,6 +249,7 @@ class ApplicationController extends GetxController {
   void getUpdatedLatestTypeMedical(String type) {
     final db = FirebaseFirestore.instance;
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final time = Timestamp.fromDate(DateTime.now());
 
       // Lắng nghe sự thay đổi của dữ liệu trong Firestore
@@ -274,6 +284,9 @@ class ApplicationController extends GetxController {
       });
     } catch (e) {
       print('Error setting up listener for updated time: $e');
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 

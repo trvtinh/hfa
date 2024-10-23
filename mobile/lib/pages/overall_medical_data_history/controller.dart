@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:health_for_all/common/entities/comment.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/user.dart';
@@ -37,11 +38,15 @@ class OverallMedicalDataHistoryController extends GetxController {
   void fetchData(List<String> id) async {
     listFollower.clear();
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Call getData and await the result
       listFollower = await getData(id);
       print(listFollower.length);
     } catch (e) {
       print('Error fetching user data: $e');
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 
@@ -63,6 +68,7 @@ class OverallMedicalDataHistoryController extends GetxController {
 
   Future addComment(BuildContext context) async {
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       final comment = Comment(
           uid: appController.state.profile.value!.id!,
           content: commentController.text,
@@ -88,6 +94,9 @@ class OverallMedicalDataHistoryController extends GetxController {
           );
         },
       );
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 
@@ -341,6 +350,7 @@ class OverallMedicalDataHistoryController extends GetxController {
     final db = FirebaseFirestore.instance;
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Chuyển đổi DateTime thành Timestamp
       final time = Timestamp.fromDate(date);
 
@@ -374,6 +384,9 @@ class OverallMedicalDataHistoryController extends GetxController {
       print('Error fetching latest event in day $date: $e');
       return null;
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   Future<MedicalEntity?> fetchLatestEventInDay(
@@ -381,6 +394,7 @@ class OverallMedicalDataHistoryController extends GetxController {
     final db = FirebaseFirestore.instance;
 
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Xác định khoảng thời gian của ngày
       final startOfDay = DateTime(date.year, date.month, date.day, 0, 0, 0);
       final endOfDay =
@@ -434,12 +448,16 @@ class OverallMedicalDataHistoryController extends GetxController {
       print('Error fetching latest event in day $date: $e');
       return null;
     }
+    finally{
+      EasyLoading.dismiss();
+    }
   }
 
   Future fetchEventsInDay(DateTime date, String value, int? limit) async {
     final db = FirebaseFirestore.instance;
     final List<MedicalEntity> data = [];
     try {
+      EasyLoading.show(status: "Đang xử lí...");
       // Xác định khoảng thời gian của ngày
       final startOfDay = DateTime(date.year, date.month, date.day, 0, 0, 0);
       final endOfDay =
@@ -497,6 +515,9 @@ class OverallMedicalDataHistoryController extends GetxController {
       // Xử lý lỗi
       print('Error fetching event in day: $e');
       return null;
+    }
+    finally{
+      EasyLoading.dismiss();
     }
   }
 
