@@ -57,8 +57,8 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   void initState() {
-    init();
     super.initState();
+    init();
   }
 
   init() async {
@@ -91,7 +91,7 @@ class _YoloVideoState extends State<YoloVideo> {
     img.Image croppedImage = await cropCameraImage(cameraImage, box);
     medicalController.state.selectedFile.value =
         await saveImageToFile(croppedImage, 'cropped.jpg');
-    // Get.back();
+    Get.back();
   }
 
   Future<XFile> saveImageToFile(img.Image image, String filename) async {
@@ -105,6 +105,7 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   Widget build(BuildContext context) {
+    Orientation deviceOrientation = MediaQuery.of(context).orientation;
     final Size size = MediaQuery.of(context).size;
     if (!isLoaded) {
       return const Scaffold(
@@ -113,31 +114,26 @@ class _YoloVideoState extends State<YoloVideo> {
         ),
       );
     }
-    Orientation deviceOrientation = MediaQuery.of(context).orientation;
-    final double aspectRatio = controller.value.aspectRatio;
-    log(aspectRatio.toString());
-    log(size.toString());
     return Stack(
       fit: StackFit.expand,
       children: [
         Transform.rotate(
           angle: (controller.description.sensorOrientation -
-                  (deviceOrientation == Orientation.portrait ? 90 : 0)) *
+                  (deviceOrientation == Orientation.portrait ? 90 : 90)) *
               pi /
               180,
-          child: Center(
-            child: FittedBox(
-              fit: BoxFit
-                  .cover, // Phóng to camera để khớp với màn hình, cắt đi các phần dư
-              child: SizedBox(
-                width: size.width, // Đảm bảo tỷ lệ camera được giữ nguyên
-                height: size.width *
-                    aspectRatio, // Đảm bảo tỷ lệ camera được giữ nguyên
-                child: CameraPreview(controller),
-              ),
-            ),
+          child: AspectRatio(
+            aspectRatio: controller.value.aspectRatio,
+            child: CameraPreview(controller),
           ),
         ),
+        // Transform.rotate(
+        //   angle: controller.description.sensorOrientation * pi / 180,
+        //   child: AspectRatio(
+        //     aspectRatio: controller.value.aspectRatio,
+        //     child: CameraPreview(controller),
+        //   ),
+        // ),
         ...displayBoxesAroundRecognizedObjects(size),
         Positioned(
           bottom: 75,

@@ -211,10 +211,9 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                   );
                 },
               );
+            } finally {
+              EasyLoading.dismiss();
             }
-            finally{
-      EasyLoading.dismiss();
-    }
           }
         },
         child: Text(

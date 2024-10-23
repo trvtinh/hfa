@@ -61,7 +61,7 @@ class _AddPrescriptionState extends State<AddPrescription> {
             height: 24,
           ),
           Flexible(
-            child: AddFile(
+            child: AddFilePrescription(
               files: selectedFiles,
               onFilesChanged: updateFiles,
             ),

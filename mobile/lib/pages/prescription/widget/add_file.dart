@@ -4,17 +4,17 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddFile extends StatefulWidget {
-  AddFile({super.key, this.files, this.onFilesChanged});
+class AddFilePrescription extends StatefulWidget {
+  AddFilePrescription({super.key, this.files, this.onFilesChanged});
 
   List<XFile>? files;
   final Function(List<XFile>)? onFilesChanged;
 
   @override
-  State<AddFile> createState() => _AddFileState();
+  State<AddFilePrescription> createState() => _AddFilePrescriptionState();
 }
 
-class _AddFileState extends State<AddFile> {
+class _AddFilePrescriptionState extends State<AddFilePrescription> {
   final ImagePicker _picker = ImagePicker();
   final List<XFile> selectedFiles = [];
 
