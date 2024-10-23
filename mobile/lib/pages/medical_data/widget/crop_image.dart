@@ -91,7 +91,7 @@ class _YoloVideoState extends State<YoloVideo> {
     img.Image croppedImage = await cropCameraImage(cameraImage, box);
     medicalController.state.selectedFile.value =
         await saveImageToFile(croppedImage, 'cropped.jpg');
-    Get.back();
+    // Get.back();
   }
 
   Future<XFile> saveImageToFile(img.Image image, String filename) async {
@@ -174,8 +174,6 @@ class _YoloVideoState extends State<YoloVideo> {
   }
 
   Future<void> loadYoloModel() async {
-    
-    log("init");
     await widget.vision.loadYoloModel(
       labels: 'assets/AI_model/labels.txt',
       modelPath: 'assets/AI_model/best_float32.tflite',

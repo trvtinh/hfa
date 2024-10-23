@@ -85,7 +85,6 @@ class ReminderController extends GetxController {
 
   bool checkDate(String saveDate) {
     try {
-      EasyLoading.show(status: "Đang xử lí...");
       // Parse the saveDate string in the format 'dd/mm/yyyy'
       DateTime saveDateTime = DateFormat('dd/MM/yyyy').parse(saveDate);
 
@@ -97,9 +96,6 @@ class ReminderController extends GetxController {
     } catch (e) {
       print('Error parsing date: $e');
       return false; // Return false in case of an error
-    }
-    finally{
-      EasyLoading.dismiss();
     }
   }
 

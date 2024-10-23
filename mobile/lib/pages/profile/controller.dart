@@ -70,7 +70,7 @@ class ProfileController extends GetxController {
     List<UserRequest> requests = [];
 
     try {
-      EasyLoading.show(status: "Đang xử lí...");
+      // EasyLoading.show(status: "Đang xử lí...");
       // Lấy danh sách các yêu cầu từ Firestore
       final querySnapshot = await FirebaseApi.getQuerySnapshot(
           'requestFollows', 'toUId', appController.state.profile.value!.id!);
@@ -103,9 +103,9 @@ class ProfileController extends GetxController {
     } catch (e) {
       print('Error fetching requests: $e');
     }
-    finally{
-      EasyLoading.dismiss();
-    }
+    // finally{
+    //   EasyLoading.dismiss();
+    // }
     for (var i in requests) {
       print("name: " + i.user!.name.toString() + 'role : ' + i.role.toString());
     }
