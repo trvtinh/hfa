@@ -1,10 +1,12 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/API/firebase_messaging_api.dart';
 import 'package:health_for_all/common/entities/alarm_entity.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
@@ -15,14 +17,25 @@ class AlarmController extends GetxController {
   final state = AlarmState();
   AlarmController();
   RxString seletedTypeId = ''.obs;
-  RxString selectedRelative = ''.obs;
+  Rx<UserData> selectedRelative = UserData().obs;
   final unitController = TextEditingController();
   final highThresholdController = TextEditingController();
   final lowThresholdController = TextEditingController();
   final notiController = Get.find<NotificationController>();
   RxInt numberAlarm = 0.obs;
 
-  Future addAlarm(BuildContext context, String fromUId) async {
+  Future<List<AlarmEntity>> fetchAlarms(String userId) async {
+    final alarms =
+        await FirebaseApi.getQuerySnapshot('alarms', 'toUId', userId);
+    log('useralarms: ${state.alarms.length}, patientalarms: ${state.patientAlarms.length}');
+
+    return alarms.docs
+        .map((doc) => AlarmEntity.fromFirestore(
+            doc as DocumentSnapshot<Map<String, dynamic>>))
+        .toList();
+  }
+
+  Future addAlarm(BuildContext context, String userId) async {
     final unit = unitController.text;
     final highThreshold = highThresholdController.text;
     final lowThreshold = lowThresholdController.text;
@@ -32,8 +45,7 @@ class AlarmController extends GetxController {
       return;
     }
     final alarm = AlarmEntity(
-      fromUId: fromUId,
-      toUId: selectedRelative.value,
+      userId: userId,
       time: Timestamp.fromDate(DateTime.now()),
       highThreshold: highThreshold,
       lowThreshold: lowThreshold,
@@ -43,14 +55,23 @@ class AlarmController extends GetxController {
     try {
       EasyLoading.show(status: "Đang xử lí...");
       await FirebaseApi.addDocument('alarms', alarm.toMap());
-      notiController.addNoti(
-        'Cảnh báo',
-        "${state.profile.value!.name!} đã gửi cảnh báo đến bạn",
-        'alarm',
-        'alarm',
-        selectedRelative.value,
-        'alarm',
-      );
+      // notiController.addNoti(
+      //   'Cảnh báo',
+      //   "${state.profile.value!.name!} đã gửi cảnh báo đến bạn",
+      //   'alarm',
+      //   'alarm',
+      //   selectedRelative.value,
+      //   'alarm',
+      // );
+      // FirebaseMessagingApi.sendMessage(
+      //   selectedRelative.value.fcmtoken!,
+      //   'Chẩn đoán',
+      //   "${state.profile.value!.name!} đã gửi cảnh báo đến bạn",
+      //   'alarm',
+      //   'alarm',
+      //   selectedRelative.value.id!,
+      //   'alarm',
+      // );
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -77,8 +98,7 @@ class AlarmController extends GetxController {
       Get.snackbar("Lỗi", "Thêm cảnh báo thất bại",
           snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
       log(e.toString());
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -103,7 +123,7 @@ class AlarmController extends GetxController {
       log(e.toString());
     } finally {
       EasyLoading.dismiss();
-    };
+    }
     numberAlarm.value = alarmCount;
   }
 
@@ -128,8 +148,7 @@ class AlarmController extends GetxController {
       clearData();
     } catch (e) {
       log(e.toString());
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }

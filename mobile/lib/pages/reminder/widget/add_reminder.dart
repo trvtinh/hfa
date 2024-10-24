@@ -182,9 +182,6 @@ class _AddReminderState extends State<AddReminder> {
 
     return Row(
       children: [
-        const SizedBox(
-          width: 4,
-        ),
         SizedBox(
           width: (MediaQuery.sizeOf(context).width - 3) / 5,
           child: ChoiceChip(

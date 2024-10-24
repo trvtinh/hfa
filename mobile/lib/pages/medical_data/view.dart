@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -211,10 +212,9 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                   );
                 },
               );
+            } finally {
+              EasyLoading.dismiss();
             }
-            finally{
-      EasyLoading.dismiss();
-    }
           }
         },
         child: Text(

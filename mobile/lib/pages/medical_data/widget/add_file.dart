@@ -9,10 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import '../controller.dart';
 
 class AddFile extends StatefulWidget {
-  AddFile({super.key, this.files, this.onFilesChanged});
+  AddFile({super.key, this.files, this.onFilesChanged, required this.medName});
 
   List<XFile>? files;
   final Function(List<XFile>)? onFilesChanged;
+  final String medName;
 
   @override
   State<AddFile> createState() => _AddFileState();
@@ -37,8 +38,19 @@ class _AddFileState extends State<AddFile> {
       widget.onFilesChanged?.call(selectedFiles); // Notify parent about changes
     });
   }
+  void openCamera() async {
+    final XFile? images = await _picker.pickImage(source: ImageSource.camera);
+    setState(() {
+      selectedFiles.add(images!);
+      widget.onFilesChanged?.call(selectedFiles); // Notify parent about changes
+    });
+  }
 
   void capturePhoto() {
+    if (widget.medName != "Huyết áp"){
+      openCamera();
+      return;
+    }
     log('Capture photo');
     Get.to(() => const CropImage());
   }

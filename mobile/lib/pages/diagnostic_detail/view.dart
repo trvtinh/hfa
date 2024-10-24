@@ -107,10 +107,10 @@ class DetailView extends StatelessWidget {
                       title: Item.getTitle(int.parse(medicalData.typeId!)),
                       value: medicalData.value!,
                       unit: Item.getUnit(int.parse(medicalData.typeId!)),
-                      note: medicalData.note!,
+                      note: medicalData.note,
                       time: DatetimeChange.getHourString(
                           medicalData.time!.toDate()),
-                      attachments: medicalData.imageUrls!,
+                      attachments: medicalData.imageUrls,
                     ),
                   ],
                 ),

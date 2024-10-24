@@ -107,6 +107,7 @@ class Following extends GetView<FollowingController> {
             return const Center(child: Text('Chưa có người thân!'));
           } else if (snapshot.hasData) {
             final users = snapshot.data ?? [];
+            controller.state.relatives = users;
             if (users.isEmpty) {
               return const Center(child: Text("Chưa có người thân"));
             }
@@ -142,6 +143,7 @@ class Following extends GetView<FollowingController> {
           return const Center(child: Text('Chưa có bệnh nhân!'));
         } else if (snapshot.hasData) {
           final users = snapshot.data ?? [];
+          controller.state.patients = users;
           if (users.isEmpty) {
             return const Center(child: Text("Chưa có bệnh nhân"));
           }

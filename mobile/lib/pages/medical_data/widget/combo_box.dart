@@ -48,7 +48,7 @@ class _ComboBoxState extends State<ComboBox> {
       selectedFiles.clear();
       return;
     }
-    if (widget.valueController.text.isEmpty) {
+    if (widget.valueController.text.isEmpty && widget.title == 'Huyết áp') {
       imageAnalyze.state.image.value = File(newFiles[0].path);
       isLoading.value = true;
       Future.delayed(Duration.zero, () {
@@ -72,13 +72,11 @@ class _ComboBoxState extends State<ComboBox> {
           });
         });
       });
-      if (widget.title == 'Huyết áp') {
-        medicalController.state.data[widget.title]?.value =
-            '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
-        log('combobox : ${medicalController.state.data[widget.title]?.value}');
-        log('hehe'
-            '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}');
-      }
+      medicalController.state.data[widget.title]?.value =
+          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}';
+      log('combobox : ${medicalController.state.data[widget.title]?.value}');
+      log('hehe'
+          '${imageAnalyze.state.systolic.value}/${imageAnalyze.state.diastolic.value}');
     }
   }
 
@@ -96,7 +94,7 @@ class _ComboBoxState extends State<ComboBox> {
             RxBool haveFile = (selectedFiles.isNotEmpty).obs;
             RxBool haveNote = widget.noteController.text.isNotEmpty.obs;
             ischeck.value =
-                medicalController.state.data[widget.title]?.value != null;
+                medicalController.state.data[widget.title]?.value != null && medicalController.state.data[widget.title]?.value != '';
             if (ischeck.value == false) {
               haveFile = false.obs;
               haveNote = false.obs;
@@ -128,67 +126,60 @@ class _ComboBoxState extends State<ComboBox> {
                           color: Theme.of(context).colorScheme.outlineVariant),
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.all(1.5),
-                        child: haveNote.value
-                            ? Badge(
-                                child: Icon(
-                                  Icons
-                                      .edit_note, // Icon when files are present
-                                  color: ischeck.value
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant,
-                                ),
-                              )
-                            : Obx(
-                                () => Icon(
-                                  Icons
-                                      .edit_note, // Icon when no files are present
-                                  color: ischeck.value
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant,
-                                ),
-                              )),
-                  ),
-                  const SizedBox(width: 8),
-                  Obx(
-                    () => Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerLowest,
-                        border: Border.all(
-                            color:
-                                Theme.of(context).colorScheme.outlineVariant),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(1.5),
-                        child: haveFile.value
-                            ? Badge(
-                                child: Icon(
-                                  Icons
-                                      .attach_file, // Icon when files are present
-                                  color: ischeck.value
-                                      ? Theme.of(context).colorScheme.primary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .outlineVariant,
-                                ),
-                              )
-                            : Icon(
-                                Icons
-                                    .attach_file, // Icon when no files are present
+                      padding: const EdgeInsets.all(1.5),
+                      child: haveNote.value
+                          ? Badge(
+                              child: Icon(
+                                Icons.edit_note, // Icon when files are present
                                 color: ischeck.value
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context)
                                         .colorScheme
                                         .outlineVariant,
                               ),
-                      ),
+                            )
+                          : Icon(
+                              Icons.edit_note, // Icon when no files are present
+                              color: ischeck.value
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                            ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                          Theme.of(context).colorScheme.surfaceContainerLowest,
+                      border: Border.all(
+                          color: Theme.of(context).colorScheme.outlineVariant),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.5),
+                      child: haveFile.value
+                          ? Badge(
+                              child: Icon(
+                                Icons
+                                    .attach_file, // Icon when files are present
+                                color: ischeck.value
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .outlineVariant,
+                              ),
+                            )
+                          : Icon(
+                              Icons
+                                  .attach_file, // Icon when no files are present
+                              color: ischeck.value
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant,
+                            ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -204,8 +195,6 @@ class _ComboBoxState extends State<ComboBox> {
                         medicalController.state.data[widget.title]!.imageUrls =
                             [];
                         medicalController.state.data[widget.title]!.unit = '';
-                        haveNote.value = false;
-                        haveFile.value = false;
                         ischeck.value = false;
                       }
                     },
@@ -220,17 +209,14 @@ class _ComboBoxState extends State<ComboBox> {
                                 Theme.of(context).colorScheme.outlineVariant),
                       ),
                       child: Padding(
-                          padding: const EdgeInsets.all(1.5),
-                          child: Obx(
-                            () => Icon(
-                              Icons.clear,
-                              color: ischeck.value
-                                  ? Theme.of(context).colorScheme.error
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .outlineVariant,
-                            ),
-                          )),
+                        padding: const EdgeInsets.all(1.5),
+                        child: Icon(
+                          Icons.clear,
+                          color: ischeck.value
+                              ? Theme.of(context).colorScheme.error
+                              : Theme.of(context).colorScheme.outlineVariant,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -329,6 +315,7 @@ class _ComboBoxState extends State<ComboBox> {
                     child: AddFile(
                       files: selectedFiles,
                       onFilesChanged: updateFiles,
+                      medName: widget.title,
                     ),
                   ),
                   const SizedBox(height: 24),

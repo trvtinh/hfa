@@ -3,15 +3,17 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
+import 'package:health_for_all/common/entities/alarm_entity.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
+import 'package:health_for_all/pages/following/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/profile/controller.dart';
 
 class AddAlarm extends StatefulWidget {
-  final String userId;
+  final UserData user;
   final List<String> relativesIds;
-  const AddAlarm({super.key, required this.userId, required this.relativesIds});
+  const AddAlarm({super.key, required this.user, required this.relativesIds});
 
   @override
   State<AddAlarm> createState() => _AddAlarmState();
@@ -20,6 +22,7 @@ class AddAlarm extends StatefulWidget {
 class _AddAlarmState extends State<AddAlarm> {
   final alarmController = Get.find<AlarmController>();
   final profileController = Get.find<ProfileController>();
+  final followingController = Get.find<FollowingController>();
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -81,12 +84,12 @@ class _AddAlarmState extends State<AddAlarm> {
           height: 24,
         ),
         // drop(),
-        dropRelatives(),
-        const SizedBox(
-          height: 24,
-        ),
-        // drop(),
+        // dropRelatives(),
+        // const SizedBox(
+        //   height: 24,
+        // ),
         drop_alt(),
+        // dropalt(),
         const SizedBox(
           height: 24,
         ),
@@ -141,7 +144,7 @@ class _AddAlarmState extends State<AddAlarm> {
                 backgroundColor: Colors.transparent,
               ),
               onPressed: () {
-                alarmController.addAlarm(context, widget.userId);
+                alarmController.addAlarm(context, widget.user.id!);
               },
               child: Text(
                 "Xác nhận",
@@ -198,38 +201,19 @@ class _AddAlarmState extends State<AddAlarm> {
       10,
       (index) =>
           Item.getTitle(index)); // Use Item.getTitle to populate the list
-  final List<String> listRelatives = [];
 
   Widget dropRelatives() {
-    return StreamBuilder(
-      stream: profileController.getUserByIds(widget.relativesIds),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(child: Text('Chưa có người nhà!'));
-        } else if (snapshot.hasData) {
-          final relatives = snapshot.data ?? [];
-          if (relatives.isEmpty) {
-            return const Center(child: Text("Chưa có người nhà"));
-          }
-          return DropdownMenu(
-            width: MediaQuery.of(context).size.width - 70,
-            hintText: "Chọn người nhà",
-            onSelected: (String? value) {
-              alarmController.selectedRelative.value = value!;
-              log(alarmController.selectedRelative.value);
-            },
-            dropdownMenuEntries:
-                relatives.map<DropdownMenuEntry<String>>((UserData value) {
-              return DropdownMenuEntry<String>(
-                  value: value.id!, label: value.name!);
-            }).toList(),
-          );
-        } else {
-          return const Center(child: Text("Chưa có bệnh nhân"));
-        }
+    return DropdownMenu(
+      width: MediaQuery.of(context).size.width - 70,
+      hintText: "Chọn người nhà",
+      onSelected: (UserData? value) {
+        alarmController.selectedRelative.value = value!;
+        log(alarmController.selectedRelative.value.name!);
       },
+      dropdownMenuEntries: followingController.state.relatives
+          .map<DropdownMenuEntry<UserData>>((UserData value) {
+        return DropdownMenuEntry<UserData>(value: value, label: value.name!);
+      }).toList(),
     );
   }
 
@@ -238,6 +222,8 @@ class _AddAlarmState extends State<AddAlarm> {
       width: MediaQuery.of(context).size.width - 70,
       hintText: "Chọn loại dữ liệu",
       onSelected: (String? value) {
+        // if (checkavability(value!) == false) {}
+
         alarmController.seletedTypeId.value = list.indexOf(value!).toString();
         log(alarmController.seletedTypeId.value);
         alarmController.unitController.text = Item.getUnit(list.indexOf(value));
@@ -245,6 +231,62 @@ class _AddAlarmState extends State<AddAlarm> {
       dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
         return DropdownMenuEntry<String>(value: value, label: value);
       }).toList(),
+    );
+  }
+
+  String? _selectedItem;
+  String? _previousSelectedItem;
+
+  Widget dropalt() {
+    return DropdownButton<String>(
+      value: _selectedItem,
+      hint: const Text("Chọn loại dữ liệu"),
+      icon: const Icon(Icons.arrow_downward),
+      items: list.map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (String? newValue) async {
+        if (await checkavability(newValue!) == false) {
+          // Show an alert dialog to notify the user
+          showForbiddenItemDialog();
+
+          // Revert to the previous selection
+          setState(() {
+            _selectedItem = _previousSelectedItem;
+          });
+        } else {
+          // Update previous selection and set the new value
+          setState(() {
+            _previousSelectedItem = newValue;
+            _selectedItem = newValue;
+            alarmController.seletedTypeId.value = newValue;
+          });
+        }
+      },
+    );
+  }
+
+  void showForbiddenItemDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Chỉ số đã được lựa chọn'),
+          content: Text(
+              'Chỉ số đã được đặt cảnh báo, vui lòng lựa chọn chỉ số khác hoặc xóa cảnh báo'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Đóng'),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -259,5 +301,15 @@ class _AddAlarmState extends State<AddAlarm> {
     });
   }
 
+  Future<bool> checkavability(String value) async {
+    List<AlarmEntity> alarms = await alarmController
+        .fetchAlarms(alarmController.selectedRelative.value.id!);
+    for (int i = 0; i < alarms.length; i++) {
+      if (list.indexOf(value).toString() == alarms[i].typeId) {
+        return false;
+      }
+    }
+    return true;
+  }
   // List<Map> MedData = getMedData();
 }

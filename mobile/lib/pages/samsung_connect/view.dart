@@ -875,7 +875,7 @@ class _HealthConnectState extends State<HealthConnect> {
           height: 10,
         ),
         const Text(
-          "1. Bấm vào 'Tải Health Connect' nếu bạn chưa có để bắt đầu đồng bộ hóa",
+          "1. Bấm vào 'Kiểm tra quyền truy cập Health Connect' để tải health connect nếu bạn chưa có, để bắt đầu đồng bộ hóa",
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(

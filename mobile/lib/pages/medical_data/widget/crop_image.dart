@@ -174,8 +174,6 @@ class _YoloVideoState extends State<YoloVideo> {
   }
 
   Future<void> loadYoloModel() async {
-    
-    log("init");
     await widget.vision.loadYoloModel(
       labels: 'assets/AI_model/labels.txt',
       modelPath: 'assets/AI_model/best_float32.tflite',

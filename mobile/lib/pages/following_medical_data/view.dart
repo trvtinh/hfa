@@ -410,8 +410,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                       GestureDetector(
                           onTap: () {
                             Get.to(() => AlarmPage(
-                                appController.state.selectedUser.value.id
-                                    .toString(),
+                                appController.state.selectedUser.value,
                                 appController
                                         .state.selectedUser.value.isDoctor ??
                                     false));

@@ -235,8 +235,8 @@ class OverallMedicalDataHistoryController extends GetxController {
                                     Get.back();
                                   },
                                   child: const Text('Huỷ')),
-                              TextButton(
-                                  onPressed: () {}, child: const Text('Sửa'))
+                              // TextButton(
+                              //     onPressed: () {}, child: const Text('Sửa'))
                             ],
                           )
                         ],
