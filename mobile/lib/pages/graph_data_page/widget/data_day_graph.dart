@@ -49,7 +49,7 @@ class _DataDayGraphState extends State<DataDayGraph> {
                             fontSize: 22,
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         ElevatedButton(
                             onPressed: () {
                               Get.to(() => GraphChart(
@@ -57,7 +57,7 @@ class _DataDayGraphState extends State<DataDayGraph> {
                                       .map((e) => double.parse(e))
                                       .toList()));
                             },
-                            child: Text("Hiện đồ thị")),
+                            child: const Text("Hiện đồ thị")),
                       ],
                     ),
                   ],

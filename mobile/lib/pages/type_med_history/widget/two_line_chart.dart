@@ -2,13 +2,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/type_med_history/controller.dart';
-import 'package:health_for_all/pages/type_med_history/widget/alarm_widget.dart';
-import 'package:health_for_all/pages/type_med_history/widget/comment_widget.dart';
-import 'package:health_for_all/pages/type_med_history/widget/diagnostic_widget.dart';
 import 'package:intl/intl.dart';
 
 class TwoLineChart extends StatefulWidget {
-  @override
   final bool show_comment;
   final bool show_diagnostic;
   final bool show_alarm;

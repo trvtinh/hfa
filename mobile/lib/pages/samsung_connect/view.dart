@@ -121,7 +121,6 @@ class _HealthConnectState extends State<HealthConnect> {
     if (!hasPermissions) {
       // requesting access to the data types before reading them
       try {
-
         authorized = await Health()
             .requestAuthorization(types, permissions: permissions);
       } catch (error) {
@@ -224,12 +223,11 @@ class _HealthConnectState extends State<HealthConnect> {
     _healthDataList.clear();
 
     try {
-
       // fetch health data
       List<HealthDataPoint> healthData = await Health().getHealthDataFromTypes(
         types: types,
         startTime: healthConnectController.start,
-        endTime: healthConnectController.end.add(Duration(hours: 24)),
+        endTime: healthConnectController.end.add(const Duration(hours: 24)),
         recordingMethodsToFilter: recordingMethodsToFilter,
       );
 
@@ -267,7 +265,9 @@ class _HealthConnectState extends State<HealthConnect> {
     // filter out duplicates
     _healthDataList = Health().removeDuplicates(_healthDataList);
 
-    _healthDataList.forEach((data) => debugPrint(toJsonString(data)));
+    for (var data in _healthDataList) {
+      debugPrint(toJsonString(data));
+    }
 
     // update the UI to display the results
     setState(() {
@@ -550,10 +550,10 @@ class _HealthConnectState extends State<HealthConnect> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Samsung Health Connect",
         ),
-        actions: [
+        actions: const [
           Icon(
             Icons.help_outline,
           ),
@@ -565,7 +565,7 @@ class _HealthConnectState extends State<HealthConnect> {
       body: Column(
         // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Divider(
+          const Divider(
             height: 1,
           ),
           if (Platform.isAndroid)
@@ -604,7 +604,7 @@ class _HealthConnectState extends State<HealthConnect> {
                       backgroundColor: WidgetStatePropertyAll(Colors.blue)),
                   child: const Text("Lấy dữ liệu",
                       style: TextStyle(color: Colors.white))),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
               TextButton(
@@ -762,9 +762,9 @@ class _HealthConnectState extends State<HealthConnect> {
   String convert(String val) {
     String res = "";
     for (int i = val.length - 1; i >= 0; i--) {
-      if (val[i] == '.')
+      if (val[i] == '.') {
         res = "";
-      else if (RegExp(r'^[0-9]$').hasMatch(val[i]))
+      } else if (RegExp(r'^[0-9]$').hasMatch(val[i]))
         res = val[i] + res;
       else
         break;
@@ -829,7 +829,7 @@ class _HealthConnectState extends State<HealthConnect> {
         // }
         return Container(
           decoration: BoxDecoration(border: Border.all()),
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
               DataDay(
@@ -852,9 +852,9 @@ class _HealthConnectState extends State<HealthConnect> {
         // );
       });
 
-  Widget _contentNoData = const Text('No Data to show');
+  final Widget _contentNoData = const Text('No Data to show');
 
-  Widget _contentNotFetched = Padding(
+  final Widget _contentNotFetched = Padding(
     padding: const EdgeInsets.all(16.0),
     child: Container(
       decoration: BoxDecoration(
@@ -864,7 +864,7 @@ class _HealthConnectState extends State<HealthConnect> {
       padding: const EdgeInsets.all(16),
       child:
           const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        const Text(
+        Text(
           "Hướng dẫn sử dụng",
           style: TextStyle(
             fontSize: 30,
@@ -874,28 +874,28 @@ class _HealthConnectState extends State<HealthConnect> {
         SizedBox(
           height: 10,
         ),
-        const Text(
+        Text(
           "1. Bấm vào 'Kiểm tra quyền truy cập Health Connect' để tải health connect nếu bạn chưa có, để bắt đầu đồng bộ hóa",
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(
           height: 10,
         ),
-        const Text(
+        Text(
           "2. Cho quyền viết và sửa dữ liệu y tế của ứng dụng HFA - Health For All và Samsung Health trong Health Connect",
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(
           height: 10,
         ),
-        const Text(
+        Text(
           "3. Bấm vào 'Chọn ngày lấy dữ liệu' để chọn khoảng thời gian lấy dữ liệu từ Samsung Health",
           style: TextStyle(fontSize: 20),
         ),
         SizedBox(
           height: 10,
         ),
-        const Text(
+        Text(
           "4. Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health",
           style: TextStyle(fontSize: 20),
         ),
@@ -905,31 +905,31 @@ class _HealthConnectState extends State<HealthConnect> {
     ),
   );
 
-  Widget _authorized = const Text('Authorization granted!');
+  final Widget _authorized = const Text('Authorization granted!');
 
-  Widget _authorizationNotGranted = const Column(
+  final Widget _authorizationNotGranted = const Column(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text('Authorization not given.'),
-      const Text(
+      Text('Authorization not given.'),
+      Text(
           'For Google Health Connect please check if you have added the right permissions and services to the manifest file.'),
-      const Text('For Apple Health check your permissions in Apple Health.'),
+      Text('For Apple Health check your permissions in Apple Health.'),
     ],
   );
 
   Widget _contentHealthConnectStatus = const Text(
       'No status, click getHealthConnectSdkStatus to get the status.');
 
-  Widget _dataAdded = const Text('Data points inserted successfully.');
+  final Widget _dataAdded = const Text('Data points inserted successfully.');
 
-  Widget _dataDeleted = const Text('Data points deleted successfully.');
+  final Widget _dataDeleted = const Text('Data points deleted successfully.');
 
   Widget get _stepsFetched => Text('Total number of steps: $_nofSteps.');
 
-  Widget _dataNotAdded =
+  final Widget _dataNotAdded =
       const Text('Failed to add data.\nDo you have permissions to add data?');
 
-  Widget _dataNotDeleted = const Text('Failed to delete data');
+  final Widget _dataNotDeleted = const Text('Failed to delete data');
 
   Widget get _content => switch (_state) {
         AppState.DATA_READY => _contentDataReady,

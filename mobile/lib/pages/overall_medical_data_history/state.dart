@@ -3,7 +3,6 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:health_for_all/common/entities/comment.dart';
 import 'package:health_for_all/common/entities/diagnostic.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
-import 'package:health_for_all/common/entities/user.dart';
 
 class OverrallMedicalDataHistoryState {
   RxMap<DateTime, List<MedicalEntity>> history =

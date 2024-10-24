@@ -44,8 +44,7 @@ class OverallMedicalDataHistoryController extends GetxController {
       print(listFollower.length);
     } catch (e) {
       print('Error fetching user data: $e');
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -94,8 +93,7 @@ class OverallMedicalDataHistoryController extends GetxController {
           );
         },
       );
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -141,11 +139,11 @@ class OverallMedicalDataHistoryController extends GetxController {
               builder: (BuildContext context) {
                 return AlertDialog(
                   // insetPadding: const EdgeInsets.symmetric(horizontal: 10),
-                  insetPadding: EdgeInsets.all(0),
+                  insetPadding: const EdgeInsets.all(0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28),
                   ),
-                  content: Container(
+                  content: SizedBox(
                     // decoration: BoxDecoration(
                     //     borderRadius: BorderRadius.circular(28),
                     //     ),
@@ -383,8 +381,7 @@ class OverallMedicalDataHistoryController extends GetxController {
       // Xử lý lỗi
       print('Error fetching latest event in day $date: $e');
       return null;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -447,8 +444,7 @@ class OverallMedicalDataHistoryController extends GetxController {
       // Xử lý lỗi
       print('Error fetching latest event in day $date: $e');
       return null;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -515,8 +511,7 @@ class OverallMedicalDataHistoryController extends GetxController {
       // Xử lý lỗi
       print('Error fetching event in day: $e');
       return null;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }

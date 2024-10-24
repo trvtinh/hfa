@@ -160,7 +160,7 @@ class _InfoReminderState extends State<InfoReminder> {
           ),
         ),
         if (!last)
-          Divider(
+          const Divider(
             height: 1,
           ),
       ],
@@ -241,7 +241,7 @@ class _InfoReminderState extends State<InfoReminder> {
         return Column(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(
+              padding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 8,
               ),
@@ -255,7 +255,7 @@ class _InfoReminderState extends State<InfoReminder> {
                           size: 24,
                           color: Theme.of(context).colorScheme.primary,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Column(
@@ -295,7 +295,7 @@ class _InfoReminderState extends State<InfoReminder> {
               ),
             ),
             if (!last)
-              Divider(
+              const Divider(
                 height: 1,
               ),
           ],
@@ -462,7 +462,7 @@ class _InfoReminderState extends State<InfoReminder> {
 
     return Row(
       children: [
-        SizedBox(
+        const SizedBox(
           width: 4,
         ),
         SizedBox(

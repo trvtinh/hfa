@@ -15,8 +15,8 @@ import 'package:carp_serializable/carp_serializable.dart';
 import 'package:intl/intl.dart';
 
 class SamsungConnectController extends GetxController {
-  DateTime start = DateTime.now().add(Duration(hours: 1));
-  DateTime end = DateTime.now().add(Duration(hours: 1));
+  DateTime start = DateTime.now().add(const Duration(hours: 1));
+  DateTime end = DateTime.now().add(const Duration(hours: 1));
   final state = SamsungConnectState();
   final startDateController = TextEditingController();
   final endDateController = TextEditingController();
@@ -70,21 +70,21 @@ class SamsungConnectController extends GetxController {
     // isLoading = false.obs;
     Get.back();
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Thành công'),
-            content: const Text('Đã đồng bộ dữ liệu'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Get.back(); // Dismiss the dialog
-                },
-                child: const Text('Xác nhận'),
-              ),
-            ],
-          );
-        },
-      );
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Thành công'),
+          content: const Text('Đã đồng bộ dữ liệu'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Get.back(); // Dismiss the dialog
+              },
+              child: const Text('Xác nhận'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

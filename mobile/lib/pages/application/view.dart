@@ -132,7 +132,7 @@ class ApplicationPage extends GetView<ApplicationController> {
             title: const Text('Cảnh báo'),
           ),
           ListTile(
-            onTap: () => Get.to(() => ConnectHardwarePage()),
+            onTap: () => Get.to(() => const ConnectHardwarePage()),
             leading: const Icon(Icons.memory),
             title: const Text('Kết nối với thiết bị'),
           ),
@@ -221,27 +221,27 @@ class About_HFA extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Divider(
+            const Divider(
               height: 1,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  Text(
+                  const Text(
                     "Video về project",
                     style: TextStyle(
                       fontSize: 30,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Container(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(),
