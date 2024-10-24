@@ -48,7 +48,7 @@ class YoloVideo extends StatefulWidget {
   State<YoloVideo> createState() => _YoloVideoState();
 }
 
-class _YoloVideoState extends State<YoloVideo> {
+class _YoloVideoState extends State<YoloVideo> with WidgetsBindingObserver {
   late CameraController controller;
   late List<Map<String, dynamic>> yoloResults;
   bool isLoaded = false;
@@ -82,16 +82,27 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     controller.dispose();
     super.dispose();
   }
 
   Future<void> cropAndNavigate(
       CameraImage cameraImage, Map<String, dynamic> box) async {
-    img.Image croppedImage = await cropCameraImage(cameraImage, box);
-    medicalController.state.selectedFile.value =
-        await saveImageToFile(croppedImage, 'cropped.jpg');
-    Get.back();
+    try {
+      img.Image croppedImage = await cropCameraImage(cameraImage, box);
+      medicalController.state.selectedFile.value =
+          await saveImageToFile(croppedImage, 'cropped.jpg');
+      // Ensure the state is updated before navigating back
+      setState(() {
+        isDetecting = false;
+      });
+      Get.back();
+    } catch (e) {
+      log('Error during crop and navigate: $e');
+      // Optionally, show an error message to the user
+      Get.snackbar('Error', 'Failed to process the image.');
+    }
   }
 
   Future<XFile> saveImageToFile(img.Image image, String filename) async {
@@ -115,8 +126,6 @@ class _YoloVideoState extends State<YoloVideo> {
     }
     Orientation deviceOrientation = MediaQuery.of(context).orientation;
     final double aspectRatio = controller.value.aspectRatio;
-    log(aspectRatio.toString());
-    log(size.toString());
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -224,12 +233,10 @@ class _YoloVideoState extends State<YoloVideo> {
       CameraImage cameraImage, Map<String, dynamic> box) async {
     // Chuyển đổi CameraImage sang định dạng RGB
     img.Image rgbImage = _convertYUV420ToImage(cameraImage);
-    log("Đã chuyển đổi CameraImage sang RGB Image");
 
     // Kích thước của ảnh gốc (CameraImage)
     int imageWidth = rgbImage.width;
     int imageHeight = rgbImage.height;
-    log("Kích thước ảnh RGB: ${imageWidth}x${imageHeight}px");
 
     // Toạ độ YOLO cung cấp là dựa trên kích thước ảnh camera, không phải kích thước màn hình
     double boxX1 = box['box'][0]; // Toạ độ x trên ảnh gốc
@@ -255,6 +262,21 @@ class _YoloVideoState extends State<YoloVideo> {
     );
 
     return croppedImage;
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (!controller.value.isInitialized) {
+      return;
+    }
+    log("AppLifecycleState: $state");
+    if (state == AppLifecycleState.inactive) {
+      controller.dispose();
+      log("Dispose camera controller");
+    } else if (state == AppLifecycleState.resumed) {
+      log("Init camera controller");
+      init();
+    }
   }
 
   Future<void> yoloOnFrame(CameraImage cameraImage) async {
