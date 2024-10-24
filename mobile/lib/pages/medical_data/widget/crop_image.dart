@@ -53,7 +53,6 @@ class _YoloVideoState extends State<YoloVideo> with WidgetsBindingObserver {
   late List<Map<String, dynamic>> yoloResults;
   bool isLoaded = false;
   bool isDetecting = false;
-  final medicalController = Get.find<MedicalDataController>();
 
   @override
   void initState() {
@@ -91,13 +90,19 @@ class _YoloVideoState extends State<YoloVideo> with WidgetsBindingObserver {
       CameraImage cameraImage, Map<String, dynamic> box) async {
     try {
       img.Image croppedImage = await cropCameraImage(cameraImage, box);
-      medicalController.state.selectedFile.value =
-          await saveImageToFile(croppedImage, 'cropped.jpg');
+      // medicalController.state.selectedFile.value =
+      //     await saveImageToFile(croppedImage, 'cropped.jpg');
+      final file = await saveImageToFile(croppedImage, 'cropped.jpg');
       // Ensure the state is updated before navigating back
       setState(() {
         isDetecting = false;
       });
-      Get.back();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        // Get.back();
+        Get.to(() => DisplayImage(
+              imageFile: File(file.path),
+            ));
+      });
     } catch (e) {
       log('Error during crop and navigate: $e');
       // Optionally, show an error message to the user
@@ -280,27 +285,28 @@ class _YoloVideoState extends State<YoloVideo> with WidgetsBindingObserver {
   }
 
   Future<void> yoloOnFrame(CameraImage cameraImage) async {
-  final result = await widget.vision.yoloOnFrame(
-    bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
-    imageHeight: cameraImage.height,
-    imageWidth: cameraImage.width,
-    iouThreshold: 0.4,
-    confThreshold: 0.4,
-    classThreshold: 0.5,
-  );
+    final result = await widget.vision.yoloOnFrame(
+      bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
+      imageHeight: cameraImage.height,
+      imageWidth: cameraImage.width,
+      iouThreshold: 0.4,
+      confThreshold: 0.4,
+      classThreshold: 0.5,
+    );
 
-  if (result.isNotEmpty) {
-    if (mounted) {  // Check if the widget is still mounted
-      setState(() {
-        yoloResults = result;
-      });
-    }
+    if (result.isNotEmpty) {
+      if (mounted) {
+        // Check if the widget is still mounted
+        setState(() {
+          yoloResults = result;
+        });
+      }
 
-    if (yoloResults.first['box'][4] > 0.9) {
-      await cropAndNavigate(cameraImage, result.first);
+      if (yoloResults.first['box'][4] > 0.9) {
+        await cropAndNavigate(cameraImage, result.first);
+      }
     }
   }
-}
 
   Future<void> startDetection() async {
     setState(() {
@@ -381,5 +387,33 @@ class PolygonPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
+  }
+}
+
+class DisplayImage extends StatelessWidget {
+  final File imageFile;
+
+  DisplayImage({super.key, required this.imageFile});
+  final medicalController = Get.find<MedicalDataController>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Cropped Image'),
+      ),
+      body: Column(children: [
+        Expanded(
+          child: Image.file(imageFile),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            medicalController.state.selectedFile.value = XFile(imageFile.path);
+            Get.back();
+            Get.back();
+          },
+          child: const Text('Select this image'),
+        ),
+      ]),
+    );
   }
 }
