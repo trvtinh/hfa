@@ -5,7 +5,6 @@ import 'package:health_for_all/pages/type_med_history/controller.dart';
 import 'package:intl/intl.dart';
 
 class TwoLineChart extends StatefulWidget {
-  @override
   final bool show_comment;
   final bool show_diagnostic;
   final bool show_alarm;
