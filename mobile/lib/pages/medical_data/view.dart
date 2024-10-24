@@ -156,6 +156,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                   }
                 }
                 log(value.toString());
+                controller.checkAlarms(value.toFirestoreMap());
                 await FirebaseApi.addDocument(
                     'medicalData', value.toFirestoreMap());
                 if (value == controller.state.data.values.last) {

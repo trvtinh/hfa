@@ -32,18 +32,27 @@ class FirebaseApi {
     } catch (e) {
       print('Error retrieving document ID: $e');
       return null;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
 
   static Future<bool?> checkExistDocumentForMed(
-      String collection, String field1, String value1, String field2, String value2, String field3, Timestamp value3) async {
+      String collection,
+      String field1,
+      String value1,
+      String field2,
+      String value2,
+      String field3,
+      Timestamp value3) async {
     try {
       EasyLoading.show(status: "Đang xử lí...");
-      final querySnapshot =
-          await db.collection(collection).where(field1, isEqualTo: value1).where(field2, isEqualTo: value2).where(field3, isEqualTo: value3).get();
+      final querySnapshot = await db
+          .collection(collection)
+          .where(field1, isEqualTo: value1)
+          .where(field2, isEqualTo: value2)
+          .where(field3, isEqualTo: value3)
+          .get();
       if (querySnapshot.docs.isNotEmpty) {
         return true;
       } else {
@@ -53,8 +62,7 @@ class FirebaseApi {
     } catch (e) {
       print('Error retrieving document ID: $e');
       return false;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -71,8 +79,7 @@ class FirebaseApi {
       }
     } catch (e) {
       throw Exception('Error retrieving document snapshot: $e');
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -86,8 +93,7 @@ class FirebaseApi {
       print('Document $documentId updated successfully in $collection.');
     } catch (e) {
       print('Error updating document: $e');
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -101,8 +107,7 @@ class FirebaseApi {
       print('Document $documentId deleted successfully from $collection.');
     } catch (e) {
       print('Error deleting document: $e');
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -129,8 +134,7 @@ class FirebaseApi {
     } catch (e) {
       print('Error adding value to array field: $e');
       return false;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -157,9 +161,27 @@ class FirebaseApi {
     } catch (e) {
       print('Error removing value from array field: $e');
       return false;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getAllDocuments(
+      String collectionName) async {
+    try {
+      // Truy vấn tất cả các document trong collection
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection(collectionName).get();
+
+      // Chuyển đổi kết quả thành một danh sách các Map (dữ liệu JSON)
+      List<Map<String, dynamic>> documents = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+
+      return documents; // Trả về danh sách các documents
+    } catch (e) {
+      print('Lỗi khi lấy documents: $e');
+      return [];
     }
   }
 
@@ -172,8 +194,7 @@ class FirebaseApi {
       return docRef.id;
     } catch (e) {
       print('Error adding document: $e');
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -193,8 +214,7 @@ class FirebaseApi {
     } catch (e) {
       print('Error uploading image: $e');
       return null;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
