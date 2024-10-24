@@ -13,13 +13,11 @@ import 'package:health_for_all/common/store/user.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
 import 'package:health_for_all/pages/chatbot/controller.dart';
 import 'package:health_for_all/pages/choose_type_med/controller.dart';
-import 'package:health_for_all/pages/connect_hardware/controller.dart';
 import 'package:health_for_all/pages/diagnostic/controller.dart';
 import 'package:health_for_all/pages/following_medical_data/controller.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
-import 'package:health_for_all/pages/samsung_connect/controller.dart';
 import 'package:intl/intl.dart';
 import 'index.dart';
 
@@ -88,8 +86,7 @@ class ApplicationController extends GetxController {
       }
     } catch (e) {
       log('Lỗi khi lấy hồ sơ: $e');
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
     return state.profile.value!;
@@ -233,8 +230,7 @@ class ApplicationController extends GetxController {
       });
     } catch (e) {
       print('Error setting up listener for updated time: $e');
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }

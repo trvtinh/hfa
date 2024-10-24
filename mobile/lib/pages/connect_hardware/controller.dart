@@ -128,7 +128,9 @@ class ConnectHardwareController extends GetxController {
       receivedIndex.removeAt(0);
       List<double> index = receivedIndex.map((e) => double.parse(e)).toList();
       double value = 0;
-      for (int i = 0; i < index.length; i++) value += index[i];
+      for (int i = 0; i < index.length; i++) {
+        value += index[i];
+      }
       value /= index.length;
       value = double.parse(value.toStringAsFixed(2));
       DateTime now = DateTime.now();
@@ -166,7 +168,7 @@ class ConnectHardwareController extends GetxController {
         receivedData = String.fromCharCodes(data);
         // String tmp = String.fromCharCodes(data);
         // log('Length: $receivedData');
-        if (receivedData != "}"&& receivedData != ","){
+        if (receivedData != "}" && receivedData != ",") {
           log('ReceivedData: $receivedData');
           receivedIndex.add(receivedData);
         }
@@ -223,7 +225,7 @@ class ConnectHardwareController extends GetxController {
 
   // Send data to the connected device's characteristic
   Future<void> sendData() async {
-    log('Sending data...' + writeCharacteristic.value.toString());
+    log('Sending data...${writeCharacteristic.value}');
     if (writeCharacteristic.value != null) {
       log('Sending data...');
       String data = writeDataController.text;

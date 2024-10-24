@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/chatbot.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/chatbot/state.dart';
 import 'package:image_picker/image_picker.dart';
 

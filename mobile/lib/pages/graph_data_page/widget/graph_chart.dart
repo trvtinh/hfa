@@ -36,7 +36,7 @@ class _GraphChartState extends State<GraphChart> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Biểu đồ"),
+        title: const Text("Biểu đồ"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -47,13 +47,14 @@ class _GraphChartState extends State<GraphChart> {
                 color: Colors.white,
                 border: Border.all(),
               ),
-              padding:
-                  const EdgeInsets.only(left: 12, right: 12, top: 26, bottom: 26),
+              padding: const EdgeInsets.only(
+                  left: 12, right: 12, top: 26, bottom: 26),
               child: LineChart(
                 LineChartData(
                   gridData: FlGridData(
                     show: true,
-                    drawVerticalLine: false, // Hide vertical lines (X-axis grid)
+                    drawVerticalLine:
+                        false, // Hide vertical lines (X-axis grid)
                     horizontalInterval: yInterval,
                     getDrawingHorizontalLine: (value) {
                       return FlLine(
@@ -64,9 +65,10 @@ class _GraphChartState extends State<GraphChart> {
                   ),
                   borderData: FlBorderData(
                     show: true,
-                    border: Border.all(color: const Color(0xff37434d), width: 1),
+                    border:
+                        Border.all(color: const Color(0xff37434d), width: 1),
                   ),
-                  titlesData: FlTitlesData(
+                  titlesData: const FlTitlesData(
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: false, // Hide X-axis titles
@@ -77,12 +79,12 @@ class _GraphChartState extends State<GraphChart> {
                         showTitles: false, // Hide Y-axis titles
                       ),
                     ),
-                    topTitles: const AxisTitles(
+                    topTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: false,
                       ),
                     ),
-                    rightTitles: const AxisTitles(
+                    rightTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: false,
                       ),
@@ -105,7 +107,8 @@ class _GraphChartState extends State<GraphChart> {
                       color: Colors.blue,
                       barWidth: 3,
                       isStrokeCapRound: true,
-                      dotData: const FlDotData(show: true), // Display dots on the points
+                      dotData: const FlDotData(
+                          show: true), // Display dots on the points
                       belowBarData: BarAreaData(
                         show: false,
                       ),

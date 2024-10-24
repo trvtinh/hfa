@@ -274,12 +274,12 @@ class _AddAlarmState extends State<AddAlarm> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Chỉ số đã được lựa chọn'),
-          content: Text(
+          title: const Text('Chỉ số đã được lựa chọn'),
+          content: const Text(
               'Chỉ số đã được đặt cảnh báo, vui lòng lựa chọn chỉ số khác hoặc xóa cảnh báo'),
           actions: <Widget>[
             TextButton(
-              child: Text('Đóng'),
+              child: const Text('Đóng'),
               onPressed: () {
                 Navigator.of(context).pop(); // Close the dialog
               },

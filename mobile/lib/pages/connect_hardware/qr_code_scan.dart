@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/connect_hardware/controller.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import 'connection_page.dart';
-
 class ScanQrScreen extends StatefulWidget {
   const ScanQrScreen({super.key});
 

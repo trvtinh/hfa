@@ -15,7 +15,8 @@ class DataDay extends StatefulWidget {
     required this.date,
     required this.time,
     required this.value,
-    required this.index, required this.pass,
+    required this.index,
+    required this.pass,
   });
 
   @override
@@ -39,7 +40,9 @@ class _DataDayState extends State<DataDay> {
           child: Row(
             children: [
               Image.asset(Item.getIconPath(widget.index)),
-              SizedBox(width: 12,),
+              const SizedBox(
+                width: 12,
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +75,8 @@ class _DataDayState extends State<DataDay> {
               const SizedBox(width: 16),
               Expanded(
                 child: Column(
-                  children: [// Adds space between hour and index
+                  children: [
+                    // Adds space between hour and index
                     Text(
                       widget.value,
                       style: TextStyle(
@@ -92,40 +96,46 @@ class _DataDayState extends State<DataDay> {
               ),
 
               Expanded(
-                child: !synced 
-                ? ElevatedButton(
-                  onPressed: (){
-                    connectController.syncMedData(widget.pass, widget.index.toString(), widget.value, Item.getUnit(widget.index), context);
-                    setState(() {
-                      synced = true;
-                    });
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-                  ),
-                  child: Container(
-                    child: Text(
-                      "Đồng Bộ",
-                    ),
-                  ),
-                )
-                : ElevatedButton(
-                  onPressed: (){
-                  }, 
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.outline,
-                  ),
-                  child: Container(
-                    child: Text(
-                      "Đã Đồng Bộ",
-                      style: TextStyle(
-                        color: Colors.white,
+                child: !synced
+                    ? ElevatedButton(
+                        onPressed: () {
+                          connectController.syncMedData(
+                              widget.pass,
+                              widget.index.toString(),
+                              widget.value,
+                              Item.getUnit(widget.index),
+                              context);
+                          setState(() {
+                            synced = true;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.surfaceContainer,
+                        ),
+                        child: Container(
+                          child: const Text(
+                            "Đồng Bộ",
+                          ),
+                        ),
+                      )
+                    : ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.outline,
+                        ),
+                        child: Container(
+                          child: const Text(
+                            "Đã Đồng Bộ",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               ),
-        
+
               // Icons for additional actions in the same row
               // const SizedBox(width: 16),
               // icon_round(have_file1, icon: Icons.edit_note_outlined),

@@ -16,7 +16,9 @@ class EcgFetched extends StatefulWidget {
     required this.date,
     required this.time,
     required this.value,
-    required this.pass, required this.index, required this.medId,
+    required this.pass,
+    required this.index,
+    required this.medId,
   });
 
   @override
@@ -40,7 +42,7 @@ class _EcgFetchedState extends State<EcgFetched> {
           child: Row(
             children: [
               Image.asset(Item.getIconPath(widget.medId)),
-              SizedBox(
+              const SizedBox(
                 width: 12,
               ),
               Expanded(
@@ -115,7 +117,7 @@ class _EcgFetchedState extends State<EcgFetched> {
                               Theme.of(context).colorScheme.surfaceContainer,
                         ),
                         child: Container(
-                          child: Text(
+                          child: const Text(
                             "Đồng Bộ",
                           ),
                         ),
@@ -127,7 +129,7 @@ class _EcgFetchedState extends State<EcgFetched> {
                               Theme.of(context).colorScheme.outline,
                         ),
                         child: Container(
-                          child: Text(
+                          child: const Text(
                             "Đã Đồng Bộ",
                             style: TextStyle(
                               color: Colors.white,
