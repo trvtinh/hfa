@@ -852,56 +852,58 @@ class _HealthConnectState extends State<HealthConnect> {
         // );
       });
 
-  final Widget _contentNoData = const Text('No Data to show');
+  final Widget _contentNoData = const Text('Không có dữ liệu nào từ Samsung Health');
 
-  final Widget _contentNotFetched = Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Container(
-      decoration: BoxDecoration(
-        border: Border.all(),
-        color: Colors.white,
-      ),
-      padding: const EdgeInsets.all(16),
-      child:
-          const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(
-          "Hướng dẫn sử dụng",
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
+  final Widget _contentNotFetched = SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(),
+          color: Colors.white,
+        ),
+        padding: const EdgeInsets.all(16),
+        child:
+            const Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            "Hướng dẫn sử dụng",
+            style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          "1. Bấm vào 'Kiểm tra quyền truy cập Health Connect' để tải health connect nếu bạn chưa có, để bắt đầu đồng bộ hóa",
-          style: TextStyle(fontSize: 20),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          "2. Cho quyền viết và sửa dữ liệu y tế của ứng dụng HFA - Health For All và Samsung Health trong Health Connect",
-          style: TextStyle(fontSize: 20),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          "3. Bấm vào 'Chọn ngày lấy dữ liệu' để chọn khoảng thời gian lấy dữ liệu từ Samsung Health",
-          style: TextStyle(fontSize: 20),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text(
-          "4. Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health",
-          style: TextStyle(fontSize: 20),
-        ),
-        // const Text("Press 'Add Data' to add some random health data."),
-        // const Text("Press 'Delete Data' to remove some random health data."),
-      ]),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "1. Bấm vào 'Kiểm tra quyền truy cập Health Connect' để tải health connect nếu bạn chưa có và kiểm tra quyền truy cập chỉ số sức khỏe của app, nếu không có gì xảy ra thì truy cập health connect trong samsung health",
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "2. Cho quyền viết và sửa dữ liệu y tế của ứng dụng HFA - Health For All và Samsung Health trong Health Connect",
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "3. Bấm vào 'Chọn ngày lấy dữ liệu' để chọn khoảng thời gian lấy dữ liệu từ Samsung Health",
+            style: TextStyle(fontSize: 20),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "4. Bấm vào 'Lấy dữ liệu' để lấy dữ liệu từ Samsung Health",
+            style: TextStyle(fontSize: 20),
+          ),
+          // const Text("Press 'Add Data' to add some random health data."),
+          // const Text("Press 'Delete Data' to remove some random health data."),
+        ]),
+      ),
     ),
   );
 
