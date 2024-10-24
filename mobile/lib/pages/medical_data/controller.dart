@@ -134,6 +134,7 @@ class MedicalDataController extends GetxController {
           .toList();
       int typeId = int.parse(data["typeId"]);
       for (var i in documents) {
+        if (i['enable'] == false) continue;
         if (data["typeId"] != i["typeId"]) continue;
         int low = int.parse(i["lowThreshold"]);
         int high = int.parse(i["highThreshold"]);

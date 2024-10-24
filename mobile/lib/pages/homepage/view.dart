@@ -429,7 +429,7 @@ class Homepage extends StatelessWidget {
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('alarms')
-                                    .where('toUId',
+                                    .where('userId',
                                         isEqualTo: appController
                                             .state.profile.value?.id)
                                     .snapshots(),
