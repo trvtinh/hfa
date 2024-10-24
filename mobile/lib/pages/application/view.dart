@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
 import 'package:health_for_all/pages/connect_hardware/view.dart';
-import 'package:health_for_all/pages/demo_ecg/view.dart';
-import 'package:health_for_all/pages/demo_pcg/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/image_analyze/view.dart';
@@ -155,21 +153,11 @@ class ApplicationPage extends GetView<ApplicationController> {
               await controller.onLogOut();
             },
           ),
-          ListTile(
-            onTap: () => Get.to(() => ImageAnalyzePage()),
-            leading: const Icon(Icons.memory_outlined),
-            title: const Text('Phân tích hình ảnh'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => const DemoECG()),
-            leading: const Icon(Icons.add_chart_outlined),
-            title: const Text('ECG - Điện tâm đồ'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => const AudioPlayerView()),
-            leading: const Icon(Icons.sos_rounded),
-            title: const Text('PCG'),
-          ),
+          // ListTile(
+          //   onTap: () => Get.to(() => ImageAnalyzePage()),
+          //   leading: const Icon(Icons.memory_outlined),
+          //   title: const Text('Phân tích hình ảnh'),
+          // ),
         ],
       ));
     }
