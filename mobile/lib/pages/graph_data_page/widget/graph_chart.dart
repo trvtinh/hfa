@@ -38,82 +38,84 @@ class _GraphChartState extends State<GraphChart> {
       appBar: AppBar(
         title: Text("Biểu đồ"),
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 310, // Adjusted height to account for padding and text
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(),
-            ),
-            padding:
-                const EdgeInsets.only(left: 12, right: 12, top: 26, bottom: 26),
-            child: LineChart(
-              LineChartData(
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false, // Hide vertical lines (X-axis grid)
-                  horizontalInterval: yInterval,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: Colors.grey.withOpacity(0.5),
-                      strokeWidth: 1,
-                    );
-                  },
-                ),
-                borderData: FlBorderData(
-                  show: true,
-                  border: Border.all(color: const Color(0xff37434d), width: 1),
-                ),
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: false, // Hide X-axis titles
-                    ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              height: 310, // Adjusted height to account for padding and text
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(),
+              ),
+              padding:
+                  const EdgeInsets.only(left: 12, right: 12, top: 26, bottom: 26),
+              child: LineChart(
+                LineChartData(
+                  gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: false, // Hide vertical lines (X-axis grid)
+                    horizontalInterval: yInterval,
+                    getDrawingHorizontalLine: (value) {
+                      return FlLine(
+                        color: Colors.grey.withOpacity(0.5),
+                        strokeWidth: 1,
+                      );
+                    },
                   ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: false, // Hide Y-axis titles
-                    ),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: Border.all(color: const Color(0xff37434d), width: 1),
                   ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: false,
-                    ),
-                  ),
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: false,
-                    ),
-                  ),
-                ),
-                minX: minX.toDouble(),
-                maxX: maxX.toDouble(),
-                minY: minY.toDouble() - yInterval,
-                maxY: maxY.toDouble() + yInterval,
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: List.generate(
-                      yAxisData.length,
-                      (index) => FlSpot(
-                        index.toDouble(), // X coordinate is the index
-                        yAxisData[index].toDouble(), // Y coordinate
+                  titlesData: FlTitlesData(
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: false, // Hide X-axis titles
                       ),
                     ),
-                    isCurved: true,
-                    color: Colors.blue,
-                    barWidth: 3,
-                    isStrokeCapRound: true,
-                    dotData: const FlDotData(show: true), // Display dots on the points
-                    belowBarData: BarAreaData(
-                      show: false,
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: false, // Hide Y-axis titles
+                      ),
+                    ),
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: false,
+                      ),
+                    ),
+                    rightTitles: const AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: false,
+                      ),
                     ),
                   ),
-                ],
+                  minX: minX.toDouble(),
+                  maxX: maxX.toDouble(),
+                  minY: minY.toDouble() - yInterval,
+                  maxY: maxY.toDouble() + yInterval,
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: List.generate(
+                        yAxisData.length,
+                        (index) => FlSpot(
+                          index.toDouble(), // X coordinate is the index
+                          yAxisData[index].toDouble(), // Y coordinate
+                        ),
+                      ),
+                      isCurved: true,
+                      color: Colors.blue,
+                      barWidth: 3,
+                      isStrokeCapRound: true,
+                      dotData: const FlDotData(show: true), // Display dots on the points
+                      belowBarData: BarAreaData(
+                        show: false,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

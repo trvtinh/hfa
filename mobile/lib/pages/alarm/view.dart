@@ -90,7 +90,7 @@ class AlarmPage extends GetView<AlarmController> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
-                    .where('toUId', isEqualTo: user.id)
+                    .where('userId', isEqualTo: user.id)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {

@@ -35,7 +35,7 @@ class AlarmController extends GetxController {
         .toList();
   }
 
-  Future addAlarm(BuildContext context, String fromUId) async {
+  Future addAlarm(BuildContext context, String userId) async {
     final unit = unitController.text;
     final highThreshold = highThresholdController.text;
     final lowThreshold = lowThresholdController.text;
@@ -45,8 +45,7 @@ class AlarmController extends GetxController {
       return;
     }
     final alarm = AlarmEntity(
-      fromUId: fromUId,
-      toUId: selectedRelative.value.id,
+      userId: userId,
       time: Timestamp.fromDate(DateTime.now()),
       highThreshold: highThreshold,
       lowThreshold: lowThreshold,
@@ -64,15 +63,15 @@ class AlarmController extends GetxController {
       //   selectedRelative.value,
       //   'alarm',
       // );
-      FirebaseMessagingApi.sendMessage(
-        selectedRelative.value.fcmtoken!,
-        'Chẩn đoán',
-        "${state.profile.value!.name!} đã gửi cảnh báo đến bạn",
-        'alarm',
-        'alarm',
-        selectedRelative.value.id!,
-        'alarm',
-      );
+      // FirebaseMessagingApi.sendMessage(
+      //   selectedRelative.value.fcmtoken!,
+      //   'Chẩn đoán',
+      //   "${state.profile.value!.name!} đã gửi cảnh báo đến bạn",
+      //   'alarm',
+      //   'alarm',
+      //   selectedRelative.value.id!,
+      //   'alarm',
+      // );
       showDialog(
         context: context,
         builder: (BuildContext context) {

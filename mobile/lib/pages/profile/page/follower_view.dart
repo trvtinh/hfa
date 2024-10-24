@@ -27,7 +27,7 @@ class _FollowerPageState extends State<FollowerPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // const AddDoctor(),
+            const AddDoctor(),
             const SizedBox(
               height: 8,
             ),

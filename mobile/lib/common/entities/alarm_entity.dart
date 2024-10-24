@@ -6,9 +6,7 @@ class AlarmEntity {
   Timestamp? time;
   String? highThreshold;
   String? lowThreshold;
-  // String? userId;
-  String? fromUId;
-  String? toUId;
+  String? userId;
   bool? enable;
 
   AlarmEntity(
@@ -17,14 +15,12 @@ class AlarmEntity {
       this.time,
       this.highThreshold,
       this.lowThreshold,
-      this.fromUId,
-      this.toUId,
-      // this.userId,
+      this.userId,
       this.enable});
 
   @override
   String toString() {
-    return 'AlarmEntity{id: $id, typeId: $typeId, time: $time, highThreshold: $highThreshold, lowThreshold: $lowThreshold, fromUId: $fromUId, toUId: $toUId, enable: $enable}';
+    return 'AlarmEntity{id: $id, typeId: $typeId, time: $time, highThreshold: $highThreshold, lowThreshold: $lowThreshold, userId: $userId, enable: $enable}';
   }
 
   factory AlarmEntity.fromFirestore(
@@ -37,8 +33,7 @@ class AlarmEntity {
       time: data?['time'] as Timestamp?,
       highThreshold: data?['highThreshold'] as String?,
       lowThreshold: data?['lowThreshold'] as String?,
-      fromUId: data?['fromUId'] as String?,
-      toUId: data?['toUId'] as String?,
+      userId: data?['userId'] as String?,
       enable: data?['enable'] as bool?,
     );
   }
@@ -49,8 +44,7 @@ class AlarmEntity {
       'time': time,
       'highThreshold': highThreshold,
       'lowThreshold': lowThreshold,
-      'fromUId': fromUId,
-      'toUId': toUId,
+      'userId': userId,
       'enable': enable,
     };
   }

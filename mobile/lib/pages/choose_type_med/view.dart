@@ -93,24 +93,24 @@ class _ChooseTypeMedState extends State<ChooseTypeMed> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: OutlinedButton(
-              onPressed: () {},
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width - 81,
-                child: Center(
-                  child: Text(
-                    "Xem thêm 0 loại thuốc",
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(16),
+          //   child: OutlinedButton(
+          //     onPressed: () {},
+          //     child: SizedBox(
+          //       width: MediaQuery.of(context).size.width - 81,
+          //       child: Center(
+          //         child: Text(
+          //           "Xem thêm 0 loại thuốc",
+          //           style: TextStyle(
+          //             color: Theme.of(context).colorScheme.primary,
+          //             fontSize: 14,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
