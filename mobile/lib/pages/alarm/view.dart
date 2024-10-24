@@ -139,8 +139,8 @@ class AlarmPage extends GetView<AlarmController> {
           Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
               snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
         } else {
-          followingController
-              .fetchRelatives(appController.state.profile.value!.id!);
+          // followingController
+          //     .fetchRelatives(appController.state.profile.value!.id!);
           _showAddDialog(context);
         }
       },

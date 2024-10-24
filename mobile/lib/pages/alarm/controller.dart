@@ -61,15 +61,6 @@ class AlarmController extends GetxController {
       //   selectedRelative.value,
       //   'alarm',
       // );
-      // FirebaseMessagingApi.sendMessage(
-      //   selectedRelative.value.fcmtoken!,
-      //   'Chẩn đoán',
-      //   "${state.profile.value!.name!} đã gửi cảnh báo đến bạn",
-      //   'alarm',
-      //   'alarm',
-      //   selectedRelative.value.id!,
-      //   'alarm',
-      // );
       showDialog(
         context: context,
         builder: (BuildContext context) {

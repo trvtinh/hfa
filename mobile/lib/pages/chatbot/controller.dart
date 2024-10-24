@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -5,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/chatbot.dart';
+import 'package:health_for_all/pages/application/controller.dart';
 import 'package:health_for_all/pages/chatbot/state.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -14,6 +17,7 @@ class ChatbotController extends GetxController {
   final FocusNode textNode = FocusNode();
   final ScrollController scrollController = ScrollController();
   final state = ChatbotState();
+  final appController = Get.find<ApplicationController>();
   // final appController = Get.find<ApplicationController>();
   Rx<ChatbotEntity> data = ChatbotEntity().obs;
   final model = GenerativeModel(
@@ -39,7 +43,8 @@ class ChatbotController extends GetxController {
   }
 
   Future getHistory() async {
-    final uid = state.profile.value?.id!;
+    final uid = appController.state.profile.value?.id!;
+    log("dakmim $uid");
     final querySnapshot = await FirebaseFirestore.instance
         .collection('chatbots')
         .where('uid', isEqualTo: uid)
@@ -62,7 +67,7 @@ class ChatbotController extends GetxController {
     final content = [Content.text(query)];
     data.value = ChatbotEntity(
         role: 'User',
-        uid: state.profile.value?.id!,
+        uid: appController.state.profile.value?.id!,
         timestamp: Timestamp.fromDate(DateTime.now()),
         content: query,
         image: "");
@@ -74,7 +79,7 @@ class ChatbotController extends GetxController {
         .then((value) {
       data.value = ChatbotEntity(
           role: 'HFA',
-          uid: state.profile.value?.id!,
+          uid: appController.state.profile.value?.id!,
           timestamp: Timestamp.fromDate(DateTime.now()),
           image: '',
           content: value.text);
@@ -116,7 +121,7 @@ class ChatbotController extends GetxController {
         await FirebaseApi.uploadImage(state.image.value!.path, 'chatbots');
     data.value = ChatbotEntity(
         role: 'User',
-        uid: state.profile.value?.id!,
+        uid: appController.state.profile.value?.id!,
         timestamp: Timestamp.fromDate(DateTime.now()),
         content: query,
         image: image ?? "");
@@ -135,7 +140,7 @@ class ChatbotController extends GetxController {
     ], generationConfig: GenerationConfig(maxOutputTokens: 250)).then((value) {
       data.value = ChatbotEntity(
           role: 'HFA',
-          uid: state.profile.value?.id!,
+          uid: appController.state.profile.value?.id!,
           timestamp: Timestamp.fromDate(DateTime.now()),
           image: '',
           content: value.text);
@@ -162,7 +167,7 @@ class ChatbotController extends GetxController {
   }
 
   Future<void> deleteChatHistoryFromFirestore() async {
-    final uid = state.profile.value?.id!;
+    final uid = appController.state.profile.value?.id!;
     final querySnapshot = await FirebaseFirestore.instance
         .collection('chatbots')
         .where('uid', isEqualTo: uid)

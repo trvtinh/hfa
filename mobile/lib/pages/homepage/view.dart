@@ -430,7 +430,7 @@ class Homepage extends StatelessWidget {
                           child: Obx(() => StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
                                     .collection('alarms')
-                                    .where('toUId',
+                                    .where('userId',
                                         isEqualTo: appController
                                             .state.profile.value?.id)
                                     .snapshots(),
@@ -582,17 +582,17 @@ class Homepage extends StatelessWidget {
                                 width: 16,
                               ),
                               Text(
-                                "Đang kết nối",
+                                "Có thể kết nối",
                                 style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color.fromRGBO(52, 199, 89, 1),
+                                  fontSize: 14,
+                                  color: Colors.orange,
                                 ),
                               ),
                               SizedBox(
                                 width: 16,
                               ),
                               Text(
-                                "HFA-Careport-0123",
+                                "HFA Careport",
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Color.fromRGBO(33, 0, 93, 1),

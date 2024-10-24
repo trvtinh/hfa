@@ -33,7 +33,6 @@ class ApplicationController extends GetxController {
   final notificationController = Get.find<NotificationController>();
   final diagnosticController = Get.find<DiagnosticController>();
   final prescriptionController = Get.find<PrescriptionController>();
-  final chatBotController = Get.find<ChatbotController>();
   final alarmController = Get.find<AlarmController>();
   final chooseMedController = Get.find<ChooseTypeMedController>();
   final reminderController = Get.find<ReminderController>();
@@ -170,7 +169,6 @@ class ApplicationController extends GetxController {
     diagnosticController.state.profile.value = state.profile.value;
     alarmController.state.profile.value = state.profile.value;
     prescriptionController.state.profile.value = state.profile.value;
-    chatBotController.state.profile.value = state.profile.value;
     chooseMedController.state.profile.value = state.profile.value;
     reminderController.state.profile.value = state.profile.value;
     // samsungController.state.profile.value = state.profile.value;

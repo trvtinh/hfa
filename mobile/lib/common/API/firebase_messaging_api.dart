@@ -150,7 +150,6 @@ class FirebaseMessagingApi {
       }
     };
     try {
-      EasyLoading.show(status: "Đang xử lí...");
       await http
           .post(Uri.parse(endpointCloudMessaging),
               body: jsonEncode(data),
@@ -164,9 +163,6 @@ class FirebaseMessagingApi {
           diagnosticId: diagnosticId, medicalId: medicalId);
     } catch (e) {
       print('Error sending message: $e');
-    }
-    finally{
-      EasyLoading.dismiss();
     }
   }
 

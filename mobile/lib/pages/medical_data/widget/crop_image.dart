@@ -280,25 +280,27 @@ class _YoloVideoState extends State<YoloVideo> with WidgetsBindingObserver {
   }
 
   Future<void> yoloOnFrame(CameraImage cameraImage) async {
-    final result = await widget.vision.yoloOnFrame(
-      bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
-      imageHeight: cameraImage.height,
-      imageWidth: cameraImage.width,
-      iouThreshold: 0.4,
-      confThreshold: 0.4,
-      classThreshold: 0.5,
-    );
+  final result = await widget.vision.yoloOnFrame(
+    bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
+    imageHeight: cameraImage.height,
+    imageWidth: cameraImage.width,
+    iouThreshold: 0.4,
+    confThreshold: 0.4,
+    classThreshold: 0.5,
+  );
 
-    if (result.isNotEmpty) {
+  if (result.isNotEmpty) {
+    if (mounted) {  // Check if the widget is still mounted
       setState(() {
         yoloResults = result;
       });
+    }
 
-      if (yoloResults.first['box'][4] > 0.9) {
-        await cropAndNavigate(cameraImage, result.first);
-      }
+    if (yoloResults.first['box'][4] > 0.9) {
+      await cropAndNavigate(cameraImage, result.first);
     }
   }
+}
 
   Future<void> startDetection() async {
     setState(() {
