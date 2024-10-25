@@ -28,8 +28,9 @@ class _CropImageState extends State<CropImage> {
 
   @override
   void dispose() async {
-    super.dispose();
+    // Stop YOLO model in dispose
     await vision.closeYoloModel();
+    super.dispose();
   }
 
   @override
@@ -73,6 +74,8 @@ class _YoloVideoState extends State<YoloVideo> {
     await controller.initialize();
 
     await loadYoloModel();
+    if (!mounted)
+      return; // Check if widget is still in the tree before setting state
     setState(() {
       isLoaded = true;
       isDetecting = false;
@@ -82,7 +85,10 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   void dispose() {
-    controller.dispose();
+    if (controller.value.isStreamingImages) {
+      controller.stopImageStream(); // Ensure the image stream is stopped
+    }
+    controller.dispose(); // Dispose camera controller properly
     super.dispose();
   }
 
@@ -91,7 +97,7 @@ class _YoloVideoState extends State<YoloVideo> {
     img.Image croppedImage = await cropCameraImage(cameraImage, box);
     medicalController.state.selectedFile.value =
         await saveImageToFile(croppedImage, 'cropped.jpg');
-    Get.back();
+    if (mounted) Get.back();
   }
 
   Future<XFile> saveImageToFile(img.Image image, String filename) async {
@@ -127,13 +133,6 @@ class _YoloVideoState extends State<YoloVideo> {
             child: CameraPreview(controller),
           ),
         ),
-        // Transform.rotate(
-        //   angle: controller.description.sensorOrientation * pi / 180,
-        //   child: AspectRatio(
-        //     aspectRatio: controller.value.aspectRatio,
-        //     child: CameraPreview(controller),
-        //   ),
-        // ),
         ...displayBoxesAroundRecognizedObjects(size),
         Positioned(
           bottom: 75,
@@ -218,42 +217,34 @@ class _YoloVideoState extends State<YoloVideo> {
 
   Future<img.Image> cropCameraImage(
       CameraImage cameraImage, Map<String, dynamic> box) async {
-    // Chuyển đổi CameraImage sang định dạng RGB
     img.Image rgbImage = _convertYUV420ToImage(cameraImage);
-    log("Đã chuyển đổi CameraImage sang RGB Image");
 
-    // Kích thước của ảnh gốc (CameraImage)
     int imageWidth = rgbImage.width;
     int imageHeight = rgbImage.height;
-    log("Kích thước ảnh RGB: ${imageWidth}x${imageHeight}px");
 
-    // Toạ độ YOLO cung cấp là dựa trên kích thước ảnh camera, không phải kích thước màn hình
-    double boxX1 = box['box'][0]; // Toạ độ x trên ảnh gốc
-    double boxY1 = box['box'][1]; // Toạ độ y trên ảnh gốc
-    double boxX2 = box['box'][2]; // Toạ độ x cuối cùng
-    double boxY2 = box['box'][3]; // Toạ độ y cuối cùng
+    double boxX1 = box['box'][0];
+    double boxY1 = box['box'][1];
+    double boxX2 = box['box'][2];
+    double boxY2 = box['box'][3];
 
-    // Kích thước và toạ độ vùng nhận diện cần cắt
     int x = boxX1.round();
     int y = boxY1.round();
     int width = (boxX2 - boxX1).round();
     int height = (boxY2 - boxY1).round();
 
-    log("Tọa độ X: $x, Y: $y, Chiều rộng: $width, Chiều cao: $height");
-
-    // Cắt ảnh theo các toạ độ đã tính toán
     img.Image croppedImage = img.copyCrop(
       rgbImage,
-      x: x.clamp(0, imageWidth - 1), // Đảm bảo toạ độ không vượt quá giới hạn
+      x: x.clamp(0, imageWidth - 1),
       y: y.clamp(0, imageHeight - 1),
-      width: width.clamp(1, imageWidth - x), // Đảm bảo chiều rộng hợp lý
-      height: height.clamp(1, imageHeight - y), // Đảm bảo chiều cao hợp lý
+      width: width.clamp(1, imageWidth - x),
+      height: height.clamp(1, imageHeight - y),
     );
 
     return croppedImage;
   }
 
   Future<void> yoloOnFrame(CameraImage cameraImage) async {
+    if (!mounted) return; // Prevent calling setState if widget is disposed
     final result = await widget.vision.yoloOnFrame(
       bytesList: cameraImage.planes.map((plane) => plane.bytes).toList(),
       imageHeight: cameraImage.height,
@@ -263,6 +254,7 @@ class _YoloVideoState extends State<YoloVideo> {
       classThreshold: 0.5,
     );
 
+    if (!mounted) return;
     if (result.isNotEmpty) {
       setState(() {
         yoloResults = result;
@@ -298,60 +290,34 @@ class _YoloVideoState extends State<YoloVideo> {
 
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
     if (yoloResults.isEmpty) return [];
-    double factorX = screen.width / (controller.value.previewSize!.height);
-    double factorY = screen.height / (controller.value.previewSize!.width);
-    Color colorPick = const Color.fromARGB(255, 50, 233, 30);
+    double factorX = screen.width;
+    double factorY = screen.height;
+
+    Color colorPick = Colors.pink;
 
     return yoloResults.map((result) {
       return Positioned(
-        left: result["box"][0] * factorX,
-        top: result["box"][1] * factorY,
-        width: (result["box"][2] - result["box"][0]) * factorX,
-        height: (result["box"][3] - result["box"][1]) * factorY,
+        left: result['box'][0] * factorX,
+        top: result['box'][1] * factorY,
+        width: (result['box'][2] - result['box'][0]) * factorX,
+        height: (result['box'][3] - result['box'][1]) * factorY,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            border: Border.all(color: Colors.pink, width: 2.0),
+            border: Border.all(
+              color: colorPick,
+              width: 3,
+            ),
           ),
           child: Text(
             "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(0)}%",
             style: TextStyle(
               background: Paint()..color = colorPick,
               color: Colors.white,
-              fontSize: 18.0,
+              fontSize: 16,
             ),
           ),
         ),
       );
     }).toList();
-  }
-}
-
-class PolygonPainter extends CustomPainter {
-  final List<Map<String, double>> points;
-
-  PolygonPainter({required this.points});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color.fromARGB(129, 255, 2, 124)
-      ..strokeWidth = 2
-      ..style = PaintingStyle.fill;
-
-    final path = Path();
-    if (points.isNotEmpty) {
-      path.moveTo(points[0]['x']!, points[0]['y']!);
-      for (var i = 1; i < points.length; i++) {
-        path.lineTo(points[i]['x']!, points[i]['y']!);
-      }
-      path.close();
-    }
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }
