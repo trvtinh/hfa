@@ -59,7 +59,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
             // _buildSearchField(context),
             const Divider(height: 2),
             ...controller.entries,
-            const MoreData(),
+            // const MoreData(),
             const Divider(height: 1),
             _buildActionButtons(context),
             const Divider(height: 1),

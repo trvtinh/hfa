@@ -399,7 +399,7 @@ class DisplayImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cropped Image'),
+        title: const Text('Ảnh hậu xử lí'),
       ),
       body: Column(children: [
         Expanded(
@@ -411,7 +411,7 @@ class DisplayImage extends StatelessWidget {
             Get.back();
             Get.back();
           },
-          child: const Text('Select this image'),
+          child: const Text('Phân tích hình ảnh'),
         ),
       ]),
     );
