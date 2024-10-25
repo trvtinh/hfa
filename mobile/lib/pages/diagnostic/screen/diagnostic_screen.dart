@@ -33,6 +33,10 @@ class DiagnosticScreen extends StatelessWidget {
                   .collection('diagnostic')
                   .where('toUId', isEqualTo: user.id)
                   .where('status', isEqualTo: status.value)
+                  // .where('timestamp',
+                  //     isGreaterThan: Timestamp.fromMillisecondsSinceEpoch(
+                  //         0)) // Filters out null timestamps
+                  // .orderBy('timestamp', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
