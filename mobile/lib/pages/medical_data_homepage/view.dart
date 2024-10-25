@@ -438,10 +438,10 @@ class MedicalDataHome extends StatelessWidget {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              Get.to(() => GraphDataPage('PPG'));
+              Get.to(() => GraphDataPage('PCG'));
             },
             child: GreyBox(
-              title: 'PPG',
+              title: 'PCG',
               iconpath:
                   'assets/medical_data_Home_images/medical_information.png',
               value: value2 != "" ? value2 : "--",

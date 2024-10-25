@@ -26,7 +26,7 @@ class Item {
       'HRV',
       'ECG - Điện tâm đồ',
       'Cân nặng',
-      'PPG',
+      'PCG',
       'Axit Uric',
     ];
     return titles[index];
