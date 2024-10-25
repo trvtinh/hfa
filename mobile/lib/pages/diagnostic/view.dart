@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/enum/type_diagnostic_status.dart';

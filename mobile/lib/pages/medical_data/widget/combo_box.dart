@@ -433,6 +433,8 @@ class _ComboBoxState extends State<ComboBox> {
                 imagePaths: [for (var i in selectedFiles) i.path],
                 imageUrls: []);
             medicalController.state.data[widget.title] = data;
+            medicalController.state.selectedFile.value = null;
+            selectedFiles.clear();
             medicalController.clearController();
             log(medicalController.state.data.toString());
             Get.back();

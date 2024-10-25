@@ -5,7 +5,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
-import 'package:health_for_all/pages/application/controller.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'state.dart';
@@ -54,15 +53,12 @@ class ChooseTypeMedController extends GetxController {
       log(e.toString());
       Get.snackbar("Lỗi", "Có lỗi xảy ra khi thêm thuốc",
           backgroundColor: Colors.red);
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
 
-  Future delMedicineBase(
-    String documentId
-  ) async {
+  Future delMedicineBase(String documentId) async {
     await FirebaseApi.deleteDocument("medicineBases", documentId);
   }
 

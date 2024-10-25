@@ -1,8 +1,7 @@
 import 'package:get/get.dart';
-import 'package:googleapis/cloudsearch/v1.dart';
 import 'package:health_for_all/common/entities/user.dart';
 
-class ConnectHardwareState{
+class ConnectHardwareState {
   RxList<int> medId = <int>[].obs;
   RxList<List<double>> medIndex = <List<double>>[].obs;
   RxList<String> medValue = <String>[].obs;
@@ -10,4 +9,4 @@ class ConnectHardwareState{
   RxList<String> medTime = <String>[].obs;
   RxList<DateTime> medPass = <DateTime>[].obs;
   var profile = Rx<UserData?>(null);
-} 
+}

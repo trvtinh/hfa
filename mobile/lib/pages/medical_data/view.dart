@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -60,7 +59,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
             // _buildSearchField(context),
             const Divider(height: 2),
             ...controller.entries,
-            const MoreData(),
+            // const MoreData(),
             const Divider(height: 1),
             _buildActionButtons(context),
             const Divider(height: 1),
@@ -156,6 +155,7 @@ class MedicalDataPage extends GetView<MedicalDataController> {
                   }
                 }
                 log(value.toString());
+                controller.checkAlarms(value.toFirestoreMap());
                 await FirebaseApi.addDocument(
                     'medicalData', value.toFirestoreMap());
                 if (value == controller.state.data.values.last) {

@@ -90,7 +90,7 @@ class AlarmPage extends GetView<AlarmController> {
               child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('alarms')
-                    .where('toUId', isEqualTo: user.id)
+                    .where('userId', isEqualTo: user.id)
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -139,8 +139,8 @@ class AlarmPage extends GetView<AlarmController> {
           Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
               snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
         } else {
-          followingController
-              .fetchRelatives(appController.state.profile.value!.id!);
+          // followingController
+          //     .fetchRelatives(appController.state.profile.value!.id!);
           _showAddDialog(context);
         }
       },

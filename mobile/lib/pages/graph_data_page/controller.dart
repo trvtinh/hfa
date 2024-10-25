@@ -24,11 +24,6 @@ class EcgDataController extends GetxController {
   Rx<DateTime> rangeStart = DateTime.now().obs;
   Rx<DateTime> rangeEnd = DateTime.now().obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   Future<String> getUser(String userId) async {
     final db = FirebaseFirestore.instance;
     final querySnapshot =
@@ -106,8 +101,7 @@ class EcgDataController extends GetxController {
       // Xử lý lỗi
       print('Error fetching event in day: $e');
       return null;
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }

@@ -4,15 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
 import 'package:health_for_all/common/entities/notification_entity.dart';
 import 'package:health_for_all/common/entities/user.dart';
 import 'package:health_for_all/common/enum/type_notification_status.dart';
 import 'package:health_for_all/common/helper/datetime_change.dart';
+import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/diagnostic/view.dart';
 import 'package:health_for_all/pages/notification/controller.dart';
-import 'package:health_for_all/pages/profile/page/follower_view.dart';
 import 'package:health_for_all/pages/profile/view.dart';
 
 class NotificationItem extends StatelessWidget {
@@ -26,6 +25,7 @@ class NotificationItem extends StatelessWidget {
   late RxBool isExpanded;
   final TypeNotificationStatus status;
   final NotificationEntity notification;
+  final controller = Get.find<NotificationController>();
 
   void _toggleContainer() {
     isExpanded.value = !isExpanded.value;
@@ -179,6 +179,9 @@ class NotificationItem extends StatelessWidget {
                                     }
                                     if (notification.page! == 'follow') {
                                       Get.to(() => const ProfilePage());
+                                    }
+                                    if (notification.page! == '/alarm') {
+                                      Get.to(() => AlarmPage(controller.state.profile.value!, true));
                                     }
                                     print('User want to see detail');
                                   },
@@ -346,8 +349,7 @@ class NotificationItem extends StatelessWidget {
       // Handle any errors
       log('Error deleting data: $e');
       _showErrorDialog(context);
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }
@@ -391,8 +393,7 @@ class NotificationItem extends StatelessWidget {
       // Handle any errors
       log('Error deleting data: $e');
       _showErrorDialog(context);
-    }
-    finally{
+    } finally {
       EasyLoading.dismiss();
     }
   }

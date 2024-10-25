@@ -113,7 +113,7 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                     child: Obx(() {
                       RxInt update = appController.state.updateMedData;
                       return Container(
-                        padding: EdgeInsets.all(16),
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
                             color: Theme.of(context).colorScheme.errorContainer,
@@ -290,10 +290,11 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                     int read = 0;
                                     int unread = 0;
                                     for (var i in data) {
-                                      if (i.status == "unread")
+                                      if (i.status == "unread") {
                                         unread++;
-                                      else
+                                      } else {
                                         read++;
+                                      }
                                     }
                                     return WhiteBox(
                                         title: 'Chẩn đoán',
@@ -487,10 +488,11 @@ class FollowingMedicalData extends GetView<FollowingMedicalDataController> {
                                 int read = 0;
                                 int unread = 0;
                                 for (var i in data) {
-                                  if (i.status == "read")
+                                  if (i.status == "read") {
                                     read++;
-                                  else
+                                  } else {
                                     unread++;
+                                  }
                                 }
                                 return WhiteBox(
                                     title: 'Thông báo',

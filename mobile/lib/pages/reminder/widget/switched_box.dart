@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/reminder/controller.dart';
-import 'package:health_for_all/pages/reminder/widget/edit_reminder.dart';
 
 class SwitchedBox extends StatefulWidget {
   const SwitchedBox(
@@ -10,7 +9,9 @@ class SwitchedBox extends StatefulWidget {
       required this.numReminder,
       required this.time,
       required this.numDate,
-      required this.onDate, required this.date, required this.reminderId});
+      required this.onDate,
+      required this.date,
+      required this.reminderId});
   final String name;
   final int numReminder;
   final String time;

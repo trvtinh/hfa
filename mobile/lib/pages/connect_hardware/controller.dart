@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/firebase_API.dart';
+import 'package:health_for_all/common/API/firebase_messaging_api.dart';
+import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/common/entities/ecg_entity.dart';
 import 'package:health_for_all/common/entities/medical_data.dart';
 import 'package:health_for_all/pages/application/controller.dart';
@@ -128,7 +130,9 @@ class ConnectHardwareController extends GetxController {
       receivedIndex.removeAt(0);
       List<double> index = receivedIndex.map((e) => double.parse(e)).toList();
       double value = 0;
-      for (int i = 0; i < index.length; i++) value += index[i];
+      for (int i = 0; i < index.length; i++) {
+        value += index[i];
+      }
       value /= index.length;
       value = double.parse(value.toStringAsFixed(2));
       DateTime now = DateTime.now();
@@ -166,7 +170,7 @@ class ConnectHardwareController extends GetxController {
         receivedData = String.fromCharCodes(data);
         // String tmp = String.fromCharCodes(data);
         // log('Length: $receivedData');
-        if (receivedData != "}"&& receivedData != ","){
+        if (receivedData != "}" && receivedData != ",") {
           log('ReceivedData: $receivedData');
           receivedIndex.add(receivedData);
         }
@@ -223,7 +227,7 @@ class ConnectHardwareController extends GetxController {
 
   // Send data to the connected device's characteristic
   Future<void> sendData() async {
-    log('Sending data...' + writeCharacteristic.value.toString());
+    log('Sending data...${writeCharacteristic.value}');
     if (writeCharacteristic.value != null) {
       log('Sending data...');
       String data = writeDataController.text;
@@ -254,6 +258,7 @@ class ConnectHardwareController extends GetxController {
 
     log(data.toString());
     await FirebaseApi.addDocument("medicalData", data.toFirestoreMap());
+    checkAlarms(data.toFirestoreMap());
     appController.getUpdatedLatestMedical();
     // isLoading = false.obs;
     Get.back();
@@ -273,6 +278,60 @@ class ConnectHardwareController extends GetxController {
           ],
         );
       },
+    );
+  }
+
+  Future checkAlarms(Map<String, dynamic> data) async {
+    try {
+      log("gửi");
+      // Truy vấn tất cả các document trong collection
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('alarms').where('userId', isEqualTo: appController.state.profile.value!.id).get();
+
+      // Chuyển đổi kết quả thành một danh sách các Map (dữ liệu JSON)
+      List<Map<String, dynamic>> documents = querySnapshot.docs
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+      int typeId = int.parse(data["typeId"]);
+      for (var i in documents) {
+        if (i['enable'] == false) continue;
+        if (data["typeId"] != i["typeId"]) continue;
+        int low = int.parse(i["lowThreshold"]);
+        int high = int.parse(i["highThreshold"]);
+        if (typeId == 0) {
+          String value = data['value'];
+          List<String> parts = value.split('/');
+          int systolic = int.parse(parts[0]);
+          int diastolic = int.parse(parts[1]);
+          value = i['highThreshold'];
+          parts = value.split('/');
+          int highSystolic = int.parse(parts[0]);
+          int highDiastolic = int.parse(parts[1]);
+          value = i['lowThreshold'];
+          parts = value.split('/');
+          int lowSystolic = int.parse(parts[0]);
+          int lowDiastolic = int.parse(parts[1]);
+          if (systolic<lowSystolic||systolic>highSystolic||diastolic<lowDiastolic||diastolic>highDiastolic) sendAlarm(typeId, value);
+        } else {
+          int value = int.parse(data['value']);
+          if (value < low || value > high) sendAlarm(typeId, value.toString());
+        }
+      }
+    } catch (e) {
+      print('Lỗi khi lấy documents: $e');
+      return [];
+    }
+  }
+
+  void sendAlarm(int type, String value) {
+    FirebaseMessagingApi.sendMessage(
+      appController.state.profile.value!.fcmtoken!,
+      'Cảnh báo',
+      "Chỉ số ${Item.getTitle(type)} $value ${Item.getUnit(type)} của bạn đang ở ngoài ngưỡng an toàn",
+      'alarm',
+      '/alarm',
+      appController.state.profile.value!.id!,
+      'alarm',
     );
   }
 

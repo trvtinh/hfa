@@ -97,9 +97,12 @@ class ReminderPage extends GetView<AlarmController> {
   Widget add_reminder(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (right == false) Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red); 
-        else _showAddDialog(context);
+        if (right == false) {
+          Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
+              snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        } else {
+          _showAddDialog(context);
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(12),

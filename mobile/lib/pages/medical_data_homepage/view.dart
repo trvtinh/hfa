@@ -8,7 +8,6 @@ import 'package:health_for_all/pages/medical_data/index.dart';
 import 'package:health_for_all/pages/medical_data_homepage/widget/GreyBox.dart';
 import 'package:health_for_all/pages/overall_medical_data_history/view.dart';
 import 'package:health_for_all/pages/type_med_history/view.dart';
-import 'package:intl/intl.dart';
 
 class MedicalDataHome extends StatelessWidget {
   MedicalDataHome({super.key, this.time, this.user});

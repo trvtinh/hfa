@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
-import 'package:health_for_all/pages/prescription/widget/edit_prescription.dart';
 import 'package:health_for_all/pages/prescription/widget/prescription_detail.dart';
 import 'package:intl/intl.dart';
 
@@ -34,7 +33,8 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
 
   DateTime getYesterdayTimestamp() {
     DateTime now = DateTime.now(); // Get the current date and time
-    DateTime yesterday = now.subtract(const Duration(days: 1)); // Subtract one day
+    DateTime yesterday =
+        now.subtract(const Duration(days: 1)); // Subtract one day
     return yesterday; // This returns the DateTime object for yesterday
   }
 
@@ -139,11 +139,11 @@ class _PrescriptionBoxState extends State<PrescriptionBox> {
                     const SizedBox(width: 16),
                     GestureDetector(
                       onTap: () {
-                        prescriptionController.delPrescription(widget.detail.id!);
+                        prescriptionController
+                            .delPrescription(widget.detail.id!);
                       },
                       child: Icon(Icons.clear_outlined,
-                          size: 20,
-                          color: Theme.of(context).colorScheme.error),
+                          size: 20, color: Theme.of(context).colorScheme.error),
                     ),
                   ],
                 ),

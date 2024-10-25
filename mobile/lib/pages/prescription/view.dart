@@ -52,9 +52,12 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   Widget add_prescrition(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (right == false) Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
-          snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
-        else _showDialog(context);
+        if (right == false) {
+          Get.snackbar("Không có quyền", "Bạn không phải bác sĩ",
+              snackPosition: SnackPosition.BOTTOM, backgroundColor: Colors.red);
+        } else {
+          _showDialog(context);
+        }
       },
       child: Container(
         decoration: BoxDecoration(
@@ -93,8 +96,10 @@ class PrescriptionPage extends GetView<PrescriptionController> {
   // This function listens for changes and updates num_prescription automatically
   Widget filter_prescription(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream:
-          FirebaseFirestore.instance.collection('prescriptions').where('patientId', isEqualTo: userId).snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('prescriptions')
+          .where('patientId', isEqualTo: userId)
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
@@ -216,7 +221,10 @@ class PrescriptionPage extends GetView<PrescriptionController> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(child: AddPrescription(userId: userId,)),
+                  Flexible(
+                      child: AddPrescription(
+                    userId: userId,
+                  )),
                 ],
               ),
             ),

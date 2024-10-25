@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/common/API/item.dart';
 import 'package:health_for_all/pages/alarm/controller.dart';
-import 'package:health_for_all/pages/alarm/widget/edit_alarm.dart';
 
 class ListAlarm extends StatelessWidget {
   final int index;

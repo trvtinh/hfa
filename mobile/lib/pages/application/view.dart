@@ -5,8 +5,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/pages/alarm/view.dart';
 import 'package:health_for_all/pages/chatbot/view.dart';
 import 'package:health_for_all/pages/connect_hardware/view.dart';
-import 'package:health_for_all/pages/demo_ecg/view.dart';
-import 'package:health_for_all/pages/demo_pcg/view.dart';
 import 'package:health_for_all/pages/following/view.dart';
 import 'package:health_for_all/pages/homepage/view.dart';
 import 'package:health_for_all/pages/image_analyze/view.dart';
@@ -132,7 +130,7 @@ class ApplicationPage extends GetView<ApplicationController> {
             title: const Text('Cảnh báo'),
           ),
           ListTile(
-            onTap: () => Get.to(() => ConnectHardwarePage()),
+            onTap: () => Get.to(() => const ConnectHardwarePage()),
             leading: const Icon(Icons.memory),
             title: const Text('Kết nối với thiết bị'),
           ),
@@ -155,21 +153,11 @@ class ApplicationPage extends GetView<ApplicationController> {
               await controller.onLogOut();
             },
           ),
-          ListTile(
-            onTap: () => Get.to(() => ImageAnalyzePage()),
-            leading: const Icon(Icons.memory_outlined),
-            title: const Text('Phân tích hình ảnh'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => const DemoECG()),
-            leading: const Icon(Icons.add_chart_outlined),
-            title: const Text('ECG - Điện tâm đồ'),
-          ),
-          ListTile(
-            onTap: () => Get.to(() => const AudioPlayerView()),
-            leading: const Icon(Icons.sos_rounded),
-            title: const Text('PCG'),
-          ),
+          // ListTile(
+          //   onTap: () => Get.to(() => ImageAnalyzePage()),
+          //   leading: const Icon(Icons.memory_outlined),
+          //   title: const Text('Phân tích hình ảnh'),
+          // ),
         ],
       ));
     }
@@ -221,27 +209,27 @@ class About_HFA extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Divider(
+            const Divider(
               height: 1,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
-                  Text(
+                  const Text(
                     "Video về project",
                     style: TextStyle(
                       fontSize: 30,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Container(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(),

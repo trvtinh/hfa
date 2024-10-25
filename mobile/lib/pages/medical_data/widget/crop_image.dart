@@ -49,17 +49,16 @@ class YoloVideo extends StatefulWidget {
   State<YoloVideo> createState() => _YoloVideoState();
 }
 
-class _YoloVideoState extends State<YoloVideo> {
+class _YoloVideoState extends State<YoloVideo> with WidgetsBindingObserver {
   late CameraController controller;
   late List<Map<String, dynamic>> yoloResults;
   bool isLoaded = false;
   bool isDetecting = false;
-  final medicalController = Get.find<MedicalDataController>();
 
   @override
   void initState() {
-    super.initState();
     init();
+    super.initState();
   }
 
   init() async {
@@ -85,19 +84,33 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   void dispose() {
-    if (controller.value.isStreamingImages) {
-      controller.stopImageStream(); // Ensure the image stream is stopped
-    }
-    controller.dispose(); // Dispose camera controller properly
+    WidgetsBinding.instance.removeObserver(this);
+    controller.dispose();
     super.dispose();
   }
 
   Future<void> cropAndNavigate(
       CameraImage cameraImage, Map<String, dynamic> box) async {
-    img.Image croppedImage = await cropCameraImage(cameraImage, box);
-    medicalController.state.selectedFile.value =
-        await saveImageToFile(croppedImage, 'cropped.jpg');
-    if (mounted) Get.back();
+    try {
+      img.Image croppedImage = await cropCameraImage(cameraImage, box);
+      // medicalController.state.selectedFile.value =
+      //     await saveImageToFile(croppedImage, 'cropped.jpg');
+      final file = await saveImageToFile(croppedImage, 'cropped.jpg');
+      // Ensure the state is updated before navigating back
+      setState(() {
+        isDetecting = false;
+      });
+      Future.delayed(const Duration(milliseconds: 500), () {
+        // Get.back();
+        Get.to(() => DisplayImage(
+              imageFile: File(file.path),
+            ));
+      });
+    } catch (e) {
+      log('Error during crop and navigate: $e');
+      // Optionally, show an error message to the user
+      Get.snackbar('Error', 'Failed to process the image.');
+    }
   }
 
   Future<XFile> saveImageToFile(img.Image image, String filename) async {
@@ -111,7 +124,6 @@ class _YoloVideoState extends State<YoloVideo> {
 
   @override
   Widget build(BuildContext context) {
-    Orientation deviceOrientation = MediaQuery.of(context).orientation;
     final Size size = MediaQuery.of(context).size;
     if (!isLoaded) {
       return const Scaffold(
@@ -120,17 +132,27 @@ class _YoloVideoState extends State<YoloVideo> {
         ),
       );
     }
+    Orientation deviceOrientation = MediaQuery.of(context).orientation;
+    final double aspectRatio = controller.value.aspectRatio;
     return Stack(
       fit: StackFit.expand,
       children: [
         Transform.rotate(
           angle: (controller.description.sensorOrientation -
-                  (deviceOrientation == Orientation.portrait ? 90 : 90)) *
+                  (deviceOrientation == Orientation.portrait ? 90 : 0)) *
               pi /
               180,
-          child: AspectRatio(
-            aspectRatio: controller.value.aspectRatio,
-            child: CameraPreview(controller),
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit
+                  .cover, // Phóng to camera để khớp với màn hình, cắt đi các phần dư
+              child: SizedBox(
+                width: size.width, // Đảm bảo tỷ lệ camera được giữ nguyên
+                height: size.width *
+                    aspectRatio, // Đảm bảo tỷ lệ camera được giữ nguyên
+                child: CameraPreview(controller),
+              ),
+            ),
           ),
         ),
         ...displayBoxesAroundRecognizedObjects(size),
@@ -243,6 +265,21 @@ class _YoloVideoState extends State<YoloVideo> {
     return croppedImage;
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (!controller.value.isInitialized) {
+      return;
+    }
+    log("AppLifecycleState: $state");
+    if (state == AppLifecycleState.inactive) {
+      controller.dispose();
+      log("Dispose camera controller");
+    } else if (state == AppLifecycleState.resumed) {
+      log("Init camera controller");
+      init();
+    }
+  }
+
   Future<void> yoloOnFrame(CameraImage cameraImage) async {
     if (!mounted) return; // Prevent calling setState if widget is disposed
     final result = await widget.vision.yoloOnFrame(
@@ -256,9 +293,12 @@ class _YoloVideoState extends State<YoloVideo> {
 
     if (!mounted) return;
     if (result.isNotEmpty) {
-      setState(() {
-        yoloResults = result;
-      });
+      if (mounted) {
+        // Check if the widget is still mounted
+        setState(() {
+          yoloResults = result;
+        });
+      }
 
       if (yoloResults.first['box'][4] > 0.9) {
         await cropAndNavigate(cameraImage, result.first);
@@ -319,5 +359,62 @@ class _YoloVideoState extends State<YoloVideo> {
         ),
       );
     }).toList();
+  }
+}
+
+class PolygonPainter extends CustomPainter {
+  final List<Map<String, double>> points;
+
+  PolygonPainter({required this.points});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color.fromARGB(129, 255, 2, 124)
+      ..strokeWidth = 2
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    if (points.isNotEmpty) {
+      path.moveTo(points[0]['x']!, points[0]['y']!);
+      for (var i = 1; i < points.length; i++) {
+        path.lineTo(points[i]['x']!, points[i]['y']!);
+      }
+      path.close();
+    }
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class DisplayImage extends StatelessWidget {
+  final File imageFile;
+
+  DisplayImage({super.key, required this.imageFile});
+  final medicalController = Get.find<MedicalDataController>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ảnh hậu xử lí'),
+      ),
+      body: Column(children: [
+        Expanded(
+          child: Image.file(imageFile),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            medicalController.state.selectedFile.value = XFile(imageFile.path);
+            Get.back();
+            Get.back();
+          },
+          child: const Text('Phân tích hình ảnh'),
+        ),
+      ]),
+    );
   }
 }

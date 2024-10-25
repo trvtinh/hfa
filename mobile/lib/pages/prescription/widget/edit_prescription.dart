@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:health_for_all/common/entities/medicine_base.dart';
 import 'package:health_for_all/common/entities/prescription.dart';
 import 'package:health_for_all/pages/choose_type_med/view.dart';
-import 'package:health_for_all/pages/medical_data/widget/add_file.dart';
 import 'package:health_for_all/pages/prescription/controller.dart';
 import 'package:health_for_all/pages/prescription/widget/add_file.dart';
 import 'package:image_picker/image_picker.dart';
@@ -60,11 +59,10 @@ class _EditPrescriptionState extends State<EditPrescription> {
             height: 24,
           ),
           Flexible(
-            child: AddFilePrescription(
-              files: widget.detail.files,
-              onFilesChanged: updateFiles,
-            )
-          ),
+              child: AddFilePrescription(
+            files: widget.detail.files,
+            onFilesChanged: updateFiles,
+          )),
           const SizedBox(
             height: 24,
           ),
@@ -177,17 +175,17 @@ class _EditPrescriptionState extends State<EditPrescription> {
             ),
           ),
           Container(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                  children: [
-                    for (var i = 0; i < widget.med.length; i++)
-                      choose_med(
-                        widget.med[i],
-                        i,
-                      ),
-                  ],
-                ),
-              )
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              children: [
+                for (var i = 0; i < widget.med.length; i++)
+                  choose_med(
+                    widget.med[i],
+                    i,
+                  ),
+              ],
+            ),
+          )
         ],
       ),
     );

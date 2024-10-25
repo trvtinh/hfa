@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:health_for_all/pages/diagnostic_add/controller.dart';
 import 'package:health_for_all/common/entities/user.dart';
-import 'package:health_for_all/pages/following/controller.dart';
-import 'package:health_for_all/pages/following_medical_data/view.dart';
 import 'package:health_for_all/pages/following_medical_data/widget/following_person_box.dart';
 
 class SendDiagnostic extends StatelessWidget {
