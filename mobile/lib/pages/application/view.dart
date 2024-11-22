@@ -153,11 +153,11 @@ class ApplicationPage extends GetView<ApplicationController> {
               await controller.onLogOut();
             },
           ),
-          // ListTile(
-          //   onTap: () => Get.to(() => ImageAnalyzePage()),
-          //   leading: const Icon(Icons.memory_outlined),
-          //   title: const Text('Phân tích hình ảnh'),
-          // ),
+          ListTile(
+            onTap: () => Get.to(() => ImageAnalyzePage()),
+            leading: const Icon(Icons.memory_outlined),
+            title: const Text('Phân tích hình ảnh'),
+          ),
         ],
       ));
     }

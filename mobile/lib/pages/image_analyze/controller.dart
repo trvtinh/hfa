@@ -13,7 +13,7 @@ class ImageAnalyzeController extends GetxController {
   final appController = Get.find<ApplicationController>();
 
   final model = GenerativeModel(
-    model: 'gemini-1.5-flash',
+    model: 'gemini-1.5-pro-001',
     apiKey: dotenv.env['GOOGLE_API_KEY']!,
     systemInstruction: Content.system('''
     {
